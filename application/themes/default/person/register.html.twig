@@ -1,0 +1,397 @@
+{% extends _layout %}
+
+{% block content %}
+
+    <ul class="breadcrumb">
+        <li><a href="{{ site_url }}">หน้าหลัก</a> <span class="divider">/</span></li>
+        <li><a href="{{ site_url }}person">ประชากรในเขตรับผิดชอบ</a> <span class="divider">/</span></li>
+        <li class="active">เพิ่มคนในบ้าน</li>
+    </ul>
+
+    <blockquote>
+        เพิ่มคนในบ้าน ที่อยู่ในเขตรับผิดชอบ
+    </blockquote>
+
+    <input type="hidden" value="{{ house_id }}" data-id="house_id">
+
+    <div class="tabbable"> <!-- Only required for left/right tabs -->
+        <ul class="nav nav-tabs">
+            <li class="active"><a href="#tab1" data-toggle="tab"><i class="icon-th-list"></i> ข้อมูลทั่วไป</a></li>
+            <li><a href="#tab2" data-toggle="tab"><i class="icon-folder-open"></i> สิทธิการรักษา</a></li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane active" id="tab1">
+                <div class="span10">
+                <div class="row-fluid">
+                    <div class="span4">
+                        <label>เลขบัตรประชาชน</label>
+                        <div class="input-append">
+                            <input class="input-medium" id="txtCID" type="text" placeholder="xxxxxxxxxxxxx">
+                            <button class="btn" type="button"><i class="icon-refresh"></i></button>
+                            <button class="btn btn-info" type="button" id="btn_search_dbpop"><i class="icon-search icon-white"></i></button>
+                        </div>
+                    </div>
+                    <div class="span3">
+                        <div class="control-group">
+                            <label class="control-label" for="txtPassport">เลขที่ Passport</label>
+                            <div class="controls">
+                                <input type="text" id="txtPassport" placeholder="เลขที่ Passport" class="input-medium">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span2">
+                        <div class="control-group">
+                            <label class="control-label" for="slTitle">คำนำหน้า</label>
+                            <div class="controls">
+                                <select  id="slTitle" class="input-small">
+                                    <option value="x">นาย</option>
+                                    <option value="x">นาง</option>
+                                    <option value="x">นางสาว</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span3">
+                        <div class="control-group">
+                            <label class="control-label" for="txtFirstName">ชื่อ</label>
+                            <div class="controls">
+                                <input type="text" id="txtFirstName" placeholder="ชื่อ" class="input-medium">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span3">
+                        <div class="control-group">
+                            <label class="control-label" for="txtLastName">สกุล</label>
+                            <div class="controls">
+                                <input type="text" id="txtLastName" placeholder="สกุล" class="input-medium">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span2">
+                        <div class="control-group">
+                            <label class="control-label" for="txtBirthDate">วันเกิด</label>
+                            <div class="controls">
+                                <input type="text" id="txtBirthDate" placeholder="วันเกิด" class="input-small">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span2">
+                        <div class="control-group">
+                            <label class="control-label" for="slSex">เพศ</label>
+                            <div class="controls">
+                                <select  id="slSex" class="input-small">
+                                    <option value="x">ชาย</option>
+                                    <option value="x">หญิง</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span3">
+                        <div class="control-group">
+                            <label class="control-label" for="slMStatus">สถานะสมรส</label>
+                            <div class="controls">
+                                <select  id="slMStatus" class="input-medium">
+                                    <option value="1">โสด</option>
+                                    <option value="2">คู่</option>
+                                    <option value="3">ม่าย</option>
+                                    <option value="4">หย่า</option>
+                                    <option value="5">แยกกันอยู่</option>
+                                    <option value="6">สมณะ</option>
+                                    <option value="9">ไม่ทราบ</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span5">
+                        <div class="control-group">
+                            <label class="control-label" for="slOccupation">อาชีพ</label>
+                            <div class="controls">
+                                <select  id="slOccupation" class="input-xlarge">
+                                    <option value="1">โสด</option>
+                                    <option value="2">คู่</option>
+                                    <option value="3">ม่าย</option>
+                                    <option value="4">หย่า</option>
+                                    <option value="5">แยกกันอยู่</option>
+                                    <option value="6">สมณะ</option>
+                                    <option value="9">ไม่ทราบ</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span3">
+                        <label class="control-label" for="txtEducation">การศึกษา</label>
+                        <div class="controls">
+                            <select  id="txtEducation" class="input-medium">
+                                <option value="1">โสด</option>
+                                <option value="2">คู่</option>
+                                <option value="3">ม่าย</option>
+                                <option value="4">หย่า</option>
+                                <option value="5">แยกกันอยู่</option>
+                                <option value="6">สมณะ</option>
+                                <option value="9">ไม่ทราบ</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row-fluid">
+
+                    <div class="span3">
+                        <div class="control-group">
+                            <label class="control-label" for="slNation">สัญชาติ</label>
+                            <div class="controls">
+                                <select  id="slNation" class="input-medium">
+                                    <option value="1">โสด</option>
+                                    <option value="2">คู่</option>
+                                    <option value="3">ม่าย</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span3">
+                        <div class="control-group">
+                            <label class="control-label" for="slRace">เชื้อชาติ</label>
+                            <div class="controls">
+                                <select  id="slRace" class="input-medium">
+                                    <option value="1">โสด</option>
+                                    <option value="2">คู่</option>
+                                    <option value="3">ม่าย</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span3">
+                        <div class="control-group">
+                            <label class="control-label" for="slReligion">ศาสนา</label>
+                            <div class="controls">
+                                <select  id="slReligion" class="input-medium">
+                                    <option value="1">โสด</option>
+                                    <option value="2">คู่</option>
+                                    <option value="3">ม่าย</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span3">
+                        <div class="control-group">
+                            <label class="control-label" for="slFstatus">สถานะในครอบครัว</label>
+                            <div class="controls">
+                                <select  id="slFstatus" class="input-medium">
+                                    <option value="2">ผู้อาศัย</option>
+                                    <option value="1">เจ้าบ้าน</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span3">
+                        <div class="control-group">
+                            <label class="control-label" for="slVstatus">สถานะในชุมชน</label>
+                            <div class="controls">
+                                <select  id="slVstatus" class="input-medium">
+                                    <option value="1">กำนันผู้ใหญ่บ้าน</option>
+                                    <option value="2">อสม.</option>
+                                    <option value="3">แพทย์ประจำตำบล</option>
+                                    <option value="4">สมาชิก อบต.</option>
+                                    <option value="5">อื่นๆ</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span3">
+                        <div class="control-group">
+                            <label class="control-label" for="txtFatherCid">CID บิดา</label>
+                            <div class="controls">
+                                <input type="text" id="txtFatherCid" placeholder="xxxxxxxxxxxxx" class="input-medium">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span3">
+                        <div class="control-group">
+                            <label class="control-label" for="txtMotherCid">CID มารดา</label>
+                            <div class="controls">
+                                <input type="text" id="txtMotherCid" placeholder="xxxxxxxxxxxxx" class="input-medium">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="span3">
+                        <div class="control-group">
+                            <label class="control-label" for="txtCoupleCid">CID คู่สมรส</label>
+                            <div class="controls">
+                                <input type="text" id="txtCoupleCid" placeholder="xxxxxxxxxxxxx" class="input-medium">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span2">
+                        <div class="control-group">
+                            <label class="control-label" for="txtMoveinDate">วันที่ย้ายเข้า</label>
+                            <div class="controls">
+                                <input type="text" id="txtMoveinDate" placeholder="วันที่ย้ายเข้า" class="input-small">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span2">
+                        <div class="control-group">
+                            <label class="control-label" for="txtDischargeDate">วันที่ย้ายออก</label>
+                            <div class="controls">
+                                <input type="text" id="txtDischargeDate" placeholder="วันที่ย้ายออก" class="input-small">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span3">
+                        <div class="control-group">
+                            <label class="control-label" for="slDischarge">สถานะการจำหน่าย</label>
+                            <div class="controls">
+                                <select  id="slDischarge" class="input-medium">
+                                    <option value="9">ไม่จำหน่าย</option>
+                                    <option value="1">ตาย</option>
+                                    <option value="2">ย้าย</option>
+                                    <option value="3">สาบสูญ</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span2">
+                        <div class="control-group">
+                            <label class="control-label" for="slABOGroup">หมู่เลือด</label>
+                            <div class="controls">
+                                <select  id="slABOGroup" class="input-small">
+                                    <option value="1">A</option>
+                                    <option value="2">B</option>
+                                    <option value="3">AB</option>
+                                    <option value="4">O</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="span2">
+                        <div class="control-group">
+                            <label class="control-label" for="slRHGroup">หมู่เลือด RH</label>
+                            <div class="controls">
+                                <select  id="slRHGroup" class="input-small">
+                                    <option value="1">Positive</option>
+                                    <option value="2">Negative</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+            </div>
+
+            <div class="tab-pane" id="tab2">
+                <form class="form-horizontal">
+                    <div class="control-group">
+                        <label class="control-label" for="slInstypeName">ประเภทสิทธิการรักษา</label>
+                        <div class="controls">
+                            <select name="slInstypeName" id="slInstypeName" class="input-xlarge">
+                                <option value="xxx">-</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="txtInsId">รหัสสิทธิ</label>
+                        <div class="controls">
+                            <input type="text" id="txtInsId" placeholder="รหัสสิทธิการรักษา">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="txtInsStartDate">วันออกบัตร</label>
+                        <div class="controls">
+                            <input type="text" id="txtInsStartDate" class="input-small" placeholder="00/00/0000">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="txtInsExpireDate">วันหมดอายุ</label>
+                        <div class="controls">
+                            <input type="text" id="txtInsExpireDate" class="input-small" placeholder="00/00/0000">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="txtInsHospMain">สถานบริการหลัก</label>
+                        <div class="controls">
+                            <div class="input-append">
+                                <input class="input-xlarge" id="txtInsHospMain" type="text">
+                                <button class="btn" type="button">
+                                    <i class="icon-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="txtInsHospSub">สถานบริการรอง</label>
+                        <div class="controls">
+                            <div class="input-append">
+                                <input class="input-xlarge" id="txtInsHospSub" type="text">
+                                <button class="btn" type="button">
+                                    <i class="icon-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+    <form action="#" class="form-actions">
+        <button type="button" class="btn btn-success btn-large">
+            <i class="icon-plus-sign icon-white"></i>
+            เพิ่มคนในบ้าน
+        </button>
+        <button type="button" class="btn btn-large">
+            <i class="icon-refresh"></i>
+            เคลียร์ข้อมูล
+        </button>
+    </form>
+    </div>
+
+
+    <div class="modal hide fade" id="modal_search_dbpop">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3>ค้นหาข้อมูลจาก DBPOP</h3>
+        </div>
+        <div class="modal-body">
+            <form action="#" class="form-inline form-actions">
+                <div class="control-group">
+                    <div class="controls">
+                        <label for="text_query_search_dbpop">เลขบัตรประชาชน</label>
+                        <div class="input-append">
+                            <input class="input-xlarge" placeholder="xxxxxxxxxxxxx" id="text_query_search_dbpop" type="text">
+                            <button class="btn btn-info" type="button" id="button_do_search_dbpop"><i class="icon-search icon-white"></i> ค้นหา</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <table class="table table-striped" id="table_search_dbpop_result_list">
+                <thead>
+                <tr>
+                    <th>เลขบัตรประชาชน</th>
+                    <th>ชื่อ - สกุล</th>
+                    <th>วันเกิด</th>
+                    <th>อายุ</th>
+                    <th>สิทธิการรักษา</th>
+                </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</button>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="{{ base_url }}assets/apps/js/apps.person.register.js"></script>
+
+{% endblock %}
