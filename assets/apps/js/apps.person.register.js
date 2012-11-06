@@ -80,7 +80,7 @@ $(function(){
                                     '<td>[' + v.subinscl + '] ' + v.maininscl_name + '</td>' +
                                     '<td><a href="#" class="btn" data-name="button_set_data_from_dbopo" ' +
                                     'data-cid="' + v.cid + '" data-fname="'+ v.fname +'" data-lname="'+ v.lname+'" ' +
-                                    'data-birth="'+ v.birthdate +'"><i class="icon-share"></i></a></td>' +
+                                    'data-birth="'+ v.birthdate +'" data-inscl="'+ v.subinscl +'"><i class="icon-share"></i></a></td>' +
                                 '</tr>'
                             );
                         });
