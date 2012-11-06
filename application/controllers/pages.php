@@ -27,6 +27,7 @@ class Pages extends CI_Controller {
         //$this->load->view('welcome_message');
     }
 
+
 }
 
 /* End of file pages.php */

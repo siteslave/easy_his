@@ -95,6 +95,11 @@ class Users extends CI_Controller
         render_json($json);
     }
 
+    public function access_denied(){
+        $json = '{"success": false, "msg": "Access denied, please login."}';
+
+        render_json($json);
+    }
 
 
 

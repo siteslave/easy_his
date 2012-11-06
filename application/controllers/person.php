@@ -30,6 +30,7 @@ class Person extends CI_Controller
 
         //load model
         $this->load->model('Person_model', 'person');
+        $this->load->model('Basic_model', 'basic');
 
         $this->csrf_token = $this->security->get_csrf_hash();
 
@@ -51,6 +52,18 @@ class Person extends CI_Controller
         if(empty($house_id)){
             show_error('No house id found.', 505);
         }else{
+            $educations = $this->basic->get_education;
+            $titles = $this->basic->get_title;
+            $inscls = $this->basic->get_inscl;
+            $occupations = $this->basic->get_occupation;
+            $marry_status = $this->basic->get_marry_status;
+
+            $this->twiggy->set('education', $educations);
+            $this->twiggy->set('title', $titles);
+            $this->twiggy->set('inscl', $inscls);
+            $this->twiggy->set('occupation', $occupations);
+            $this->twiggy->set('marry_status', $marry_status);
+
             $this->twiggy->set('house_id', $house_id);
             $this->twiggy->template('person/register')->display();
         }

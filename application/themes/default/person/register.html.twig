@@ -46,9 +46,10 @@
                             <label class="control-label" for="slTitle">คำนำหน้า</label>
                             <div class="controls">
                                 <select  id="slTitle" class="input-small">
-                                    <option value="x">นาย</option>
-                                    <option value="x">นาง</option>
-                                    <option value="x">นางสาว</option>
+                                    <option value="">--</option>
+                                    {% for t in title %}
+                                        <option value="{{ t.id }}">{{ t.name }}</option>
+                                    {% endfor %}
                                 </select>
                             </div>
                         </div>
@@ -94,15 +95,7 @@
                         <div class="control-group">
                             <label class="control-label" for="slMStatus">สถานะสมรส</label>
                             <div class="controls">
-                                <select  id="slMStatus" class="input-medium">
-                                    <option value="1">โสด</option>
-                                    <option value="2">คู่</option>
-                                    <option value="3">ม่าย</option>
-                                    <option value="4">หย่า</option>
-                                    <option value="5">แยกกันอยู่</option>
-                                    <option value="6">สมณะ</option>
-                                    <option value="9">ไม่ทราบ</option>
-                                </select>
+                                <select  id="slMStatus" class="input-medium"></select>
                             </div>
                         </div>
                     </div>
@@ -110,15 +103,7 @@
                         <div class="control-group">
                             <label class="control-label" for="slOccupation">อาชีพ</label>
                             <div class="controls">
-                                <select  id="slOccupation" class="input-xlarge">
-                                    <option value="1">โสด</option>
-                                    <option value="2">คู่</option>
-                                    <option value="3">ม่าย</option>
-                                    <option value="4">หย่า</option>
-                                    <option value="5">แยกกันอยู่</option>
-                                    <option value="6">สมณะ</option>
-                                    <option value="9">ไม่ทราบ</option>
-                                </select>
+                                <select  id="slOccupation" class="input-xlarge"></select>
                             </div>
                         </div>
                     </div>
@@ -291,10 +276,10 @@
             <div class="tab-pane" id="tab2">
                 <form class="form-horizontal">
                     <div class="control-group">
-                        <label class="control-label" for="slInstypeName">ประเภทสิทธิการรักษา</label>
+                        <label class="control-label" for="slInstype">ประเภทสิทธิการรักษา</label>
                         <div class="controls">
-                            <select name="slInstypeName" id="slInstypeName" class="input-xlarge">
-                                <option value="xxx">-</option>
+                            <select name="slInstype" id="slInstype" class="input-xlarge">
+
                             </select>
                         </div>
                     </div>
