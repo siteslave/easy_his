@@ -52,17 +52,33 @@ class Person extends CI_Controller
         if(empty($house_id)){
             show_error('No house id found.', 505);
         }else{
-            $educations = $this->basic->get_education;
-            $titles = $this->basic->get_title;
-            $inscls = $this->basic->get_inscl;
-            $occupations = $this->basic->get_occupation;
-            $marry_status = $this->basic->get_marry_status;
+            $educations = $this->basic->get_education();
+            $titles = $this->basic->get_title();
+            $inscls = $this->basic->get_inscl();
+            $occupations = $this->basic->get_occupation();
+            $marry_status = $this->basic->get_marry_status();
+            $races = $this->basic->get_races();
+            $nationalities = $this->basic->get_nationalities();
+            $religions = $this->basic->get_religions();
+            $provinces = $this->basic->get_province();
+            $typearea = $this->basic->get_typearea();
+            $labor_types = $this->basic->get_labor_type();
+            $vstatus = $this->basic->get_vstatus();
+            $house_type = $this->basic->get_house_type();
 
-            $this->twiggy->set('education', $educations);
-            $this->twiggy->set('title', $titles);
-            $this->twiggy->set('inscl', $inscls);
-            $this->twiggy->set('occupation', $occupations);
-            $this->twiggy->set('marry_status', $marry_status);
+            $this->twiggy->set('educations', $educations);
+            $this->twiggy->set('titles', $titles);
+            $this->twiggy->set('inscls', $inscls);
+            $this->twiggy->set('occupations', $occupations);
+            $this->twiggy->set('races', $races);
+            $this->twiggy->set('nationalities', $nationalities);
+            $this->twiggy->set('religions', $religions);
+            $this->twiggy->set('marry_statuses', $marry_status);
+            $this->twiggy->set('provinces', $provinces);
+            $this->twiggy->set('typearea', $typearea);
+            $this->twiggy->set('labor_types', $labor_types);
+            $this->twiggy->set('vstatus', $vstatus);
+            $this->twiggy->set('house_type', $house_type);
 
             $this->twiggy->set('house_id', $house_id);
             $this->twiggy->template('person/register')->display();
@@ -142,6 +158,7 @@ class Person extends CI_Controller
                 $json = '{"success": false, "msg": "House duplicated"}';
             //if don't duplicate save new house
             }else{
+                $data['hid'] = generate_serial('HOUSE', FALSE);
                 $this->person->owner_id = $this->owner_id;
                 $result = $this->person->save_house($data);
 
@@ -175,6 +192,16 @@ class Person extends CI_Controller
                     $obj->maininscl_name = get_main_inscl($r['maininscl']);
                     $obj->cid = $r['pid'];
                     $obj->subinscl = $r['subinscl'];
+                    $obj->sex = $r['sex'];
+                    $obj->cardid = $r['cardid'];
+                    $obj->hmain_code = (string) $r['hmain'];
+                    $obj->hmain_code = strlen($obj->hmain_code) < 5 ? '0' . $obj->hmain_code : (string) $r['hmain'];
+                    $obj->hsub_code = (string) $r['hsub'];
+                    $obj->hsub_code = strlen($obj->hsub_code) < 5 ? '0' . $obj->hsub_code : (string) $r['hsub'];
+                    $obj->hmain_name = get_hospital_name($obj->hmain_code);
+                    $obj->hsub_name = get_hospital_name($obj->hsub_code);
+                    $obj->startdate = $r['startdate'];
+                    $obj->expdate = $r['expdate'];
 
                     array_push($arr_result, $obj);
                 }
@@ -184,6 +211,98 @@ class Person extends CI_Controller
                 $json = '{"success": true, "rows": '. $rows .'}';
             }else{
                 $json = '{"success"": false, "msg": "No result found"}';
+            }
+        }
+
+        render_json($json);
+    }
+
+    public function save_house_survey(){
+        $data = $this->input->post('data');
+
+        if(!$data){
+            $json = '{"success": false, "msg": "No data for save"}';
+        }else{
+            //check house duplicate
+            $house_exist = $this->person->check_house_exist($data['house_id']);
+
+            //if house duplicate return false
+            if(!$house_exist){
+                $json = '{"success": false, "msg": "No house id found"}';
+                //if don't duplicate save new house
+            }else{
+                $this->person->owner_id = $this->owner_id;
+                $result = $this->person->save_house_survey($data);
+
+                if($result){
+                    $json = '{"success": true}';
+                }else{
+                    $json = '{"success": false, "msg": "Model error."}';
+                }
+            }
+        }
+        //render json
+        render_json($json);
+
+    }
+
+    public function get_house_survey(){
+        $house_id = $this->input->post('house_id');
+
+        if(empty($house_id)){
+            $json = '{"success": false, "msg": "No house id found"}';
+        }else{
+            //check house exist
+            $house_exist = $this->person->check_house_exist($house_id);
+
+            //if house exist
+            if(!$house_exist){
+                $json = '{"success": false, "msg": "No house id found"}';
+            }else{
+                $result = $this->person->get_house_survey($house_id);
+
+                $rows = json_encode($result);
+                if($result){
+                    $json = '{"success": true, "rows": '.$rows.'}';
+                }else{
+                    $json = '{"success": false, "msg": "Model error."}';
+                }
+            }
+        }
+        //render json
+        render_json($json);
+
+    }
+
+    public function save(){
+        $data = $this->input->post('data');
+        if(empty($data)){
+            $json = '{"success": false, "msg": "No data found"}';
+        }else{
+            //check cid
+            $person_exist = $this->person->check_person_exist($data['cid']);
+            if($person_exist){
+                $json = '{"success": false, "msg": "CID duplicate."}';
+            }else{
+                $data['hn'] = generate_serial('HN');
+                $this->person->owner_id = $this->owner_id;
+
+                $result = $this->person->save_person($data);
+
+                if($result){
+                    //save address
+                    if($data['typearea'] == '3' || $data['typearea'] == '4' || $data['typearea'] == '0'){
+                        $person_id = $result;
+                        $res = $this->person->save_person_address($person_id, $data['address']);
+                        if($res){
+                            $json = '{"success": true}';
+                        }else{
+                            $json = '{"success": false, "save address failed."}';
+                        }
+                    }
+                }else{
+                    $json = '{"success": false, "msg": "Model error"}';
+                }
             }
         }
 

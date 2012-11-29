@@ -59,7 +59,7 @@
     </div>
     <div class="row-fluid" id="divPersonList">
         <div class="span12">
-            <input type="hidden" id="txt_house_address">
+            <input type="hidden" id="txtHouseId">
             <p class="lead">ประชากรในบ้านเลขที่ :  <span class="badge badge-success" id="txt_show_house_address"></span></p>
             <table class="table table-striped">
                 <thead>
@@ -107,17 +107,17 @@
                 <div class="row-fluid">
                     <div class="span4">
                         <div class="control-group">
-                            <label class="control-label" for="txtHouse">บ้านเลขที่</label>
+                            <label class="control-label" for="txtAddress">บ้านเลขที่</label>
                             <div class="controls">
-                                <input type="text" id="txtHouse" placeholder="บ้านเลขที่">
+                                <input type="text" id="txtAddress" placeholder="บ้านเลขที่">
                             </div>
                         </div>
                     </div>
                     <div class="span4">
                         <div class="control-group">
-                            <label class="control-label" for="txtHouseId">รหัสบ้าน (กรมการปกครอง)</label>
+                            <label class="control-label" for="txtHouseCode">รหัสบ้าน (กรมการปกครอง)</label>
                             <div class="controls">
-                                <input type="text" id="txtHouseId" placeholder="รหัสบ้าน">
+                                <input type="text" id="txtHouseCode" placeholder="รหัสบ้าน">
                             </div>
                         </div>
                     </div>
@@ -212,9 +212,9 @@
     <div class="row-fluid">
         <div class="span4">
             <div class="control-group">
-                <label class="control-label" for="slLocatype">ที่ตั้ง</label>
+                <label class="control-label" for="sl_locatype">ที่ตั้ง</label>
                 <div class="controls">
-                    <select id="slLocatype">
+                    <select id="sl_locatype">
                         <option value="1">ในเขตเทศบาล</option>
                         <option value="2">นอกเขตเทศบาล</option>
                     </select>
@@ -223,17 +223,17 @@
         </div>
         <div class="span4">
             <div class="control-group">
-                <label class="control-label" for="txtLatitude">ละติจูด</label>
+                <label class="control-label" for="txt_house_latitude">ละติจูด</label>
                 <div class="controls">
-                    <input type="text" id="txtLatitude" placeholder="ละติจูด">
+                    <input type="text" id="txt_house_latitude" placeholder="ละติจูด">
                 </div>
             </div>
         </div>
         <div class="span4">
             <div class="control-group">
-                <label class="control-label" for="txtLongitude">ลองจิจูด</label>
+                <label class="control-label" for="txt_house_longitude">ลองจิจูด</label>
                 <div class="controls">
-                    <input type="text" id="txtLongitude" placeholder="ลองจิจูด">
+                    <input type="text" id="txt_house_longitude" placeholder="ลองจิจูด">
                 </div>
             </div>
         </div>
@@ -242,14 +242,16 @@
         <div class="span6">
             <div class="input-append">
                 <label>อสม. ประจำบ้าน</label>
-                <input class="input-xlarge uneditable-input" id="txtVhVid" type="text">
+                <input type="hidden" id="txt_vhvid">
+                <input class="input-xlarge uneditable-input" id="txt_vhvid_cid" type="text">
                 <button class="btn btn-info" type="button"><i class="icon-search icon-white"></i></button>
             </div>
         </div>
         <div class="span6">
             <div class="input-append">
                 <label>เจ้าบ้าน</label>
-                <input class="input-xlarge uneditable-input" id="txtHeadId" type="text">
+                <input type="hidden" id="txt_headid">
+                <input class="input-xlarge uneditable-input" id="txt_headid_cid" type="text">
                 <button class="btn btn-info" type="button"><i class="icon-search icon-white"></i></button>
             </div>
         </div>
@@ -258,9 +260,9 @@
     <div class="row-fluid">
         <div class="span3">
             <div class="control-group">
-                <label class="control-label" for="slToilet">การมีส้วม</label>
+                <label class="control-label" for="sl_toilet">การมีส้วม</label>
                 <div class="controls">
-                    <select id="slToilet" class="input-medium">
+                    <select id="sl_toilet" class="input-medium">
                         <option value="9">ไม่ทราบ</option>
                         <option value="0">ไม่มี</option>
                         <option value="1">มี</option>
@@ -271,9 +273,9 @@
         </div>
         <div class="span3">
             <div class="control-group">
-                <label class="control-label" for="slWater">น้ำดื่มเพียงพอ</label>
+                <label class="control-label" for="sl_water">น้ำดื่มเพียงพอ</label>
                 <div class="controls">
-                    <select id="slWater" class="input-medium">
+                    <select id="sl_water" class="input-medium">
                         <option value="9">ไม่ทราบ</option>
                         <option value="0">ไม่เพียงพอ</option>
                         <option value="1">เพียงพอ</option>
@@ -284,9 +286,9 @@
         </div>
         <div class="span3">
             <div class="control-group">
-                <label class="control-label" for="slWaterType">ประเภทแหล่งน้ำ</label>
+                <label class="control-label" for="sl_watertype">ประเภทแหล่งน้ำ</label>
                 <div class="controls">
-                    <select id="slWatertype" class="input-medium">
+                    <select id="sl_watertype" class="input-medium">
                         <option value="9">ไม่ทราบ</option>
                         <option value="1">น้ำฝน</option>
                         <option value="2">น้ำประปา</option>
@@ -301,9 +303,9 @@
         </div>
         <div class="span3">
             <div class="control-group">
-                <label class="control-label" for="slGarbage">วิธีกำจัดขยะ</label>
+                <label class="control-label" for="sl_garbage">วิธีกำจัดขยะ</label>
                 <div class="controls">
-                    <select id="slGarbage" class="input-medium">
+                    <select id="sl_garbage" class="input-medium">
                         <option value="9">ไม่ทราบ</option>
                         <option value="1">ฝัง</option>
                         <option value="2">เผา</option>
@@ -318,9 +320,9 @@
     <div class="row-fluid">
         <div class="span3">
             <div class="control-group">
-                <label class="control-label" for="slToilet">การจัดบ้านถูกหลัก</label>
+                <label class="control-label" for="sl_housing">การจัดบ้านถูกหลัก</label>
                 <div class="controls">
-                    <select id="slHousing" class="input-medium">
+                    <select id="sl_housing" class="input-medium">
                         <option value="9">ไม่ทราบ</option>
                         <option value="0">ไม่ถูก</option>
                         <option value="1">ถูก</option>
@@ -331,9 +333,9 @@
         </div>
         <div class="span3">
             <div class="control-group">
-                <label class="control-label" for="slDurability">ความคงทน</label>
+                <label class="control-label" for="sl_durability">ความคงทน</label>
                 <div class="controls">
-                    <select id="slDurability" class="input-medium">
+                    <select id="sl_durability" class="input-medium">
                         <option value="9">ไม่ทราบ</option>
                         <option value="1">คงทน 1-4 ปี</option>
                         <option value="2">คงทน 5 ปีขึ้นไป</option>
@@ -345,9 +347,9 @@
         </div>
         <div class="span3">
             <div class="control-group">
-                <label class="control-label" for="slCleanliness">ความสะอาด</label>
+                <label class="control-label" for="sl_cleanliness">ความสะอาด</label>
                 <div class="controls">
-                    <select id="slCleanliness" class="input-medium">
+                    <select id="sl_cleanliness" class="input-medium">
                         <option value="9">ไม่ทราบ</option>
                         <option value="1">ไม่สะอาด</option>
                         <option value="2">สะอาด</option>
@@ -358,9 +360,9 @@
         </div>
         <div class="span3">
             <div class="control-group">
-                <label class="control-label" for="slVentilation">การระบายอากาศ</label>
+                <label class="control-label" for="sl_ventilation">การระบายอากาศ</label>
                 <div class="controls">
-                    <select id="slVentilation" class="input-medium">
+                    <select id="sl_ventilation" class="input-medium">
                         <option value="9">ไม่ทราบ</option>
                         <option value="0">ไม่ระบาย</option>
                         <option value="1">ระบาย</option>
@@ -373,9 +375,9 @@
     <div class="row-fluid">
         <div class="span3">
             <div class="control-group">
-                <label class="control-label" for="slLight">แสงสว่าง</label>
+                <label class="control-label" for="sl_light">แสงสว่าง</label>
                 <div class="controls">
-                    <select id="slLight" class="input-medium">
+                    <select id="sl_light" class="input-medium">
                         <option value="9">ไม่ทราบ</option>
                         <option value="0">ไม่เพียงพอ</option>
                         <option value="1">เพียงพอ</option>
@@ -386,9 +388,9 @@
         </div>
         <div class="span3">
             <div class="control-group">
-                <label class="control-label" for="slWatertm">การกำจัดน้ำเสีย</label>
+                <label class="control-label" for="sl_watertm">การกำจัดน้ำเสีย</label>
                 <div class="controls">
-                    <select id="slWatertm" class="input-medium">
+                    <select id="sl_watertm" class="input-medium">
                         <option value="9">ไม่ทราบ</option>
                         <option value="1">ไม่กำจัด</option>
                         <option value="2">กำจัด</option>
@@ -399,9 +401,9 @@
         </div>
         <div class="span3">
             <div class="control-group">
-                <label class="control-label" for="slMFood">สารปรุงแต่ง</label>
+                <label class="control-label" for="sl_mfood">สารปรุงแต่ง</label>
                 <div class="controls">
-                    <select id="slMFood" class="input-medium">
+                    <select id="sl_mfood" class="input-medium">
                         <option value="9">ไม่ทราบ</option>
                         <option value="1">ไม่ใช้</option>
                         <option value="2">ใช้</option>>
@@ -412,9 +414,9 @@
         </div>
         <div class="span3">
             <div class="control-group">
-                <label class="control-label" for="slBcontrol">การควบคุมแมลง</label>
+                <label class="control-label" for="sl_bcontrol">การควบคุมแมลง</label>
                 <div class="controls">
-                    <select id="slBcontrol" class="input-medium">
+                    <select id="sl_bcontrol" class="input-medium">
                         <option value="9">ไม่ทราบ</option>
                         <option value="0">ไม่ควบคุม</option>
                         <option value="1">ควบคุม</option>
@@ -427,9 +429,9 @@
     <div class="row-fluid">
         <div class="span3">
             <div class="control-group">
-                <label class="control-label" for="slAcontrol">การควบคุมสัตว์</label>
+                <label class="control-label" for="sl_acontrol">การควบคุมสัตว์</label>
                 <div class="controls">
-                    <select id="slAcontrol" class="input-medium">
+                    <select id="sl_acontrol" class="input-medium">
                         <option value="9">ไม่ทราบ</option>
                         <option value="0">ไม่ควบคุม</option>
                         <option value="1">ควบคุม</option>
@@ -439,9 +441,9 @@
         </div>
         <div class="span3">
             <div class="control-group">
-                <label class="control-label" for="slChemical">การจัดเก็บสารเคมี</label>
+                <label class="control-label" for="sl_chemical">การจัดเก็บสารเคมี</label>
                 <div class="controls">
-                    <select id="slChemical" class="input-medium">
+                    <select id="sl_chemical" class="input-medium">
                         <option value="9">ไม่ทราบ</option>
                         <option value="1">ไม่มี</option>
                         <option value="2">มี</option>
@@ -454,8 +456,8 @@
     </form>
     </div>
     <div class="modal-footer">
+        <button type="button" class="btn btn-success" id="btn_save_house_seruvey"><i class="icon-plus-sign icon-white"></i> บันทึก</button>
         <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</button>
-        <button type="button" class="btn btn-success"><i class="icon-plus-sign icon-white"></i> บันทึก</button>
     </div>
     </div>
     <!-- end modal survey -->

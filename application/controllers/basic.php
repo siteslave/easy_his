@@ -31,6 +31,51 @@ class Basic extends CI_Controller
     {
         show_404();
     }
+
+    public function search_hospital(){
+        $op = $this->input->post('op');
+        $query = $this->input->post('query');
+
+        if(empty($query)){
+            $json = '{"success": false, "msg": "No query found."}';
+        }else{
+            if($op == 1){
+                //search by name
+                $result = $this->basic->search_hospital_by_name($query);
+            }else{
+                //search by code
+                $result = $this->basic->search_hospital_by_code($query);
+            }
+
+            $rows = json_encode($result);
+
+            $json = '{"success": true, "rows": '.$rows.'}';
+        }
+
+        render_json($json);
+    }
+
+    public function get_ampur(){
+
+        $chw = $this->input->post('chw');
+        $result = $this->basic->get_ampur($chw);
+        $rows = json_encode($result);
+
+        $json = '{"success": true, "rows": '.$rows.'}';
+
+        render_json($json);
+    }
+    public function get_tambon(){
+
+        $chw = $this->input->post('chw');
+        $amp = $this->input->post('amp');
+        $result = $this->basic->get_tambon($chw, $amp);
+        $rows = json_encode($result);
+
+        $json = '{"success": true, "rows": '.$rows.'}';
+
+        render_json($json);
+    }
 /*
     public function get_inscl(){
 

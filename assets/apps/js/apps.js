@@ -34,11 +34,28 @@ var App = {
 
     convertToThaiDateFormat: function(d){
         if(!d){
-            return '-';
+            return '';
         }else{
             var old_date = d.toString();
 
             var year = old_date.substr(0, 4).toString(),
+                month = old_date.substr(4, 2).toString(),
+                day = old_date.substr(6, 2).toString();
+
+            var new_date = day + '/' + month + '/' + year;
+
+            return new_date;
+        }
+
+    },
+
+    convertDBPOPDateToEngDate: function(d){
+        if(!d){
+            return '';
+        }else{
+            var old_date = d.toString();
+
+            var year = parseInt(old_date.substr(0, 4).toString()) - 543,
                 month = old_date.substr(4, 2).toString(),
                 day = old_date.substr(6, 2).toString();
 
@@ -82,3 +99,12 @@ var App = {
         return Math.max(fileSizeInBytes, 0.1).toFixed(1) + byteUnits[i];
     }
 };
+
+$(function(){
+    $('div[data-name="datepicker"]').datepicker({
+        format: 'dd/mm/yyyy',
+        language: 'th'
+    });
+
+    $('input[disabled]').css('background-color', 'white');
+});

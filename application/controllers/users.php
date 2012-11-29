@@ -68,9 +68,9 @@ class Users extends CI_Controller
 
                 $owners = $this->user->get_owner_detail($owner_id);
 
-                $hmain_code = $owners['hmain'];
+                $hmain_code = $owners['main_hospital'];
                 $hmain_name = get_hospital_name($hmain_code);
-                $hsub_code = $owners['hsub'];
+                $hsub_code = $owners['pcucode'];
                 $hsub_name = get_hospital_name($hsub_code);
 
                 $data = array(
@@ -95,6 +95,10 @@ class Users extends CI_Controller
         render_json($json);
     }
 
+    public function logout(){
+        $this->session->sess_destroy();
+        $this->login();
+    }
     public function access_denied(){
         $json = '{"success": false, "msg": "Access denied, please login."}';
 

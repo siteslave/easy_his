@@ -18,8 +18,8 @@
 
 $config['default']['mongo_hostbase'] = '127.0.0.1';
 $config['default']['mongo_database'] = 'easy_his';
-$config['default']['mongo_username'] = 'monalisa';
-$config['default']['mongo_password'] = '789124';
+$config['default']['mongo_username'] = '';
+$config['default']['mongo_password'] = '';
 $config['default']['mongo_persist']  = FALSE;
 $config['default']['mongo_persist_key']	 = 'ci_persist';
 $config['default']['mongo_replica_set']  = FALSE;

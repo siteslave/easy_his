@@ -11,6 +11,7 @@
     <!-- Le styles -->
     <link href="{{ base_url }}assets/css/bootstrap.min.css" rel="stylesheet">
     <link href="{{ base_url }}assets/css/docs.css" rel="stylesheet">
+    <link href="{{ base_url }}assets/css/datepicker.css" rel="stylesheet">
     <style>
         body {
             padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
@@ -67,7 +68,7 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li>
-                                <a href="{{ site_url }}services">
+                                <a href="{{ site_url }}/services">
                                     <i class="icon-check"></i>
                                     รายชื่อผู้มารับบริการ
                                 </a>
@@ -82,7 +83,7 @@
                         </a>
                         <ul class="dropdown-menu">
                             <li>
-                                <a href="{{ site_url }}person">
+                                <a href="{{ site_url }}/person">
                                     <i class="icon-folder-close"></i>
                                     ข้อมูลประชากรในเขตรับผิดชอบ
                                 </a>
@@ -101,9 +102,12 @@
                         <li>
                             <a href="#"><i class="icon-edit"></i> เปลี่ยนรหัสผ่าน (Change password)</a>
                         </li>
-                        <li class="divider"></li>
                         <li>
                             <a href="#"> <i class="icon-info-sign"></i> แก้ไขข้อมูลส่วนตัว</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="{{ site_url }}/users/logout"><i class="icon-off"></i> ออกจากระบบ (Logout)</a>
                         </li>
                     </ul>
                 </div>

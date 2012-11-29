@@ -21,7 +21,7 @@ $(function(){
         do_login: function(items, callback){
 
             $.ajax({
-                url: site_url + 'users/do_login',
+                url: site_url + '/users/do_login',
                 type: 'POST',
                 dataType: 'json',
 
