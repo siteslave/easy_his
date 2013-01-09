@@ -52,7 +52,7 @@ $autoload['packages'] = array();
 |	$autoload['libraries'] = array('database', 'session', 'xmlrpc');
 */
 
-$autoload['libraries'] = array('session', 'twiggy', 'mongo_db');
+$autoload['libraries'] = array('session', 'mongo_db', 'layout');
 
 
 /*
@@ -64,7 +64,7 @@ $autoload['libraries'] = array('session', 'twiggy', 'mongo_db');
 |	$autoload['helper'] = array('url', 'file');
 */
 
-$autoload['helper'] = array('url', 'his');
+$autoload['helper'] = array('url', 'his', 'basic');
 
 
 /*

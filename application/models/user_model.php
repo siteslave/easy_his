@@ -35,9 +35,10 @@ class User_model extends CI_Model
         $result = $this->mongo_db
                         ->where('username', $username)
                         ->where('password', $password)
-                        ->count('users');
+                        ->limit(1)
+                        ->get('users');
 
-        return $result > 0 ? TRUE : FALSE;
+        return $result[0];
     }
     /*
      * Get user login detail

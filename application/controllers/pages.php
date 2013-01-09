@@ -16,15 +16,15 @@ class Pages extends CI_Controller {
             redirect(site_url('users/login'));
         }
 
-        $this->twiggy->set('site_url', site_url());
-        $this->twiggy->set('base_url', base_url());
+        //$this->twiggy->set('site_url', site_url());
+        //$this->twiggy->set('base_url', base_url());
 
-        $this->twiggy->set('fullname', $this->session->userdata('fullname'));
+        //$this->twiggy->set('fullname', $this->session->userdata('fullname'));
     }
     public function index()
     {
-        $this->twiggy->display();
-        //$this->load->view('welcome_message');
+        //$this->twiggy->display();
+        $this->layout->view('pages/index_view');
     }
 
 

@@ -18,14 +18,16 @@ class Users extends CI_Controller
     {
         parent::__construct();
 
+        $this->layout->setLayout('login_layout');
+
         //load model
         $this->load->model('User_model', 'user');
 
-        $this->csrf_token = $this->security->get_csrf_hash();
+        //$this->csrf_token = $this->security->get_csrf_hash();
 
-        $this->twiggy->set('site_url', site_url());
-        $this->twiggy->set('base_url', base_url());
-        $this->twiggy->set('csrf_token', $this->csrf_token);
+        //$this->twiggy->set('site_url', site_url());
+        //$this->twiggy->set('base_url', base_url());
+        //$this->twiggy->set('csrf_token', $this->csrf_token);
 
     }
 
@@ -35,7 +37,8 @@ class Users extends CI_Controller
         $this->login();
     }
     public function login(){
-        $this->twiggy->layout('login')->template('users/login')->display();
+        //$this->twiggy->layout('login')->template('users/login')->display();
+        $this->layout->view('users/login_view');
     }
 
     /*
@@ -54,15 +57,17 @@ class Users extends CI_Controller
             $json = '{"success": false, "msg": "Password empty."}';
         }else{
             //do login
-            $validated = $this->user->do_login($username, $password);
+            $users = $this->user->do_login($username, $password);
 
-            if($validated){
+            if(count($users) > 0){
 
                 // Create session
 
-                $users = $this->user->get_user_detail($username);
+                //$users = $this->user->get_user_detail($username);
 
                 $fullname = $users['fullname'];
+                $user_id = get_first_object($users['_id']);
+                $provider_id = get_first_object($users['provider_id']);
 
                 $owner_id = $users['owner_id'];
 
@@ -80,7 +85,9 @@ class Users extends CI_Controller
                     'hsub_code' => $hsub_code,
                     'hmain_name' => $hmain_name,
                     'hsub_name' => $hsub_name,
-                    'owner_id' => $owner_id
+                    'owner_id' => $owner_id,
+                    'user_id' => $user_id,
+                    'provider_id' => $provider_id
                 );
 
                 //set session data

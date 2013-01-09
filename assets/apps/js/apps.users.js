@@ -1,10 +1,10 @@
-$(function(){
+head.ready(function(){
 
     //User namespace
-    var User = {};
+    var user = {};
 
 
-    User.alert = {
+    user.alert = {
         setAlert: function(c, head, message){
             $('#divAlert').removeClass('alert alert-info');
             $('#divAlert').addClass(c);
@@ -13,68 +13,72 @@ $(function(){
         }
     };
     //Namespace for dataset
-    User.ds = {};
+    user.ds = {};
 
-    //Namespace for ajax
-    User.ajax = {
-        //Do login
-        do_login: function(items, callback){
+    user.check_login = function(){
 
-            $.ajax({
-                url: site_url + '/users/do_login',
-                type: 'POST',
-                dataType: 'json',
+        $("#btnDoLogin").attr("disabled", "disabled");
 
-                data: {
-                    username: items.username,
-                    password: items.password,
-                    csrf_token: csrf_token
-                },
-                //if success
-                success: function(data){
-                    if(data.success){
-                        callback(null);
-                    }else{
-                        callback(data.msg);
-                    }
-                },
-                //if error
-                error: function(xhr, status){
-                    callback(xhr);
-                }
-            });
-        }
-    };
-
-    //Do login
-    $('#btnDoLogin').click(function(){
         var items = {};
         items.username = $('#txtUsername').val();
         items.password = $('#txtPassword').val();
 
         if(!items.username){
             //alert('กรุณาระบุชื่อผู้ใช้งาน');
-            User.alert.setAlert('alert', 'เกิดข้อผิดพลาด', 'กรุณาระบุชื่อผู้ใช้งาน');
+            user.alert.setAlert('alert', 'เกิดข้อผิดพลาด', 'กรุณาระบุชื่อผู้ใช้งาน');
+            $("#btnDoLogin").removeAttr("disabled");
         }else if(!items.password){
             //alert('กรุณาระบุรหัสผ่าน');
-            User.alert.setAlert('alert', 'เกิดข้อผิดพลาด', 'กรุณาระบุรหัสผ่าน');
+            user.alert.setAlert('alert', 'เกิดข้อผิดพลาด', 'กรุณาระบุรหัสผ่าน');
+            $("#btnDoLogin").removeAttr("disabled");
         }else{
 
-            App.showLoginLoading();
+            app.showLoginLoading();
             //Check user login
-            User.ajax.do_login(items, function(err){
+            user.ajax.do_login(items, function(err){
 
                 if(err){
-                    User.alert.setAlert('alert', 'เกิดข้อผิดพลาด', err);
+                    user.alert.setAlert('alert', 'เกิดข้อผิดพลาด', err);
+                    $("#btnDoLogin").removeAttr("disabled");
                 }else{
-                    User.alert.setAlert('alert alert-success', 'ยินดีต้อนรับ', 'ยินดีต้อนรับเข้าสู่ระบบ');
+                    user.alert.setAlert('alert alert-success', 'ยินดีต้อนรับ', 'ยินดีต้อนรับเข้าสู่ระบบ');
                     location.href = site_url;
                 }
 
-                App.hideLoginLoading();
+                app.hideLoginLoading();
             });
         }
 
-        App.hideLoginLoading();
+        app.hideLoginLoading();
+    }
+
+    //Namespace for ajax
+    user.ajax = {
+        //Do login
+        do_login: function(items, cb){
+            var url = 'users/do_login',
+                params = {
+                    username: items.username,
+                    password: items.password
+                };
+            app.ajax(url, params, function(err){
+                if(err){
+                    cb(err);
+                }else{
+                    cb(null);
+                }
+            });
+        }
+    };
+
+    $('#txtPassword').bind('keypress', function(e) {
+        if(e.keyCode==13){
+            user.check_login();
+        }
+    });
+
+    //Do login
+    $('#btnDoLogin').click(function(){
+        user.check_login();
     });
 });

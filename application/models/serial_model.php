@@ -37,8 +37,9 @@ class Serial_model extends CI_Model
 
         $default_thai_yy = (int) date('Y') + 543;
         $default_thai_yy = substr($default_thai_yy, -2);
+        $sr_yy = isset($result[0]) ? $result[0]['yy'] : $default_thai_yy;
 
-        return count($result) > 0 ? (string) $result[0]['yy'] : $default_thai_yy;
+        return $sr_yy;
     }
     public function update_year($new_year){
         $result = $this->mongo_db

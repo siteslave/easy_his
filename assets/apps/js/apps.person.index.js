@@ -1,9 +1,16 @@
-$(document).ready(function(){
+/**
+ * Main person script
+ */
+head.ready(document).ready(function(){
     var Person = {};
 
     Person.alert = {};
 
+    /**
+     * Modal window
+     */
     Person.modal = {
+        /** show new register help **/
         showNewHouse: function(){
             $('#mdlNewHouse').modal({
                     backdrop: 'static'
@@ -14,18 +21,9 @@ $(document).ready(function(){
                     }
                 });
         },
+        /** show house survey **/
         showHouseSurvey: function(){
             $('#mdlHouseSurvey').modal({
-                backdrop: 'static'
-            }).css({
-                    width: 780,
-                    'margin-left': function() {
-                        return -($(this).width() / 2);
-                    }
-                });
-        },
-        showPerson: function(){
-            $('#mdlPersonDetail').modal({
                 backdrop: 'static'
             }).css({
                     width: 780,
@@ -43,163 +41,128 @@ $(document).ready(function(){
         $('#alert_save_house span').html(message);
     };
 
-    //Decoder
-    amplify.request.decoders.appEnvelope =
-        function(data, status, xhr, success, error) {
-            if(data.success){
-                success(data.rows);
-            }else{
-                error(data.msg, xhr);
-            }
-        };
 
-    amplify.request.decoders.appSaveEnvelope =
-        function(data, status, xhr, success, error) {
-            if(data.success){
-                success(null);
-            }else{
-                error(data.msg, xhr);
-            }
-        };
-
-    //define ajax request
-    amplify.request.define('get_villages', 'ajax', {
-        url: site_url + '/person/get_villages',
-        dataType: 'json',
-        type: 'POST',
-
-        decoder: "appEnvelope"
-    });
-
-    //get house
-    amplify.request.define('get_houses', 'ajax', {
-        url: site_url + '/person/get_houses',
-        dataType: 'json',
-        type: 'POST',
-
-        decoder: "appEnvelope"
-    });
-
-    amplify.request.define('get_house_survey', 'ajax', {
-        url: site_url + '/person/get_house_survey',
-        dataType: 'json',
-        type: 'POST',
-
-        decoder: "appEnvelope"
-    });
-
-    amplify.request.define('save_house', 'ajax', {
-        url: site_url + '/person/save_house',
-        dataType: 'json',
-        type: 'POST',
-
-        decoder: "appSaveEnvelope"
-    });
-
-    amplify.request.define('save_house_survey', 'ajax', {
-        url: site_url + '/person/save_house_survey',
-        dataType: 'json',
-        type: 'POST',
-
-        decoder: "appSaveEnvelope"
-    });
-
-
+    /** Ajax functions **/
     Person.ajax = {
+        /**
+         * Get house survey detail
+         *
+         * @param   house_id    House id
+         * @param   cb          Callback function
+         * @return  callback
+         */
         get_house_survey: function(house_id, cb){
-            amplify.request({
-                resourceId: 'get_house_survey',
-                data: {
-                    csrf_token: csrf_token,
+            var url = 'person/get_house_survey',
+                params = {
                     house_id: house_id
-                },
-                success: function(data){
-                    cb(null, data);
-                },
-                error: function(msg, xhr){
-                    cb('เกิดข้อผิดพลาด: ' + msg + ' [' + xhr.status + ': ' + xhr.statusText + ']');
-                }
+                };
+
+            app.ajax(url, params, function(err, data){
+                return err ? cb(err) : cb(null, data);
             });
         },
+        /**
+         * Get village list
+         *
+         * @param   cb  Callback function, no parameters for assign.
+         * @return  cb  Callback function
+         */
         get_villages: function(cb){
-            amplify.request({
-                resourceId: 'get_villages',
-                data: {csrf_token: csrf_token},
-                success: function(data){
-                    cb(null, data);
-                },
-                error: function(msg, xhr){
-                    cb('เกิดข้อผิดพลาด: ' + msg + ' [' + xhr.status + ': ' + xhr.statusText + ']');
-                }
+            var url = 'person/get_villages',
+                params = {};
+
+            app.ajax(url, params, function(err, data){
+                return err ? cb(err) : cb(null, data);
             });
         },
+        /**
+         * Get house list
+         *
+         * @param   village_id  The village id
+         * @param   cb          Callback function.
+         * @return  cb          Callback function.
+         */
         get_houses: function(village_id, cb){
-            amplify.request({
-                resourceId: 'get_houses',
-                data: {
-                    csrf_token: csrf_token,
+            var url = 'person/get_houses',
+                params = {
                     village_id: village_id
-                },
-                success: function(data){
-                    cb(null, data);
-                },
-                error: function(msg, xhr){
-                    cb('เกิดข้อผิดพลาด: ' + msg + ' [' + xhr.status + ': ' + xhr.statusText + ']');
-                }
+                };
+
+            app.ajax(url, params, function(err, data){
+                return err ? cb(err) : cb(null, data);
             });
         },
+        /**
+         * Save house data
+         *
+         * @param items The object of house information.
+         * @param cb    Callback function.
+         */
         save_house: function(items, cb){
-            amplify.request({
-                resourceId: 'save_house',
-                data: {
-                    csrf_token: csrf_token,
+            var url = 'person/save_house',
+                params = {
                     data: items
-                },
-                success: function(){
-                    cb(null);
-                },
-                error: function(msg, xhr){
-                    cb('เกิดข้อผิดพลาด: ' + msg + ' [' + xhr.status + ': ' + xhr.statusText + ']');
-                }
+                };
+
+            app.ajax(url, params, function(err, data){
+                return err ? cb(err) : cb(null, data);
             });
         },
+        /**
+         * Save house survey detail
+         *
+         * @param items The object of survey detail.
+         * @param cb    Callback function.
+         */
         save_house_survey: function(items, cb){
-            amplify.request({
-                resourceId: 'save_house_survey',
-                data: {
-                    csrf_token: csrf_token,
+
+            var url = 'person/save_house_survey',
+                params = {
                     data: items
-                },
-                success: function(){
-                    cb(null);
-                },
-                error: function(msg, xhr){
-                    cb('เกิดข้อผิดพลาด: ' + msg + ' [' + xhr.status + ': ' + xhr.statusText + ']');
-                }
+                };
+
+            app.ajax(url, params, function(err, data){
+                return err ? cb(err) : cb(null, data);
+            });
+
+        },
+        /**
+         * Get person list in the house
+         *
+         * @param house_code    The house id [_id].
+         * @param cb            Callback function.
+         */
+        get_person_list: function(house_code, cb){
+
+            var url = 'person/get_person_list',
+                params = {
+                    house_code: house_code
+                };
+
+            app.ajax(url, params, function(err, data){
+                return err ? cb(err) : cb(null, data);
             });
         }
     };
 
     Person.set_house = function(village_id){
 
-        App.showImageLoading();
-
         Person.ajax.get_houses(village_id, function(err, data){
 
-            $('#tbl_houses_list tbody').empty();
+            $('#tbl_houses_list > tbody').empty();
 
             var i = 1;
-            if(_.size(data)){
-                _.each(data, function(v){
-                    $('#tbl_houses_list tbody').append(
+            if(_.size(data.rows)){
+                _.each(data.rows, function(v){
+                    $('#tbl_houses_list > tbody').append(
                         '<tr>' +
                             '<td>'+ i +'</td>' +
                             '<td>'+ v.house_id +'</td>' +
                             '<td>'+ v.house +'</td>' +
-                            '<td>-</td>' +
+                            '<td>'+ v.total +'</td>' +
                             '<td>' +
                             '<div class="btn-group"> ' +
-                            '<a href="javascript:void(0);" data-name="btn_get_person" class="btn btn-info" data-house="' + v.house + '" data-id="' + v.id + '" title="ดูประชากร"><i class="icon-user icon-white"></i></a>' +
+                            '<a href="#showPersonList" data-name="btn_get_person" class="btn btn-info" data-house="' + v.house + '" data-id="' + v.id + '" title="ดูประชากร"><i class="icon-user icon-white"></i></a>' +
                             '<a href="javascript:void(0);" data-name="btnHouseSurvey" data-id="' + v.id + '" class="btn" title="ข้อมูลสำรวจ" data-id="' + v.id + '">'+
                             '<i class="icon-edit"></i></a>' +
                             '</td>' +
@@ -209,13 +172,11 @@ $(document).ready(function(){
                     i++;
                 });
             }else{
-                $('#tbl_houses_list tbody').append(
+                $('#tbl_houses_list > tbody').append(
                     '<tr><td colspan="4">ไม่พบหลังคาเรือน</td></tr>'
                 );
             }
 
-
-            App.hideImageLoading();
         });
     };
 
@@ -273,26 +234,24 @@ $(document).ready(function(){
         var house_id = $(this).attr('data-id');
 
         if(!house_id){
-            alert('กรุณาเลือกหลังคาเรือนที่ต้องการ');
+            app.alert('กรุณาเลือกหลังคาเรือนที่ต้องการ');
         }else{
 
             $('#txtHouseId').val(house_id);
 
-            App.showImageLoading();
             Person.ajax.get_house_survey(house_id, function(err, data){
                 //set data
                 if(err){
-                    alert(err);
+                    app.alert(err);
                 }else{
                     //set data
-                    if(_.size(data.surveys) > 0){
-                        Person.setSurvey(data.surveys);
+                    if(_.size(data.rows.surveys) > 0){
+                        Person.setSurvey(data.rows.surveys);
                     }
                     //console.log(data.surveys);
                     Person.modal.showHouseSurvey();
                 }
 
-                App.hideImageLoading();
             });
 
         }
@@ -302,9 +261,10 @@ $(document).ready(function(){
         var house_id = $('#txtHouseId').val();
 
         if(!house_id){
-            alert('กรุณาเลือกหลังคาเรือนที่ต้องการ');
+            app.alert('กรุณาเลือกหลังคาเรือนที่ต้องการ');
         }else{
-            location.href = site_url + '/person/register/' + house_id;
+            var url = 'person/register/' + house_id;
+            app.go_to_url(url);
         }
 
     });
@@ -314,6 +274,9 @@ $(document).ready(function(){
         //clear old address
         $('#txtHouseId').val('');
         $('#txt_show_house_address').html('');
+        //clear person list
+        $('#tbl_person_in_house > tbody').empty();
+        $('#divPersonList').fadeOut('slow');
 
         var village_id = $(this).attr('data-id'),
             village_name = $(this).attr('data-vname'),
@@ -328,15 +291,14 @@ $(document).ready(function(){
         $('#btnShowModalNewHouse').fadeIn('slow');
     });
 
-    App.showImageLoading();
     Person.ajax.get_villages(function(err, data){
 
         if(err){
-            alert(err);
+            app.alert(err);
         }else{
-            $('#tblVillageList tbody').empty();
-            _.each(data, function(v){
-                $('#tblVillageList tbody').append(
+            $('#tblVillageList > tbody').empty();
+            _.each(data.rows, function(v){
+                $('#tblVillageList > tbody').append(
                     '<tr>' +
                         '<td>'+ v.village_code +'</td>' +
                         '<td>'+ v.moo +'</td>' +
@@ -351,8 +313,6 @@ $(document).ready(function(){
                 );
             });
         }
-
-        App.hideImageLoading();
     });
 
 
@@ -388,13 +348,18 @@ $(document).ready(function(){
         items.village_id = $('#village_id').val();
 
         if(!items.house){
-            Person.alert.show_save_house_alert('alert alert-error', 'เกิดข้อผิดพลาด', 'กรุณาระบุบ้านเลขที่');
+            //Person.alert.show_save_house_alert('alert alert-error', 'เกิดข้อผิดพลาด', 'กรุณาระบุบ้านเลขที่');
+            app.alert('กรุณาระบุบ้านเลขที่');
         }else{
             Person.ajax.save_house(items, function(err){
                 if(err){
-                    Person.alert.show_save_house_alert('alert alert-error', 'เกิดข้อผิดพลาด', err);
+                    //Person.alert.show_save_house_alert('alert alert-error', 'เกิดข้อผิดพลาด', err);
+                    app.alert(err);
                 }else{
-                    Person.alert.show_save_house_alert('alert alert-info', 'สำเร็จ', 'การบันทึกข้อมูลเสร็จเรียบร้อย');
+                    //Person.alert.show_save_house_alert('alert alert-info', 'สำเร็จ', 'การบันทึกข้อมูลเสร็จเรียบร้อย');
+
+                    app.alert('การบันทึกข้อมูลเสร็จเรียบร้อย');
+                    
                     Person.set_house(items.village_id);
 
                     Person.clear_register_form();
@@ -442,13 +407,13 @@ $(document).ready(function(){
         items.house_id = $('#txtHouseId').val();
 
         if(!items.house_id){
-            alert('กรุณาเลือกหลังคาเรือนที่ต้องการสำรวจ');
+            app.alert('กรุณาเลือกหลังคาเรือนที่ต้องการสำรวจ');
         }else{
             Person.ajax.save_house_survey(items, function(err){
                 if(err){
-                    alert(err);
+                    app.alert(err);
                 }else{
-                    alert('Save success');
+                    app.alert('Save success');
                     $('#mdlHouseSurvey').modal('hide');
                 }
             });
@@ -457,5 +422,48 @@ $(document).ready(function(){
 
     $('#mdlHouseSurvey').on('hidden', function(){
         Person.clear_servey_form();
+    });
+
+    $('a[data-name="btn_get_person"]').live('click', function(){
+        var house_code = $(this).attr('data-id');
+
+        $('#divPersonList').fadeIn('slow');
+
+        //get person list
+        if(house_code){
+            Person.ajax.get_person_list(house_code, function(err, data){
+                $('#tbl_person_in_house > tbody').empty();
+
+                if(err){
+                    $('#tbl_person_in_house > tbody').append(
+                        '<tr>' +
+                            '<td colspan="9">ไม่พบรายการ</td>' +
+                        '</tr>'
+                    );
+                }else{
+                    _.each(data.rows, function(v){
+                        $('#tbl_person_in_house > tbody').append(
+                            '<tr>' +
+                                '<td>'+ v.hn +'</td>' +
+                                '<td>'+ v.cid +'</td>' +
+                                '<td>'+ v.title +'</td>' +
+                                '<td>'+ v.first_name + ' ' + v.last_name +'</td>' +
+                                '<td>'+ app.to_thai_date(v.birthdate) +'</td>' +
+                                '<td>'+ v.age +'</td>' +
+                                '<td>'+ v.sex +'</td>' +
+                                '<td>'+ v.fstatus +'</td>' +
+                                '<td> <div class="btn-group">' +
+                                '<a class="btn btn-danger" href="'+ site_url + 'person/delete/' + v.id + '" title="ลบ">' +
+                                '<i class="icon-trash icon-white"></i></a>' +
+                                '<a class="btn" href="'+ site_url + 'person/edit/' + v.id + '" title="แก้ไข">' +
+                                '<i class="icon-edit"></i></a>' +
+                                '</div></td>' +
+                            '</tr>'
+                        );
+                    });
+                }
+
+            });
+        }
     });
 });
