@@ -20,8 +20,8 @@ class Basic_model extends CI_Model
     public function get_insurance()
     {
         $result = $this->mongo_db
-                        ->order_by(array('code' => 1))
-                        ->get('ref_insurances');
+            ->order_by(array('code' => 1))
+            ->get('ref_insurances');
 
         $arr_result = array();
         foreach($result as $r){
@@ -29,6 +29,55 @@ class Basic_model extends CI_Model
             $obj->code = $r['code'];
             $obj->name = $r['name'];
             //$obj->c = $r['inscl'];
+
+            array_push($arr_result, $obj);
+        }
+
+        return $arr_result;
+    }
+
+    public function get_drug_usage_by_alias($query)
+    {
+        $this->mongo_db->add_index('ref_drug_usages', array('alias_code' => -1));
+        $this->mongo_db->add_index('ref_drug_usages', array('name1' => -1));
+
+        $result = $this->mongo_db
+            ->like('alias_code', $query)
+            ->get('ref_drug_usages');
+
+        $arr_result = array();
+
+        foreach($result as $r){
+            $obj = new stdClass();
+            $obj->alias_code = $r['alias_code'];
+            $obj->name1 = $r['name1'];
+            $obj->name2 = $r['name2'];
+            $obj->name2 = $r['name3'];
+
+            array_push($arr_result, $obj);
+        }
+
+        return $arr_result;
+    }
+
+
+    public function get_drug_usage_by_name($query)
+    {
+        $this->mongo_db->add_index('ref_drug_usages', array('alias_code' => -1));
+        $this->mongo_db->add_index('ref_drug_usages', array('name1' => -1));
+
+        $result = $this->mongo_db
+            ->like('name1', $query)
+            ->get('ref_drug_usages');
+
+        $arr_result = array();
+
+        foreach($result as $r){
+            $obj = new stdClass();
+            $obj->alias_code = $r['alias_code'];
+            $obj->name1 = $r['name1'];
+            $obj->name2 = $r['name2'];
+            $obj->name2 = $r['name3'];
 
             array_push($arr_result, $obj);
         }
@@ -162,8 +211,8 @@ class Basic_model extends CI_Model
     public function get_races()
     {
         $result = $this->mongo_db
-                        ->where(array('actived' => 'Y'))
-                        ->order_by(array('name' => 1))->get('ref_races');
+            ->where(array('actived' => 'Y'))
+            ->order_by(array('name' => 1))->get('ref_races');
 
         $arr_result = array();
         foreach($result as $r){
@@ -180,8 +229,8 @@ class Basic_model extends CI_Model
     public function get_nationalities()
     {
         $result = $this->mongo_db
-                        ->where(array('actived' => 'Y'))
-                        ->order_by(array('name' => 1))->get('ref_nations');
+            ->where(array('actived' => 'Y'))
+            ->order_by(array('name' => 1))->get('ref_nations');
 
         $arr_result = array();
         foreach($result as $r){
@@ -197,7 +246,7 @@ class Basic_model extends CI_Model
     public function get_drinking()
     {
         $result = $this->mongo_db
-                        ->order_by(array('export_code' => 1))->get('ref_drinkings');
+            ->order_by(array('export_code' => 1))->get('ref_drinkings');
 
         $arr_result = array();
         foreach($result as $r){
@@ -213,7 +262,7 @@ class Basic_model extends CI_Model
     public function get_smoking()
     {
         $result = $this->mongo_db
-                        ->order_by(array('export_code' => 1))->get('ref_smokings');
+            ->order_by(array('export_code' => 1))->get('ref_smokings');
 
         $arr_result = array();
         foreach($result as $r){
@@ -230,8 +279,8 @@ class Basic_model extends CI_Model
     public function get_religions()
     {
         $result = $this->mongo_db
-                        ->where(array('actived' => 'Y'))
-                        ->order_by(array('name' => 1))->get('ref_religions');
+            ->where(array('actived' => 'Y'))
+            ->order_by(array('name' => 1))->get('ref_religions');
 
         $arr_result = array();
         foreach($result as $r){
@@ -250,10 +299,10 @@ class Basic_model extends CI_Model
         $this->mongo_db->add_index('ref_hospitals', array('hospname' => -1));
 
         $result = $this->mongo_db
-                        ->like('hospname', $query)
-                        ->order_by(array('hospcode' => 1))
-                        ->limit(25)
-                        ->get('ref_hospitals');
+            ->like('hospname', $query)
+            ->order_by(array('hospcode' => 1))
+            ->limit(25)
+            ->get('ref_hospitals');
 
         $arr_result = array();
 
@@ -273,10 +322,10 @@ class Basic_model extends CI_Model
         $this->mongo_db->add_index('ref_hospitals', array('hospname' => -1));
 
         $result = $this->mongo_db
-                        ->like('hospname', $query)
-                        ->order_by(array('hospcode' => 1))
-                        ->limit(25)
-                        ->get('ref_hospitals');
+            ->like('hospname', $query)
+            ->order_by(array('hospcode' => 1))
+            ->limit(25)
+            ->get('ref_hospitals');
 
         $arr_result = array();
 
@@ -296,9 +345,9 @@ class Basic_model extends CI_Model
         $this->mongo_db->add_index('ref_hospitals', array('hospcode' => -1));
 
         $result = $this->mongo_db
-                        ->order_by(array('hospcode' => 1))
-                        ->where(array('hospcode' => $query))
-                        ->get('ref_hospitals');
+            ->order_by(array('hospcode' => 1))
+            ->where(array('hospcode' => $query))
+            ->get('ref_hospitals');
 
         $arr_result = array();
 
@@ -317,9 +366,9 @@ class Basic_model extends CI_Model
         $this->mongo_db->add_index('ref_hospitals', array('hospcode' => -1));
 
         $result = $this->mongo_db
-                        ->order_by(array('hospcode' => 1))
-                        ->where(array('hospcode' => $query))
-                        ->get('ref_hospitals');
+            ->order_by(array('hospcode' => 1))
+            ->where(array('hospcode' => $query))
+            ->get('ref_hospitals');
 
         $arr_result = array();
 
@@ -358,7 +407,7 @@ class Basic_model extends CI_Model
     public function get_provider_type(){
 
         $result = $this->mongo_db
-            //->order_by(array('name' => 1))
+        //->order_by(array('name' => 1))
             ->get('ref_provider_types');
 
         $arr_result = array();

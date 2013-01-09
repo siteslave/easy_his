@@ -193,6 +193,33 @@ class Basic extends CI_Controller
         render_json($json);
     }
 
+
+
+    public function get_drug_usage(){
+        $query = $this->input->post('query');
+        if(empty($query)){
+            $json = '{"success": false, "msg": "No query found."}';
+        }else{
+
+            $op = has_number($query);
+
+            if($op){
+                $rs = $this->basic->get_drug_usage_by_code($query);
+            }else{
+                $rs = $this->basic->get_drug_usage_by_name($query);
+            }
+
+            if($rs){
+                $rows = json_encode($rs);
+                $json = '{"success": true, "rows": '.$rows.'}';
+            }else{
+                $json = '{"success": false, "msg": "No data."}';
+            }
+        }
+
+        render_json($json);
+    }
+
     public function search_icd_ajax(){
         $query = $this->input->post('query');
         if(empty($query)){
