@@ -11,6 +11,7 @@
 
 class Services extends CI_Controller
 {
+    var $provider_id;
 
     public function __construct()
     {
@@ -22,6 +23,8 @@ class Services extends CI_Controller
         if(empty($this->owner_id)){
             redirect(site_url('users/login'));
         }
+
+        $this->provider_id = $this->session->userdata('provider_id');
 
         $this->load->model('Service_model', 'service');
         $this->load->model('Basic_model', 'basic');
@@ -664,6 +667,94 @@ class Services extends CI_Controller
         render_json($json);
     }
 
+    ########### Drug module #########
+
+    /*
+     * Save drug
+     */
+    public function save_drug_opd(){
+        $data = $this->input->post('data');
+        if(empty($data)){
+            $json = '{"success": false, "msg": "No data for save."}';
+        }else if(empty($data['drug_id'])){
+            $json = '{"success": false, "msg": "No drug id found."}';
+        }else if(!$this->service->check_visit_exist($data['vn'])){
+           $json = '{"success": false, "msg": "No visit found."}';
+        }else if($data['isupdate']){
+            //do update
+            $rs = $this->service->update_drug_opd($data);
+            if($rs){
+                $json = '{"success": true}';
+            }else{
+                $json = '{"success": false, "msg": "Can\'t update data"}';
+            }
+        }else{
+
+            //check drug duplicate
+            $duplicated = $this->service->check_drug_duplicate($data['vn'], $data['drug_id']);
+            if($duplicated){
+                //do save
+                $data['provider_id'] = $this->provider_id;
+                $rs = $this->service->save_drug_opd($data);
+
+                if($rs){
+                    $json = '{"success": true}';
+                }else{
+                    $json = '{"success": false, "msg": "Can\'t save data"}';
+                }
+            }else{
+                $json = '{"success": false, "msg": "Drug duplicate, please use another."}';
+            }
+        }
+
+        render_json($json);
+    }
+    /*
+     * Remove drug
+     *
+     * @param   array   $data
+     */
+    public function remove_drug_opd(){
+        $id = $this->input->post('id');
+        if(empty($id)){
+            $json = '{"success": false, "msg": "NO data found"}';
+        }else{
+            $rs = $this->service->remove_drug
+        }
+    }
+    /*
+     * Get drug list
+     */
+    public function get_drug_list(){
+        $vn = $this->input->post('vn');
+        if(!empty($vn)){
+            $rs = $this->service->get_drug_list($vn);
+            if($rs){
+                $arr_result = array();
+                foreach($rs as $r){
+                    $obj = new stdClass();
+                    $obj->id = get_first_object($r['_id']);
+                    $obj->drug_id = get_first_object($r['drug_id']);
+                    $obj->drug_name = get_drug_name($obj->drug_id);
+                    $obj->usage_id = get_first_object($r['usage_id']);
+                    $obj->usage_name = get_usage_name($obj->usage_id);
+                    $obj->price = $r['price'];
+                    $obj->qty = $r['qty'];
+
+                    array_push($arr_result, $obj);
+
+                    $rows = json_encode($arr_result);
+                    $json = '{"success": true, "rows": '.$rows.'}';
+                }
+            }else{
+                $json = '{"success": false, "msg": "Can\'t get drug list."}';
+            }
+        }else{
+            $json = '{"success": false, "msg": "No vn found."}';
+        }
+
+        render_json($json);
+    }
 }
 
 /* End of file services.php */

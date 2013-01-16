@@ -311,6 +311,7 @@ class Service_model extends CI_Model
         return $rs;
     }
 
+
     public function check_duplicate_opd_proced($vn, $code){
         $rs = $this->mongo_db
             ->where(array('vn' => $vn, 'code' => $code))
@@ -344,7 +345,87 @@ class Service_model extends CI_Model
 
         return $rs;
     }
+
+    ####################### Drug modules #######################
+
+    /*
+     * Save drug items
+     *
+     * @param  array   $data
+     * @retrun  boolean
+     */
+    public function  save_drug_opd($data){
+        $rs = $this->mongo_db
+            ->insert('drugs_opd', array(
+            'vn' => (string) $data['vn'],
+            'drug_id' => new MongoId($data['drug_id']),
+            'usage_id' => new MongoId($data['usage_id']),
+            'price' => (float) $data['price'],
+            'qty' => (int) $data['qty'],
+            'provider_id' => new MongoId($data['provider_id'])
+        ));
+        return $rs;
+    }
+    /*
+     * Update drug item
+     *
+     * @param   array   $data
+     */
+    public function update_drug_opd($data){
+        $rs = $this->mongo_db
+            ->where(array('vn' => $data['vn'], 'drug_id' => new MongoId($data['drug_id'])))
+            ->set(array(
+                'qty' => (float) $data['qty'],
+                'price' => (float) $data['price']
+            ))->update('drugs_opd');
+        return $rs;
+    }
+
+    /*
+     * Remove drug
+     */
+    public function remove_drug_opd($id){
+        $rs = $this->mongo_db
+            ->where('_id', new MongoId($id))
+            ->delete('drugs_opd');
+        return $rs;
+    }
+    /*
+     * Check duplicate drug
+     *
+     * @param   string      $vn The visit number
+     * @param   ObjectId    $drug_id    The drug id
+     *
+     * @return  boolean TRHE if duplicate, else is FALSE
+     */
+
+    public function check_drug_duplicate($vn, $drug_id){
+        $this->mongo_db->add_index('drugs_opd', array('vn' => -1));
+        $this->mongo_db->add_index('drugs_opd', array('drug_id' => -1));
+
+        $rs = $this->mongo_db
+            ->where(array('vn' => (string) $vn, 'drug_id' => new MongoId($drug_id)))
+            ->count('drugs_opd');
+        return $rs > 0 ? TRUE : FALSE;
+    }
+
+    /*
+     * Get drug list
+     *
+     * @param  string  $vn The visit number
+     * @retrun  array
+     */
+    public function get_drug_list($vn){
+
+        $this->mongo_db->add_index('drugs_opd', array('vn' => -1));
+
+        $rs = $this->mongo_db
+            ->where('vn',(string) $vn)
+            ->get('drugs_opd');
+
+        return $rs;
+    }
 }
 
-/* End of file myfile.php */
-/* Location: ./models/myfile.php */
+/* End of file service_model.php */
+/* Location: ./models/service_model.php */

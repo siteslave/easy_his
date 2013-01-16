@@ -195,7 +195,7 @@ class Basic extends CI_Controller
 
 
 
-    public function get_drug_usage(){
+    public function search_drug_usage(){
         $query = $this->input->post('query');
         if(empty($query)){
             $json = '{"success": false, "msg": "No query found."}';
@@ -204,9 +204,9 @@ class Basic extends CI_Controller
             $op = has_number($query);
 
             if($op){
-                $rs = $this->basic->get_drug_usage_by_code($query);
+                $rs = $this->basic->search_drug_usage_by_alias($query);
             }else{
-                $rs = $this->basic->get_drug_usage_by_name($query);
+                $rs = $this->basic->search_drug_usage_by_name($query);
             }
 
             if($rs){

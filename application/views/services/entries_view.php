@@ -507,10 +507,9 @@
 
         </div>
         <div class="tab-pane" id="tab_drug">
-            <table class="table table-hover">
+            <table class="table table-hover" id="tbl_drug_list">
                 <thead>
                 <tr>
-                    <th>รหัส</th>
                     <th>รายการ</th>
                     <th>ราคา</th>
                     <th>จำนวน</th>
@@ -520,7 +519,6 @@
                 </thead>
                 <tbody>
                 <tr>
-                    <td>...</td>
                     <td>...</td>
                     <td>...</td>
                     <td>...</td>
@@ -726,11 +724,13 @@
     </div>
     <div class="modal-body">
         <form class="form-horizontal">
+            <input type="hidden" id="drug_isupdate" value="0">
+            <input type="hidden" id="service_drug_id" value="">
             <div class="control-group">
                 <label class="control-label" for="txt_drug_name">ชื่อยา/เวชภัณฑ์</label>
                 <div class="controls">
                     <div class="input-append">
-                        <input type="hidden" id="txt_drug_code">
+                        <input type="hidden" id="txt_drug_id">
                         <input id="txt_drug_name" class="input-xlarge uneditable-input" disabled="disabled" type="text" placeholder="คลิกปุ่มค้นหา">
                         <button class="btn btn-info" type="button" id="btn_drug_show_search">
                             <i class="icon-search icon-white"></i>
@@ -743,9 +743,9 @@
                 <label class="control-label" for="txt_drug_name">วิธีการใช้ยา</label>
                 <div class="controls">
                     <div class="input-append">
-                        <input type="hidden" id="txt_drug_usage_code">
+                        <input type="hidden" id="txt_drug_usage_id">
                         <input id="txt_drug_usage_name" class="input-xlarge uneditable-input" disabled="disabled" type="text" placeholder="คลิกปุ่มค้นหา">
-                        <button class="btn btn-info" type="button">
+                        <button class="btn btn-info" type="button" id="btn_drug_usage_show_search">
                             <i class="icon-search icon-white"></i>
                         </button>
                     </div>
@@ -772,7 +772,7 @@
         </form>
     </div>
     <div class="modal-footer">
-        <a href="#" class="btn btn-success" id="btn_drug_do_save"><i class="icon-plus icon-white"></i> เพิ่มรายการ</a>
+        <a href="#" class="btn btn-success" id="btn_drug_do_save"><i class="icon-plus icon-white"></i> เพิ่มรายการ/ปรับปรุง</a>
         <a href="#" class="btn btn-danger" data-dismiss="modal"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</a>
 
     </div>
@@ -815,6 +815,43 @@
     </div>
 </div>
 
+    <!-- search drug usage -->
+<div class="modal hide fade" id="mdl_drug_usage_search">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>เพิ่มรายการยา</h3>
+    </div>
+    <div class="modal-body">
+        <blockquote>ค้นหาวิธีการใช้ยา โดยพิมพ์ข้อความ หรือ รหัสการใช้ยา เพื่อค้นหา</blockquote>
+        <form class="form-actions form-inline">
+            <label for="txt_drug_search_name">ค้นหา</label>
+            <div class="input-append">
+                <input id="txt_drug_usage_search_query" class="input-xlarge" type="text" placeholder="พิมพ์วิธีการใช้/รหัสการใช้ยา...">
+                <button class="btn btn-info" type="button" id="bnt_drug_usage_do_search">
+                    <i class="icon-search icon-white"></i>
+                </button>
+            </div>
+        </form>
+        <table class="table table-hover" id="tbl_drug_usage_search_result">
+            <thead>
+            <tr>
+                <th>alias</th>
+                <th>วิธีการใช้</th>
+                <th>name1</th>
+                <th>name2</th>
+                <th>name3</th>
+            </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn btn-danger" data-dismiss="modal"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</a>
+
+    </div>
+</div>
+
+    <!-- end search drug usage -->
 <!-- <script type="text/javascript" src="{{ base_url }}assets/apps/js/apps.services.js"></script> -->
 <script type="text/javascript">
     head.js(

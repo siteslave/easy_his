@@ -36,13 +36,14 @@ class Basic_model extends CI_Model
         return $arr_result;
     }
 
-    public function get_drug_usage_by_alias($query)
+    public function search_drug_usage_by_alias($query)
     {
         $this->mongo_db->add_index('ref_drug_usages', array('alias_code' => -1));
         $this->mongo_db->add_index('ref_drug_usages', array('name1' => -1));
 
         $result = $this->mongo_db
             ->like('alias_code', $query)
+            ->limit(50)
             ->get('ref_drug_usages');
 
         $arr_result = array();
@@ -52,7 +53,8 @@ class Basic_model extends CI_Model
             $obj->alias_code = $r['alias_code'];
             $obj->name1 = $r['name1'];
             $obj->name2 = $r['name2'];
-            $obj->name2 = $r['name3'];
+            $obj->name3 = $r['name3'];
+            $obj->id = get_first_object($r['_id']);
 
             array_push($arr_result, $obj);
         }
@@ -61,13 +63,14 @@ class Basic_model extends CI_Model
     }
 
 
-    public function get_drug_usage_by_name($query)
+    public function search_drug_usage_by_name($query)
     {
         $this->mongo_db->add_index('ref_drug_usages', array('alias_code' => -1));
         $this->mongo_db->add_index('ref_drug_usages', array('name1' => -1));
 
         $result = $this->mongo_db
             ->like('name1', $query)
+            ->limit(50)
             ->get('ref_drug_usages');
 
         $arr_result = array();
@@ -78,6 +81,7 @@ class Basic_model extends CI_Model
             $obj->name1 = $r['name1'];
             $obj->name2 = $r['name2'];
             $obj->name2 = $r['name3'];
+            $obj->id = get_first_object($r['_id']);
 
             array_push($arr_result, $obj);
         }
@@ -689,6 +693,13 @@ class Basic_model extends CI_Model
 
         return count($result) > 0 ? $result[0]['name'] : '-';
     }
+
+    public function get_usage_name($id){
+        $result = $this->mongo_db->where(array('_id' => new MongoId($id)))->get('ref_drug_usages');
+
+        return count($result) > 0 ? $result[0]['name1'] : '-';
+    }
+
     public function get_clinic_name($id){
         $result = $this->mongo_db->where(array('_id' => new MongoId($id)))->get('ref_clinics');
 
