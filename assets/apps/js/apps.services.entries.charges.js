@@ -1,11 +1,11 @@
 
 head.ready(function(){
-    var drug = {};
-    drug.vn = $('#vn').val();
+    var charge = {};
+    charge.vn = $('#vn').val();
 
-    drug.modal = {
+    charge.modal = {
         show_new: function(){
-            $('#mdl_drug_new').modal({
+            $('#mdl_charge_new').modal({
                 backdrop: 'static'
             }).css({
                     width: 640,
@@ -15,10 +15,10 @@ head.ready(function(){
                 });
         },
         hide_new: function(){
-            $('#mdl_drug_new').modal('hide');
+            $('#mdl_charge_new').modal('hide');
         },
-        show_search_drug: function(){
-            $('#mdl_drug_search').modal({
+        show_search_charge: function(){
+            $('#mdl_charge_search').modal({
                 backdrop: 'static'
             }).css({
                     width: 960,
@@ -27,11 +27,11 @@ head.ready(function(){
                     }
                 });
         },
-        hide_search_drug: function(){
-            $('#mdl_drug_search').modal('hide');
+        hide_search_charge: function(){
+            $('#mdl_charge_search').modal('hide');
         },
-        show_search_drug_usage: function(){
-            $('#mdl_drug_usage_search').modal({
+        show_search_charge_usage: function(){
+            $('#mdl_charge_usage_search').modal({
                 backdrop: 'static'
             }).css({
                     width: 780,
@@ -40,16 +40,16 @@ head.ready(function(){
                     }
                 });
         },
-        hide_search_drug_usage: function(){
-            $('#mdl_drug_usage_search').modal('hide');
+        hide_search_charge_usage: function(){
+            $('#mdl_charge_usage_search').modal('hide');
         }
     };
 
     //ajax
-    drug.ajax = {
-        save_drug: function(data, cb){
+    charge.ajax = {
+        save_charge: function(data, cb){
 
-            var url = 'services/save_drug_opd',
+            var url = 'services/save_charge_opd',
                 params = {
                     data: data
                 };
@@ -58,9 +58,9 @@ head.ready(function(){
                 return err ? cb(err) : cb(null, data);
             });
         },
-        search_drug: function(query, cb){
+        search_charge: function(query, cb){
 
-            var url = 'basic/search_drug',
+            var url = 'basic/search_charge',
                 params = {
                     query: query
                 };
@@ -71,7 +71,7 @@ head.ready(function(){
         },
         get_list: function(vn, cb){
 
-            var url = 'services/get_drug_list',
+            var url = 'services/get_charge_list',
                 params = {
                     vn: vn
                 };
@@ -80,9 +80,9 @@ head.ready(function(){
                 return err ? cb(err) : cb(null, data);
             });
         },
-        remove_drug: function(id, cb){
+        remove_charge: function(id, cb){
 
-            var url = 'services/remove_drug_opd',
+            var url = 'services/remove_charge_opd',
                 params = {
                     id: id
                 };
@@ -93,7 +93,7 @@ head.ready(function(){
         },
         search_usage: function(query, cb){
 
-            var url = 'basic/search_drug_usage',
+            var url = 'basic/search_charge_usage',
                 params = {
                     query: query
                 };
@@ -105,34 +105,34 @@ head.ready(function(){
     };
 
 
-    drug.get_list = function(){
-        drug.ajax.get_list(drug.vn, function(err, data){
+    charge.get_list = function(){
+        charge.ajax.get_list(charge.vn, function(err, data){
             if(err){
                 app.alert(err);
             }else{
-                drug.set_list(data);
+                charge.set_list(data);
             }
 
         });
     };
-    //set drug list
-    drug.set_list = function(data){
-        $('#tbl_drug_list > tbody').empty();
+    //set charge list
+    charge.set_list = function(data){
+        $('#tbl_charge_list > tbody').empty();
 
         _.each(data.rows, function(v){
-            $('#tbl_drug_list > tbody').append(
+            $('#tbl_charge_list > tbody').append(
                 '<tr>' +
-                    '<td>' + v.drug_name + '</td>' +
+                    '<td>' + v.charge_name + '</td>' +
                     '<td>' + app.add_commars(v.price) + '</td>' +
                     '<td>' + v.qty + '</td>' +
                     '<td>' + v.usage_name + '</td>' +
                     '<td>' +
                     '<div class="btn-group">' +
                     '<a href="javascript:void(0);" class="btn" title="แก้ไขรายการ" ' +
-                    'data-name="btn_drug_edit" data-id="'+ v.id +'" data-drug_id="'+ v.drug_id +'" data-drug_name="'+ v.drug_name+'" ' +
+                    'data-name="btn_charge_edit" data-id="'+ v.id +'" data-charge_id="'+ v.charge_id +'" data-charge_name="'+ v.charge_name+'" ' +
                     'data-price="' + v.price + '" data-usage_id="'+ v.usage_id +'" data-usage_name="'+ v.usage_name +'" ' +
                     'data-qty="'+ v.qty +'"><i class="icon-edit"></i></a>' +
-                    '<a href="javascript:void(0);" data-name="btn_drug_remove" class="btn" title="ลบรายการ" data-id="'+ v.id +'"><i class="icon-remove"></i></a>' +
+                    '<a href="javascript:void(0);" data-name="btn_charge_remove" class="btn" title="ลบรายการ" data-id="'+ v.id +'"><i class="icon-remove"></i></a>' +
                     '</div>' +
                     '</td>' +
                     '</tr>'
@@ -140,37 +140,37 @@ head.ready(function(){
         });
     };
 
-    $('#btn_drug_new').click(function(){
-        drug.clear_form();
-        drug.modal.show_new();
+    $('#btn_charge_new').click(function(){
+        charge.clear_form();
+        charge.modal.show_new();
     });
 
-    $('#btn_drug_show_search').click(function(){
-        drug.modal.hide_new();
-        //$('#mdl_drug_new').modal('hide');
-        drug.modal.show_search_drug();
+    $('#btn_charge_show_search').click(function(){
+        charge.modal.hide_new();
+        //$('#mdl_charge_new').modal('hide');
+        charge.modal.show_search_charge();
     });
 
-    $('#mdl_drug_search').on('hidden', function(){
-        drug.modal.show_new();
+    $('#mdl_charge_search').on('hidden', function(){
+        charge.modal.show_new();
     });
 
-    //do search drug
-    $('#bnt_drug_do_search').click(function(){
-        var query = $('#txt_drug_search_name').val();
+    //do search charge
+    $('#bnt_charge_do_search').click(function(){
+        var query = $('#txt_charge_search_name').val();
         if(!query){
             app.alert('กรุณาระบุคำค้นหา');
         }else{
-            drug.ajax.search_drug(query, function(err, data){
-                $('#tbl_drug_search_result > tbody').empty();
+            charge.ajax.search_charge(query, function(err, data){
+                $('#tbl_charge_search_result > tbody').empty();
                 if(err){
                     app.alert(err);
-                    $('#tbl_drug_search_result > tbody').append(
+                    $('#tbl_charge_search_result > tbody').append(
                         '<tr><td colspan="6">ไม่พบรายการ</td></tr>'
                     );
                 }else{
                     _.each(data.rows, function(v){
-                        $('#tbl_drug_search_result > tbody').append(
+                        $('#tbl_charge_search_result > tbody').append(
                             '<tr>' +
                                 '<td>' + v.stdcode + '</td>' +
                                 '<td>' + v.name + '</td>' +
@@ -178,7 +178,7 @@ head.ready(function(){
                                 '<td>' + v.unit + '</td>' +
                                 '<td>' + v.streng + '</td>' +
                                 '<td><a href="javascript:void(0);" class="btn btn-mini" title="เลือกรายการ" ' +
-                                'data-name="btn_selected_drug" data-id="' + v.id + '" data-vname="' + v.name + '" ' +
+                                'data-name="btn_selected_charge" data-id="' + v.id + '" data-vname="' + v.name + '" ' +
                                 'data-price="' + v.price + '">' +
                                 '<i class="icon-ok"></i>' +
                                 '</a></td>' +
@@ -190,50 +190,50 @@ head.ready(function(){
         }
     });
 
-    $('a[data-name="btn_selected_drug"]').live('click', function(){
+    $('a[data-name="btn_selected_charge"]').live('click', function(){
         var id = $(this).attr('data-id'),
             name = $(this).attr('data-vname'),
             price = $(this).attr('data-price');
 
-        $('#txt_drug_id').val(id);
-        $('#txt_drug_name').val(name);
-        $('#txt_drug_price').val(app.add_commars(price));
+        $('#txt_charge_id').val(id);
+        $('#txt_charge_name').val(name);
+        $('#txt_charge_price').val(app.add_commars(price));
 
-        drug.modal.hide_search_drug();
+        charge.modal.hide_search_charge();
     });
 
     //show search usage
-    $('#btn_drug_usage_show_search').click(function(){
-        drug.modal.hide_new();
-        drug.modal.show_search_drug_usage();
+    $('#btn_charge_usage_show_search').click(function(){
+        charge.modal.hide_new();
+        charge.modal.show_search_charge_usage();
     });
 
-    $('#mdl_drug_usage_search').on('hidden', function(){
-        drug.modal.show_new();
+    $('#mdl_charge_usage_search').on('hidden', function(){
+        charge.modal.show_new();
     });
     //search usage
-    $('#bnt_drug_usage_do_search').click(function(){
-        var query = $('#txt_drug_usage_search_query').val();
+    $('#bnt_charge_usage_do_search').click(function(){
+        var query = $('#txt_charge_usage_search_query').val();
         if(!query){
             app.alert('กรุณาระบุคำที่ต้องการค้นหา');
         }else{
-            drug.ajax.search_usage(query, function(err, data){
-                $('#tbl_drug_usage_search_result > tbody').empty();
+            charge.ajax.search_usage(query, function(err, data){
+                $('#tbl_charge_usage_search_result > tbody').empty();
                 if(err){
                     app.alert(err);
-                    $('#tbl_drug_usage_search_result > tbody').append(
+                    $('#tbl_charge_usage_search_result > tbody').append(
                         '<tr><td colspan="6">ไม่พบรายการ</td></tr>'
                     );
                 }else{
                     _.each(data.rows, function(v){
-                        $('#tbl_drug_usage_search_result > tbody').append(
+                        $('#tbl_charge_usage_search_result > tbody').append(
                             '<tr>' +
                                 '<td>' + v.alias_code + '</td>' +
                                 '<td>' + v.name1 + '</td>' +
                                 '<td>' + v.name2 + '</td>' +
                                 '<td>' + v.name3 + '</td>' +
                                 '<td><a href="javascript:void(0);" class="btn btn-mini btn-info" title="เลือกรายการ" ' +
-                                'data-name="btn_selected_drug_usage" data-id="' + v.id + '" data-vname="' + v.name1 + '">' +
+                                'data-name="btn_selected_charge_usage" data-id="' + v.id + '" data-vname="' + v.name1 + '">' +
                                 '<i class="icon-ok icon-white"></i>' +
                                 '</a></td>' +
                                 '</tr>'
@@ -244,40 +244,40 @@ head.ready(function(){
         }
     });
 
-    $('a[data-name="btn_selected_drug_usage"]').live('click', function(){
+    $('a[data-name="btn_selected_charge_usage"]').live('click', function(){
         var id = $(this).attr('data-id'),
             name = $(this).attr('data-vname');
 
-        $('#txt_drug_usage_name').val(name);
-        $('#txt_drug_usage_id').val(id);
+        $('#txt_charge_usage_name').val(name);
+        $('#txt_charge_usage_id').val(id);
 
-        drug.modal.hide_search_drug_usage();
+        charge.modal.hide_search_charge_usage();
     });
 
-    drug.clear_form = function(){
-        $('#txt_drug_usage_id').val('');
-        $('#txt_drug_usage_name').val('');
-        $('#txt_drug_id').val('');
-        $('#txt_drug_name').val('');
-        $('#txt_drug_price').val('0');
-        $('#txt_drug_qty').val('0');
-        $('#btn_drug_show_search').removeAttr('disabled');
-        $('#drug_isupdate').val('0');
+    charge.clear_form = function(){
+        $('#txt_charge_usage_id').val('');
+        $('#txt_charge_usage_name').val('');
+        $('#txt_charge_id').val('');
+        $('#txt_charge_name').val('');
+        $('#txt_charge_price').val('0');
+        $('#txt_charge_qty').val('0');
+        $('#btn_charge_show_search').removeAttr('disabled');
+        $('#charge_isupdate').val('0');
     };
-    //save drug
-    $('#btn_drug_do_save').click(function(){
+    //save charge
+    $('#btn_charge_do_save').click(function(){
         var items = {};
 
-        items.usage_id = $('#txt_drug_usage_id').val();
-        items.drug_id = $('#txt_drug_id').val();
-        items.price = $('#txt_drug_price').val();
-        items.qty = $('#txt_drug_qty').val();
+        items.usage_id = $('#txt_charge_usage_id').val();
+        items.charge_id = $('#txt_charge_id').val();
+        items.price = $('#txt_charge_price').val();
+        items.qty = $('#txt_charge_qty').val();
 
-        items.vn = drug.vn;
+        items.vn = charge.vn;
 
-        items.isupdate = $('#drug_isupdate').val();
+        items.isupdate = $('#charge_isupdate').val();
 
-        if(!items.drug_id){
+        if(!items.charge_id){
             app.alert('กรุณาระบุรายการยา')
         }else if(!items.usage_id){
             app.alert('กรุณาระบุข้อมูลการใช้ยา');
@@ -287,28 +287,28 @@ head.ready(function(){
             app.alert('กรุณาระบุราคา');
         }else{
             //do save
-            drug.ajax.save_drug(items, function(err){
+            charge.ajax.save_charge(items, function(err){
                 if(err){
                     app.alert(err);
                 }else{
                     app.alert('บันทึกรายการเสร็จเรียบร้อยแล้ว');
-                    drug.modal.hide_new();
-                    drug.get_list();
-                    drug.clear_form();
+                    charge.modal.hide_new();
+                    charge.get_list();
+                    charge.clear_form();
                 }
             });
         }
     });
 
 
-    $('a[href="#tab_drug"]').click(function(){
-        drug.get_list();
+    $('a[href="#tab_charge"]').click(function(){
+        charge.get_list();
     });
 
-    $('a[data-name="btn_drug_edit"]').live('click', function(){
+    $('a[data-name="btn_charge_edit"]').live('click', function(){
         var id = $(this).attr('data-id'),
-            drug_id = $(this).attr('data-drug_id'),
-            drug_name = $(this).attr('data-drug_name'),
+            charge_id = $(this).attr('data-charge_id'),
+            charge_name = $(this).attr('data-charge_name'),
             price = $(this).attr('data-price'),
             qty = $(this).attr('data-qty'),
             usage_id = $(this).attr('data-usage_id'),
@@ -316,37 +316,37 @@ head.ready(function(){
 
         //set data
 
-        $('#txt_drug_usage_id').val(usage_id);
-        $('#txt_drug_usage_name').val(usage_name);
-        $('#txt_drug_id').val(drug_id);
-        $('#btn_drug_show_search').attr('disabled', 'disabled');
-        $('#txt_drug_price').val(price);
-        $('#txt_drug_qty').val(qty);
+        $('#txt_charge_usage_id').val(usage_id);
+        $('#txt_charge_usage_name').val(usage_name);
+        $('#txt_charge_id').val(charge_id);
+        $('#btn_charge_show_search').attr('disabled', 'disabled');
+        $('#txt_charge_price').val(price);
+        $('#txt_charge_qty').val(qty);
 
-        $('#drug_isupdate').val('1');
+        $('#charge_isupdate').val('1');
 
-        drug.modal.show_new();
+        charge.modal.show_new();
 
     });
 
-    $('#mdl_drug_new').on('hidden', function(){
-        //drug.clear_form();
+    $('#mdl_charge_new').on('hidden', function(){
+        //charge.clear_form();
     });
 
-    //remove drug
-    $('a[data-name="btn_drug_remove"]').live('click', function(){
+    //remove charge
+    $('a[data-name="btn_charge_remove"]').live('click', function(){
 
         var id = $(this).attr('data-id');
        // alert(id);
 
         app.confirm('คุณต้องการลบรายการใช่หรือไม่?', function(res){
             if(res){
-                drug.ajax.remove_drug(id, function(err){
+                charge.ajax.remove_charge(id, function(err){
                     if(err){
                         app.alert(err);
                     }else{
                         app.alert('ลบรายการเสร็จเรียบร้อยแล้ว');
-                        drug.get_list();
+                        charge.get_list();
                     }
                 });
             }

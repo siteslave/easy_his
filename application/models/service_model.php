@@ -404,7 +404,7 @@ class Service_model extends CI_Model
         $this->mongo_db->add_index('drugs_opd', array('drug_id' => -1));
 
         $rs = $this->mongo_db
-            ->where(array('vn' => (string) $vn, 'drug_id' => new MongoId($drug_id)))
+            ->where(array('vn' => (string) $vn,'drug_id' => new MongoId($drug_id)))
             ->count('drugs_opd');
         return $rs > 0 ? TRUE : FALSE;
     }

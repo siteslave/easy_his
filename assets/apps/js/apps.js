@@ -2,8 +2,8 @@
  * Main application script
  */
  
-var base_url = 'http://localhost/his/',
-    site_url = 'http://localhost/his/index.php/';
+var base_url = 'http://localhost/easy_his/',
+    site_url = 'http://localhost/easy_his/index.php/';
         
 var app = {
     showLoginLoading: function(){

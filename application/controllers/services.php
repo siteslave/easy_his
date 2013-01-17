@@ -680,7 +680,7 @@ class Services extends CI_Controller
             $json = '{"success": false, "msg": "No drug id found."}';
         }else if(!$this->service->check_visit_exist($data['vn'])){
            $json = '{"success": false, "msg": "No visit found."}';
-        }else if($data['isupdate']){
+        }else if($data['isupdate'] == '1'){
             //do update
             $rs = $this->service->update_drug_opd($data);
             if($rs){
@@ -692,7 +692,7 @@ class Services extends CI_Controller
 
             //check drug duplicate
             $duplicated = $this->service->check_drug_duplicate($data['vn'], $data['drug_id']);
-            if($duplicated){
+            if(!$duplicated){
                 //do save
                 $data['provider_id'] = $this->provider_id;
                 $rs = $this->service->save_drug_opd($data);
@@ -719,8 +719,15 @@ class Services extends CI_Controller
         if(empty($id)){
             $json = '{"success": false, "msg": "NO data found"}';
         }else{
-            //$rs = $this->service->remove_drug
+            $rs = $this->service->remove_drug_opd($id);
+            if($rs){
+                $json = '{"success": true}';
+            }else{
+                $json = '{"success": false, "msg": "Can\'t save data"}';
+            }
         }
+
+        render_json($json);
     }
     /*
      * Get drug list
@@ -755,6 +762,102 @@ class Services extends CI_Controller
 
         render_json($json);
     }
+
+
+    ########### Charge module #########
+
+    /*
+     * Save charge
+     */
+    public function save_charge_opd(){
+        $data = $this->input->post('data');
+        if(empty($data)){
+            $json = '{"success": false, "msg": "No data for save."}';
+        }else if(empty($data['charge_id'])){
+            $json = '{"success": false, "msg": "No charge id found."}';
+        }else if(!$this->service->check_visit_exist($data['vn'])){
+            $json = '{"success": false, "msg": "No visit found."}';
+        }else if($data['isupdate'] == '1'){
+            //do update
+            $rs = $this->service->update_charge_opd($data);
+            if($rs){
+                $json = '{"success": true}';
+            }else{
+                $json = '{"success": false, "msg": "Can\'t update data"}';
+            }
+        }else{
+
+            //check drug duplicate
+            $duplicated = $this->service->check_charge_duplicate($data['vn'], $data['charge_id']);
+            if(!$duplicated){
+                //do save
+                $data['provider_id'] = $this->provider_id;
+                $rs = $this->serzvice->save_charge_opd($data);
+
+                if($rs){
+                    $json = '{"success": true}';
+                }else{
+                    $json = '{"success": false, "msg": "Can\'t save data"}';
+                }
+            }else{
+                $json = '{"success": false, "msg": "Charge duplicate, please use another."}';
+            }
+        }
+
+        render_json($json);
+    }
+    /*
+     * Remove drug
+     *
+     * @param   array   $data
+     */
+    public function remove_charge_opd(){
+        $id = $this->input->post('id');
+        if(empty($id)){
+            $json = '{"success": false, "msg": "No data found"}';
+        }else{
+            $rs = $this->service->remove_charge_opd($id);
+            if($rs){
+                $json = '{"success": true}';
+            }else{
+                $json = '{"success": false, "msg": "Can\'t save data"}';
+            }
+        }
+
+        render_json($json);
+    }
+    /*
+     * Get drug list
+     */
+    public function get_charge_list(){
+        $vn = $this->input->post('vn');
+        if(!empty($vn)){
+            $rs = $this->service->get_charge_list($vn);
+            if($rs){
+                $arr_result = array();
+                foreach($rs as $r){
+                    $obj = new stdClass();
+                    $obj->id = get_first_object($r['_id']);
+                    $obj->charge_id = get_first_object($r['charge_id']);
+                    $obj->charge_name = get_drug_name($obj->charge_id);
+                    $obj->price = $r['price'];
+                    $obj->qty = $r['qty'];
+
+                    array_push($arr_result, $obj);
+
+                    $rows = json_encode($arr_result);
+                    $json = '{"success": true, "rows": '.$rows.'}';
+                }
+            }else{
+                $json = '{"success": false, "msg": "Can\'t get charge list."}';
+            }
+        }else{
+            $json = '{"success": false, "msg": "No vn found."}';
+        }
+
+        render_json($json);
+    }
+
 }
 
 /* End of file services.php */

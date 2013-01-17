@@ -534,9 +534,31 @@
                 <button type="button" class="btn btn-danger"><i class="icon-trash icon-white"></i> ลบใบสั่งยา</button>
             </div>
         </div>
+        <!-- Charge item -->
         <div class="tab-pane" id="tab_income">
-            <p>tab_income</p>
+            <table class="table table-hover" id="tbl_charge_list">
+                <thead>
+                <tr>
+                    <th>รายการ</th>
+                    <th>ราคา</th>
+                    <th>จำนวน</th>
+                    <th>#</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>...</td>
+                    <td>...</td>
+                    <td>...</td>
+                    <td>...</td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="btn-group pull-right">
+                <button type="button" class="btn btn-success" id="btn_charge_new"><i class="icon-plus-sign icon-white"></i> เพิ่มรายการ</button>
+            </div>
         </div>
+        <!-- end charge item -->
         <div class="tab-pane" id="tab_history">
             <p>history</p>
         </div>
@@ -852,6 +874,55 @@
 </div>
 
     <!-- end search drug usage -->
+
+<!-- new charge item -->
+<div class="modal hide fade" id="mdl_charge_new">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>เพิ่มรายการยา</h3>
+    </div>
+    <div class="modal-body">
+        <form class="form-horizontal">
+            <input type="hidden" id="charge_isupdate" value="0">
+            <input type="hidden" id="service_charge_id" value="">
+            <div class="control-group">
+                <label class="control-label" for="txt_drug_name">รายการค่าใช้จ่าย</label>
+                <div class="controls">
+                    <div class="input-append">
+                        <input type="hidden" id="txt_charge_id">
+                        <input id="txt_charge_name" class="input-xlarge uneditable-input" disabled="disabled" type="text" placeholder="คลิกปุ่มค้นหา">
+                        <button class="btn btn-info" type="button" id="btn_charge_show_search">
+                            <i class="icon-search icon-white"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="txt_charge_qty">จำนวน</label>
+                <div class="controls">
+                    <input id="txt_charge_qty" class="input-mini" type="text" data-type="number" value="1">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label" for="txt_charge_price">ราคา</label>
+                <div class="controls">
+                    <div class="input-append">
+                        <input class="input-mini" id="txt_charge_price" type="text" data-type="number">
+                        <span class="add-on">บาท</span>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn btn-success" id="btn_charge_do_save"><i class="icon-plus icon-white"></i> เพิ่มรายการ/ปรับปรุง</a>
+        <a href="#" class="btn btn-danger" data-dismiss="modal"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</a>
+
+    </div>
+</div>
+<!-- end new charge item -->
 <!-- <script type="text/javascript" src="{{ base_url }}assets/apps/js/apps.services.js"></script> -->
 <script type="text/javascript">
     head.js(
@@ -859,6 +930,7 @@
             '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.allergy.js',
             '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.diagnosis.js',
             '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.procedures.js',
-            '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.drugs.js'
+            '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.drugs.js',
+            '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.charges.js'
     );
 </script>
