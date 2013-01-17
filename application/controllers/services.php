@@ -719,7 +719,7 @@ class Services extends CI_Controller
         if(empty($id)){
             $json = '{"success": false, "msg": "NO data found"}';
         }else{
-            $rs = $this->service->remove_drug
+            //$rs = $this->service->remove_drug
         }
     }
     /*
