@@ -252,6 +252,32 @@ class Basic extends CI_Controller
         render_json($json);
     }
 
+    public function search_charge_item_ajax(){
+        $query = $this->input->post('query');
+        if(empty($query)){
+            $json = '{"success": false, "msg": "No query found."}';
+        }else{
+
+            $result = $this->basic->search_charge_item_ajax($query);
+
+            if($result){
+                $arr_result = array();
+                foreach ($result as $r) {
+                    $obj = new stdClass();
+                    $obj->name = $r['code'] . '|' . $r['name'] . '|' . $r['price'] . '|' . $r['unit'];
+
+                    array_push($arr_result, $obj);
+                }
+                $rows = json_encode($arr_result);
+                $json = '{"success": true, "rows": '.$rows.'}';
+            }else{
+                $json = '{"success": false, "msg": "No data."}';
+            }
+        }
+
+        render_json($json);
+    }
+
     public function search_procedure_ajax(){
         $query = $this->input->post('query');
         if(empty($query)){

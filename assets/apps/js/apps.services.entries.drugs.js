@@ -91,6 +91,17 @@ head.ready(function(){
                 return err ? cb(err) : cb(null, data);
             });
         },
+        remove_bill: function(cb){
+
+            var url = 'services/remove_bill_drug_opd',
+                params = {
+                    vn: drug.vn
+                };
+
+            app.ajax(url, params, function(err, data){
+                return err ? cb(err) : cb(null, data);
+            });
+        },
         search_usage: function(query, cb){
 
             var url = 'basic/search_drug_usage',
@@ -108,6 +119,11 @@ head.ready(function(){
     drug.get_list = function(){
         drug.ajax.get_list(drug.vn, function(err, data){
             if(err){
+                $('#tbl_drug_list > tbody').empty();
+                $('#tbl_drug_list > tbody').append(
+                    '<tr><td colspan="5">ไม่พบรายการ</td></tr>'
+                );
+
                 app.alert(err);
             }else{
                 drug.set_list(data);
@@ -350,6 +366,21 @@ head.ready(function(){
                     }
                 });
             }
+        });
+    });
+
+    $('#btn_drug_remove_bill').click(function(){
+        app.confirm('คุณต้องการยกเลิกรายการยาทั้งหมด ใช่หรือไม่?', function(res){
+           if(res){
+               drug.ajax.remove_bill(function(err){
+                   if(err){
+                       app.alert(err);
+                   }else{
+                       drug.get_list();
+                       app.alert('ยกเลิกรายการเสร็จเรียบร้อยแล้ว');
+                   }
+               });
+           }
         });
     });
 });

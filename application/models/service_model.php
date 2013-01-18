@@ -375,9 +375,9 @@ class Service_model extends CI_Model
         $rs = $this->mongo_db
             ->where(array('vn' => $data['vn'], 'drug_id' => new MongoId($data['drug_id'])))
             ->set(array(
-                'qty' => (float) $data['qty'],
-                'price' => (float) $data['price']
-            ))->update('drugs_opd');
+            'qty' => (float) $data['qty'],
+            'price' => (float) $data['price']
+        ))->update('drugs_opd');
         return $rs;
     }
 
@@ -388,6 +388,13 @@ class Service_model extends CI_Model
         $rs = $this->mongo_db
             ->where('_id', new MongoId($id))
             ->delete('drugs_opd');
+        return $rs;
+    }
+
+    public function remove_bill_drug_opd($vn){
+        $rs = $this->mongo_db
+            ->where('vn', (string) $vn)
+            ->delete_all('drugs_opd');
         return $rs;
     }
     /*
@@ -422,6 +429,85 @@ class Service_model extends CI_Model
         $rs = $this->mongo_db
             ->where('vn',(string) $vn)
             ->get('drugs_opd');
+
+        return $rs;
+    }
+
+    ####################### Charge modules #######################
+
+    /*
+     * Save charge items
+     *
+     * @param  array   $data
+     * @retrun  boolean
+     */
+    public function  save_charge_opd($data){
+        $rs = $this->mongo_db
+            ->insert('charge_opd', array(
+            'vn' => (string) $data['vn'],
+            'charge_code' => $data['charge_code'],
+            'price' => (float) $data['price'],
+            'qty' => (int) $data['qty'],
+            'user_id' => new MongoId($data['user_id'])
+        ));
+        return $rs;
+    }
+    /*
+     * Update charge item
+     *
+     * @param   array   $data
+     */
+    public function update_charge_opd($data){
+        $rs = $this->mongo_db
+            ->where(array('vn' => $data['vn'], 'charge_code' => $data['charge_code']))
+            ->set(array(
+            'qty' => (float) $data['qty'],
+            'price' => (float) $data['price']
+        ))->update('charge_opd');
+        return $rs;
+    }
+
+    /*
+     * Remove drug
+     */
+    public function remove_charge_opd($id){
+        $rs = $this->mongo_db
+            ->where('_id', new MongoId($id))
+            ->delete('charge_opd');
+        return $rs;
+    }
+    /*
+     * Check duplicate
+     *
+     * @param   string      $vn The visit number
+     * @param   ObjectId    $drug_id    The drug id
+     *
+     * @return  boolean TRHE if duplicate, else is FALSE
+     */
+
+    public function check_charge_duplicate($vn, $charge_code){
+        $this->mongo_db->add_index('charge_opd', array('vn' => -1));
+        $this->mongo_db->add_index('charge_opd', array('charge_code' => -1));
+
+        $rs = $this->mongo_db
+            ->where(array('vn' => (string) $vn,'charge_code' => $charge_code))
+            ->count('charge_opd');
+        return $rs > 0 ? TRUE : FALSE;
+    }
+
+    /*
+     * Get charge list
+     *
+     * @param  string  $vn The visit number
+     * @retrun  array
+     */
+    public function get_charge_list($vn){
+
+        $this->mongo_db->add_index('charge_opd', array('vn' => -1));
+
+        $rs = $this->mongo_db
+            ->where('vn',(string) $vn)
+            ->get('charge_opd');
 
         return $rs;
     }

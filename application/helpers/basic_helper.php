@@ -104,6 +104,18 @@ if(!function_exists('get_usage_name')){
     }
 }
 
+if(!function_exists('get_charge_name')){
+    function get_charge_name($code){
+        $ci =& get_instance();
+
+        $ci->load->model('Basic_model', 'basic');
+
+        $result = $ci->basic->get_charge_name($code);
+
+        return $result;
+    }
+}
+
 if(!function_exists('get_symptom_name')){
     function get_symptom_name($id){
         $ci =& get_instance();

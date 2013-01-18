@@ -55,7 +55,6 @@
         <li><a href="#tab_procedure" data-toggle="tab"><i class="icon-eye-close"></i> หัตถการ</a></li>
         <li><a href="#tab_drug" data-toggle="tab"><i class="icon-filter"></i> จ่ายยา</a></li>
         <li><a href="#tab_income" data-toggle="tab"><i class="icon-shopping-cart"></i> ค่าใช้จ่าย</a></li>
-        <li><a href="#tab_history" data-toggle="tab"><i class="icon-time"></i> ประวัติรับบริการ</a></li>
     </ul>
     <div class="tab-content">
         <div class="tab-pane active" id="tab_screening">
@@ -529,9 +528,11 @@
             </table>
             <div class="btn-group pull-right">
                 <button type="button" class="btn btn-success" id="btn_drug_new"><i class="icon-plus-sign icon-white"></i> เพิ่ม</button>
+                <!--
                 <button type="button" class="btn"><i class="icon-th-list"></i> กำหนดสูตร</button>
                 <button type="button" class="btn"><i class="icon-refresh"></i> Remed.</button>
-                <button type="button" class="btn btn-danger"><i class="icon-trash icon-white"></i> ลบใบสั่งยา</button>
+                -->
+                <button type="button" class="btn btn-danger" id="btn_drug_remove_bill"><i class="icon-trash icon-white"></i> ลบใบสั่งยา</button>
             </div>
         </div>
         <!-- Charge item -->
@@ -539,14 +540,18 @@
             <table class="table table-hover" id="tbl_charge_list">
                 <thead>
                 <tr>
+                    <th>รหัส</th>
                     <th>รายการ</th>
                     <th>ราคา</th>
                     <th>จำนวน</th>
+                    <th>รวม (บาท)</th>
                     <th>#</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr>
+                    <td>...</td>
+                    <td>...</td>
                     <td>...</td>
                     <td>...</td>
                     <td>...</td>
@@ -559,9 +564,6 @@
             </div>
         </div>
         <!-- end charge item -->
-        <div class="tab-pane" id="tab_history">
-            <p>history</p>
-        </div>
     </div>
 </div>
 <!-- new drug allergy -->
@@ -888,10 +890,9 @@
             <div class="control-group">
                 <label class="control-label" for="txt_charge_name">รายการค่าใช้จ่าย</label>
                 <div class="controls">
-                    <div class="input-append">
-                        <input type="hidden" id="txt_charge_id">
-                        <input id="txt_charge_name" class="input-xlarge uneditable-input" disabled="disabled" type="text" placeholder="พิมพ์ชื่อรายการ">
-                    </div>
+                    <input type="text" class="input-small uneditable-input" disabled="disabled" id="txt_charge_code">
+                    <input id="txt_charge_name" class="input-xxlarge" type="text" placeholder="พิมพ์ชื่อรายการ">
+
                 </div>
             </div>
             <div class="control-group">

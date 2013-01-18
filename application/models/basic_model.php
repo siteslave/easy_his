@@ -700,6 +700,13 @@ class Basic_model extends CI_Model
         return count($result) > 0 ? $result[0]['name1'] : '-';
     }
 
+    public function get_charge_name($code){
+        $result = $this->mongo_db->where(array('code' => $code))->get('ref_charge_items');
+
+        return count($result) > 0 ? $result[0]['name'] : '-';
+    }
+
+
     public function get_clinic_name($id){
         $result = $this->mongo_db->where(array('_id' => new MongoId($id)))->get('ref_clinics');
 
@@ -847,6 +854,14 @@ class Basic_model extends CI_Model
             ->where(array('valid_code' => 'T'))
             ->limit(10)
             ->get('ref_icd9');
+        return $result;
+    }
+    public function search_charge_item_ajax($query){
+        $result = $this->mongo_db
+            ->like('name', $query)
+            ->where(array('active' => 'Y'))
+            ->limit(10)
+            ->get('ref_charge_items');
         return $result;
     }
 
