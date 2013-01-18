@@ -352,4 +352,38 @@ head.ready(function(){
             }
         });
     });
+
+    $('#txt_charge_name').typeahead({
+        ajax: {
+            url: site_url + 'basic/search_charge_item_ajax',
+            timeout: 500,
+            displayField: 'name',
+            triggerLength: 3,
+            preDispatch: function(query){
+                return {
+                    query: query,
+                    csrf_token: csrf_token
+                }
+            },
+
+            preProcess: function(data){
+                if(data.success){
+                    return data.rows;
+                }else{
+                    return false;
+                }
+            }
+        },
+        updater: function(data){
+            var d = data.split('#');
+            var name = d[1],
+                id = d[0];
+
+            $('#txt_charge_id').val(id);
+            $('#txt_charge_name').val(name);
+
+            return name;
+        }
+    });
+
 });
