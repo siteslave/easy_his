@@ -708,10 +708,18 @@ class Basic_model extends CI_Model
 
 
     public function get_clinic_name($id){
-        $result = $this->mongo_db->where(array('_id' => new MongoId($id)))->get('ref_clinics');
+    	$result = $this->mongo_db->where(array('_id' => new MongoId($id)))->get('ref_clinics');
+    
+    	return count($result) > 0 ? $result[0]['name'] : '-';
+    }
+    
+    public function get_appoint_type_name($id){
+        $result = $this->mongo_db->where(array('_id' => new MongoId($id)))->get('ref_appoint_types');
 
         return count($result) > 0 ? $result[0]['name'] : '-';
     }
+    
+    
     public function get_diag_name($code){
         $result = $this->mongo_db->where(array('code' => $code))->get('ref_icd10');
 
@@ -759,8 +767,8 @@ class Basic_model extends CI_Model
         return count($result) > 0 ? $result[0]['desc_r'] : '-';
     }
 
-    public function get_provider_name($provider){
-        $result = $this->mongo_db->where(array('provider' => $provider))->get('providers');
+    public function get_provider_name_by_id($id){
+        $result = $this->mongo_db->where(array('_id' => new MongoId($id)))->get('providers');
 
         if(count($result) > 0){
             $fullname = $result[0]['first_name'] . ' ' . $result[0]['last_name'];

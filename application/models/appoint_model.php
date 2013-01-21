@@ -1,6 +1,6 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * Services controller
+ * Appointment controller
  *
  * @package     Controllers
  * @author      Satit Rianpit <rianpit@gmail.com>
@@ -15,17 +15,80 @@ class Appoint_model extends CI_Model {
 	public $user_id;
 	public $provider_id;
 	
-	public function get_list(){
+	/*
+	 * Get appoint list
+	 * 
+	 * @param	string	$apdate		Appoint date in yyyymmdd format.
+	 * @param	string	$apclinic	Appoint clinic.
+	 * @param	string	$apstatus	Appoint status, 0 = All, 1 = Ok, 2 = Absent.
+	 * 
+	 * @return	array
+	 */
+	public function get_list($apdate, $apclinic, $apstatus){
+		if($apstatus == '0'){
+			if($apclinic == '00000'){ // all clinic
+				
+				$rs = $this->mongo_db
+				->where(array(
+						'owner_id' 	=> $this->owner_id,
+						//'apclinic' 	=> $apclinic,
+						'apdate'	=> $apdate
+				))
+				->get('appoints');
+				
+			}else{
+				
+				$rs = $this->mongo_db
+				->where(array(
+						'owner_id' 	=> $this->owner_id,
+						'apclinic' 	=> $apclinic,
+						'apdate'	=> $apdate
+				))
+				->get('appoints');
+				
+			}
+			
+		}else{
+			if($apclinic == '00000'){
+				
+				$rs = $this->mongo_db
+				->where(array(
+						'owner_id' 	=> $this->owner_id,
+						//'apclinic' 	=> $apclinic,
+						'apdate'	=> $apdate,
+						'apstatus'	=> $apstatus
+				))
+				->get('appoints');
+				
+			}else{
+				$rs = $this->mongo_db
+				->where(array(
+						'owner_id' 	=> $this->owner_id,
+						'apclinic' 	=> $apclinic,
+						'apdate'	=> $apdate,
+						'apstatus'	=> $apstatus
+				))
+				->get('appoints');
+			}
+			
+		}
 		
+		return $rs;
 	}
 	/*
-	 * data[apdate]	15/01/2013
-		data[apdiag]	Z097
-		data[aptime]	12:00
-		data[aptype]	50fcc5d500082f1784622c86
-		data[clinic]	50caaf79c4d635581300009c
-		data[hn]	550000028
-		data[vn]	560000003
+	 * Register new appoint
+	 * 
+	 * @param	string		$vn			Visit number.
+	 * @param	string 		$hn			Person hn.
+	 * @param	string 		$apdate		Appoint date in dd-mm-yyyy format.
+	 * @param	string		$aptime		Appoint time in hh:mm format.
+	 * @param	ObjectId	$apclinic	Appoint clinic.
+	 * @param	ObjectId	$user_id	User id.
+	 * @param	ObjectId	$owner_id	Owner id.
+	 * @param	ObjectId	$provider_id Provider id.
+	 * 
+	 * @retur	boolean		TRUE if success, FALSE if failed.
+	 * 
 	 */
 	public function do_register($data){
 		$rs = $this->mongo_db
@@ -34,7 +97,7 @@ class Appoint_model extends CI_Model {
 							'hn' => $data['hn'],
 							'apdate' => to_string_date($data['apdate']),
 							'aptime' => $data['aptime'],
-							'aptype' => new MongoId($data['aptype']),
+							'aptype_id' => new MongoId($data['aptype']),
 							'apclinic_id' => new MongoId($data['clinic']),
 							'provider_id' => new MongoId($this->provider_id),
 							'user_id' => new MongoId($this->user_id),
@@ -42,5 +105,7 @@ class Appoint_model extends CI_Model {
 							));
 		return $rs;
 	}
+	
+	
 }
 

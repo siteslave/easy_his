@@ -43,13 +43,12 @@ class Appoints extends CI_Controller
      * @param	string	$vn	The visit number, if null will display appointment list else if vn isset 
      * 						display new register.
      */
-    public function index($vn = ''){
+    public function index($vn = '', $hn = ''){
     	if(empty($vn) || !isset($vn)){
-    		$data['vn'] = $vn;
-    		
+    		$data['clinics'] = $this->basic->get_clinic();
     		$this->layout->view('appoints/index_view', $data);
     	}else{
-    		$this->register($vn);
+    		$this->register($vn, $hn);
     	}
     }
     /*
@@ -67,15 +66,14 @@ class Appoints extends CI_Controller
 		}else{
 			//show new register
 			$data = get_patient_info($hn);
-			$data['vn'] = $vn;
-			$data['hn'] = $hn;
-			$data['address'] = get_address($hn);
-			$data['aptypes'] = $this->basic->get_appoint_type();
-			$data['clinics'] = $this->basic->get_clinic();
+			$data['vn'] 		= $vn;
+			$data['hn'] 		= $hn;
+			$data['address'] 	= get_address($hn);
+			$data['aptypes'] 	= $this->basic->get_appoint_type();
+			$data['clinics'] 	= $this->basic->get_clinic();
 			
 			$this->layout->view('appoints/register_view', $data);
 			
-			//echo var_dump($data['first_name']);
 		}
 		
 	}    
@@ -96,8 +94,8 @@ class Appoints extends CI_Controller
 			}else{
 				
 				$this->appoint->provider_id = $this->provider_id;
-				$this->appoint->user_id = $this->user_id;
-				$this->appoint->owner_id = $this->owner_id;
+				$this->appoint->user_id 	= $this->user_id;
+				$this->appoint->owner_id 	= $this->owner_id;
 				
 				$rs = $this->appoint->do_register($data);
 				
@@ -112,4 +110,56 @@ class Appoints extends CI_Controller
 		render_json($json);
 	}
     
+	/*
+	 * Get appointment list
+	 * 
+	 * @internal	param	string	$apdate		Appoint date in format dd/mm/yyyy
+	 * @internal	param	string	$apclinic	Appoint clinic id.
+	 * @internal	param	string	$apstatus	Appoint status, 0 = All, 1 = Ok, 2 = Absent.
+	 */
+	public function get_list(){
+		
+		$apdate 	= $this->input->post('apdate');
+		$apclinic 	= $this->input->post('apclinic');
+		$apstatus 	= $this->input->post('apstatus');
+		
+		$apdate 	= empty($apdate) ? date('Ymd') : to_string_date($apdate);
+		$apclinic 	= empty($apclinic) ? '00000' : $apclinic; // 00000 = All clinic
+		$apstatus 	= empty($apstatus) ? '0' : $apstatus; // 0 = All, 1 = Ok, 2 = Absent
+		
+		$this->appoint->owner_id = $this->owner_id;
+
+		$rs = $this->appoint->get_list($apdate, $apclinic, $apstatus);
+		
+		if($rs){
+			
+			$arr_result = array();
+			
+			foreach($rs as $r){
+				$obj = new stdClass();
+				
+				$obj->clinic_name = get_clinic_name(get_first_object($r['apclinic_id']));
+				$obj->provider_name = get_provider_name_by_id($r['provider_id']);
+				$obj->apdate = $r['apdate'];
+				$obj->aptime = $r['aptime'];
+				$obj->aptype_name = get_appoint_type_name($r['aptype_id']);
+								
+				$person = $this->service->get_person_detail($r['hn']);
+				
+				$obj->person_name = $person['first_name'] . ' ' . $person['last_name'];
+				$obj->hn = $r['hn'];
+				$obj->vn = $r['vn'];
+				
+				
+				array_push($arr_result, $obj);
+			}
+			
+			$rows = json_encode($arr_result);
+			$json = '{"success": true, "rows": '.$rows.'}';
+		}else{
+			$json = '{"success": false, "msg": "No record found."}';
+		}
+		
+		render_json($json);
+	}
 }

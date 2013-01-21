@@ -56,6 +56,7 @@ if(!function_exists('get_title_name')){
         return $result;
     }
 }
+
 if(!function_exists('get_provider_type_name')){
     function get_provider_type_name($id){
         $ci =& get_instance();
@@ -161,13 +162,13 @@ if(!function_exists('get_diag_type_name')){
         return $result;
     }
 }
-if(!function_exists('get_provider_name')){
-    function get_provider_name($code){
+if(!function_exists('get_provider_name_by_id')){
+    function get_provider_name_by_id($id){
         $ci =& get_instance();
 
         $ci->load->model('Basic_model', 'basic');
 
-        $result = $ci->basic->get_provider_name($code);
+        $result = $ci->basic->get_provider_name_by_id($id);
 
         return $result;
     }
@@ -282,5 +283,18 @@ if(!function_exists('get_insurance_name')){
         $result = $ci->basic->get_insurance_name($code);
         return $result;
     }
+}
+
+
+if(!function_exists('get_appoint_type_name')){
+	function get_appoint_type_name($id){
+		$ci =& get_instance();
+
+		$ci->load->model('Basic_model', 'basic');
+
+		$result = $ci->basic->get_appoint_type_name($id);
+
+		return $result;
+	}
 }
 
