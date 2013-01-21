@@ -216,6 +216,27 @@ if(!function_exists('get_drug_allergy_level_name')){
         return $result;
     }
 }
+
+if(!function_exists('get_appoint_type')){
+	function get_appoint_type(){
+		$ci =& get_instance();
+		$ci->load->model('Basic_model', 'basic');
+		$rs = $ci->basic->get_appoint_type();
+		
+		$arr_result = array();
+		foreach($rs as $r){
+			$obj = new stdClass();
+			$obj->id = get_first_object($r['_id']);
+			$obj->name = $r['name'];
+			$obj->desc = $r['desc'];
+		
+			array_push($arr_result, $obj);
+		}
+		
+		return $arr_result;
+	}
+}
+
 /**
  * Check empty value
  *
@@ -242,49 +263,6 @@ if(!function_exists('get_drug_allergy_in_array')){
             }
         }
         return NULL;
-    }
-}
-/*
- * Get address
- *
- * @param   $hn
- * @return  string  Address
- */
-if(!function_exists('get_address')){
-    function get_address($hn){
-
-        /*
-         * 1. get house detail: house, village_id
-         * 2. get village_code
-         * 3. return address
-         */
-        $ci =& get_instance();
-
-        $ci->load->model('Basic_model', 'basic');
-
-        $house_code = get_first_object($ci->basic->get_house_code($hn));
-
-        $houses = $ci->basic->get_house_detail($house_code);
-        $village_id = $houses['village_id'];
-
-        $villages = $ci->basic->get_village_detail($village_id);
-
-        $village_code = $villages['village_code'];
-        //44010106
-        $chw = substr($village_code, 0, 2);
-        $amp = substr($village_code, 2, 2);
-        $tmb = substr($village_code, 4, 2);
-        $moo = substr($village_code, 6, 2);
-
-        $chw_name = $ci->basic->get_province_name($chw);
-        $amp_name = $ci->basic->get_ampur_name($chw, $amp);
-        $tmb_name = $ci->basic->get_tambon_name($chw, $amp, $tmb);
-
-        $address = $houses['house'];
-
-        $address_name = $address . ' หมู่ ' . $moo . ' ต.' . $tmb_name . ' อ.' . $amp_name . ' จ.' . $chw_name;
-        return $address_name;
-        //return $house_code;
     }
 }
 

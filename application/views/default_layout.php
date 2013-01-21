@@ -88,8 +88,12 @@
                         <ul class="dropdown-menu">
                             <li>
                                 <a href="<?php echo site_url('services'); ?>">
-                                    <i class="icon-th-list"></i>
-                                    ผู้มารับบริการ
+                                    <i class="icon-th-list"></i> ผู้มารับบริการ
+                                </a>
+                            </li>
+                             <li>
+                                <a href="<?php echo site_url('appoints'); ?>">
+                                    <i class="icon-tags"></i> ทะเบียนนัด
                                 </a>
                             </li>
                         </ul>

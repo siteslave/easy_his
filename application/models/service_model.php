@@ -78,6 +78,7 @@ class Service_model extends CI_Model
             ->insert('visit', array(
                     'owner_id' => new MongoId($this->owner_id),
                     'person_id' => new MongoId($data['person_id']),
+            		'hn' => $data['hn'],
                     'vn' => $data['vn'],
                     'date_serv' => to_string_date($data['date_serv']),
                     'time_serv' => $data['time_serv'],
@@ -510,6 +511,36 @@ class Service_model extends CI_Model
             ->get('charge_opd');
 
         return $rs;
+    }
+    
+    public function get_person_hn($person_id){
+    	$rs = $this->mongo_db
+    	->select(array('hn'))
+    	->where('_id', new MongoId($person_id))
+    	->limit(1)
+    	->get('person');
+    	/*
+    	if($rs){
+    		return count($rs) ? $rs[0] : NULL;
+    	}else{
+    		return NULL;
+    	}
+    	*/
+    	
+    	return count($rs);
+    }
+    public function get_person_id_from_visit($vn){
+    	$rs = $this->mongo_db
+    	->select(array('person_id'))
+    	->where('vn', $vn)
+    	->limit(1)
+    	->get('visit');
+    
+    	if($rs){
+    		return count($rs) ? $rs[0] : NULL;
+    	}else{
+    		return NULL;
+    	}
     }
 }
 

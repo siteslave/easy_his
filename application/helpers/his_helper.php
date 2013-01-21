@@ -29,6 +29,25 @@ if(!function_exists('to_string_date')){
     }
 }
 
+if(!function_exists('from_mongo_to_thai_date')){
+	function from_mongo_to_thai_date($mongo_date){
+		/*
+		$year = parseInt(old_date.substr(0, 4).toString()) + 543,
+		month = old_date.substr(4, 2).toString(),
+		day = old_date.substr(6, 2).toString();
+		
+		var new_date = day + '/' + month + '/' + year;
+		*/
+		$year = (int) substr($mongo_date, 0, 4) + 543;
+		$month = substr($mongo_date, 4, 2);
+		$day = substr($mongo_date, 6, 2);
+		
+		$new_date = $day . '/' . $month . '/' . $year;
+		
+		return $new_date;
+	}
+}
+
 if(!function_exists('check_cid_format')){
     function check_cid_format($cid){
         if(strlen($cid) != 13) return false;
@@ -263,6 +282,72 @@ if(!function_exists('generate_serial')){
 
         return $new_sn;
     }
-
-
 }
+
+/*
+ * Get address
+*
+* @param   $hn
+* @return  string  Address
+*/
+if(!function_exists('get_address')){
+	function get_address($hn){
+
+		/*
+		 * 1. get house detail: house, village_id
+		* 2. get village_code
+		* 3. return address
+		*/
+		$ci =& get_instance();
+
+		$ci->load->model('Basic_model', 'basic');
+
+		$house_code = get_first_object($ci->basic->get_house_code($hn));
+
+		$houses = $ci->basic->get_house_detail($house_code);
+		$village_id = $houses['village_id'];
+
+		$villages = $ci->basic->get_village_detail($village_id);
+
+		$village_code = $villages['village_code'];
+		//44010106
+		$chw = substr($village_code, 0, 2);
+		$amp = substr($village_code, 2, 2);
+		$tmb = substr($village_code, 4, 2);
+		$moo = substr($village_code, 6, 2);
+
+		$chw_name = $ci->basic->get_province_name($chw);
+		$amp_name = $ci->basic->get_ampur_name($chw, $amp);
+		$tmb_name = $ci->basic->get_tambon_name($chw, $amp, $tmb);
+
+		$address = $houses['house'];
+
+		$address_name = $address . ' หมู่ ' . $moo . ' ต.' . $tmb_name . ' อ.' . $amp_name . ' จ.' . $chw_name;
+		return $address_name;
+		//return $house_code;
+	}
+}
+
+/*
+ * Get patient information
+ * 
+ * @param	string	$hn	Patian hn.
+ * @return 	array
+ */
+if(!function_exists('get_patient_info')){
+	function get_patient_info($hn){
+		if(empty($hn) || !isset($hn)){
+			return '-';
+		}else{
+			
+			$ci =& get_instance();
+			$ci->load->model('Person_model', 'person');
+			
+			$data = $ci->person->get_person_detail_with_hn($hn);
+			$data['address'] = get_address($hn);
+			
+			return $data;
+		}
+	}
+}
+	

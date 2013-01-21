@@ -950,4 +950,19 @@ class Basic_model extends CI_Model
     }
 
 
+    public function get_appoint_type(){
+    	$rs = $this->mongo_db->order_by(array('name' => -1))->get('ref_appoint_types');
+
+    	$arr_result = array();
+    	foreach($rs as $r){
+    		$obj = new stdClass();
+    		$obj->id = get_first_object($r['_id']);
+    		$obj->name = $r['name'];
+    		$obj->desc = $r['desc'];
+    	
+    		array_push($arr_result, $obj);
+    	}
+    	
+    	return $arr_result;
+    }
 }

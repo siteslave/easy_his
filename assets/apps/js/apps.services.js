@@ -120,6 +120,7 @@ head.ready(function(){
 
         $('#txt_person_id').val('');
         $('#txt_service_vn').val('');
+        $('#txt_service_hn').val('');
         $('#txt_reg_service_date').val(app.get_current_date());
         $('#txt_reg_service_time').val(app.get_current_time());
 
@@ -342,6 +343,7 @@ head.ready(function(){
         var items = {};
         items.person_id = $('#txt_person_id').val();
         items.vn = $('#txt_service_vn').val();
+        items.hn = $('#txt_service_profile_hn').val();
         items.date_serv = $('#txt_reg_service_date').val();
         items.time_serv = $('#txt_reg_service_time').val();
         items.clinic = $('#sl_reg_service_clinic').val();

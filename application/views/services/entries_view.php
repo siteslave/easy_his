@@ -1,6 +1,6 @@
 <ul class="breadcrumb">
-    <li><a href="{{ site_url }}">หน้าหลัก</a> <span class="divider">/</span></li>
-    <li><a href="{{ site_url }}services">การให้บริการ</a> <span class="divider">/</span></li>
+    <li><a href="<?php echo site_url(); ?>">หน้าหลัก</a> <span class="divider">/</span></li>
+    <li><a href="<?php echo site_url('services'); ?>">การให้บริการ</a> <span class="divider">/</span></li>
     <li class="active"><?php echo $patient_name; ?> [HN: <?php echo $hn; ?>, CID: <?php echo $cid; ?>]</li>
 </ul>
 <!--
@@ -19,7 +19,7 @@
 
 <form action="#" class="form-actions">
     <a href="javascript:void(0);" class="btn btn-success"><i class="icon-th-list icon-white"></i> คัดกรองเรื้อรัง</a>
-    <a href="javascript:void(0);" class="btn btn-warning"><i class="icon-calendar icon-white"></i> ลงทะเบียนนัด</a>
+    <a href="<?php echo site_url('appoints/register/' . $vn . '/' . $hn); ?>" class="btn btn-warning"><i class="icon-calendar icon-white"></i> ลงทะเบียนนัด</a>
     <a href="javascript:void(0);" class="btn btn-info"><i class="icon-share-alt icon-white"></i> สั่ง LAB</a>
 
     <div class="btn-group">
