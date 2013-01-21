@@ -28,24 +28,14 @@ class Settings extends CI_Controller
         //models
         $this->load->model('Setting_model', 'setting');
         $this->load->model('Basic_model', 'basic');
-
-        $this->csrf_token = $this->security->get_csrf_hash();
-
-        $this->twiggy->set('site_url', site_url());
-        $this->twiggy->set('base_url', base_url());
-        $this->twiggy->set('csrf_token', $this->csrf_token);
-
-        $this->twiggy->set('fullname', $this->session->userdata('fullname'));
     }
 
     public function providers()
     {
-        $titles = $this->basic->get_title();
-        $provider_types = $this->basic->get_provider_type();
+        $data['titles'] = $this->basic->get_title();
+        $data['provider_types'] = $this->basic->get_provider_type();
 
-        $this->twiggy->set('titles', $titles);
-        $this->twiggy->set('provider_types', $provider_types);
-        $this->twiggy->template('settings/providers')->display();
+        $this->layout->view('settings/provider_view', $data);
     }
 
     public function do_save_providers(){

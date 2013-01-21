@@ -1,10 +1,6 @@
-{% extends _layout %}
-
-{% block content %}
-
     <ul class="breadcrumb">
-        <li><a href="{{ site_url }}">หน้าหลัก</a> <span class="divider">/</span></li>
-        <li><a href="{{ site_url }}settings">ตั้งค่า</a> <span class="divider">/</span></li>
+        <li><a href="<?php echo site_url(); ?>">หน้าหลัก</a> <span class="divider">/</span></li>
+        <li><a href="<?php echo site_url('settings'); ?>">ตั้งค่า</a> <span class="divider">/</span></li>
         <li class="active">ข้อมูลผู้ให้บริการ (Providers)</li>
     </ul>
     <div class="alert alert-info">
@@ -104,9 +100,11 @@
                             <div class="controls">
                                 <select  id="sl_title" class="input-small">
                                     <option value="">--</option>
-                                    {% for t in titles %}
-                                        <option value="{{ t.id }}">{{ t.name }}</option>
-                                    {% endfor %}
+                                    <?php 
+                                    foreach($titles as $t){
+                                    	echo '<option value="'.$t->id.'">' . $t->name . '</option>';
+                                    }
+                                    ?>
                                 </select>
                             </div>
                         </div>
@@ -147,9 +145,11 @@
                             <div class="controls">
                                 <select  id="sl_provider_type" class="input-xlarge">
                                     <option value="">--</option>
-                                    {% for t in provider_types %}
-                                        <option value="{{ t.code }}">{{ t.name }}</option>
-                                    {% endfor %}
+                                    <?php 
+                                    foreach($provider_types as $t){
+                                    	echo '<option value="'.$t->code.'">' . $t->name . '</option>';
+                                    }
+                                    ?>
                                 </select>
                             </div>
                         </div>
@@ -260,6 +260,5 @@
     <!-- end person -->
     <!-- <script type="text/javascript" src="{{ base_url }}assets/apps/js/apps.settings.provider.js"></script> -->
     <script type="text/javascript">
-        head.js('{{ base_url }}assets/apps/js/apps.settings.provider.js');
+        head.js('<?php echo base_url(); ?>assets/apps/js/apps.settings.provider.js');
     </script>
-{% endblock %}
