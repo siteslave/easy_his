@@ -506,5 +506,35 @@ class Person_model extends CI_Model
         }
     }
 
-
+	public function get_hn_from_cid($cid){
+		$rs = $this->mongo_db
+				->select(array('hn'))
+				->where('cid', $cid)
+				->limit(1)
+				->get('person');
+		
+		if($rs){
+			return count($rs) ? $rs[0]['hn'] : '000000000';
+		}else{
+			return '000000000';
+		}
+	}
+	
+	public function get_hn_from_first_last_name($first_name, $last_name){
+		$rs = $this->mongo_db
+		->select(array('hn'))
+		->where(array(
+				'first_name' => $first_name,
+				'last_name' => $last_name
+				))
+		->limit(1)
+		->get('person');
+	
+		if($rs){
+			return count($rs) ? $rs[0]['hn'] : '000000000';
+		}else{
+			return '000000000';
+		}
+	}
+	
 }

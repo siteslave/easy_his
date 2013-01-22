@@ -10,11 +10,14 @@
  */
 
 class Appoint_model extends CI_Model {
-	
+	//-----------------------------------------------------------------------------------------------------------------
+	/*
+	 * Global parameters
+	 */
 	public $owner_id;
 	public $user_id;
 	public $provider_id;
-	
+	//-----------------------------------------------------------------------------------------------------------------
 	/*
 	 * Get appoint list
 	 * 
@@ -75,19 +78,12 @@ class Appoint_model extends CI_Model {
 		
 		return $rs;
 	}
+	//------------------------------------------------------------------------------------------------------------------
 	/*
 	 * Register new appoint
 	 * 
-	 * @param	string		$vn			Visit number.
-	 * @param	string 		$hn			Person hn.
-	 * @param	string 		$apdate		Appoint date in dd-mm-yyyy format.
-	 * @param	string		$aptime		Appoint time in hh:mm format.
-	 * @param	ObjectId	$apclinic	Appoint clinic.
-	 * @param	ObjectId	$user_id	User id.
-	 * @param	ObjectId	$owner_id	Owner id.
-	 * @param	ObjectId	$provider_id Provider id.
-	 * 
-	 * @retur	boolean		TRUE if success, FALSE if failed.
+	 * @param	array	$data	The data for save.
+	 * @return	boolean		TRUE if success, FALSE if failed.
 	 * 
 	 */
 	public function do_register($data){
@@ -101,11 +97,54 @@ class Appoint_model extends CI_Model {
 							'apclinic_id' => new MongoId($data['clinic']),
 							'provider_id' => new MongoId($this->provider_id),
 							'user_id' => new MongoId($this->user_id),
-							'owner_id' => new MongoId($this->owner_id)
+							'owner_id' => new MongoId($this->owner_id),
+							'visit_status' => '0',
+							'visit_vn' => ''
 							));
 		return $rs;
 	}
 	
+	//------------------------------------------------------------------------------------------------------------------
+	/*
+	 * Search visit
+	 * 
+	 * @param	string	$hn The person hn.
+	 */
+	public function do_search_visit($hn){
+		$rs = $this->mongo_db->where(array('hn' => (string) $hn))->get('visit');
+		return $rs;
+	}
 	
+	//------------------------------------------------------------------------------------------------------------------
+	/*
+	 * Check duplicate appoint
+	 * 
+	 * @param	string	$vn		The visit number.
+	 * @param	string	$clinic	The clinic that appoint.
+	 */
+	
+	public function check_duplicate($apdate, $aptype){
+		$rs = $this->mongo_db
+				->where(array(
+						'apdate' => $apdate,
+						'aptype_id' => new MongoId($aptype)))
+				->count('appoints');
+				
+		return $rs > 0 ? TRUE : FALSE;
+	}
+	
+	//------------------------------------------------------------------------------------------------------------------
+	/*
+	 * Remove appointment
+	 * 
+	 * @param	ObjectId	$id	The appointment id.
+	 * @return	boolean		TRUE if success, FALSE if failed.
+	 */
+	
+	public function do_remove($id){
+		$rs = $this->mongo_db->where(array('_id' => new MongoId($id)))->delete('appoints');
+		
+		return $rs;
+	}
 }
 

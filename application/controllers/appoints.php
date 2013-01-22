@@ -13,10 +13,17 @@
 
 class Appoints extends CI_Controller
 {
+	//------------------------------------------------------------------------------------------------------------------
+	/*
+	 * Global parameter
+	 */
 	protected $user_id;
 	protected $owner_id;
 	protected $provider_id;
-
+	//------------------------------------------------------------------------------------------------------------------
+	/*
+	 * Construction function
+	 */
     public function __construct()
     {
         parent::__construct();
@@ -34,8 +41,10 @@ class Appoints extends CI_Controller
         $this->load->model('Appoint_model', 'appoint');
         $this->load->model('Service_model', 'service');
         $this->load->model('Basic_model', 'basic');
+        $this->load->model('Person_model', 'person');
         
     }
+    //------------------------------------------------------------------------------------------------------------------
     /*
      * Index function
      * 
@@ -51,6 +60,7 @@ class Appoints extends CI_Controller
     		$this->register($vn, $hn);
     	}
     }
+    //------------------------------------------------------------------------------------------------------------------
     /*
      * Register function
      * 
@@ -75,41 +85,51 @@ class Appoints extends CI_Controller
 			$this->layout->view('appoints/register_view', $data);
 			
 		}
-		
 	}    
-	
+	//------------------------------------------------------------------------------------------------------------------
+	/*
+	 * Save appoint registration
+	 * 
+	 * @param	array	$data	The data for save.
+	 */
 	public function do_register(){
 		$data = $this->input->post('data');
 		if(empty($data)){
 			$json = '{"success": false, "msg": "No data for save."}';
 		}else{
 			if(empty($data['apdate'])){
-				$json = '{"success": false, "msg": "No apdate found."}';
+				$json = '{"success": false, "msg": "ไม่พบวันที่นัด"}';
 			}else if(empty($data['aptime'])){
-				$json = '{"success": false, "msg": "No aptime found."}';
+				$json = '{"success": false, "msg": "ไม่พบเวลานัด"}';
 			}else if(empty($data['clinic'])){
-				$json = '{"success": false, "msg": "No clinic found."}';
+				$json = '{"success": false, "msg": "ไม่พบแผนกที่นัด"}';
 			}else if(empty($data['aptype'])){
-				$json = '{"success": false, "msg": "No aptype found."}';
+				$json = '{"success": false, "msg": "ไม่พบประเภทการนัด"}';
 			}else{
 				
-				$this->appoint->provider_id = $this->provider_id;
-				$this->appoint->user_id 	= $this->user_id;
-				$this->appoint->owner_id 	= $this->owner_id;
+				$duplicated = $this->appoint->check_duplicate(to_string_date($data['apdate']), $data['aptype']);
 				
-				$rs = $this->appoint->do_register($data);
-				
-				if($rs){
-					$json = '{"success": true}';
+				if($duplicated){
+					$json = '{"success": false, "msg": "ข้อมูลซ้ำ กรุณาเลือกแผลกและประเภทการนัดใหม่"}';
 				}else{
-					$json = '{"success": false, "msg": "Can\'t save appointment."}';
+					$this->appoint->provider_id = $this->provider_id;
+					$this->appoint->user_id 	= $this->user_id;
+					$this->appoint->owner_id 	= $this->owner_id;
+					
+					$rs = $this->appoint->do_register($data);
+					
+					if($rs){
+						$json = '{"success": true}';
+					}else{
+						$json = '{"success": false, "msg": "Can\'t save appointment."}';
+					}
 				}
 			}
 		}
 		
 		render_json($json);
 	}
-    
+    //-----------------------------------------------------------------------------------------------------------------
 	/*
 	 * Get appointment list
 	 * 
@@ -146,10 +166,11 @@ class Appoints extends CI_Controller
 								
 				$person = $this->service->get_person_detail($r['hn']);
 				
+				$obj->id = get_first_object($r['_id']);
 				$obj->person_name = $person['first_name'] . ' ' . $person['last_name'];
 				$obj->hn = $r['hn'];
 				$obj->vn = $r['vn'];
-				
+				$obj->vstatus = $r['visit_status'];
 				
 				array_push($arr_result, $obj);
 			}
@@ -162,4 +183,93 @@ class Appoints extends CI_Controller
 		
 		render_json($json);
 	}
+	
+	//------------------------------------------------------------------------------------------------------------------
+	/*
+	 * Search visit
+	*
+	* @param	string 	$query	The query for search
+	* @param	string	$filter	The filter type. 0 = CID, 1 = HN, 2 = First name and last name
+	*/
+	public function search_visit(){
+		$query = $this->input->post('query');
+		$filter = $this->input->post('filter');
+	
+		$filter = empty($filter) ? '0' : $filter;
+	
+		if(empty($query)){
+			$json = '{"success": false, "msg": "No query found"}';
+		}else{
+			
+			$hn = NULL;
+			
+			if($filter == '0'){
+				//get hn by cid
+				$hn = $this->person->get_hn_from_cid($query);
+			}else if($filter == '2'){
+				//get hn by first name and last name
+				$fullname = explode(' ', $query); // [0] = first name, [1] = last name
+				$hn = $this->person->get_hn_from_first_last_name($fullname[0], $fullname[1]);
+			}else{
+				$hn = $query;
+			}
+			
+			//$json = '{"success": true, "hn": "'.$hn.'"}';
+			
+			$rs = $this->appoint->do_search_visit($hn);
+			
+			if($rs){
+				
+				$arr_result = array();
+				foreach($rs as $r){
+					$obj = new stdClass();
+					
+					$person = $this->service->get_person_detail($r['hn']);
+					$obj->person_name = $person['first_name'] . ' ' . $person['last_name'];
+
+					$obj->hn = $r['hn'];
+					$obj->vn = $r['vn'];
+					$obj->date_serv = from_mongo_to_thai_date($r['date_serv']);
+					$obj->time_serv = $r['time_serv'];
+					$obj->clinic_name = get_clinic_name(get_first_object($r['clinic']));
+					
+					array_push($arr_result, $obj);
+				}
+				
+				$rows = json_encode($arr_result);
+				$json = '{"success": true, "rows": '.$rows.'}';
+			}else{
+				$json = '{"success": false, "msg": "No result."}';
+			}
+			
+		}
+	
+		render_json($json);
+	}
+	
+	//------------------------------------------------------------------------------------------------------------------
+	/*
+	 * Remove appointment
+	 * 
+	 * @param	MongoId	$id The appointment id.
+	 */
+	public function remove(){
+		
+		$id = $this->input->post('id');
+		if(empty($id)){
+			$json = '{"success": false, "msg": "ไม่พบรหัสการนัดที่ต้องการลบ"}';
+		}else{
+			//do remove
+			$rs = $this->appoint->do_remove($id);
+			if($rs){
+				$json = '{"success": true}';
+			}else{
+				$json = '{"success": false, "msg": "ไม่สามารถลบรายการได้ กรุณาตรวจสอบ"}';
+			}
+		}
+		
+		render_json($json);
+	}
 }
+
+//End file
