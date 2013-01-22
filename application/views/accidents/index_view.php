@@ -33,18 +33,18 @@
 				<div class="row-fluid">
 					<div class="span2">
 						<div class="control-group error">
-							<label class="control-label" for="txt_date">วันที่เกิดอุบัติเหตุ</label>
+							<label class="control-label" for="txt_aedate">วันที่เกิดอุบัติเหตุ</label>
 							<div class="input-append date" data-name="datepicker">
-								<input class="input-small" id="txt_date" type="text" disabled>
+								<input class="input-small" id="txt_aedate" type="text" disabled>
 								<span class="add-on"><i class="icon-th"></i></span>
 							</div>
 						</div>
 					</div>
 					<div class="span1">
 						<div class="control-group error">
-							<label class="control-label" for="txt_time">เวลา</label>
+							<label class="control-label" for="txt_aetime">เวลา</label>
 					        <div class="controls">
-					        	<input type="text" data-type="time" id="txt_time" class="input-mini">
+					        	<input type="text" data-type="time" id="txt_aetime" class="input-mini">
 					        </div>
 					  	</div>
 					</div>		
@@ -112,6 +112,19 @@
 								<option value="">---</option>
 								<?php 
 								foreach($aetraffics as $r){
+									echo '<option value="'.$r->id.'">' . $r->name . '</option>';
+								}
+								?>
+							</select>
+						</div>
+					</div>
+					<div class="span3">
+						<div class="control-group">
+							<label class="control-label" for="sl_aevehicle">ประเภทยานพาหนะ</label>
+							<select id="sl_aevehicle" class="input-xlarge">
+								<option value="">---</option>
+								<?php 
+								foreach($aevehicles as $r){
 									echo '<option value="'.$r->id.'">' . $r->name . '</option>';
 								}
 								?>
@@ -258,6 +271,6 @@
 </form>
 
 <script type="text/javascript">
-    head.js('<?php echo base_url(); ?>assets/apps/js/apps.appointments.register.js');
+    head.js('<?php echo base_url(); ?>assets/apps/js/apps.accidents.js');
 </script>
 

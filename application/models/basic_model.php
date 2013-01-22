@@ -1034,11 +1034,30 @@ class Basic_model extends CI_Model
     }
     //------------------------------------------------------------------------------------------------------------------
     /*
-     * Get Accident type in
+     * Get Accident traffice
     */
     public function get_aetraffic()
     {
     	$result = $this->mongo_db->order_by(array('export_code' => 1))->get('ref_aetraffics');
+    
+    	$arr_result = array();
+    	foreach($result as $r){
+    		$obj = new stdClass();
+    		$obj->id = get_first_object($r['_id']);
+    		$obj->name = $r['name'];
+    
+    		array_push($arr_result, $obj);
+    	}
+    
+    	return $arr_result;
+    }
+    //------------------------------------------------------------------------------------------------------------------
+    /*
+     * Get Accident vehicle
+    */
+    public function get_aevehicle()
+    {
+    	$result = $this->mongo_db->order_by(array('export_code' => 1))->get('ref_aevehicles');
     
     	$arr_result = array();
     	foreach($result as $r){

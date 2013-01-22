@@ -62,7 +62,8 @@ class Accidents extends CI_Controller
     		$data['aetypes'] 	= $this->basic->get_aetype();
     		$data['aeplaces'] 	= $this->basic->get_aeplace();
     		$data['aetypeins'] 	= $this->basic->get_aetypein();
-    		$data['aetraffics'] 	= $this->basic->get_aetraffic();
+    		$data['aetraffics'] = $this->basic->get_aetraffic();
+    		$data['aevehicles'] = $this->basic->get_aevehicle();
     		
     		$this->layout->view('accidents/index_view', $data);
     	}
