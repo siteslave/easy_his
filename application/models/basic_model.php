@@ -973,4 +973,82 @@ class Basic_model extends CI_Model
     	
     	return $arr_result;
     }
+    
+    //------------------------------------------------------------------------------------------------------------------
+    /*
+     * Get Accident type
+     */
+    public function get_aetype()
+    {
+    	$result = $this->mongo_db->order_by(array('th_name' => 1))->get('ref_aetypes');
+    
+    	$arr_result = array();
+    	foreach($result as $r){
+    		$obj = new stdClass();
+    		$obj->id = get_first_object($r['_id']);
+    		$obj->name = $r['th_name'];
+    
+    		array_push($arr_result, $obj);
+    	}
+    
+    	return $arr_result;
+    }
+    //------------------------------------------------------------------------------------------------------------------
+    /*
+     * Get Accident place
+    */
+    public function get_aeplace()
+    {
+    	$result = $this->mongo_db->order_by(array('export_code' => 1))->get('ref_aeplaces');
+    
+    	$arr_result = array();
+    	foreach($result as $r){
+    		$obj = new stdClass();
+    		$obj->id = get_first_object($r['_id']);
+    		$obj->name = $r['name'];
+    
+    		array_push($arr_result, $obj);
+    	}
+    
+    	return $arr_result;
+    }
+    
+    //------------------------------------------------------------------------------------------------------------------
+    /*
+     * Get Accident type in
+    */
+    public function get_aetypein()
+    {
+    	$result = $this->mongo_db->order_by(array('export_code' => 1))->get('ref_aetypeins');
+    
+    	$arr_result = array();
+    	foreach($result as $r){
+    		$obj = new stdClass();
+    		$obj->id = get_first_object($r['_id']);
+    		$obj->name = $r['name'];
+    
+    		array_push($arr_result, $obj);
+    	}
+    
+    	return $arr_result;
+    }
+    //------------------------------------------------------------------------------------------------------------------
+    /*
+     * Get Accident type in
+    */
+    public function get_aetraffic()
+    {
+    	$result = $this->mongo_db->order_by(array('export_code' => 1))->get('ref_aetraffics');
+    
+    	$arr_result = array();
+    	foreach($result as $r){
+    		$obj = new stdClass();
+    		$obj->id = get_first_object($r['_id']);
+    		$obj->name = $r['name'];
+    
+    		array_push($arr_result, $obj);
+    	}
+    
+    	return $arr_result;
+    }
 }

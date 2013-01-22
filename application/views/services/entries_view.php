@@ -18,7 +18,7 @@
 </div>
 
 <form action="#" class="form-actions">
-    <a href="javascript:void(0);" class="btn btn-danger"><i class="icon-th-list icon-white"></i> ข้อมูลอุบัติเหตุ</a>
+    <a href="<?php echo site_url('accidents/index/' . $vn . '/' . $hn); ?>" class="btn btn-danger"><i class="icon-th-list icon-white"></i> ข้อมูลอุบัติเหตุ</a>
     <a href="<?php echo site_url('appoints/register/' . $vn . '/' . $hn); ?>" class="btn btn-warning"><i class="icon-calendar icon-white"></i> ลงทะเบียนนัด</a>
     <a href="javascript:void(0);" class="btn btn-info"><i class="icon-share-alt icon-white"></i> สั่ง LAB</a>
 
