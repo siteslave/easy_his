@@ -61,11 +61,18 @@ class Services extends CI_Controller
     }
     public function entries($vn = '')
     {
-        if(empty($vn) || !isset($vn)){
+    	$this->service->owner_id = $this->owner_id;
+    	
+        if(empty($vn) || !isset($vn))
+        {
             show_error('No vn found.', 404);
-        }else if(!$this->service->check_visit_exist($vn)){
+        }
+        else if(!$this->service->check_visit_exist($vn))
+        {
             show_error('VN don\'t exist, please check visit number and try again.', 404);
-        }else{
+        }
+        else
+        {
             $person_id = $this->service->get_person_id($vn);
             $person = $this->person->get_person_detail($person_id);
 
@@ -83,6 +90,7 @@ class Services extends CI_Controller
             $smokings                  = $this->basic->get_smoking();
 
             $diag_types                 = $this->basic->get_diag_type();
+            $fp_types					= $this->basic->get_fp_type();
 
             $data['drug_allergy_informants'] = $drug_allergy_informants;
             $data['drug_allergy_symptoms'] = $drug_allergy_symptoms;
@@ -91,12 +99,14 @@ class Services extends CI_Controller
             $data['drinkings'] = $drinkings;
             $data['smokings'] = $smokings;
             $data['diag_types'] = $diag_types;
-
+			$data['fp_types'] = $fp_types;
+            
             $data['hn'] = $hn;
             $data['person_id'] = $person_id;
             $data['cid'] =$cid;
             $data['vn'] = $vn;
             $data['sex'] = $sex;
+            
 
             $data['patient_name'] = $patient_name;
             $this->layout->view('services/entries_view', $data);
@@ -105,24 +115,35 @@ class Services extends CI_Controller
 
     }
 
-    public function search_person(){
+    public function search_person()
+    {
         $query = $this->input->post('query');
         $op = $this->input->post('op');
 
-        if(empty($query)){
+        if(empty($query))
+        {
             $json = '{"success": false, "msg": "No query."}';
-        }else{
-            if($op == 'hn'){
+        }
+        else
+        {
+            if($op == 'hn')
+            {
                 $rs = $this->service->search_person_by_hn($query);
-            }else if($op == 'cid'){
+            }
+            else if($op == 'cid')
+            {
                 $rs = $this->service->search_person_by_cid($query);
-            }else{
+            }
+            else
+            {
                 $rs = $this->service->search_person_by_name($query);
             }
 
-            if($rs){
+            if($rs)
+            {
                 $arr_result = array();
-                foreach($rs as $r){
+                foreach($rs as $r)
+                {
                     $obj = new stdClass();
                     $obj->id = get_first_object($r['_id']);
                     $obj->fullname = $r['first_name'] . ' ' . $r['last_name'];
@@ -137,7 +158,9 @@ class Services extends CI_Controller
 
                 $rows = json_encode($arr_result);
                 $json = '{"success": true, "rows": '.$rows.'}';
-            }else{
+            }
+            else
+            {
                 $json = '{"success": false, "msg": "No result."}';
             }
         }
@@ -145,7 +168,8 @@ class Services extends CI_Controller
         render_json($json);
     }
 
-    public function get_person_detail(){
+    public function get_person_detail()
+    {
         $hn = $this->input->post('hn');
         if(empty($hn)){
             $json = '{"success": false, "msg": "No hn found."}';
@@ -674,37 +698,59 @@ class Services extends CI_Controller
     /*
      * Save drug
      */
-    public function save_drug_opd(){
+    public function save_drug_opd()
+    {
         $data = $this->input->post('data');
-        if(empty($data)){
+        $this->service->owner_id = $this->owner_id;
+        
+        if(empty($data))
+        {
             $json = '{"success": false, "msg": "No data for save."}';
-        }else if(empty($data['drug_id'])){
+        }
+        else if(empty($data['drug_id']))
+        {
             $json = '{"success": false, "msg": "No drug id found."}';
-        }else if(!$this->service->check_visit_exist($data['vn'])){
+        }
+        else if(!$this->service->check_visit_exist($data['vn']))
+        {
            $json = '{"success": false, "msg": "No visit found."}';
-        }else if($data['isupdate'] == '1'){
+        }
+        else if($data['isupdate'] == '1')
+        {
             //do update
             $rs = $this->service->update_drug_opd($data);
-            if($rs){
+            if($rs)
+            {
                 $json = '{"success": true}';
-            }else{
+            }
+            else
+            {
                 $json = '{"success": false, "msg": "Can\'t update data"}';
             }
-        }else{
+        }
+        else
+        {
 
             //check drug duplicate
             $duplicated = $this->service->check_drug_duplicate($data['vn'], $data['drug_id']);
-            if(!$duplicated){
+            
+            if(!$duplicated)
+            {
                 //do save
                 $data['provider_id'] = $this->provider_id;
                 $rs = $this->service->save_drug_opd($data);
 
-                if($rs){
+                if($rs)
+                {
                     $json = '{"success": true}';
-                }else{
+                }
+                else
+                {
                     $json = '{"success": false, "msg": "Can\'t save data"}';
                 }
-            }else{
+            }
+            else
+            {
                 $json = '{"success": false, "msg": "Drug duplicate, please use another."}';
             }
         }
@@ -787,34 +833,55 @@ class Services extends CI_Controller
     /*
      * Save charge
      */
-    public function save_charge_opd(){
+    public function save_charge_opd()
+    {
         $data = $this->input->post('data');
-        if(empty($data)){
+        $this->service->owner_id = $this->owner_id;
+        
+        if(empty($data))
+        {
             $json = '{"success": false, "msg": "No data for save."}';
-        }else if(!$this->service->check_visit_exist($data['vn'])){
+        }
+        else if(!$this->service->check_visit_exist($data['vn']))
+        {
             $json = '{"success": false, "msg": "No visit found."}';
-        }else if($data['isupdate'] == '1'){
+        }
+        else if($data['isupdate'] == '1')
+        {
             //do update
             $rs = $this->service->update_charge_opd($data);
-            if($rs){
+            
+            if($rs)
+            {
                 $json = '{"success": true}';
-            }else{
+            }
+            else
+            {
                 $json = '{"success": false, "msg": "Can\'t update data"}';
             }
-        }else{
+        }
+        else
+        {
             //check drug duplicate
             $duplicated = $this->service->check_charge_duplicate($data['vn'], $data['charge_code']);
-            if(!$duplicated){
+            
+            if(!$duplicated)
+            {
                 //do save
                 $data['user_id'] = $this->user_id;
                 $rs = $this->service->save_charge_opd($data);
 
-                if($rs){
+                if($rs)
+                {
                     $json = '{"success": true}';
-                }else{
+                }
+                else
+                {
                     $json = '{"success": false, "msg": "Can\'t save data"}';
                 }
-            }else{
+            }
+            else
+            {
                 $json = '{"success": false, "msg": "Charge duplicate, please use another."}';
             }
         }
@@ -872,7 +939,175 @@ class Services extends CI_Controller
 
         render_json($json);
     }
+    
+    //------------------------------------------------------------------------------------------------------------------
+    /**
+     * Save FP data
+     * 
+     * @param	string	$vn
+     * @param	string	$hn
+     * @param	string 	$fp_type
+     * 
+     * @return 	json
+     */
+    public function save_fp()
+    {
+    	$data = $this->input->post('data');
+    	
+    	if(empty($data))
+    	{
+    		$json = '{"success": false, "msg": "No data for save."}';
+    	}
+    	else
+    	{
+    		//check visit exist
+    		$this->service->owner_id = $this->owner_id;
+    		$visit_exist = $this->service->check_visit_exist($data['vn']);
+    		
+    		if(!$visit_exist)
+    		{
+    			$json = '{"success": false, "msg": "Visit not found."}';
+    		}
+    		else
+    		{
+    			
+    			//check duplicate 
+    			$duplicated = $this->service->check_fp_duplicated($data['vn'], $data['fp_type']);
+    			
+    			if($duplicated)
+    			{
+    				$json = '{"success": false, "msg": "(ซ้ำ) รายการนี้มีอยู่แล้ว กรุณาตรวจสอบ"}';
+    			}
+    			else 
+    			{
+    				//check sex
+    				$fp_sex = $this->basic->get_fp_type_sex($data['fp_type']);
+    				$person_sex = $this->basic->get_person_sex($data['hn']);
+    				
+    				if($fp_sex == $person_sex)
+    				{
+    					$this->service->provider_id = $this->provider_id;
+    					$this->service->owner_id = $this->owner_id;
+    					
+    					$rs = $this->service->save_fp($data);
+    						
+    					if($rs)
+    					{
+    						$json = '{"success": true}';
+    					}
+    					else
+    					{
+    						$json = '{"success": false, "msg": "Can\'t save fp data."}';
+    					}
+    				}
+    				else
+    				{
+    					$json = '{"success": false, "msg": "เพศ ไม่เหมาะสมกับประเภทการคุมกำเนิด กรุณาตรวจสอบ"}';
+    				}	
+    			}
+    		}
+    	}
+    	
+    	render_json($json);
+    }
+    //------------------------------------------------------------------------------------------------------------------
+    /**
+     * Get FP list
+     * 
+     * 
+     */
+   	public function get_fp_list()
+   	{
+   		$vn = $this->input->post('vn');
+   		
+   		if(empty($vn))
+   		{
+   			$json = '{"success": false, "msg": "Vn not found."}';
+   		}
+   		else
+   		{
+   			$rs = $this->service->get_fp_list($vn);
+   			
+   			if($rs)
+   			{
+   				$arr_result = array();
+   				
+   				foreach($rs as $r)
+   				{
+   					$obj = new stdClass();
+   					$obj->id = get_first_object($r['_id']);
+   					$obj->fp_name = get_fp_type_name($r['fp_type']);
+   					$obj->provider_name = get_provider_name_by_id(get_first_object($r['provider_id']));
+ 					//$obj->owner_name = get_owner_name(get_first_object($r['owner_id']));
+   					array_push($arr_result, $obj);
+   				}
+   				
+   				$rows = json_encode($arr_result);
+   				
+   				$json = '{"success": true, "rows": '.$rows.'}';
+   			}
+   			else 
+   			{
+   				$json = '{"success": false, "msg": "Record not found."}';
+   			}
+   		}
+   		
+   		render_json($json);
+   	}
 
+   	//------------------------------------------------------------------------------------------------------------------
+   	/**
+   	 * Get FP list
+   	 *
+   	 *
+   	 */
+   	public function get_fp_list_all()
+   	{
+   		$hn = $this->input->post('hn');
+   		 
+   		if(empty($hn))
+   		{
+   			$json = '{"success": false, "msg": "HN not found."}';
+   		}
+   		else
+   		{
+   			$rs = $this->service->get_fp_list_all($hn);
+   	
+   			if($rs)
+   			{
+   				$arr_result = array();
+   					
+   				foreach($rs as $r)
+   				{
+   					$obj = new stdClass();
+   					
+   					$obj->vn = $r['vn'];
+   					
+   					$visit = $this->service->get_visit_info($obj->vn);
+   					$obj->clinic_name = get_clinic_name(get_first_object($visit['clinic']));
+   					$obj->date_serv = to_js_date($visit['date_serv']);
+   					$obj->time_serv = $visit['time_serv'];
+   					
+   					$obj->id = get_first_object($r['_id']);
+   					$obj->fp_name = get_fp_type_name($r['fp_type']);
+   					$obj->provider_name = get_provider_name_by_id(get_first_object($r['provider_id']));
+   					$obj->owner_name = get_owner_name(get_first_object($r['owner_id']));
+   					array_push($arr_result, $obj);
+   				}
+   					
+   				$rows = json_encode($arr_result);
+   					
+   				$json = '{"success": true, "rows": '.$rows.'}';
+   			}
+   			else
+   			{
+   				$json = '{"success": false, "msg": "Record not found."}';
+   			}
+   		}
+   		 
+   		render_json($json);
+   	}
+   	
 }
 
 /* End of file services.php */

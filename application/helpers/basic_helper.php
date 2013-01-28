@@ -69,6 +69,32 @@ if(!function_exists('get_provider_type_name')){
     }
 }
 
+
+if(!function_exists('get_provider_name')){
+	function get_provider_name($code){
+		$ci =& get_instance();
+
+		$ci->load->model('Basic_model', 'basic');
+
+		$result = $ci->basic->get_provider_name($code);
+
+		return $result;
+	}
+}
+
+if(!function_exists('get_owner_name')){
+	function get_owner_name($id){
+		$ci =& get_instance();
+
+		$ci->load->model('Basic_model', 'basic');
+
+		$pcucode = $ci->basic->get_owner_pcucode($id);
+		
+
+		return $pcucode ? get_hospital_name($pcucode) : '-';
+	}
+}
+
 if(!function_exists('get_streng_name')){
     function get_streng_name($code){
         $ci =& get_instance();
@@ -162,6 +188,7 @@ if(!function_exists('get_diag_type_name')){
         return $result;
     }
 }
+
 if(!function_exists('get_provider_name_by_id')){
     function get_provider_name_by_id($id){
         $ci =& get_instance();
@@ -297,4 +324,18 @@ if(!function_exists('get_appoint_type_name')){
 		return $result;
 	}
 }
+
+
+if(!function_exists('get_fp_type_name')){
+	function get_fp_type_name($code){
+		$ci =& get_instance();
+
+		$ci->load->model('Basic_model', 'basic');
+
+		$result = $ci->basic->get_fp_type_name($code);
+
+		return $result;
+	}
+}
+
 

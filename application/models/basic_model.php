@@ -778,6 +778,19 @@ class Basic_model extends CI_Model
         }
     }
 
+    public function get_provider_name($code){
+    	$result = $this->mongo_db->where(array('provider' => (string) $code))->get('providers');
+    
+    	return $result ? $result[0]['first_name'] . ' ' . $result[0]['last_name'] : '-';
+    }
+    
+    public function get_owner_pcucode($id){
+    	$result = $this->mongo_db->where(array('_id' => new MongoId($id)))->get('owners');
+    
+    	return $result ? $result[0]['pcucode'] : '-';
+    }
+    
+    
     public function get_drug_detail($id){
         $result = $this->mongo_db->where(array('_id' => new MongoId($id)))->get('ref_drugs');
 
@@ -803,7 +816,17 @@ class Basic_model extends CI_Model
         $result = $this->mongo_db
             ->order_by(array('code' => 'ASC'))
             ->get('ref_diag_types');
-        return $result;
+        
+        $arr_result = array();
+        foreach($result as $r){
+        	$obj = new stdClass();
+        	$obj->code = $r['code'];
+        	$obj->name = $r['name'];
+        
+        	array_push($arr_result, $obj);
+        }
+        
+        return $arr_result;
     }
 
     public function search_drug($query){
@@ -925,10 +948,12 @@ class Basic_model extends CI_Model
         return count($rs) > 0 ? $rs[0]['house_code'] : NULL;
     }
 
-    public function get_village_detail($id){
+    public function get_village_detail($id)
+    {
         $rs = $this->mongo_db
             ->where('_id', new MongoId($id))
             ->get('villages');
+        
         return count($rs) > 0 ? $rs[0] : NULL;
     }
 
@@ -1069,5 +1094,49 @@ class Basic_model extends CI_Model
     	}
     
     	return $arr_result;
+    }
+    
+    //------------------------------------------------------------------------------------------------------------------
+    /*
+     * Get FP type
+    */
+    public function get_fp_type()
+    {
+    	$result = $this->mongo_db->order_by(array('code' => 1))->get('ref_fp_types');
+    
+    	$arr_result = array();
+    	foreach($result as $r){
+    		$obj = new stdClass();
+    		$obj->code = $r['code'];
+    		$obj->name = $r['name'];
+    
+    		array_push($arr_result, $obj);
+    	}
+    
+    	return $arr_result;
+    }
+    
+    public function get_fp_type_name($code){
+    	$result = $this->mongo_db->where(array('code' => $code))->get('ref_fp_types');
+    
+    	return count($result) > 0 ? $result[0]['name'] : '-';
+    }
+    
+    public function get_fp_type_sex($code)
+    {
+    	$rs = $this->mongo_db->where('code', (string) $code)->get('ref_fp_types');
+    	return $rs ? $rs[0]['sex'] : NULL;
+    }
+    /**
+     * Get person sex
+     * @param 	string $hn
+     * @return 	string
+     */
+    public function get_person_sex($hn)
+    {
+    	$rs = $this->mongo_db->select(array('sex'))
+    						->where('hn', (string) $hn)
+    						->get('person');
+    	return $rs ? $rs[0]['sex'] : NULL;
     }
 }

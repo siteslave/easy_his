@@ -44,7 +44,8 @@ class Service_model extends CI_Model
         return $rs;
     }
 
-    public function get_person_detail($hn){
+    public function get_person_detail($hn)
+    {
         $rs = $this->mongo_db
             ->select(array('first_name', 'last_name', 'cid', 'hn', 'sex', 'birthdate', 'house_code'))
             ->where('hn', $hn)
@@ -54,26 +55,8 @@ class Service_model extends CI_Model
         return count($rs) > 0 ? $rs[0] : NULL;
     }
 
-    /*
-     * items.person_id = $('#txt_person_id').val();
-        items.vn = $('#txt_service_vn').val();
-        items.date_serv = $('#txt_reg_service_date').val();
-        items.time_serv = $('#txt_reg_service_time').val();
-        items.clinic = $('#sl_reg_service_clinic').val();
-        items.doctor_room = $('#sl_reg_service_doctor_room').val();
-        items.patient_type = $('#sl_reg_service_pttype').val();
-        items.location = $('#sl_reg_service_location').val();
-        items.type_in = $('#sl_reg_service_typein').val();
-        items.service_place = $('#sl_reg_service_service_place').val();
-        items.insc_id = $('#sl_reg_service_insc').val();
-        items.insc_code = $('#sl_reg_service_insc').val();
-        items.insc_start_date = $('#txt_reg_service_insc_start_date').val();
-        items.insc_expire_date = $('#txt_reg_service_insc_expire_date').val();
-        items.insc_hosp_main = $('#txt_reg_service_insc_hosp_main_code').val();
-        items.insc_hosp_sub = $('#txt_reg_service_insc_hosp_sub_code').val();
-
-     */
-    public function do_register($data){
+    public function do_register($data)
+    {
         $rs = $this->mongo_db
             ->insert('visit', array(
                     'owner_id' => new MongoId($this->owner_id),
@@ -105,11 +88,13 @@ class Service_model extends CI_Model
         return $rs;
     }
 
-    public function do_update($data){
+    public function do_update($data)
+    {
 
     }
 
-    public function get_list_by_date($date, $offset, $limit){
+    public function get_list_by_date($date, $offset, $limit)
+    {
         $rs = $this->mongo_db
             ->where('date_serv', $date)
             ->offset($offset)
@@ -120,7 +105,8 @@ class Service_model extends CI_Model
 
     }
 
-    public function get_service_screening($vn){
+    public function get_service_screening($vn)
+    {
         $result = $this->mongo_db
             ->select(array('screenings'))
             ->where(array('vn' => (string) $vn))
@@ -129,7 +115,8 @@ class Service_model extends CI_Model
         return count($result) > 0 ? $result[0]['screenings'] : NULL;
     }
 
-    public function get_person_id($vn){
+    public function get_person_id($vn)
+    {
         $result = $this->mongo_db
             ->select(array('person_id'))
             ->where(array('vn' => $vn))
@@ -138,15 +125,17 @@ class Service_model extends CI_Model
         return count($result) > 0 ? get_first_object($result[0]['person_id']) : NULL;
     }
 
-    public function check_visit_exist($vn){
+    public function check_visit_exist($vn)
+    {
         $rs = $this->mongo_db
-            ->where('vn', $vn)
+            ->where(array('vn' => $vn, 'owner_id' => new MongoId($this->owner_id)))
             ->count('visit');
 
         return $rs > 0 ? TRUE : FALSE;
     }
 
-    public function save_screening($data){
+    public function save_screening($data)
+    {
         $rs = $this->mongo_db
             ->where('vn', $data['vn'])
             ->set(array(
@@ -355,7 +344,8 @@ class Service_model extends CI_Model
      * @param  array   $data
      * @retrun  boolean
      */
-    public function  save_drug_opd($data){
+    public function  save_drug_opd($data)
+    {
         $rs = $this->mongo_db
             ->insert('drugs_opd', array(
             'vn' => (string) $data['vn'],
@@ -542,6 +532,72 @@ class Service_model extends CI_Model
     		return NULL;
     	}
     }
+    //------------------------------------------------------------------------------------------------------------------
+    /**
+     * Save visit fp
+     * 
+     * @param 	array 	$data
+     * @return 	boolean
+     */
+    public function save_fp($data)
+    {
+    	$rs = $this->mongo_db
+    				->insert('visit_fp',
+    						array(
+    								'provider_id'=> new MongoId($this->provider_id),
+    								'owner_id' => new MongoId($this->owner_id),
+    								'vn' => $data['vn'],
+    								'hn' => $data['hn'],
+    								'fp_type' => $data['fp_type'])
+    						);
+    	return $rs;
+    }
+    
+    //------------------------------------------------------------------------------------------------------------------
+    /**
+     * 
+     */
+    public function check_fp_duplicated($vn, $fp_type)
+    {
+    	$rs = $this->mongo_db->where(array('vn' => (string) $vn, 'fp_type' => (string) $fp_type))->count('visit_fp');
+    	
+    	return $rs > 0 ? TRUE : FALSE;
+    }
+    
+    //------------------------------------------------------------------------------------------------------------------
+    /**
+     * Get FP list
+     * 
+     * 
+     */
+    public function get_fp_list($vn)
+    {
+    	$rs = $this->mongo_db->where(array('vn' => $vn))->get('visit_fp');
+    	return $rs;
+    }
+    
+    public function get_fp_list_all($hn)
+    {
+    	$rs = $this->mongo_db->where(array('hn' => $hn))->get('visit_fp');
+    	return $rs;
+    }
+    //------------------------------------------------------------------------------------------------------------------
+    /**
+     * Get visit info.
+     * 
+     * @param string $vn
+     */
+    public function get_visit_info($vn)
+    {
+    	$rs = $this->mongo_db->select(array('clinic','date_serv', 'time_serv'))
+    						->where('vn', (string) $vn)
+    						->get('visit');
+    	return $rs ? $rs[0] : NULL;
+    }
+    
+
+    
+    
 }
 
 /* End of file service_model.php */

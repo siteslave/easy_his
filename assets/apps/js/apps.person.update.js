@@ -1222,6 +1222,9 @@ head.ready(function(){
         person.update.ajax.get_chronic_list(person_id, function(err, data){
             if(err){
                 app.alert(err);
+                $('#tbl_chronic_list > tbody').append(
+                        '<tr><td colspan="5">ไม่พบรายการ</td></tr>'
+                    );
             }else{
                 if(_.size(data.rows)){
                     _.each(data.rows, function(v){
@@ -1248,7 +1251,7 @@ head.ready(function(){
                         );
                     });
                 }else{
-                    $('#tbl_search_drug_result_list > tbody').append(
+                    $('#tbl_chronic_list > tbody').append(
                         '<tr><td colspan="5">ไม่พบรายการ</td></tr>'
                     );
                 }

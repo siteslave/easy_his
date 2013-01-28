@@ -6,7 +6,24 @@
 
 <input type="hidden" id="txt_hn" value="<?php echo $hn; ?>">
 <input type="hidden" id="txt_vn" value="<?php echo $vn; ?>">
+<input type="hidden" id="isupdate" value="<?php echo $updated; ?>">
 
+<?php 
+	if($updated)
+	{
+		echo '
+          <div class="alert alert-block alert-error fade in" id="div_warning">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <h4 class="alert-heading">พบข้อมูลเดิมที่เคยบันทึกไว้แล้ว!</h4>
+            <p>เนื่องจากมีการตรวจสอบพบว่ามีการบันทึกข้อมูลเดิมของผู้ป่วยที่มารับบริการในครั้งนี้อยู่แล้ว คุณต้องการเรียกข้อมูลเดิมขึ้นมาแก้ไขหรือไม่</p>
+            <p>
+              <a class="btn btn-danger" href="#" id="btn_get_data"><i class="icon-refresh icon-white"></i> เรียกข้อมูลเดิมขึ้นมาแก้ไข</a>
+            </p>
+          </div>
+			';
+	}
+
+?>
 <legend>ข้อมูลผู้ป่วย</legend>
 <form action="#" class="well form-inline">
 	<label class="control-label" for="txt_fullname">ชื่อ - สกุล</label>
@@ -260,13 +277,17 @@
 		<i class="icon-ok-sign icon-white"></i> บันทึกข้อมูล
 	</a>
 	
-	<a href="<?php echo site_url('services'); ?>" class="btn">
+	<a href="<?php echo site_url('services/entries'); ?>/<?php echo $vn; ?>" class="btn">
 		<i class="icon-home"></i> กลับหน้าหลัก
 	</a>
+
 	<div class="pull-right">
-		<a href="javascript:void(0);" class="btn btn-info">
-		<i class="icon-time icon-white"></i> ประวัติการเกิดอุบัติเหตุ
-	</a>
+		<a href="javascript:void(0);" class="btn btn-danger disabled">
+			<i class="icon-trash icon-white"></i> ลบข้อมูล
+		</a>
+		<a href="javascript:void(0);" class="btn btn-info disabled">
+			<i class="icon-time icon-white"></i> ประวัติการเกิดอุบัติเหตุ
+		</a>
 	</div>
 </form>
 

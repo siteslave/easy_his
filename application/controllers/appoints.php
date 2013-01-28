@@ -52,7 +52,8 @@ class Appoints extends CI_Controller
      * @param	string	$vn	The visit number, if null will display appointment list else if vn isset 
      * 						display new register.
      */
-    public function index($vn = '', $hn = ''){
+    public function index($vn = '', $hn = '')
+    {
     	if(empty($vn) || !isset($vn)){
     		$data['clinics'] = $this->basic->get_clinic();
     		$this->layout->view('appoints/index_view', $data);
@@ -68,10 +69,16 @@ class Appoints extends CI_Controller
      * @param	string	$vn The visit number
      * 
      */
-	public function register($vn = '', $hn = ''){
-		if(empty($vn) || !isset($vn) || empty($hn) || !isset($hn)){
+	public function register($vn = '', $hn = '')
+	{
+		$this->service->owner_id = $this->owner_id;
+		
+		if(empty($vn) OR !isset($vn) OR empty($hn) OR !isset($hn))
+		{
 			show_error('No vn found.', 404);
-		}else if(!$this->service->check_visit_exist($vn)){
+		}
+		else if(!$this->service->check_visit_exist($vn))
+		{
 			show_error('VN don\'t exist, please check visit number and try again.', 404);
 		}else{
 			//show new register

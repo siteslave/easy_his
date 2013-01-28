@@ -30,7 +30,8 @@ class Accidents extends CI_Controller
 
         $this->owner_id = $this->session->userdata('owner_id');
 
-        if(empty($this->owner_id)){
+        if(empty($this->owner_id))
+        {
             redirect(site_url('users/access_denied'));
         }
         
@@ -42,6 +43,7 @@ class Accidents extends CI_Controller
         $this->load->model('Service_model', 'service');
         $this->load->model('Basic_model', 'basic');
         $this->load->model('Person_model', 'person');
+        $this->load->model('Accident_model', 'accident');
         
     }
     //------------------------------------------------------------------------------------------------------------------
@@ -52,10 +54,18 @@ class Accidents extends CI_Controller
      * @param	string	$vn	The visit number, if null will display appointment list else if vn isset 
      * 						display new register.
      */
-    public function index($vn = '', $hn = ''){
-    	if(empty($vn) || !isset($vn)){
-    		show_404();
-    	}else{
+    public function register($vn = '', $hn = '')
+    {
+    	$this->service->owner_id = $this->owner_id;
+    	
+    	$vn_exist = $this->service->check_visit_exist($vn);
+    	
+    	if(!$vn_exist)
+    	{
+    		show_error('Service not found.', 404);
+    	}
+    	else
+    	{
     		$data = get_patient_info($hn);
     		$data['vn'] 		= $vn;
     		$data['hn'] 		= $hn;
@@ -65,75 +75,106 @@ class Accidents extends CI_Controller
     		$data['aetraffics'] = $this->basic->get_aetraffic();
     		$data['aevehicles'] = $this->basic->get_aevehicle();
     		
-    		$this->layout->view('accidents/index_view', $data);
+    		//check exist
+    		$data['updated'] = $this->accident->check_exist($vn) ? '1' : '0';
+    		
+    		$this->layout->view('accidents/register_view', $data);
     	}
     }   
-	//------------------------------------------------------------------------------------------------------------------
-	/*
-	 * Save appoint registration
-	 * 
-	 * @param	array	$data	The data for save.
-	 */
-	public function do_register(){
-		$data = $this->input->post('data');
-		if(empty($data)){
-			$json = '{"success": false, "msg": "No data for save."}';
-		}else{
-			if(empty($data['apdate'])){
-				$json = '{"success": false, "msg": "ไม่พบวันที่นัด"}';
-			}else if(empty($data['aptime'])){
-				$json = '{"success": false, "msg": "ไม่พบเวลานัด"}';
-			}else if(empty($data['clinic'])){
-				$json = '{"success": false, "msg": "ไม่พบแผนกที่นัด"}';
-			}else if(empty($data['aptype'])){
-				$json = '{"success": false, "msg": "ไม่พบประเภทการนัด"}';
-			}else{
-				
-				$duplicated = $this->appoint->check_duplicate(to_string_date($data['apdate']), $data['aptype']);
-				
-				if($duplicated){
-					$json = '{"success": false, "msg": "ข้อมูลซ้ำ กรุณาเลือกแผลกและประเภทการนัดใหม่"}';
-				}else{
-					$this->appoint->provider_id = $this->provider_id;
-					$this->appoint->user_id 	= $this->user_id;
-					$this->appoint->owner_id 	= $this->owner_id;
-					
-					$rs = $this->appoint->do_register($data);
-					
-					if($rs){
-						$json = '{"success": true}';
-					}else{
-						$json = '{"success": false, "msg": "Can\'t save appointment."}';
-					}
-				}
-			}
-		}
-		
-		render_json($json);
-	}
-	//------------------------------------------------------------------------------------------------------------------
-	/*
-	 * Remove appointment
-	 * 
-	 * @param	MongoId	$id The appointment id.
-	 */
-	public function remove(){
-		
-		$id = $this->input->post('id');
-		if(empty($id)){
-			$json = '{"success": false, "msg": "ไม่พบรหัสการนัดที่ต้องการลบ"}';
-		}else{
-			//do remove
-			$rs = $this->appoint->do_remove($id);
-			if($rs){
-				$json = '{"success": true}';
-			}else{
-				$json = '{"success": false, "msg": "ไม่สามารถลบรายการได้ กรุณาตรวจสอบ"}';
-			}
-		}
-		
-		render_json($json);
-	}
+
+    //------------------------------------------------------------------------------------------------------------------
+    /**
+     * Save data
+     * 
+     * Save accident data
+     */
+    public function save() 
+    {
+    	$data = $this->input->post('data');
+    	
+    	if(empty($data))
+    	{
+    		$json = '{"success": false, "msg": "No data for save"}';
+    	}
+    	else
+    	{
+    		$this->accident->user_id = $this->user_id;
+    		$this->accident->provider_id = $this->provider_id;
+    		$this->accident->owner_id = $this->owner_id;
+    			
+    		$data['ae_date'] = to_string_date($data['ae_date']);
+    		
+    		$rs = FALSE;
+    		
+    		if($data['isupdate'])
+    		{
+    			$rs = $this->accident->update($data);
+    		}
+    		else 
+    		{
+    			$rs = $this->accident->save($data);
+    		}
+    			
+    	 	if($rs)
+    	 	{
+ 				$json = '{"success": true}';
+  			}
+    	 	else
+    		{
+    			$json = '{"success": false, "msg": "Can\'t save data."}';
+    		}
+    		
+    	}
+    	
+    	render_json($json);
+    }
+    
+    public function get_data()
+    {
+    	$vn = $this->input->post('vn');
+    	
+    	if(empty($vn))
+    	{
+    		$json = '{"success": false, "msg": "No vn found"}';
+    	}
+    	else
+    	{
+    		$rs = $this->accident->get_data($vn);
+    		if($rs)
+    		{
+    			$obj = new stdClass();
+    			$obj->ae_date = to_js_date($rs['ae_date']);
+    			$obj->ae_time = $rs['ae_time'];
+    			$obj->ae_urgency = $rs['ae_urgency'];
+    			$obj->ae_type = get_first_object($rs['ae_type']);
+    			$obj->ae_place = get_first_object($rs['ae_place']);
+    			$obj->ae_typein = get_first_object($rs['ae_typein']);
+    			$obj->ae_traffic = get_first_object($rs['ae_traffic']);
+    			$obj->ae_vehicle = get_first_object($rs['ae_vehicle']);
+    			$obj->ae_alcohol = $rs['ae_alcohol'];
+    			$obj->ae_nacrotic_drug = $rs['ae_nacrotic_drug'];
+    			$obj->ae_belt = $rs['ae_belt'];
+    			$obj->ae_helmet = $rs['ae_helmet'];
+    			$obj->ae_airway = $rs['ae_airway'];
+    			$obj->ae_stopbleed = $rs['ae_stopbleed'];
+    			$obj->ae_splint = $rs['ae_splint'];
+    			$obj->ae_fluid = $rs['ae_fluid'];
+    			$obj->ae_coma_eye = $rs['ae_coma_eye'];
+    			$obj->ae_coma_speak = $rs['ae_coma_speak'];
+    			$obj->ae_coma_movement = $rs['ae_coma_movement'];
+    				
+    	
+    			$rows = json_encode($obj);
+    			$json = '{"success": true, "rows": '.$rows.'}';
+    		}
+    		else
+    		{
+    			$json = '{"success": false, "msg": "No data."}';
+    		}
+    	}
+    	
+    	render_json($json);
+    }
 }
 
 //End file

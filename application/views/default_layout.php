@@ -23,7 +23,7 @@
         }
     </style>
     <link href="<?php echo base_url(); ?>assets/css/bootstrap-responsive.min.css" rel="stylesheet">
-    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <script src="<?php echo base_url(); ?>assets/js/html5.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/head.load.min.js"></script>
     <script>
         head.js(
@@ -51,8 +51,6 @@
     </script>
 
     <script type="text/javascript">
-        //var base_url = '{{ base_url }}';
-        //var site_url = '{{ site_url }}';
         var csrf_token = '<?php echo $this->security->get_csrf_hash(); ?>';
     </script>
 </head>

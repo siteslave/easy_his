@@ -1,7 +1,7 @@
 <ul class="breadcrumb">
     <li><a href="<?php echo site_url(); ?>">หน้าหลัก</a> <span class="divider">/</span></li>
     <li><a href="<?php echo site_url('services'); ?>">การให้บริการ</a> <span class="divider">/</span></li>
-    <li class="active"><?php echo $patient_name; ?> [HN: <?php echo $hn; ?>, CID: <?php echo $cid; ?>]</li>
+    <li class="active"><?php echo $patient_name; ?> เพศ: <?php echo $sex == '1' ? 'ชาย' : 'หญิง'; ?> [HN: <?php echo $hn; ?>, CID: <?php echo $cid; ?>]</li>
 </ul>
 <!--
 <div class="page-header">
@@ -18,7 +18,7 @@
 </div>
 
 <form action="#" class="form-actions">
-    <a href="<?php echo site_url('accidents/index/' . $vn . '/' . $hn); ?>" class="btn btn-danger"><i class="icon-th-list icon-white"></i> ข้อมูลอุบัติเหตุ</a>
+    <a href="<?php echo site_url('accidents/register/' . $vn . '/' . $hn); ?>" class="btn btn-danger"><i class="icon-th-list icon-white"></i> ข้อมูลอุบัติเหตุ</a>
     <a href="<?php echo site_url('appoints/register/' . $vn . '/' . $hn); ?>" class="btn btn-warning"><i class="icon-calendar icon-white"></i> ลงทะเบียนนัด</a>
     <a href="javascript:void(0);" class="btn btn-info"><i class="icon-share-alt icon-white"></i> สั่ง LAB</a>
 
@@ -28,7 +28,9 @@
             <span class="caret"></span>
         </button>
         <ul class="dropdown-menu">
-            <li><a href="javascript:void(0);"><i class="icon-folder-open"></i> ฝากครรภ์</a></li>
+        	<li><a href="javascript:void(0);" data-name="btn_fp"><i class="icon-tags"></i> วางแผนครอบครัว (Family Planing)</a></li>
+            <li><a href="javascript:void(0);"><i class="icon-text-height"></i> บันทึกโภชนาการ (Nutrition)</a></li>
+            <li><a href="javascript:void(0);"><i class="icon-user"></i> บันทึกข้อมูลการรับวัคซีน (EPI)</a></li>
         </ul>
     </div>
     <div class="btn-group">
@@ -45,6 +47,7 @@
 </form>
 
 <input type="hidden" id="vn" value="<?php echo $vn; ?>">
+<input type="hidden" id="hn" value="<?php echo $hn; ?>">
 <input type="hidden" id="person_id" value="<?php echo $person_id; ?>">
 <input type="hidden" id="person_sex" value="<?php echo $sex; ?>">
 
@@ -686,7 +689,7 @@
                 <div class="controls">
                     <select id="sl_diag_type" class="input-xlarge">
                         <option value="">--</option>
-                        <?php foreach($diag_types as $t) echo '<option value="'.$t->id.'">'.$t->name.'</option>'; ?>
+                        <?php foreach($diag_types as $t) echo '<option value="'.$t->code.'">'.$t->name.'</option>'; ?>
                     </select>
                 </div>
             </div>
@@ -970,6 +973,80 @@
     </div>
 </div>
 <!-- end search charge  -->
+
+<!-- FP -->
+<div class="modal hide fade" id="mdl_fp">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>เพิ่มข้อมูลการวางแผนครอบครัว</h3>
+    </div>
+    <div class="modal-body">
+    
+    
+
+    <div class="tabbable">
+	    <ul class="nav nav-tabs">
+		    <li class="active"><a href="#fp_tab1" data-toggle="tab"><i class="icon-file"></i> บันทึกข้อมูล</a></li>
+		    <li><a href="#fp_tab2" data-toggle="tab"><i class="icon-time"></i> ประวัติการรับบริการ</a></li>
+	    </ul>
+	    <div class="tab-content">
+		    <div class="tab-pane active" id="fp_tab1">
+		    	<blockquote>
+		    	ข้อมูลการรับบริการในครั้งนี้
+		    	</blockquote>
+		        <form class="form-horizontal">
+		            <div class="control-group">
+		                <label class="control-label" for="txt_drug_name">วิธีการคุมกำเนิด</label>
+		                <div class="controls">
+		                    <select id="sl_fp_type" class="input-xlarge">
+		                    <option value="">-----</option>
+		                    <?php 
+		                    foreach($fp_types as $r) echo '<option value="'.$r->code.'">'.$r->name.'</option>';
+		                    ?>
+		                    </select>
+		                    <a href="#" class="btn btn-success" id="btn_do_save_fp"><i class="icon-plus icon-white"></i> เพิ่มรายการ</a>
+		                </div>
+		            </div>
+		        </form>
+		        <table class="table table-hover" id="tbl_fp_list" style="width: 640px;">
+		        <thead>
+		        <tr>
+		        	<th>ประเภทการคุมกำเนิด</th>
+		        	<th>ผู้ให้บริการ</th>
+		        </tr>
+		        </thead>
+		        <tbody></tbody>
+		        </table>
+        
+		    </div>
+		    <div class="tab-pane" id="fp_tab2">
+		    	<blockquote>
+		    	ประวัติการรับบริการจากหน่วยงานอื่นๆ
+		    	</blockquote>
+		    	
+		    	<table class="table table-hover" id="tbl_fp_list_all">
+		        <thead>
+		        <tr>
+		        	<th>วันที่</th>
+		        	<th>เวลา</th>
+		        	<th>คลินิก</th>
+		        	<th>สถานบริการ</th>
+		        	<th>ประเภทการคุมกำเนิด</th>
+		        	<th>ผู้ให้บริการ</th>
+		        </tr>
+		        </thead>
+		        <tbody></tbody>
+		        </table>
+		        
+		    </div>
+	    </div>
+    </div>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn btn-danger" data-dismiss="modal"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</a>
+    </div>
+</div>
+<!--  end FP -->
 <!-- <script type="text/javascript" src="{{ base_url }}assets/apps/js/apps.services.js"></script> -->
 <script type="text/javascript">
     head.js(
@@ -978,6 +1055,7 @@
             '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.diagnosis.js',
             '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.procedures.js',
             '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.drugs.js',
-            '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.charges.js'
+            '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.charges.js',
+            '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.fp.js'
     );
 </script>
