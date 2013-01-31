@@ -16,7 +16,6 @@
     <link href="<?php echo base_url(); ?>assets/css/alertify.core.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/css/alertify.default.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/css/freeow/freeow.css" rel="stylesheet">
-
     <style>
         body {
             padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
@@ -40,8 +39,6 @@
                 '<?php echo base_url(); ?>assets/js/jquery.maskedinput.min.js',
                 '<?php echo base_url(); ?>assets/js/typeahead.js',
                 '<?php echo base_url(); ?>assets/js/spin.min.js',
-                '<?php echo base_url(); ?>assets/js/jquery.paging.min.js',
-                '<?php echo base_url(); ?>assets/js/jquery.paging.min.js',
                 '<?php echo base_url(); ?>assets/js/jquery.paging.min.js',
                 '<?php echo base_url(); ?>assets/js/jquery.numeric.js',
                 '<?php echo base_url(); ?>assets/js/numeral.min.js',
@@ -90,6 +87,25 @@
                                 </a>
                             </li>
                              <li>
+                                <a href="<?php echo site_url('appoints'); ?>">
+                                    <i class="icon-tags"></i> ทะเบียนนัด
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="icon-th-list"></i>
+                            ทะเบียนต่างๆ
+                            <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="<?php echo site_url('epis'); ?>">
+                                    <i class="icon-book"></i> ทะเบียนส่งเสริมป้องกันโรค (EPI)
+                                </a>
+                            </li>
+                            <li>
                                 <a href="<?php echo site_url('appoints'); ?>">
                                     <i class="icon-tags"></i> ทะเบียนนัด
                                 </a>

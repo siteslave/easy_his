@@ -197,19 +197,19 @@ var app = {
                         if(data){
                             cb(null, data);
                         }else{
-                            cb(null);
+                            cb('Result not found.', null);
                         }
 
                         app.hide_loading();
 
                     }else{
-                        cb(data.msg);
+                        cb(data.msg, null);
                         app.hide_loading();
                     }
                 },
 
                 error: function(xhr, status){
-                    cb('Error:  [' + xhr.status + '] ' + xhr.statusText);
+                    cb('Error:  [' + xhr.status + '] ' + xhr.statusText, null);
                     app.hide_loading();
                 }
             });
@@ -297,8 +297,15 @@ var app = {
         var my_number = numeral(str).format('0,0.00');
 
         return my_number;
+    },
+
+    clear_null: function(v)
+    {
+        return v == null ? '-' : v;
     }
 };
+//Record pre page
+app.record_per_page = 25;
 
 head.ready(function(){
     $('div[data-name="datepicker"]').datepicker({

@@ -1,10 +1,8 @@
 <?php
 /**
- * File
+ * Person Helper
  *
- * File information information
- *
- * @package     File
+ * @package     Helpers
  * @author      Satit Rianpit <rianpit@gmail.com>
  * @since       Version 1.0.0
  * @copyright   Copyright 2013 Data center of Maha Sarakham Hospital
@@ -65,3 +63,17 @@ if(!function_exists('get_sex')){
     }
 }
 
+
+if(!function_exists('get_village_list'))
+{
+    $ci =& get_instance();
+
+    $owner_id = $ci->session->userdata('owner_id');
+
+    $ci->load->model('Person_model', 'person');
+
+    $ci->person->owner_id = $owner_id;
+    $rs = $ci->person->get_villages();
+
+    return $rs;
+}

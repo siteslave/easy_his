@@ -464,6 +464,40 @@ class Person_model extends CI_Model
         return $result > 0 ? TRUE : FALSE;
     }
 
+    /**
+     * Register person clinic
+     *
+     * @param   $person_id
+     * @param   $clinic     string  The clinic number, 01=DM, 02=HT, 03=STOKE, 04=ANC/MCH, 05=EPI
+     * @return  mixed
+     */
+    public function do_register_clinic($person_id, $clinic)
+    {
+        $rs = $this->mongo_db
+            ->where('_id', new MongoId($person_id))
+            ->push('registers', array(
+            'clinic_code' => $clinic,
+            'owner_id' => new MongoId($this->owner_id),
+            'reg_date' => date('Ymd'),
+            'user_id' => new MongoId($this->user_id)
+        ))
+            ->update('person');
+
+        return $rs;
+    }
+
+    public function check_clinic_exist($hn, $clinic){
+        $result = $this->mongo_db
+            ->where(array(
+                            'hn' => (string) $hn,
+                            'registers.clinic_code' => $clinic,
+                            'registers.owner_id' => new MongoId($this->owner_id)
+            ))
+            ->count('person');
+
+        return $result > 0 ? TRUE : FALSE;
+    }
+
     public function get_person_detail($id){
         $rs = $this->mongo_db
             ->select(array('hn', 'first_name', 'last_name', 'cid', 'birthdate', 'sex'))
@@ -551,5 +585,48 @@ class Person_model extends CI_Model
 				->update('person');
 		return $rs;
 	}
-	
+
+    //------------------------------------------------------------------------------------------------------------------
+    /**
+     * Search person by first name and last name
+     *
+     * @param   string  $first_name
+     * @param   string $last_name
+     */
+
+    public function search_person_by_first_last_name($first_name, $last_name)
+    {
+        $rs = $this->mongo_db
+            ->where(array('first_name' => $first_name, 'last_name' => $last_name))
+            ->get('person');
+        return $rs;
+    }
+
+	//------------------------------------------------------------------------------------------------------------------
+    /**
+     * Search person by cid
+     *
+     * @param   string  $cid
+     */
+    public function search_person_by_cid($cid)
+    {
+        $rs = $this->mongo_db
+            ->where('cid', $cid)
+            ->get('person');
+
+        return $rs;
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    /**
+     * Search person by hn
+     */
+    public function search_person_by_hn($hn)
+    {
+        $rs = $this->mongo_db
+            ->where('hn', $hn)
+            ->get('person');
+
+        return $rs;
+    }
 }

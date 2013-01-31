@@ -1105,7 +1105,9 @@ class Basic_model extends CI_Model
     	$result = $this->mongo_db->order_by(array('code' => 1))->get('ref_fp_types');
     
     	$arr_result = array();
-    	foreach($result as $r){
+
+    	foreach($result as $r)
+        {
     		$obj = new stdClass();
     		$obj->code = $r['code'];
     		$obj->name = $r['name'];
@@ -1116,7 +1118,8 @@ class Basic_model extends CI_Model
     	return $arr_result;
     }
     
-    public function get_fp_type_name($code){
+    public function get_fp_type_name($code)
+    {
     	$result = $this->mongo_db->where(array('code' => $code))->get('ref_fp_types');
     
     	return count($result) > 0 ? $result[0]['name'] : '-';
@@ -1139,4 +1142,26 @@ class Basic_model extends CI_Model
     						->get('person');
     	return $rs ? $rs[0]['sex'] : NULL;
     }
+    //------------------------------------------------------------------------------------------------------------------
+    public function get_epi_vaccine_list()
+    {
+        $result = $this->mongo_db->order_by(array('export_code' => 1))->get('ref_epi_vaccines');
+
+        $arr_result = array();
+
+        foreach($result as $r)
+        {
+            $obj = new stdClass();
+            $obj->id = get_first_object($r['_id']);
+            $obj->export_code = $r['export_code'];
+            $obj->name = $r['th_name'];
+
+            $arr_result[] = $obj;
+        }
+
+        return $arr_result;
+    }
+
 }
+
+//End file

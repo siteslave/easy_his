@@ -30,7 +30,7 @@
         <ul class="dropdown-menu">
         	<li><a href="javascript:void(0);" data-name="btn_fp"><i class="icon-tags"></i> วางแผนครอบครัว (Family Planing)</a></li>
             <li><a href="javascript:void(0);"><i class="icon-text-height"></i> บันทึกโภชนาการ (Nutrition)</a></li>
-            <li><a href="javascript:void(0);"><i class="icon-user"></i> บันทึกข้อมูลการรับวัคซีน (EPI)</a></li>
+            <li><a href="javascript:void(0);" data-name="btn_epi"><i class="icon-user"></i> บันทึกข้อมูลการรับวัคซีน (EPI)</a></li>
         </ul>
     </div>
     <div class="btn-group">
@@ -1047,6 +1047,33 @@
     </div>
 </div>
 <!--  end FP -->
+
+<!-- EPI -->
+<div class="modal hide fade" id="mdl_epi">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>บันทึกข้อมูลการให้บริการ</h3>
+    </div>
+    <div class="modal-body">
+        <form class="form-horizontal">
+            <div class="control-group">
+                <label class="control-label" for="sl_epi_vaccines">วัคซีน</label>
+                <div class="controls">
+                    <select id="sl_epi_vaccines"></select>
+                </div>
+
+                <button type="button" class="btn btn-success">
+                    <i class="icon-plus-sign icon-white"></i> เพิ่มรายการ
+                </button>
+            </div>
+        </form>
+
+    </div>
+    <div class="modal-footer">
+        <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</a>
+    </div>
+</div>
+<!-- end EPI -->
 <!-- <script type="text/javascript" src="{{ base_url }}assets/apps/js/apps.services.js"></script> -->
 <script type="text/javascript">
     head.js(
@@ -1056,6 +1083,7 @@
             '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.procedures.js',
             '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.drugs.js',
             '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.charges.js',
-            '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.fp.js'
+            '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.fp.js',
+            '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.epi.js'
     );
 </script>

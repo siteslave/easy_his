@@ -75,6 +75,16 @@ head.ready(function(){
             app.ajax(url, params, function(err, data){
                 return err ? cb(err) : cb(null, data);
             });
+        },
+        check_epi_registration: function(hn, cb){
+            var url = '/epis/check_registration',
+                params = {
+                    hn: hn
+                };
+
+            app.ajax(url, params, function(err, data){
+                err ? cb(err) : cb(null, data);
+            });
         }
     };
 
@@ -408,6 +418,9 @@ head.ready(function(){
             app.go_to_url('services/entries/' + vn);
         }
     });
+
+
+    //------------------------------------------------------------------------------------------------------------------
 
     service.get_list();
 });
