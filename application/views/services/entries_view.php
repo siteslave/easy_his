@@ -1052,21 +1052,47 @@
 <div class="modal hide fade" id="mdl_epi">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>บันทึกข้อมูลการให้บริการ</h3>
+        <h3>เลือกข้อมูลวัคซีน</h3>
     </div>
     <div class="modal-body">
-        <form class="form-horizontal">
-            <div class="control-group">
-                <label class="control-label" for="sl_epi_vaccines">วัคซีน</label>
-                <div class="controls">
-                    <select id="sl_epi_vaccines"></select>
-                </div>
 
-                <button type="button" class="btn btn-success">
-                    <i class="icon-plus-sign icon-white"></i> เพิ่มรายการ
-                </button>
+        <div class="tabbable">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab_epi1" data-toggle="tab"><i class="icon-plus"></i> เพิ่มข้อมูล</a></li>
+                <li><a href="#tab_epi2" data-toggle="tab"><i class="icon-refresh"></i> ประวัติการรับบริการ</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab_epi1">
+                    <form class="form-horizontal">
+                        <div class="control-group">
+                            <label class="control-label" for="sl_epi_vaccines">วัคซีน</label>
+                            <div class="controls">
+                                <select id="sl_epi_vaccines" class="input-xlarge"></select>
+                                <a href="#" class="btn btn-success" id="btn_do_add">
+                                    <i class="icon-plus-sign icon-white"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="tab-pane" id="tab_epi2">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>วันที่</th>
+                            <th>หน่วยบริการ</th>
+                            <th>วัคซีน</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td colspan="3">ไม่พบรายการ</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </form>
+        </div>
 
     </div>
     <div class="modal-footer">

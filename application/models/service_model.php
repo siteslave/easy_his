@@ -586,6 +586,7 @@ class Service_model extends CI_Model
      * Get visit info.
      * 
      * @param string $vn
+     * @return mixed
      */
     public function get_visit_info($vn)
     {

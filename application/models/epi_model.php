@@ -36,5 +36,50 @@ class Epi_model extends CI_Model
         return $rs;
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+    /**
+     * Save epi visit
+     */
+    public function save_service($data)
+    {
+        $rs = $this->mongo_db
+            ->insert('visit_epi', array(
+                'vn' => $data['vn'],
+                'hn' => $data['hn'],
+                'vaccine_id' => new MongoId($data['vaccine_id']),
+                'owner_id' => new MongoId($this->owner_id),
+                'provider_id' => new MongoId($this->provider_id),
+                'user_id' => new MongoId($this->user_id)
+            ));
+
+        return $rs;
+    }
+
+    public function check_visit_duplicated($vn, $vaccine_id)
+    {
+        $rs = $this->mongo_db
+            ->where(array('vn' => (string) $vn, 'vaccine_id' => new MongoId($vaccine_id)))
+            ->count('visit_epi');
+
+        return $rs > 0 ? TRUE : FALSE;
+    }
+
+    public function get_history($hn)
+    {
+        $rs = $this->mongo_db
+            ->where('hn', (string) $hn)
+            ->get('visit_epi');
+
+        return $rs;
+    }
+
+    public function get_list_by_visit($vn)
+    {
+        $rs = $this->mongo_db
+            ->where('vn', (string) $vn)
+            ->get('visit_epi');
+
+        return $rs;
+    }
 
 }

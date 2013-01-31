@@ -197,7 +197,7 @@ var app = {
                         if(data){
                             cb(null, data);
                         }else{
-                            cb('Result not found.', null);
+                            cb('Record not found.', null);
                         }
 
                         app.hide_loading();
@@ -214,7 +214,7 @@ var app = {
                 }
             });
         }catch(err){
-            cb(err);
+            cb(err, null);
         }
 
     },

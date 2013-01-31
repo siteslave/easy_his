@@ -467,14 +467,14 @@ class Person_model extends CI_Model
     /**
      * Register person clinic
      *
-     * @param   $person_id
+     * @param   $hn
      * @param   $clinic     string  The clinic number, 01=DM, 02=HT, 03=STOKE, 04=ANC/MCH, 05=EPI
      * @return  mixed
      */
-    public function do_register_clinic($person_id, $clinic)
+    public function do_register_clinic($hn, $clinic)
     {
         $rs = $this->mongo_db
-            ->where('_id', new MongoId($person_id))
+            ->where('hn', (string) $hn)
             ->push('registers', array(
             'clinic_code' => $clinic,
             'owner_id' => new MongoId($this->owner_id),

@@ -51,21 +51,14 @@ head.ready(function(){
             });
         },
 
-        do_register: function(id, cb){
+        do_register: function(hn, cb){
             var url = 'epis/do_register',
                 params = {
-                    id: id
+                    hn: hn
                 }
 
-            app.ajax(url, params, function(err){
-                if(err)
-                {
-                    cb(err);
-                }
-                else
-                {
-                    cb(null);
-                }
+            app.ajax(url, params, function(err, data){
+                return err ? cb(err) : cb(null, data);
             });
         },
 
@@ -271,21 +264,18 @@ head.ready(function(){
             $('#tbl_search_person_result > tbody').empty();
 
             epi.ajax.search_person(query, filter, function(err, data){
+
                 if(err)
                 {
                     app.alert(err);
                 }
+                else if(!data)
+                {
+                    app.alert('ไม่พบรายการ');
+                }
                 else
                 {
-                    //console.log(data);
-                    if(data == null)
-                    {
-                        app.alert('ไม่พบรายการ');
-                    }
-                    else
-                    {
-                        epi.set_search_person_result(data);
-                    }
+                   epi.set_search_person_result(data);
                 }
             });
         }

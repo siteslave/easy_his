@@ -1154,7 +1154,8 @@ class Basic_model extends CI_Model
             $obj = new stdClass();
             $obj->id = get_first_object($r['_id']);
             $obj->export_code = $r['export_code'];
-            $obj->name = $r['th_name'];
+            $obj->th_name = $r['th_name'];
+            $obj->eng_name = $r['eng_name'];
 
             $arr_result[] = $obj;
         }

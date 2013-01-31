@@ -174,7 +174,7 @@ class Epis extends CI_Controller
                 }
 
                 $rows = json_encode($arr_result);
-                $json = '{"success": true, "rows ": '.$rows.'}';
+                $json = '{"success": true, "rows": '.$rows.'}';
             }
             else
             {
@@ -310,6 +310,50 @@ class Epis extends CI_Controller
         else
         {
             $json = '{"success": false, "msg": "ไม่พบข้อมูล"}';
+        }
+
+        render_json($json);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    /**
+     * Save epi service
+     */
+    public function save_service()
+    {
+        $data = $this->input->post('data');
+
+        if(empty($data))
+        {
+            $json = '{"success": false, "msg": "ไม่พบข้อมูลสำหรับบันทึก"}';
+        }
+        else
+        {
+            //check duplicated
+            $duplicated = $this->epi->check_visit_duplicated($data['vn'], $data['vaccine_id']);
+
+            if($duplicated)
+            {
+                $json = '{"success": false, "msg": "ข้อมูลซ้ำ [มีการให้วัคซีนนี้แล้วในครั้งนี้]"}';
+            }
+            else
+            {
+                $this->epi->owner_id = $this->owner_id;
+                $this->epi->user_id = $this->user_id;
+                $this->epi->provider_id = $this->provider_id;
+
+                $rs = $this->epi->save_service($data);
+
+                if($rs)
+                {
+                    $json = '{"success": true}';
+                }
+                else
+                {
+                    $json = '{"success": false, "msg": "ไม่สามารถบันทึกข้อมูลได้"}';
+                }
+            }
+
         }
 
         render_json($json);
