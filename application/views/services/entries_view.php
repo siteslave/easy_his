@@ -1069,14 +1069,29 @@
                             <div class="controls">
                                 <select id="sl_epi_vaccines" class="input-xlarge"></select>
                                 <a href="#" class="btn btn-success" id="btn_do_add">
-                                    <i class="icon-plus-sign icon-white"></i>
+                                    <i class="icon-plus-sign icon-white"></i> เพิ่มรายการ
                                 </a>
                             </div>
                         </div>
                     </form>
+                    <legend>ประวัติวันนี้</legend>
+                    <table class="table table-striped" id="tbl_epi_visit_history">
+                        <thead>
+                        <tr>
+                            <th>ชื่อวัคซีน</th>
+                            <th>ผู้ให้บริการ</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td colspan="3">ไม่พบรายการ</td>
+                        </tr>
+                        </tbody>
+                    </table>
+
                 </div>
                 <div class="tab-pane" id="tab_epi2">
-                    <table class="table table-striped">
+                    <table class="table table-striped" id="tbl_epi_history">
                         <thead>
                         <tr>
                             <th>วันที่</th>

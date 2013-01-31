@@ -358,6 +358,42 @@ class Epis extends CI_Controller
 
         render_json($json);
     }
+
+    public function get_epi_visit_list()
+    {
+        $vn = $this->input->post('vn');
+
+        if(!empty($vn))
+        {
+            $rs = $this->epi->get_list_by_visit($vn);
+
+            if($rs)
+            {
+                $arr_result = array();
+
+                foreach($rs as $r)
+                {
+                    $obj = new stdClass();
+                    $obj->id = get_first_object($r['_id']);
+                    $obj->vaccine_name = get_vaccine_name(get_first_object($r['vaccine_id']));
+                    $obj->provider_name = get_provider_name_by_id(get_first_object($r['provider_id']));
+                    array_push($arr_result, $obj);
+                }
+                $rows = json_encode($arr_result);
+                $json = '{"success": true, "rows": '.$rows.'}';
+            }
+            else
+            {
+                $json = '{"success": false, "msg": "ไม่สามารถบันทึกข้อมูลได้"}';
+            }
+        }
+        else
+        {
+            $json = '{"success": false, "msg": "ไม่พบข้อมูล"}';
+        }
+
+        render_json($json);
+    }
 }
 
 //End file

@@ -23,6 +23,16 @@ head.ready(function(){
                 err ? cb(err) : cb(null, data);
             });
         },
+        get_epi_visit_list: function(vn, cb){
+            var url = '/epis/get_epi_visit_list',
+                params = {
+                    vn: vn
+                };
+
+            app.ajax(url, params, function(err, data){
+                err ? cb(err) : cb(null, data);
+            });
+        },
         do_register: function(data, cb){
             var url = '/epis/save_service',
                 params = {
@@ -78,11 +88,43 @@ head.ready(function(){
            else
            {
                epis.set_vaccine_list();
+                epis.get_epi_visit_list();
                //show epi
                 epis.modal.show_new_epi();
            }
         });
     });
+
+
+    epis.set_epi_visit_list = function(data)
+    {
+        _.each(data.rows, function(v){
+            $('#tbl_epi_visit_history > tbody').append(
+                '<tr>' +
+                    '<td>'+ v.vaccine_name +'</td>' +
+                    '<td>'+ v.provider_name +'</td>' +
+                    '</tr>'
+            );
+        });
+    };
+    epis.get_epi_visit_list = function()
+    {
+        var vn = $('#vn').val();
+
+        epis.ajax.get_epi_visit_list(vn, function(err, data){
+
+            $('#tbl_epi_visit_history > tbody').empty();
+
+           if(err)
+           {
+               $('#tbl_epi_visit_history > tbody').append('<tr><td colspan="2">ไม่พบรายการ</td></tr>');
+           }
+            else
+           {
+                epis.set_epi_visit_list(data);
+           }
+        });
+    };
 
     $('#btn_do_add').click(function(){
         var data = {};
