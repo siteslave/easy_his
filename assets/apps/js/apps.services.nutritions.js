@@ -15,15 +15,30 @@ head.ready(function(){
                         return -($(this).width() / 2);
                     }
                 });
+        },
+        hide_add: function()
+        {
+            $('#mdl_nutri').modal('hide');
         }
     };
 
     nutri.ajax = {
         do_save: function(data, cb){
 
-            var url = 'services/save_nutri',
+            var url = 'services/save_nutrition',
                 params = {
                     data: data
+                };
+
+            app.ajax(url, params, function(err, data){
+                return err ? cb(err) : cb(null, data);
+            });
+        },
+        get_nutrition: function(vn, cb){
+
+            var url = 'services/get_nutrition',
+                params = {
+                    vn: vn
                 };
 
             app.ajax(url, params, function(err, data){
@@ -33,6 +48,29 @@ head.ready(function(){
     };
 
     $('a[data-name="btn_nutri"]').click(function(){
+        var vn = $('#vn').val();
+
+        nutri.ajax.get_nutrition(vn, function(err, data){
+            if(err)
+            {
+                app.alert(err);
+            }
+            else
+            {
+                if(data)
+                {
+                    $('#txt_nutri_headcircum').val(data.rows.headcircum);
+                    $('#sl_childdevelop').val(data.rows.childdevelop);
+                    $('#sl_food').val(data.rows.food);
+                    $('#sl_bottle').val(data.rows.bottle);
+                }
+                else
+                {
+                    app.alert('ไม่มีข้อมูลในวันนี้');
+                }
+            }
+        });
+
         nutri.modal.add_nutrition();
     });
 
@@ -44,6 +82,8 @@ head.ready(function(){
         data.childdevelop = $('#sl_childdevelop').val();
         data.food = $('#sl_food').val();
         data.bottle = $('#sl_bottle').val();
+
+        data.vn = $('#vn').val();
 
         if(!data.height)
         {
@@ -72,8 +112,16 @@ head.ready(function(){
         else
         {
             //do save
-            nutri.ajax.do_save(data, function(err, data){
-                
+            nutri.ajax.do_save(data, function(err){
+               if(err)
+               {
+                   app.alert(err);
+               }
+               else
+               {
+                   app.alert('บันทึกรายการเสร็จเรียบร้อยแล้ว');
+                   nutri.modal.hide_add();
+               }
             });
         }
 

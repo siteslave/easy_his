@@ -596,20 +596,30 @@ class Service_model extends CI_Model
     	return $rs ? $rs[0] : NULL;
     }
 
-    public function save_nutri($data)
+    public function save_nutrition($data)
     {
         $rs = $this->mongo_db
             ->where('vn', $data['vn'])
             ->set(
                 array(
                     'nutritions.weight'=> $data['weight'],
-                    'nutritions.height' => $data['weight'],
+                    'nutritions.height' => $data['height'],
                     'nutritions.headcircum' => $data['headcircum'],
                     'nutritions.childdevelop' => $data['childdevelop'],
-                    'nutritions.food' => $data['foot'],
+                    'nutritions.food' => $data['food'],
                     'nutritions.bottle' => $data['bottle'])
             )->update('visit');
         return $rs;
+    }
+
+    public function get_nutrition($vn)
+    {
+        $rs = $this->mongo_db
+            ->where('vn', $vn)
+            ->select(array('nutritions'))
+            ->get('visit');
+
+        return $rs ? $rs[0] : NULL;
     }
     
     

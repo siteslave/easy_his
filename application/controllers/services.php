@@ -1107,7 +1107,58 @@ class Services extends CI_Controller
    		 
    		render_json($json);
    	}
-   	
+
+    public function save_nutrition()
+    {
+        $data = $this->input->post('data');
+
+        if(empty($data))
+        {
+            $json = '{"success": false, "msg": "ไม่พบข้อมูลที่ต้องการบันทึก"}';
+        }
+        else
+        {
+            $rs = $this->service->save_nutrition($data);
+
+            if($rs)
+            {
+                $json = '{"success": true}';
+            }
+            else
+            {
+                $json = '{"success": false, "msg": "ไม่สามารถบันทึกข้อมูลได้"}';
+            }
+        }
+
+        render_json($json);
+    }
+
+    public function get_nutrition()
+    {
+        $vn = $this->input->post('vn');
+
+        if(empty($vn))
+        {
+            $json = '{"success": false, "msg": "VN not found."}';
+        }
+        else
+        {
+            $rs = $this->service->get_nutrition($vn);
+            if($rs)
+            {
+                $data = $rs['nutritions'];
+                $rows = $data ? json_encode($data) : NULL;
+
+                $json = '{"success": true, "rows": '.$rows.'}';
+            }
+            else
+            {
+                $json = '{"success": false, "msg": "ไม่พบข้อมูล"}';
+            }
+        }
+
+        render_json($json);
+    }
 }
 
 /* End of file services.php */

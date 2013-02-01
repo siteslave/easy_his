@@ -1186,7 +1186,7 @@
 
                         </div>
 
-                        <button class="btn btn-success" id="btn_nutri_save">
+                        <button class="btn btn-success" type="button" id="btn_nutri_save">
                             <i class="icon-plus-sign icon-white"></i> บันทึกโภชนาการ
                         </button>
                     </form>
@@ -1203,7 +1203,7 @@
                         </thead>
                         <tbody>
                         <tr>
-                            <td colspan="4">ไม่พบรายการ</td>
+                            <td colspan="4">อยู่ในระหว่างปรับปรุงระบบ</td>
                         </tr>
                         </tbody>
                     </table>
