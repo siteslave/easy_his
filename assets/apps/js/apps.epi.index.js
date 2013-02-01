@@ -39,6 +39,28 @@ head.ready(function(){
             });
         },
 
+        get_house_list: function(village_id, cb){
+            var url = '/person/get_houses_list',
+                params = {
+                    village_id: village_id
+                };
+
+            app.ajax(url, params, function(err, data){
+                err ? cb(err) : cb(null, data);
+            });
+        },
+
+        get_list_by_house: function(house_id, cb){
+            var url = '/epis/get_list_by_house',
+                params = {
+                    house_id: house_id
+                };
+
+            app.ajax(url, params, function(err, data){
+                err ? cb(err) : cb(null, data);
+            });
+        },
+
         search_person: function(query, filter, cb){
             var url = 'epis/search_person',
                 params = {
@@ -126,7 +148,7 @@ head.ready(function(){
         }
     };
     epi.get_list = function(){
-        //$('#main_paging').fadeIn('slow');
+        $('#main_paging').fadeIn('slow');
         epi.ajax.get_list_total(function(err, data){
             if(err){
                 app.alert(err);
@@ -207,25 +229,6 @@ head.ready(function(){
         });
     };
 
-    //------------------------------------------------------------------------------------------------------------------
-    $('#btn_do_get_list').click(function()
-    {
-        var village_id = $('#sl_village_id').val();
-
-        epi.ajax.get_person_list(village_id, function(err, data){
-            $('#tbl_epi_list > tbody').empty();
-
-            if(err)
-            {
-                app.alert(err);
-            }
-            else
-            {
-                //epi.set_person_list(data);
-            }
-        });
-    });
-
     $('#btn_register').click(function(){
         epi.modal.show_register();
     });
@@ -303,9 +306,66 @@ head.ready(function(){
                 {
                     app.alert('ลงทะเบียนรายการเสร็จเรียบร้อยแล้ว');
                     epi.modal.hide_register();
+                    epi.get_list();
                 }
             });
         }
     });
+
+    $('#sl_village').on('change', function(){
+        var village_id = $(this).val();
+
+        epi.ajax.get_house_list(village_id, function(err, data){
+            if(err)
+            {
+                app.alert(err);
+            }
+            else
+            {
+                if(data)
+                {
+                    $('#sl_house').empty();
+                   // $('#sl_house').append('<option value="00000000">ทั้งหมด</option>');
+
+                    _.each(data.rows, function(v){
+                        $('#sl_house').append('<option value="'+ v.id +'">' + v.house + '</option>');
+                    });
+
+                }
+            }
+        });
+    });
+
+    $('#btn_do_get_list').click(function(){
+        var house_id = $('#sl_house').val();
+
+        epi.ajax.get_list_by_house(house_id, function(err, data){
+
+            $('#tbl_epi_list > tbody').empty();
+
+           if(err)
+           {
+               app.alert(err);
+               $('#tbl_epi_list > tbody').append(
+                   '<tr><td colspan="8">ไม่พบรายการ</td></tr>'
+               );
+           }
+            else
+           {
+               if(data)
+               {
+                   $('#main_paging').fadeOut('slow');
+                   epi.set_list(data);
+               }
+               else
+               {
+                   $('#tbl_epi_list > tbody').append(
+                       '<tr><td colspan="8">ไม่พบรายการ</td></tr>'
+                   );
+               }
+           }
+        });
+    });
+
     epi.get_list();
 });

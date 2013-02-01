@@ -4,14 +4,16 @@
 </ul>
 <form action="#" class="well form-inline">
     <label for="sl_village_id">หมู่บ้าน</label>
-    <select class="input-xlarge" id="sl_village_id">
-        <option value="00000000">--- ทั้งหมด ---</option>
+    <select class="input-xlarge" id="sl_village">
+        <option value="00000000">---</option>
         <?php
         foreach ($villages as $r){
             echo '<option value="'.get_first_object($r['_id']).'">' . $r['village_code'] . ' ' . $r['village_name'] . '</option>';
         }
         ?>
     </select>
+    บ้านเลขที่
+    <select id="sl_house" class="input-medium"></select>
     <button type="button" class="btn btn-info" id="btn_do_get_list"><i class="icon-search icon-white"></i> แสดงรายการ</button>
     <div class="btn-group pull-right">
         <button type="button" id="btn_search" class="btn"><i class="icon-search"></i> ค้นหา</button>

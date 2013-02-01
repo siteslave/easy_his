@@ -133,6 +133,37 @@ class Person extends CI_Controller
         render_json($json);
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+    /**
+     * @internal param   string  $village_id
+     */
+    public function get_houses_list(){
+
+        $village_id = $this->input->post('village_id');
+        if(empty($village_id)){
+            $json = '{"success": false, "msg": "No village id found."}';
+        }else{
+            $result = $this->person->get_houses($village_id);
+
+            $arr_result = array();
+
+            foreach($result as $r){
+
+                $obj            = new stdClass();
+                $obj->house     = $r['house'];
+                $obj->id        = get_first_object($r['_id']);
+                $obj->house_id  = $r['house_id'];
+
+                array_push($arr_result, $obj);
+            }
+
+            $rows = json_encode($arr_result);
+
+            $json = '{"success": true, "rows": '. $rows .'}';
+        }
+
+        render_json($json);
+    }
     /**
      * Save new house
      *

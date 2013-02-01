@@ -71,7 +71,54 @@ class Epis extends CI_Controller
 
         $limit = (int) $stop - (int) $start;
 
+        $this->epi->owner_id = $this->owner_id;
         $rs = $this->epi->get_list($start, $limit);
+
+        if($rs)
+        {
+
+            $arr_result = array();
+
+            foreach($rs as $r)
+            {
+                $obj = new stdClass();
+                $obj->hn = $r['hn'];
+                $obj->cid = $r['cid'];
+                $obj->id = get_first_object($r['_id']);
+                $obj->first_name = $r['first_name'];
+                $obj->last_name = $r['last_name'];
+                $obj->sex = $r['sex'] == '1' ? 'ชาย' : 'หญิง';
+                $obj->birthdate = $r['birthdate'];
+                $obj->age = count_age($r['birthdate']);
+                $obj->reg_date = isset($r['registers'][0]['reg_date']) ? $r['registers'][0]['reg_date'] : '';
+
+                $arr_result[] = $obj;
+            }
+
+            $rows = json_encode($arr_result);
+            $json = '{"success": true, "rows": '.$rows.'}';
+        }
+        else
+        {
+            $json = '{"success": false, "msg": "No result."}';
+        }
+
+        render_json($json);
+    }
+    //------------------------------------------------------------------------------------------------------------------
+    public function get_list_by_house()
+    {
+        $start = $this->input->post('start');
+        $stop = $this->input->post('stop');
+        $house_id = $this->input->post('house_id');
+
+        //$start = empty($start) ? 0 : $start;
+        //$stop = empty($stop) ? 25 : $stop;
+
+        $limit = (int) $stop - (int) $start;
+
+        $this->epi->owner_id = $this->owner_id;
+        $rs = $this->epi->get_list_by_house($house_id);
 
         if($rs)
         {
@@ -107,7 +154,17 @@ class Epis extends CI_Controller
 
     public function get_list_total()
     {
+        $this->epi->owner_id = $this->owner_id;
         $total = $this->epi->get_list_total();
+        $json = '{"success": true, "total": '.$total.'}';
+
+        render_json($json);
+    }
+
+    public function get_list_by_village_total()
+    {
+        $this->epi->owner_id = $this->owner_id;
+        $total = $this->epi->get_list_by_village_total();
         $json = '{"success": true, "total": '.$total.'}';
 
         render_json($json);
@@ -251,14 +308,8 @@ class Epis extends CI_Controller
                 $json = '{"success": false, "msg": "ไม่สามารถบันทึกข้อมูลได้"}';
             }
         }
-    }
-    //------------------------------------------------------------------------------------------------------------------
-    /**
-     * Get service history
-     */
-    public function get_history()
-    {
 
+        render_json($json);
     }
 
     /**

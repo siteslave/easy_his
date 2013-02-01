@@ -27,7 +27,7 @@ class Person_model extends CI_Model
         $this->mongo_db->add_index('villages', array('owner_id' => -1));
 
         $result = $this->mongo_db
-                        ->where(array('owner_id' => $this->owner_id))
+                        ->where(array('owner_id' => new MongoId($this->owner_id)))
                         ->order_by(array('village_code' => 1))
                         ->get('villages');
         return $result;

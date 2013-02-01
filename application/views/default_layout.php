@@ -165,7 +165,7 @@
                         </li>
                         <li class="divider"></li>
                         <li>
-                            <a href="<?php echo site_url('users/logout'); ?><i class="icon-off"></i> ออกจากระบบ (Logout)</a>
+                            <a href="<?php echo site_url('users/logout'); ?>"><i class="icon-off"></i> ออกจากระบบ (Logout)</a>
                         </li>
                     </ul>
                 </div>

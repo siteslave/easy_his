@@ -69,7 +69,7 @@ class Users extends CI_Controller
                 $user_id = get_first_object($users['_id']);
                 $provider_id = get_first_object($users['provider_id']);
 
-                $owner_id = $users['owner_id'];
+                $owner_id = get_first_object($users['owner_id']);
 
                 $owners = $this->user->get_owner_detail($owner_id);
 
