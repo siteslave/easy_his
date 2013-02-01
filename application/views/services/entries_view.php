@@ -1074,7 +1074,7 @@
                             </div>
                         </div>
                     </form>
-                    <legend>ประวัติวันนี้</legend>
+                    <legend>ประวัติครั้งนี้</legend>
                     <table class="table table-striped" id="tbl_epi_visit_history">
                         <thead>
                         <tr>
@@ -1097,11 +1097,12 @@
                             <th>วันที่</th>
                             <th>หน่วยบริการ</th>
                             <th>วัคซีน</th>
+                            <th>ผู้ให้บริการ</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
-                            <td colspan="3">ไม่พบรายการ</td>
+                            <td colspan="4">ไม่พบรายการ</td>
                         </tr>
                         </tbody>
                     </table>
