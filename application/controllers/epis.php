@@ -492,6 +492,11 @@ class Epis extends CI_Controller
 	{
 
 	}
+
+	public function hello_world()
+	{
+		echo 'Hello world';
+	}
 }
 
 
