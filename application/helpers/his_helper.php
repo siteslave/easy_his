@@ -18,7 +18,7 @@ if( ! function_exists('render_json')){
 
 if(!function_exists('to_string_date')){
     function to_string_date($date){
-        if(empty($date) || strlen($date) != 10){
+        if(empty($date)){
             return null;
         }else{
             $d = explode('/', $date);

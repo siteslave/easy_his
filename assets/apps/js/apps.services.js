@@ -131,8 +131,8 @@ head.ready(function(){
         $('#txt_person_id').val('');
         $('#txt_service_vn').val('');
         $('#txt_service_hn').val('');
-        $('#txt_reg_service_date').val(app.get_current_date());
-        $('#txt_reg_service_time').val(app.get_current_time());
+        $('#txt_reg_service_date').val();
+        $('#txt_reg_service_time').val();
 
         app.set_first_selected($('#sl_reg_service_clinic'));
         app.set_first_selected($('#sl_reg_service_doctor_room'));
