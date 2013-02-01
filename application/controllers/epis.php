@@ -487,6 +487,12 @@ class Epis extends CI_Controller
 
         render_json($json);
     }
+
+	public function ncd()
+	{
+
+	}
 }
+
 
 //End file
