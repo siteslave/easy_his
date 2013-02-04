@@ -397,6 +397,6 @@ head.ready(function(){
             }
         });
     });
-
+    
     ncd.get_list();
 });
