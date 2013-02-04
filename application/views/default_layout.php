@@ -111,6 +111,11 @@
                                 </a>
                             </li>
                             <li>
+                                <a href="<?php echo site_url('ancs'); ?>">
+                                    <i class="icon-book"></i> ทะเบียนหญิงตั้งครรภ์และหญิงหลังคลอด 6 สัปดาห์ (ANC)
+                                </a>
+                            </li>
+                            <li>
                                 <a href="<?php echo site_url('appoints'); ?>">
                                     <i class="icon-tags"></i> ทะเบียนนัด
                                 </a>

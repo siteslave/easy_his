@@ -1,18 +1,18 @@
 /**
- * NCD scripts
+ * anc scripts
  *
  * @author      Mr.Satit Riapit <mr.satit@outlook.com>
  * @copyright   Copyright 2013, Mr.Satit Rianpit
  * @since       Version 1.0
  */
 head.ready(function(){
-    // NCD name space with object.
-    var ncd = {};
-    ncd.update = {};
+    // anc name space with object.
+    var anc = {};
+    anc.update = {};
 
     //------------------------------------------------------------------------------------------------------------------
     //ajax object
-    ncd.ajax = {
+    anc.ajax = {
         /**
          * Get person list
          *
@@ -21,7 +21,7 @@ head.ready(function(){
          * @param   cb
          */
         get_list: function(start, stop, cb){
-            var url = 'ncd/get_list',
+            var url = 'ancs/get_list',
                 params = {
                     start: start,
                     stop: stop
@@ -32,7 +32,7 @@ head.ready(function(){
             });
         },
         get_list_total: function(cb){
-            var url = 'ncd/get_list_total',
+            var url = 'ancs/get_list_total',
                 params = {};
 
             app.ajax(url, params, function(err, data){
@@ -52,7 +52,7 @@ head.ready(function(){
         },
 
         get_list_by_house: function(house_id, cb){
-            var url = 'ncd/get_list_by_house',
+            var url = 'ancs/get_list_by_house',
                 params = {
                     house_id: house_id
                 };
@@ -63,7 +63,7 @@ head.ready(function(){
         },
 
         search_person: function(query, filter, cb){
-            var url = 'ncd/search_person',
+            var url = 'ancs/search_person',
                 params = {
                     query: query,
                     filter: filter
@@ -75,7 +75,7 @@ head.ready(function(){
         },
 
         do_register: function(hn, cb){
-            var url = 'ncd/do_register',
+            var url = 'ancs/do_register',
                 params = {
                     hn: hn
                 }
@@ -86,7 +86,7 @@ head.ready(function(){
         },
 
         check_registration: function(hn, cb){
-            var url = 'ncd/check_registration',
+            var url = 'ancs/check_registration',
                 params = {
                     hn: hn
                 };
@@ -97,9 +97,9 @@ head.ready(function(){
         }
     };
     
-    ncd.update.ajax = {
-        remove_ncd_register: function(person_id, cb) {
-            var url = 'ncd/remove_ncd_register',
+    anc.update.ajax = {
+        remove_anc_register: function(person_id, cb) {
+            var url = 'ancs/remove_anc_register',
                 params = {
                     person_id: person_id
                 };
@@ -110,7 +110,7 @@ head.ready(function(){
         }
     };
 
-    ncd.modal = {
+    anc.modal = {
         show_register: function()
         {
             $('#mdl_register').modal({
@@ -134,10 +134,10 @@ head.ready(function(){
      * @param data
      */
 
-    ncd.set_list = function(data){
+    anc.set_list = function(data){
         if(_.size(data.rows) > 0){
             _.each(data.rows, function(v){
-                $('#tbl_ncd_list > tbody').append(
+                $('#tbl_anc_list > tbody').append(
                     '<tr>' +
                         '<td>' + v.hn + '</td>' +
                         '<td>' + app.clear_null(v.cid) + '</td>' +
@@ -155,14 +155,14 @@ head.ready(function(){
                 );
             });
         }else{
-            $('#tbl_ncd_list > tbody').append(
+            $('#tbl_anc_list > tbody').append(
                 '<tr><td colspan="8">ไม่พบรายการ</td></tr>'
             );
         }
     };
-    ncd.get_list = function(){
+    anc.get_list = function(){
         $('#main_paging').fadeIn('slow');
-        ncd.ajax.get_list_total(function(err, data){
+        anc.ajax.get_list_total(function(err, data){
             if(err){
                 app.alert(err);
             }else{
@@ -172,12 +172,12 @@ head.ready(function(){
                     lapping: 1,
                     page: 1,
                     onSelect: function(page){
-                        ncd.ajax.get_list(this.slice[0], this.slice[1], function(err, data){
-                            $('#tbl_ncd_list > tbody').empty();
+                        anc.ajax.get_list(this.slice[0], this.slice[1], function(err, data){
+                            $('#tbl_anc_list > tbody').empty();
                             if(err){
                                 app.alert(err);
                             }else{
-                                ncd.set_list(data);
+                                anc.set_list(data);
                             }
 
                         });
@@ -243,11 +243,11 @@ head.ready(function(){
     };
 
     $('#btn_register').click(function(){
-        ncd.modal.show_register();
+        anc.modal.show_register();
     });
 
 
-    ncd.set_search_person_result = function(data)
+    anc.set_search_person_result = function(data)
     {
         _.each(data.rows, function(v)
         {
@@ -279,7 +279,7 @@ head.ready(function(){
             //do search
             $('#tbl_search_person_result > tbody').empty();
 
-            ncd.ajax.search_person(query, filter, function(err, data){
+            anc.ajax.search_person(query, filter, function(err, data){
 
                 if(err)
                 {
@@ -291,7 +291,7 @@ head.ready(function(){
                 }
                 else
                 {
-                   ncd.set_search_person_result(data);
+                   anc.set_search_person_result(data);
                 }
             });
         }
@@ -310,7 +310,7 @@ head.ready(function(){
         if(confirm('คุณต้องการลงทะเบียนข้อมูลนี้ใช่หรือไม่?'))
         {
             //do register
-            ncd.ajax.do_register(hn, function(err){
+            anc.ajax.do_register(hn, function(err){
                 if(err)
                 {
                     app.alert(err);
@@ -318,8 +318,8 @@ head.ready(function(){
                 else
                 {
                     app.alert('ลงทะเบียนรายการเสร็จเรียบร้อยแล้ว');
-                    ncd.modal.hide_register();
-                    ncd.get_list();
+                    anc.modal.hide_register();
+                    anc.get_list();
                 }
             });
         }
@@ -328,7 +328,7 @@ head.ready(function(){
     $('#sl_village').on('change', function(){
         var village_id = $(this).val();
 
-        ncd.ajax.get_house_list(village_id, function(err, data){
+        anc.ajax.get_house_list(village_id, function(err, data){
             if(err)
             {
                 app.alert(err);
@@ -352,14 +352,14 @@ head.ready(function(){
     $('#btn_do_get_list').click(function(){
         var house_id = $('#sl_house').val();
 
-        ncd.ajax.get_list_by_house(house_id, function(err, data){
+        anc.ajax.get_list_by_house(house_id, function(err, data){
 
-            $('#tbl_ncd_list > tbody').empty();
+            $('#tbl_anc_list > tbody').empty();
 
            if(err)
            {
                app.alert(err);
-               $('#tbl_ncd_list > tbody').append(
+               $('#tbl_anc_list > tbody').append(
                    '<tr><td colspan="8">ไม่พบรายการ</td></tr>'
                );
            }
@@ -368,11 +368,11 @@ head.ready(function(){
                if(data)
                {
                    $('#main_paging').fadeOut('slow');
-                   ncd.set_list(data);
+                   anc.set_list(data);
                }
                else
                {
-                   $('#tbl_ncd_list > tbody').append(
+                   $('#tbl_anc_list > tbody').append(
                        '<tr><td colspan="8">ไม่พบรายการ</td></tr>'
                    );
                }
@@ -382,21 +382,21 @@ head.ready(function(){
     
     $('a[data-name="remove"]').live('click', function() {
         var person_id = $(this).attr('data-id');
-        //Confirm remove NCD data
+        //Confirm remove anc data
         app.confirm('คุณต้องการจะลบรายการนี้หรือไม่?', function(cb) {
             if(cb) {
-                ncd.update.ajax.remove_ncd_register(person_id, function(err) {
+                anc.update.ajax.remove_anc_register(person_id, function(err) {
                     if(err) {
                         app.alert(err);
                     } else {
                         app.alert('ลบรายการเรียบร้อยแล้ว');
                         
-                        ncd.get_list();
+                        anc.get_list();
                     }
                 });
             }
         });
     });
 
-    ncd.get_list();
+    anc.get_list();
 });
