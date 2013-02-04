@@ -498,7 +498,7 @@ class Ncd extends CI_Controller
             if($rs) {
                 $json = '{ "success": true }';
             } else {
-                $json = '{ "success": false, "msg": "Cann\'t remove ncd register." }';
+                $json = '{ "success": false, "msg": "Can\'t remove ncd register." }';
             }
         }
         
