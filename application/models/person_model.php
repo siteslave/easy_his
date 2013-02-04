@@ -468,7 +468,7 @@ class Person_model extends CI_Model
      * Register person clinic
      *
      * @param   $hn
-     * @param   $clinic     string  The clinic number, 01=DM, 02=HT, 03=STOKE, 04=ANC/MCH, 05=EPI
+     * @param   $clinic     string  The clinic number, 01=DM, 02=HT, 03=STOKE, 04=ANC/MCH, 05=EPI, 06=NCD
      * @return  mixed
      */
     public function do_register_clinic($hn, $clinic)

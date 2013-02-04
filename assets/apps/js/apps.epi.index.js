@@ -20,7 +20,7 @@ head.ready(function(){
          * @param   cb
          */
         get_list: function(start, stop, cb){
-            var url = '/epis/get_list',
+            var url = 'epis/get_list',
                 params = {
                     start: start,
                     stop: stop
@@ -31,7 +31,7 @@ head.ready(function(){
             });
         },
         get_list_total: function(cb){
-            var url = '/epis/get_list_total',
+            var url = 'epis/get_list_total',
                 params = {};
 
             app.ajax(url, params, function(err, data){
@@ -40,7 +40,7 @@ head.ready(function(){
         },
 
         get_house_list: function(village_id, cb){
-            var url = '/person/get_houses_list',
+            var url = 'person/get_houses_list',
                 params = {
                     village_id: village_id
                 };
@@ -51,7 +51,7 @@ head.ready(function(){
         },
 
         get_list_by_house: function(house_id, cb){
-            var url = '/epis/get_list_by_house',
+            var url = 'epis/get_list_by_house',
                 params = {
                     house_id: house_id
                 };
@@ -85,7 +85,7 @@ head.ready(function(){
         },
 
         check_registration: function(hn, cb){
-            var url = '/epis/check_registration',
+            var url = 'epis/check_registration',
                 params = {
                     hn: hn
                 };
