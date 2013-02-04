@@ -487,16 +487,6 @@ class Epis extends CI_Controller
 
         render_json($json);
     }
-
-	public function ncd()
-	{
-
-	}
-
-	public function hello_world()
-	{
-		echo 'Hello world';
-	}
 }
 
 
