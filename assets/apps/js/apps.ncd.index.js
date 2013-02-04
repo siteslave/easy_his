@@ -1,17 +1,18 @@
 /**
- * EPI scripts
+ * NCD scripts
  *
  * @author      Mr.Satit Riapit <mr.satit@outlook.com>
  * @copyright   Copyright 2013, Mr.Satit Rianpit
  * @since       Version 1.0
  */
 head.ready(function(){
-    // EPI name space with object.
-    var epi = {};
+    // NCD name space with object.
+    var ncd = {};
+    ncd.update = {};
 
     //------------------------------------------------------------------------------------------------------------------
     //ajax object
-    epi.ajax = {
+    ncd.ajax = {
         /**
          * Get person list
          *
@@ -20,7 +21,7 @@ head.ready(function(){
          * @param   cb
          */
         get_list: function(start, stop, cb){
-            var url = 'epis/get_list',
+            var url = 'ncd/get_list',
                 params = {
                     start: start,
                     stop: stop
@@ -31,7 +32,7 @@ head.ready(function(){
             });
         },
         get_list_total: function(cb){
-            var url = 'epis/get_list_total',
+            var url = 'ncd/get_list_total',
                 params = {};
 
             app.ajax(url, params, function(err, data){
@@ -51,7 +52,7 @@ head.ready(function(){
         },
 
         get_list_by_house: function(house_id, cb){
-            var url = 'epis/get_list_by_house',
+            var url = 'ncd/get_list_by_house',
                 params = {
                     house_id: house_id
                 };
@@ -62,7 +63,7 @@ head.ready(function(){
         },
 
         search_person: function(query, filter, cb){
-            var url = 'epis/search_person',
+            var url = 'ncd/search_person',
                 params = {
                     query: query,
                     filter: filter
@@ -74,7 +75,7 @@ head.ready(function(){
         },
 
         do_register: function(hn, cb){
-            var url = 'epis/do_register',
+            var url = 'ncd/do_register',
                 params = {
                     hn: hn
                 }
@@ -85,7 +86,7 @@ head.ready(function(){
         },
 
         check_registration: function(hn, cb){
-            var url = 'epis/check_registration',
+            var url = 'ncd/check_registration',
                 params = {
                     hn: hn
                 };
@@ -95,8 +96,21 @@ head.ready(function(){
             });
         }
     };
+    
+    ncd.update.ajax = {
+        remove_ncd_register: function(person_id, cb) {
+            var url = 'ncd/remove_ncd_register',
+                params = {
+                    person_id: person_id
+                };
+            
+            app.ajax(url, params, function(err, data) {
+                return err ? cb(err) : cb(null, data);
+            });
+        }
+    };
 
-    epi.modal = {
+    ncd.modal = {
         show_register: function()
         {
             $('#mdl_register').modal({
@@ -120,10 +134,10 @@ head.ready(function(){
      * @param data
      */
 
-    epi.set_list = function(data){
+    ncd.set_list = function(data){
         if(_.size(data.rows) > 0){
             _.each(data.rows, function(v){
-                $('#tbl_epi_list > tbody').append(
+                $('#tbl_ncd_list > tbody').append(
                     '<tr>' +
                         '<td>' + v.hn + '</td>' +
                         '<td>' + app.clear_null(v.cid) + '</td>' +
@@ -134,22 +148,21 @@ head.ready(function(){
                         '<td>' + v.sex + '</td>' +
                         '<td>' +
                         '<div class="btn-group">' +
-                        '<a href="javascript:void(0);" class="btn" data-name="edit" data-vname="' + v.name + '" data-id="' + v.id + '"><i class="icon-edit"></i></a>' +
-                        '<a href="javascript:void(0);" class="btn" data-name="remove" data-id="' + v.id + '"><i class="icon-trash"></i></a>' +
+                        '<a href="javascript:void(0);" class="btn btn-danger" data-name="remove" data-id="' + v.id + '"><i class="icon-trash"></i></a>' +
                         '</div>' +
                         '</td>' +
                         '</tr>'
                 );
             });
         }else{
-            $('#tbl_epi_list > tbody').append(
+            $('#tbl_ncd_list > tbody').append(
                 '<tr><td colspan="8">ไม่พบรายการ</td></tr>'
             );
         }
     };
-    epi.get_list = function(){
+    ncd.get_list = function(){
         $('#main_paging').fadeIn('slow');
-        epi.ajax.get_list_total(function(err, data){
+        ncd.ajax.get_list_total(function(err, data){
             if(err){
                 app.alert(err);
             }else{
@@ -159,12 +172,12 @@ head.ready(function(){
                     lapping: 1,
                     page: 1,
                     onSelect: function(page){
-                        epi.ajax.get_list(this.slice[0], this.slice[1], function(err, data){
-                            $('#tbl_epi_list > tbody').empty();
+                        ncd.ajax.get_list(this.slice[0], this.slice[1], function(err, data){
+                            $('#tbl_ncd_list > tbody').empty();
                             if(err){
                                 app.alert(err);
                             }else{
-                                epi.set_list(data);
+                                ncd.set_list(data);
                             }
 
                         });
@@ -230,11 +243,11 @@ head.ready(function(){
     };
 
     $('#btn_register').click(function(){
-        epi.modal.show_register();
+        ncd.modal.show_register();
     });
 
 
-    epi.set_search_person_result = function(data)
+    ncd.set_search_person_result = function(data)
     {
         _.each(data.rows, function(v)
         {
@@ -266,7 +279,7 @@ head.ready(function(){
             //do search
             $('#tbl_search_person_result > tbody').empty();
 
-            epi.ajax.search_person(query, filter, function(err, data){
+            ncd.ajax.search_person(query, filter, function(err, data){
 
                 if(err)
                 {
@@ -278,7 +291,7 @@ head.ready(function(){
                 }
                 else
                 {
-                   epi.set_search_person_result(data);
+                   ncd.set_search_person_result(data);
                 }
             });
         }
@@ -297,7 +310,7 @@ head.ready(function(){
         if(confirm('คุณต้องการลงทะเบียนข้อมูลนี้ใช่หรือไม่?'))
         {
             //do register
-            epi.ajax.do_register(hn, function(err){
+            ncd.ajax.do_register(hn, function(err){
                 if(err)
                 {
                     app.alert(err);
@@ -305,8 +318,8 @@ head.ready(function(){
                 else
                 {
                     app.alert('ลงทะเบียนรายการเสร็จเรียบร้อยแล้ว');
-                    epi.modal.hide_register();
-                    epi.get_list();
+                    ncd.modal.hide_register();
+                    ncd.get_list();
                 }
             });
         }
@@ -315,7 +328,7 @@ head.ready(function(){
     $('#sl_village').on('change', function(){
         var village_id = $(this).val();
 
-        epi.ajax.get_house_list(village_id, function(err, data){
+        ncd.ajax.get_house_list(village_id, function(err, data){
             if(err)
             {
                 app.alert(err);
@@ -339,14 +352,14 @@ head.ready(function(){
     $('#btn_do_get_list').click(function(){
         var house_id = $('#sl_house').val();
 
-        epi.ajax.get_list_by_house(house_id, function(err, data){
+        ncd.ajax.get_list_by_house(house_id, function(err, data){
 
-            $('#tbl_epi_list > tbody').empty();
+            $('#tbl_ncd_list > tbody').empty();
 
            if(err)
            {
                app.alert(err);
-               $('#tbl_epi_list > tbody').append(
+               $('#tbl_ncd_list > tbody').append(
                    '<tr><td colspan="8">ไม่พบรายการ</td></tr>'
                );
            }
@@ -355,17 +368,35 @@ head.ready(function(){
                if(data)
                {
                    $('#main_paging').fadeOut('slow');
-                   epi.set_list(data);
+                   ncd.set_list(data);
                }
                else
                {
-                   $('#tbl_epi_list > tbody').append(
+                   $('#tbl_ncd_list > tbody').append(
                        '<tr><td colspan="8">ไม่พบรายการ</td></tr>'
                    );
                }
            }
         });
     });
+    
+    $('a[data-name="remove"]').live('click', function() {
+        var person_id = $(this).attr('data-id');
+        //Confirm remove NCD data
+        app.confirm('คุณต้องการจะลบรายการนี้หรือไม่?', function(cb) {
+            if(cb) {
+                ncd.update.ajax.remove_ncd_register(person_id, function(err) {
+                    if(err) {
+                        app.alert(err);
+                    } else {
+                        app.alert('ลบรายการเรียบร้อยแล้ว');
+                        
+                        ncd.get_list();
+                    }
+                });
+            }
+        });
+    });
 
-    epi.get_list();
+    ncd.get_list();
 });

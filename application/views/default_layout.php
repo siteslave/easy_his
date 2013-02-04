@@ -106,6 +106,11 @@
                                 </a>
                             </li>
                             <li>
+                                <a href="<?php echo site_url('ncd'); ?>">
+                                    <i class="icon-book"></i> ทะเบียนโรคเรื้อรัง (NCD)
+                                </a>
+                            </li>
+                            <li>
                                 <a href="<?php echo site_url('appoints'); ?>">
                                     <i class="icon-tags"></i> ทะเบียนนัด
                                 </a>
