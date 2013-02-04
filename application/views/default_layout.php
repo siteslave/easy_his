@@ -106,6 +106,11 @@
                                 </a>
                             </li>
                             <li>
+                                <a href="<?php echo site_url('pregnancies'); ?>">
+                                    <i class="icon-book"></i> ทะเบียนฝากครรภ์/คลอด/การดูแลหลังคลอด
+                                </a>
+                            </li>
+                            <li>
                                 <a href="<?php echo site_url('appoints'); ?>">
                                     <i class="icon-tags"></i> ทะเบียนนัด
                                 </a>
