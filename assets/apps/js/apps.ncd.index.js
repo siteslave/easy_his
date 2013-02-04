@@ -397,6 +397,14 @@ head.ready(function(){
             }
         });
     });
+<<<<<<< HEAD
 
+=======
+<<<<<<< HEAD
+    
+=======
+
+>>>>>>> master
+>>>>>>> ncd
     ncd.get_list();
 });
