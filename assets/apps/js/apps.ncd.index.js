@@ -397,6 +397,18 @@ head.ready(function(){
             }
         });
     });
+<<<<<<< HEAD
 
+=======
+<<<<<<< HEAD
+
+=======
+<<<<<<< HEAD
+    
+=======
+
+>>>>>>> master
+>>>>>>> ncd
+>>>>>>> develop
     ncd.get_list();
 });

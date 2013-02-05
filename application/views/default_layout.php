@@ -106,8 +106,13 @@
                                 </a>
                             </li>
                             <li>
+<<<<<<< HEAD
                                 <a href="<?php echo site_url('ncd'); ?>">
                                     <i class="icon-book"></i> ทะเบียนโรคเรื้อรัง (NCD)
+=======
+                                <a href="<?php echo site_url('pregnancies'); ?>">
+                                    <i class="icon-book"></i> ทะเบียนฝากครรภ์/คลอด/การดูแลหลังคลอด
+>>>>>>> pp
                                 </a>
                             </li>
                             <li>

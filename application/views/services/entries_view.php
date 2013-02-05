@@ -29,7 +29,7 @@
         </button>
         <ul class="dropdown-menu">
         	<li><a href="javascript:void(0);" data-name="btn_fp"><i class="icon-tags"></i> วางแผนครอบครัว (Family Planing)</a></li>
-            <li><a href="javascript:void(0);"><i class="icon-text-height"></i> บันทึกโภชนาการ (Nutrition)</a></li>
+            <li><a href="javascript:void(0);" data-name="btn_nutri"><i class="icon-text-height"></i> บันทึกโภชนาการ (Nutrition)</a></li>
             <li><a href="javascript:void(0);" data-name="btn_epi"><i class="icon-user"></i> บันทึกข้อมูลการรับวัคซีน (EPI)</a></li>
         </ul>
     </div>
@@ -925,7 +925,7 @@
 </div>
 <!-- end new charge item -->
 
-<!-- modal search charge item -->
+<!-- modal search charge item
 <div class="modal hide fade" id="mdl_charge_search_item">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -1047,7 +1047,6 @@
     </div>
 </div>
 <!--  end FP -->
-
 <!-- EPI -->
 <div class="modal hide fade" id="mdl_epi">
     <div class="modal-header">
@@ -1116,6 +1115,108 @@
     </div>
 </div>
 <!-- end EPI -->
+
+<!-- Nutrition -->
+<div class="modal hide fade" id="mdl_nutri">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>ข้อมูลระดับโภชนาการ</h3>
+    </div>
+    <div class="modal-body">
+
+        <div class="tabbable">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab_nutri1" data-toggle="tab"><i class="icon-plus"></i> เพิ่มข้อมูล</a></li>
+                <li><a href="#tab_nutri2" data-toggle="tab"><i class="icon-refresh"></i> ประวัติการรับบริการ</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab_nutri1">
+                    <form class="form-horizontal">
+                        <div class="row-fluid">
+                            <div class="span5">
+                                <div class="control-group">
+                                    <label class="control-label" for="txt_nutri_headcircum">เส้นรอบศีรษะ</label>
+                                    <div class="controls">
+                                        <div class="input-append">
+                                            <input class="input-small" id="txt_nutri_headcircum" type="text" data-type="number">
+                                            <span class="add-on">ซม.</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span5">
+                                <div class="control-group">
+                                    <label class="control-label" for="sl_childdevelop">ระดับพัฒนาการ</label>
+                                    <div class="controls">
+                                        <select id="sl_childdevelop">
+                                            <option value="1">ปกติ</option>
+                                            <option value="2">สงสัยช้ากว่าปกติ</option>
+                                            <option value="3">ช้ากว่าปกติ</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row-fluid">
+                            <div class="span5">
+                                <div class="control-group">
+                                    <label class="control-label" for="sl_food">อาหารที่รับประทาน</label>
+                                    <div class="controls">
+                                        <select id="sl_food">
+                                            <option value="1">นมแม่อย่างเดียว</option>
+                                            <option value="2">นมแม่และน้ำ</option>
+                                            <option value="3">นมแม่และนมผสม</option>
+                                            <option value="4">นมผสมอย่างเดียว</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="span5">
+                                <div class="control-group">
+                                    <label class="control-label" for="sl_bottle">การใช้ขวดนม</label>
+                                    <div class="controls">
+                                        <select id="sl_bottle">
+                                            <option value="1">ใช้ขวดนม</option>
+                                            <option value="2">ไม่ใช้ขวดนม</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <button class="btn btn-success" type="button" id="btn_nutri_save">
+                            <i class="icon-plus-sign icon-white"></i> บันทึกโภชนาการ
+                        </button>
+                    </form>
+                </div>
+                <div class="tab-pane" id="tab_nutri2">
+                    <table class="table table-striped" id="tbl_nutri_history">
+                        <thead>
+                        <tr>
+                            <th>วันที่</th>
+                            <th>หน่วยบริการ</th>
+                            <th>วัคซีน</th>
+                            <th>ผู้ให้บริการ</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td colspan="4">อยู่ในระหว่างปรับปรุงระบบ</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</a>
+    </div>
+</div>
+<!-- end Nutrition -->
 <!-- <script type="text/javascript" src="{{ base_url }}assets/apps/js/apps.services.js"></script> -->
 <script type="text/javascript">
     head.js(
@@ -1126,6 +1227,7 @@
             '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.drugs.js',
             '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.charges.js',
             '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.fp.js',
-            '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.epi.js'
+            '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.epi.js',
+            '<?php echo base_url(); ?>assets/apps/js/apps.services.nutritions.js'
     );
 </script>

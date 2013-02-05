@@ -1,24 +1,4 @@
 head.ready(function(){
-/*
- $('#btn_screening_add_drgu_allergy').click(function(){
- console.log($(this).text('ยกเลิก'));
- $('#div_screening_drug_allergy').fadeToggle('slow');
- });
-
- */
- /*
-    $('#btn_screening_add_drgu_allergy').toggle(
-        function(){
-            $(this).html('<i class="icon-refresh icon-white"></i> ยกเลิก');
-            $('#div_screening_drug_allergy').fadeIn('slow');
-        },
-        function(){
-            $(this).html('<i class="icon-plus icon-white"></i> เพิ่มรายการ');
-            $('#div_screening_drug_allergy').fadeOut('slow');
-        }
-    );
-
-    */
 
     var entries = {};
 
