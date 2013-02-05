@@ -458,7 +458,7 @@ class Pregnancies extends CI_Controller
             }
             else
             {
-                $json = '{"success": false, "msg": "ไม่สามารถบันทึกข้อมูลได้"}';
+                $json = '{"success": false, "msg": "เกิดข้อผิดพลาดในการค้นหาข้อมูล"}';
             }
         }
         else
