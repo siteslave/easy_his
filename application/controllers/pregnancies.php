@@ -350,7 +350,7 @@ class Pregnancies extends CI_Controller
 
     //------------------------------------------------------------------------------------------------------------------
     /**
-     * Get epi vaccines list
+     * Get Pregnancies list
      */
     public function get_detail()
     {
@@ -381,7 +381,7 @@ class Pregnancies extends CI_Controller
 
     //------------------------------------------------------------------------------------------------------------------
     /**
-     * Save epi service
+     * Save Pregnancies service
      */
     public function save_service()
     {

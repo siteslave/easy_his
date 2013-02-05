@@ -108,9 +108,24 @@ head.ready(function(){
                     }
                 });
         },
+        show_labor: function()
+        {
+            $('#mdl_labor').modal({
+                backdrop: 'static'
+            }).css({
+                    width: 960,
+                    'margin-left': function() {
+                        return -($(this).width() / 2);
+                    }
+                });
+        },
         hide_register: function()
         {
             $('#mdl_register').modal('hide');
+        },
+        hide_labor: function()
+        {
+            $('#mdl_labor').modal('hide');
         }
     };
     //------------------------------------------------------------------------------------------------------------------
@@ -134,7 +149,7 @@ head.ready(function(){
                         '<td>' + v.sex + '</td>' +
                         '<td>' +
                         '<div class="btn-group">' +
-                        '<a href="javascript:void(0);" class="btn" data-name="edit" data-vname="' + v.name + '" data-id="' + v.id + '"><i class="icon-edit"></i></a>' +
+                        '<a href="javascript:void(0);" class="btn" data-name="labor" data-hn="' + v.hn + '" title="ข้อมูลการคลอด"><i class="icon-check"></i></a>' +
                         '<a href="javascript:void(0);" class="btn" data-name="remove" data-id="' + v.id + '"><i class="icon-trash"></i></a>' +
                         '</div>' +
                         '</td>' +
@@ -365,6 +380,15 @@ head.ready(function(){
                }
            }
         });
+    });
+
+    //labor detail
+    $('a[data-name="labor"]').live('click', function(){
+        var hn = $(this).attr('data-hn');
+
+        //show labor detail
+
+        preg.modal.show_labor();
     });
 
     preg.get_list();
