@@ -329,7 +329,7 @@ class Epis extends CI_Controller
         }
         else
         {
-            $rs = $this->person->do_register_clinic($hn, $this->clinic_code);
+            $rs = $this->person->check_clinic_exist($hn, $this->clinic_code);
 
             if($rs)
             {

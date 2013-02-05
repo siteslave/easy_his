@@ -6,7 +6,7 @@ head.ready(function(){
 
     epis.ajax = {
         check_registration: function(hn, cb){
-            var url = '/epis/check_registration',
+            var url = 'epis/check_registration',
                 params = {
                     hn: hn
                 };
@@ -16,7 +16,7 @@ head.ready(function(){
             });
         },
         get_epi_vaccine_list: function(cb){
-            var url = '/epis/get_epi_vaccine_list',
+            var url = 'epis/get_epi_vaccine_list',
                 params = { };
 
             app.ajax(url, params, function(err, data){
@@ -24,7 +24,7 @@ head.ready(function(){
             });
         },
         get_epi_visit_list: function(vn, cb){
-            var url = '/epis/get_epi_visit_list',
+            var url = 'epis/get_epi_visit_list',
                 params = {
                     vn: vn
                 };
@@ -34,7 +34,7 @@ head.ready(function(){
             });
         },
         get_epi_visit_history: function(hn, cb){
-            var url = '/epis/get_epi_visit_history',
+            var url = 'epis/get_epi_visit_history',
                 params = {
                     hn: hn
                 };
@@ -44,7 +44,7 @@ head.ready(function(){
             });
         },
         do_register: function(data, cb){
-            var url = '/epis/save_service',
+            var url = 'epis/save_service',
                 params = {
                     data: data
                 };

@@ -1,17 +1,17 @@
 /**
- * EPI scripts
+ * Pregnancies scripts
  *
  * @author      Mr.Satit Riapit <mr.satit@outlook.com>
  * @copyright   Copyright 2013, Mr.Satit Rianpit
  * @since       Version 1.0
  */
 head.ready(function(){
-    // EPI name space with object.
-    var epi = {};
+    // Pregnancies name space with object.
+    var preg = {};
 
     //------------------------------------------------------------------------------------------------------------------
     //ajax object
-    epi.ajax = {
+    preg.ajax = {
         /**
          * Get person list
          *
@@ -20,7 +20,7 @@ head.ready(function(){
          * @param   cb
          */
         get_list: function(start, stop, cb){
-            var url = 'epis/get_list',
+            var url = 'pregnancies/get_list',
                 params = {
                     start: start,
                     stop: stop
@@ -31,7 +31,7 @@ head.ready(function(){
             });
         },
         get_list_total: function(cb){
-            var url = 'epis/get_list_total',
+            var url = 'pregnancies/get_list_total',
                 params = {};
 
             app.ajax(url, params, function(err, data){
@@ -51,7 +51,7 @@ head.ready(function(){
         },
 
         get_list_by_house: function(house_id, cb){
-            var url = 'epis/get_list_by_house',
+            var url = 'pregnancies/get_list_by_house',
                 params = {
                     house_id: house_id
                 };
@@ -62,7 +62,7 @@ head.ready(function(){
         },
 
         search_person: function(query, filter, cb){
-            var url = 'epis/search_person',
+            var url = 'pregnancies/search_person',
                 params = {
                     query: query,
                     filter: filter
@@ -74,7 +74,7 @@ head.ready(function(){
         },
 
         do_register: function(hn, cb){
-            var url = 'epis/do_register',
+            var url = 'pregnancies/do_register',
                 params = {
                     hn: hn
                 }
@@ -85,7 +85,7 @@ head.ready(function(){
         },
 
         check_registration: function(hn, cb){
-            var url = 'epis/check_registration',
+            var url = 'pregnancies/check_registration',
                 params = {
                     hn: hn
                 };
@@ -96,7 +96,7 @@ head.ready(function(){
         }
     };
 
-    epi.modal = {
+    preg.modal = {
         show_register: function()
         {
             $('#mdl_register').modal({
@@ -120,10 +120,10 @@ head.ready(function(){
      * @param data
      */
 
-    epi.set_list = function(data){
+    preg.set_list = function(data){
         if(_.size(data.rows) > 0){
             _.each(data.rows, function(v){
-                $('#tbl_epi_list > tbody').append(
+                $('#tbl_list > tbody').append(
                     '<tr>' +
                         '<td>' + v.hn + '</td>' +
                         '<td>' + app.clear_null(v.cid) + '</td>' +
@@ -142,14 +142,14 @@ head.ready(function(){
                 );
             });
         }else{
-            $('#tbl_epi_list > tbody').append(
+            $('#tbl_list > tbody').append(
                 '<tr><td colspan="8">ไม่พบรายการ</td></tr>'
             );
         }
     };
-    epi.get_list = function(){
+    preg.get_list = function(){
         $('#main_paging').fadeIn('slow');
-        epi.ajax.get_list_total(function(err, data){
+        preg.ajax.get_list_total(function(err, data){
             if(err){
                 app.alert(err);
             }else{
@@ -159,12 +159,12 @@ head.ready(function(){
                     lapping: 1,
                     page: 1,
                     onSelect: function(page){
-                        epi.ajax.get_list(this.slice[0], this.slice[1], function(err, data){
-                            $('#tbl_epi_list > tbody').empty();
+                        preg.ajax.get_list(this.slice[0], this.slice[1], function(err, data){
+                            $('#tbl_list > tbody').empty();
                             if(err){
                                 app.alert(err);
                             }else{
-                                epi.set_list(data);
+                                preg.set_list(data);
                             }
 
                         });
@@ -230,11 +230,11 @@ head.ready(function(){
     };
 
     $('#btn_register').click(function(){
-        epi.modal.show_register();
+        preg.modal.show_register();
     });
 
 
-    epi.set_search_person_result = function(data)
+    preg.set_search_person_result = function(data)
     {
         _.each(data.rows, function(v)
         {
@@ -266,7 +266,7 @@ head.ready(function(){
             //do search
             $('#tbl_search_person_result > tbody').empty();
 
-            epi.ajax.search_person(query, filter, function(err, data){
+            preg.ajax.search_person(query, filter, function(err, data){
 
                 if(err)
                 {
@@ -278,7 +278,7 @@ head.ready(function(){
                 }
                 else
                 {
-                   epi.set_search_person_result(data);
+                   preg.set_search_person_result(data);
                 }
             });
         }
@@ -297,7 +297,7 @@ head.ready(function(){
         if(confirm('คุณต้องการลงทะเบียนข้อมูลนี้ใช่หรือไม่?'))
         {
             //do register
-            epi.ajax.do_register(hn, function(err){
+            preg.ajax.do_register(hn, function(err){
                 if(err)
                 {
                     app.alert(err);
@@ -305,8 +305,8 @@ head.ready(function(){
                 else
                 {
                     app.alert('ลงทะเบียนรายการเสร็จเรียบร้อยแล้ว');
-                    epi.modal.hide_register();
-                    epi.get_list();
+                    preg.modal.hide_register();
+                    preg.get_list();
                 }
             });
         }
@@ -315,7 +315,7 @@ head.ready(function(){
     $('#sl_village').on('change', function(){
         var village_id = $(this).val();
 
-        epi.ajax.get_house_list(village_id, function(err, data){
+        preg.ajax.get_house_list(village_id, function(err, data){
             if(err)
             {
                 app.alert(err);
@@ -339,7 +339,7 @@ head.ready(function(){
     $('#btn_do_get_list').click(function(){
         var house_id = $('#sl_house').val();
 
-        epi.ajax.get_list_by_house(house_id, function(err, data){
+        preg.ajax.get_list_by_house(house_id, function(err, data){
 
             $('#tbl_epi_list > tbody').empty();
 
@@ -355,7 +355,7 @@ head.ready(function(){
                if(data)
                {
                    $('#main_paging').fadeOut('slow');
-                   epi.set_list(data);
+                   preg.set_list(data);
                }
                else
                {
@@ -367,5 +367,5 @@ head.ready(function(){
         });
     });
 
-    epi.get_list();
+    preg.get_list();
 });

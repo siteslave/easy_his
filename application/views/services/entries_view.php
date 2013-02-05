@@ -31,6 +31,7 @@
         	<li><a href="javascript:void(0);" data-name="btn_fp"><i class="icon-tags"></i> วางแผนครอบครัว (Family Planing)</a></li>
             <li><a href="javascript:void(0);" data-name="btn_nutri"><i class="icon-text-height"></i> บันทึกโภชนาการ (Nutrition)</a></li>
             <li><a href="javascript:void(0);" data-name="btn_epi"><i class="icon-user"></i> บันทึกข้อมูลการรับวัคซีน (EPI)</a></li>
+            <li><a href="javascript:void(0);" data-name="btn_anc"><i class="icon-eye-open"></i> บันทึกข้อมูลการฝากครรภ์ (ANC)</a></li>
         </ul>
     </div>
     <div class="btn-group">
@@ -1217,6 +1218,117 @@
     </div>
 </div>
 <!-- end Nutrition -->
+
+<!-- ANC -->
+<div class="modal hide fade" id="mdl_anc">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>ข้อมูลการฝากครรภ์</h3>
+    </div>
+    <div class="modal-body">
+
+        <div class="tabbable">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab_anc1" data-toggle="tab"><i class="icon-plus"></i> เพิ่มข้อมูล</a></li>
+                <li><a href="#tab_anc2" data-toggle="tab"><i class="icon-refresh"></i> ประวัติการรับบริการ</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab_anc1">
+                    <form class="form-horizontal">
+                        <legend>การให้บริการวันนี้</legend>
+                        <div class="row-fluid">
+                            <div class="span4">
+                                <div class="control-group">
+                                    <label class="control-label" for="sl_childdevelop">ครรภ์ที่</label>
+                                    <div class="controls">
+                                        <select id="sl_anc_gravida" class="input-small">
+                                            <option value="">ระบุ..</option>
+                                            <?php
+                                                for($i = 1; $i<=10; $i++)
+                                                {
+                                                    echo '<option value="'.$i.'">'.$i.'</option>';
+                                                }
+
+                                            ?>
+
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span5">
+                                <div class="control-group">
+                                    <label class="control-label" for="sl_anc_no">ANC ช่วงที่</label>
+                                    <div class="controls">
+                                        <select id="sl_anc_no">
+                                            <option value="1">ช่วงที่ 1 (อายุครรภ์ <= 12 สัปดาห์)</option>
+                                            <option value="2">ช่วงที่ 2 (อายุครรภ์ 18 สัปดาห์)</option>
+                                            <option value="3">ช่วงที่ 3 (อายุครรภ์ 26 สัปดาห์)</option>
+                                            <option value="4">ช่วงที่ 4 (อายุครรภ์ 32 สัปดาห์)</option>
+                                            <option value="5">ช่วงที่ 5 (อายุครรภ์ 38 สัปดาห์)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row-fluid">
+                            <div class="span4">
+                                <div class="control-group">
+                                    <label class="control-label" for="txt_anc_ga">อายุครรภ์ (สัปดาห์)</label>
+                                    <div class="controls">
+                                        <input type="text" class="input-mini" data-type="number" id="txt_anc_ga">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="span5">
+                                <div class="control-group">
+                                    <label class="control-label" for="sl_anc_result">ผลตรวจ</label>
+                                    <div class="controls">
+                                        <select id="sl_anc_result">
+                                            <option value="1">ปกติ</option>
+                                            <option value="2">ผิดปกติ</option>
+                                            <option value="9">ไม่ทราบ</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <button class="btn btn-success" type="button" id="btn_anc_save">
+                            <i class="icon-plus-sign icon-white"></i> บันทึกข้อมูล
+                        </button>
+                    </form>
+                </div>
+                <div class="tab-pane" id="tab_anc2">
+                    <legend>ประวัติการรับบริการ</legend>
+                    <table class="table table-striped" id="tbl_anc_history">
+                        <thead>
+                        <tr>
+                            <th>วันที่</th>
+                            <th>หน่วยบริการ</th>
+                            <th>ครรภ์ที่</th>
+                            <th>อายุครรภ์ (สัปดาห์)</th>
+                            <th>ผลตรวจ</th>
+                            <th>ผู้ให้บริการ</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td colspan="6">อยู่ในระหว่างปรับปรุงระบบ</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</a>
+    </div>
+</div>
+<!-- /ANC -->
 <!-- <script type="text/javascript" src="{{ base_url }}assets/apps/js/apps.services.js"></script> -->
 <script type="text/javascript">
     head.js(
@@ -1228,6 +1340,7 @@
             '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.charges.js',
             '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.fp.js',
             '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.epi.js',
-            '<?php echo base_url(); ?>assets/apps/js/apps.services.nutritions.js'
+            '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.nutritions.js',
+            '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.pregnancies.js'
     );
 </script>
