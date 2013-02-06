@@ -875,6 +875,7 @@ class Person extends CI_Controller
     
     public function auto_gen_hn()
     {
+        ini_set('memory_limit', '-1');
     	$person = $this->person->get_all_person();
 
     	foreach($person as $r)

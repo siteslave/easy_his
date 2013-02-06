@@ -117,6 +117,14 @@
                                     <i class="icon-tags"></i> ทะเบียนนัด
                                 </a>
                             </li>
+                            <li>
+                                <a href="<?php echo site_url('dm'); ?>">
+                                    <i class="icon-tags"></i> ทะเบียนผู้ป่วยเบาหวาน (DM)
+                                </a>
+                                <a href="<?php echo site_url('ht'); ?>">
+                                    <i class="icon-tags"></i> ทะเบียนผู้ป่วยความดัน (HT)
+                                </a>
+                            </li>
                         </ul>
                     </li>
                     <li class="dropdown">
