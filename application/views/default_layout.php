@@ -107,7 +107,7 @@
                             </li>
                             <li>
                                 <a href="<?php echo site_url('ncd'); ?>">
-                                    <i class="icon-book"></i> ทะเบียนโรคเรื้อรัง (NCD)
+                                    <i class="icon-book"></i> ทะเบียนคัดกรองเบาหวาน/ความดัน 15 ปีขึ้นไป
                                 <a href="<?php echo site_url('pregnancies'); ?>">
                                     <i class="icon-book"></i> ทะเบียนฝากครรภ์/คลอด/การดูแลหลังคลอด
                                 </a>

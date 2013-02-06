@@ -1,6 +1,6 @@
 <ul class="breadcrumb">
     <li><a href="<?php echo site_url(); ?>">หน้าหลัก</a> <span class="divider">/</span></li>
-    <li class="active">ทะเบียนโรคเรื้อรัง NCD</li>
+    <li class="active">ทะเบียนคัดกรองเบาหวาน/ความดัน 15 ปีขึ้นไป</li>
 </ul>
 <form action="#" class="well form-inline">
     <label for="sl_village_id">หมู่บ้าน</label>
