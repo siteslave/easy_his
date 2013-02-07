@@ -61,6 +61,24 @@ class Pregnancies extends CI_Controller
         $this->layout->view('pregnancies/index_view', $data);
     }
 
+    public function check_registration()
+    {
+        $hn = $this->input->post('hn');
+        //$this->preg->owner_id = $this->owner_id;
+
+        $rs = $this->preg->check_register_status($hn);
+
+        if($rs)
+        {
+            $json = '{"success": true}';
+        }
+        else
+        {
+            $json = '{"success": false, "msg": "ไม่พบข้อมูลการลงทะเบียน"}';
+        }
+
+        render_json($json);
+    }
     //------------------------------------------------------------------------------------------------------------------
     public function get_list()
     {
@@ -73,6 +91,7 @@ class Pregnancies extends CI_Controller
         $limit = (int) $stop - (int) $start;
 
         $this->preg->owner_id = $this->owner_id;
+
         $rs = $this->preg->get_list($start, $limit);
 
         if($rs)
@@ -82,63 +101,20 @@ class Pregnancies extends CI_Controller
 
             foreach($rs as $r)
             {
+                $person = $this->person->get_person_detail_with_hn($r['hn']);
                 $obj = new stdClass();
                 $obj->hn = $r['hn'];
-                $obj->cid = $r['cid'];
+                $obj->cid = $person['cid'];
                 $obj->id = get_first_object($r['_id']);
-                $obj->first_name = $r['first_name'];
-                $obj->last_name = $r['last_name'];
-                $obj->sex = $r['sex'] == '1' ? 'ชาย' : 'หญิง';
-                $obj->birthdate = $r['birthdate'];
-                $obj->age = count_age($r['birthdate']);
-                $obj->reg_date = isset($r['registers'][0]['reg_date']) ? $r['registers'][0]['reg_date'] : '';
-
-                $arr_result[] = $obj;
-            }
-
-            $rows = json_encode($arr_result);
-            $json = '{"success": true, "rows": '.$rows.'}';
-        }
-        else
-        {
-            $json = '{"success": false, "msg": "No result."}';
-        }
-
-        render_json($json);
-    }
-    //------------------------------------------------------------------------------------------------------------------
-    public function get_list_by_house()
-    {
-        $start = $this->input->post('start');
-        $stop = $this->input->post('stop');
-        $house_id = $this->input->post('house_id');
-
-        //$start = empty($start) ? 0 : $start;
-        //$stop = empty($stop) ? 25 : $stop;
-
-        $limit = (int) $stop - (int) $start;
-
-        $this->preg->owner_id = $this->owner_id;
-        $rs = $this->preg->get_list_by_house($house_id);
-
-        if($rs)
-        {
-
-            $arr_result = array();
-
-            foreach($rs as $r)
-            {
-                $obj = new stdClass();
-                $obj->hn = $r['hn'];
-                $obj->cid = $r['cid'];
-                $obj->id = get_first_object($r['_id']);
-                $obj->first_name = $r['first_name'];
-                $obj->last_name = $r['last_name'];
-                $obj->sex = $r['sex'] == '1' ? 'ชาย' : 'หญิง';
-                $obj->birthdate = $r['birthdate'];
-                $obj->age = count_age($r['birthdate']);
-                $obj->reg_date = isset($r['registers'][0]['reg_date']) ? $r['registers'][0]['reg_date'] : '';
-
+                $obj->first_name = $person['first_name'];
+                $obj->last_name = $person['last_name'];
+                $obj->sex = $person['sex'] == '1' ? 'ชาย' : 'หญิง';
+                $obj->birthdate = $person['birthdate'];
+                $obj->age = count_age($person['birthdate']);
+                $obj->reg_date = $r['reg_date'];
+                $obj->anc_code = $r['anc_code'];
+                $obj->gravida = $r['gravida'];
+                $obj->preg_status = $r['preg_status'] == '0' ? 'ยังไม่คลอด' : 'คลอดแล้ว';
                 $arr_result[] = $obj;
             }
 
@@ -157,15 +133,6 @@ class Pregnancies extends CI_Controller
     {
         $this->preg->owner_id = $this->owner_id;
         $total = $this->preg->get_list_total();
-        $json = '{"success": true, "total": '.$total.'}';
-
-        render_json($json);
-    }
-
-    public function get_list_by_village_total()
-    {
-        $this->preg->owner_id = $this->owner_id;
-        $total = $this->preg->get_list_by_village_total();
         $json = '{"success": true, "total": '.$total.'}';
 
         render_json($json);
@@ -246,19 +213,20 @@ class Pregnancies extends CI_Controller
 
     public function do_register()
     {
-        $hn = $this->input->post('hn');
+        $data = $this->input->post('data');
 
-        if(empty($hn))
+        if(empty($data))
         {
-            $json = '{"success": false, "msg": "HN not found."}';
+            $json = '{"success": false, "msg": "Data not found."}';
         }
         else
         {
 
-            $this->person->owner_id = $this->owner_id;
-            $this->person->user_id = $this->user_id;
+            $this->preg->owner_id = $this->owner_id;
+            $this->preg->user_id = $this->user_id;
+            $this->preg->provider_id = $this->provider_id;
 
-            $exists = $this->person->check_clinic_exist($hn, $this->clinic_code);
+            $exists = $this->preg->check_register_status($data['hn']);
 
             if($exists)
             {
@@ -266,7 +234,8 @@ class Pregnancies extends CI_Controller
             }
             else
             {
-                $rs = $this->person->do_register_clinic($hn, $this->clinic_code);
+                $data['anc_code'] = generate_serial('ANC');
+                $rs = $this->preg->do_register($data);
 
                 if($rs)
                 {
@@ -288,7 +257,7 @@ class Pregnancies extends CI_Controller
      * Service module
      */
 
-    public function service_save()
+    public function anc_service_save()
     {
         $data = $this->input->post('data');
 
@@ -316,58 +285,25 @@ class Pregnancies extends CI_Controller
         render_json($json);
     }
 
-    /**
-     * Check EPI registration
-     *
-     * @return void
-     * @internal param string $hn
-     */
-
-    public function check_registration()
-    {
-        $hn = $this->input->post('hn');
-
-        if(empty($hn))
-        {
-            $json = '{"success": false, "msg": "HN not found."}';
-        }
-        else
-        {
-            $rs = $this->person->check_clinic_exist($hn, $this->clinic_code);
-
-            if($rs)
-            {
-                $json = '{"success": true}';
-            }
-            else
-            {
-                $json = '{"success": false, "msg": "ไม่พบข้อมูลการลงทะเบียน"}';
-            }
-        }
-
-        render_json($json);
-    }
-
     //------------------------------------------------------------------------------------------------------------------
     /**
      * Get Pregnancies list
      */
-    public function get_detail()
+    public function anc_get_detail()
     {
-        $vn = $this->input->post('vn');
+        $data = $this->input->post('data');
 
-        if(empty($vn))
+        if(empty($data))
         {
-            $json = '{"success": false,"msg": "ไม่พบ VN"}';
+            $json = '{"success": false,"msg": "ไม่พบข้อมูลเพื่อค้นหา"}';
         }
         else
         {
-            $rs = $this->preg->get_detail($vn);
+            $rs = $this->preg->anc_get_detail($data['hn'], $data['vn']);
 
             if($rs)
             {
                 $rows = json_encode($rs);
-
                 $json = '{"success": true, "rows": '.$rows.'}';
             }
             else
@@ -379,11 +315,21 @@ class Pregnancies extends CI_Controller
         render_json($json);
     }
 
+    public function anc_get_gravida()
+    {
+        $hn = $this->input->post('hn');
+
+        $gravidas = $this->preg->anc_get_gravida($hn);
+
+        $json = '{"success": true, "rows": '.json_encode($gravidas).'}';
+
+        render_json($json);
+    }
     //------------------------------------------------------------------------------------------------------------------
     /**
      * Save Pregnancies service
      */
-    public function save_service()
+    public function anc_save_service()
     {
         $data = $this->input->post('data');
 
@@ -394,7 +340,7 @@ class Pregnancies extends CI_Controller
         else
         {
             //check duplicated
-            $duplicated = $this->preg->check_visit_duplicated($data['vn']);
+            $duplicated = $this->preg->anc_check_visit_duplicated($data['hn'], $data['vn'], $data['gravida']);
 
             $this->preg->owner_id = $this->owner_id;
             $this->preg->user_id = $this->user_id;
@@ -404,11 +350,11 @@ class Pregnancies extends CI_Controller
             {
                 //$json = '{"success": false, "msg": "ข้อมูลซ้ำ"}';
                 //do update
-                $rs = $this->preg->update_service($data);
+                $rs = $this->preg->anc_update_service($data);
             }
             else
             {
-                $rs = $this->preg->save_service($data);
+                $rs = $this->preg->anc_save_service($data);
             }
 
             if($rs)
@@ -424,37 +370,45 @@ class Pregnancies extends CI_Controller
 
         render_json($json);
     }
-    public function get_history()
+    public function anc_get_history()
     {
         $hn = $this->input->post('hn');
 
         if(!empty($hn))
         {
-            $rs = $this->preg->get_history($hn);
+            $rs = $this->preg->anc_get_history($hn);
+            $gravida = $rs[0]['gravida'];
 
             if($rs)
             {
                 $arr_result = array();
 
-                foreach($rs as $r)
+                if(isset($rs[0]['anc']))
                 {
-                    $obj = new stdClass();
+                    foreach($rs[0]['anc'] as $r)
+                    {
+                        $obj = new stdClass();
+                        $visit = $this->service->get_visit_info($r['vn']);
+                        $obj->clinic_name = get_clinic_name(get_first_object($visit['clinic']));
+                        $obj->date_serv = $visit['date_serv'];
+                        $obj->time_serv = $visit['time_serv'];
+                        $obj->anc_no = $r['anc_no'];
+                        $obj->ga = $r['ga'];
+                        $obj->anc_result = $r['anc_result'];
+                        $obj->provider_name = get_provider_name_by_id(get_first_object($r['provider_id']));
+                        $obj->owner_name = get_owner_name(get_first_object($r['owner_id']));
 
-                    $visit = $this->service->get_visit_info($r['vn']);
-                    $obj->clinic_name = get_clinic_name(get_first_object($visit['clinic']));
-                    $obj->date_serv = $visit['date_serv'];
-                    $obj->time_serv = $visit['time_serv'];
+                        $arr_result[] = $obj;
+                    }
 
-                    $obj->anc_no = $r['anc_no'];
-                    $obj->ga = $r['ga'];
-                    $obj->anc_result = $r['anc_result'];
-                    $obj->provider_name = get_provider_name_by_id(get_first_object($r['provider_id']));
-                    $obj->owner_name = get_owner_name(get_first_object($r['owner_id']));
-
-                    $arr_result[] = $obj;
+                    $rows = json_encode($arr_result);
+                    $json = '{"success": true, "rows": '.$rows.', "gravida": "'.$gravida.'"}';
                 }
-                $rows = json_encode($arr_result);
-                $json = '{"success": true, "rows": '.$rows.'}';
+                else
+                {
+                    $json = '{"success": false, "msg": "No result found"}';
+                }
+
             }
             else
             {

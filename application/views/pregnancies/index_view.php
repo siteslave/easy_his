@@ -24,13 +24,15 @@
 <table class="table table-striped table-hover" id="tbl_list">
     <thead>
     <tr>
+        <th>ANC No.</th>
         <th>HN</th>
         <th>CID</th>
-        <th>วันที่ลงทะเบียน</th>
         <th>ชื่อ - สกุล</th>
         <th>วันเกิด</th>
         <th>อายุ (ปี)</th>
-        <th>เพศ</th>
+        <th>วันที่ลงทะเบียน</th>
+        <th>ครรภ์ที่</th>
+        <th>สถานะ</th>
         <th>#</th>
     </tr>
     </thead>
@@ -103,38 +105,20 @@
         </blockquote>
         <form class="form-inline well">
             <label>HN</label>
-            <input type="text" class="input-small uneditable-input" disabled="disabled">
+            <input type="text" class="input-small uneditable-input" disabled="disabled" id="txt_labor_hn">
             <label>CID</label>
-            <input type="text" class="input-medium uneditable-input" disabled="disabled">
+            <input type="text" class="input-medium uneditable-input" disabled="disabled" id="txt_labor_cid">
             <label>ชื่อ - สกุล</label>
-            <input type="text" class="input-medium uneditable-input" disabled="disabled">
+            <input type="text" class="input-medium uneditable-input" disabled="disabled" id="txt_labor_fullname">
             <label>วันเกิด</label>
-            <input type="text" class="input-small uneditable-input" disabled="disabled">
+            <input type="text" class="input-small uneditable-input" disabled="disabled" id="txt_labor_birthdate">
             <label>อายุ (ปี)</label>
-            <input type="text" class="input-mini uneditable-input" disabled="disabled">
+            <input type="text" class="input-mini uneditable-input" disabled="disabled" id="txt_labor_age">
         </form>
 
         <form action="#">
             <legend>ข้อมูลการคลอด</legend>
             <div class="row-fluid">
-                <div class="span2">
-                    <div class="control-group">
-                        <label class="control-label" for="sl_anc_no">ครรภ์ที่</label>
-                        <div class="controls">
-                            <select id="sl_anc_no" class="input-small">
-                                <option value="">ระบุ..</option>
-                                <?php
-                                for($i = 1; $i<=10; $i++)
-                                {
-                                    echo '<option value="'.$i.'">'.$i.'</option>';
-                                }
-
-                                ?>
-
-                            </select>
-                        </div>
-                    </div>
-                </div>
                 <div class="span2">
                     <div class="control-group">
                         <label class="control-label" for="txt_reg_service_date">LMP</label>

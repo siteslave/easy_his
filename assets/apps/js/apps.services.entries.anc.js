@@ -2,9 +2,9 @@
  * Service EPI script
  */
 head.ready(function(){
-    var pregnancies = {};
+    var anc = {};
 
-    pregnancies.ajax = {
+    anc.ajax = {
         check_registration: function(hn, cb){
             var url = 'pregnancies/check_registration',
                 params = {
@@ -16,7 +16,7 @@ head.ready(function(){
             });
         },
         get_history: function(hn, cb){
-            var url = 'pregnancies/get_history',
+            var url = 'pregnancies/anc_get_history',
                 params = {
                     hn: hn
                 };
@@ -25,18 +25,28 @@ head.ready(function(){
                 err ? cb(err) : cb(null, data);
             });
         },
-        get_detail: function(vn, cb){
-            var url = 'pregnancies/get_detail',
+        get_gravida: function(hn, cb){
+            var url = 'pregnancies/anc_get_gravida',
                 params = {
-                    vn: vn
+                    hn: hn
                 };
 
             app.ajax(url, params, function(err, data){
                 err ? cb(err) : cb(null, data);
             });
         },
-        do_register: function(data, cb){
-            var url = 'pregnancies/save_service',
+        get_detail: function(data, cb){
+            var url = 'pregnancies/anc_get_detail',
+                params = {
+                    data: data
+                };
+
+            app.ajax(url, params, function(err, data){
+                err ? cb(err) : cb(null, data);
+            });
+        },
+        save_service: function(data, cb){
+            var url = 'pregnancies/anc_save_service',
                 params = {
                     data: data
                 };
@@ -47,7 +57,7 @@ head.ready(function(){
         }
     };
 
-    pregnancies.modal = {
+    anc.modal = {
         show_new: function()
         {
             $('#mdl_anc').modal({
@@ -67,36 +77,53 @@ head.ready(function(){
     };
 
 
-    pregnancies.get_detail = function(vn)
+    anc.get_detail = function(data)
     {
-        pregnancies.ajax.get_detail(vn, function(err, data){
+        anc.ajax.get_detail(data, function(err, data){
            if(err)
            {
                app.alert(err);
            }
             else
            {
-                $('#sl_anc_no').val(data.rows.anc_no);
-                $('#txt_anc_ga').val(data.rows.ga);
-                $('#sl_anc_result').val(data.rows.anc_result);
+               //set anc_no
+                $('#sl_anc_no').val(data.rows.anc[0].anc_no);
+                $('#txt_anc_ga').val(data.rows.anc[0].ga);
+                $('#sl_anc_result').val(data.rows.anc[0].anc_result);
+               $('#sl_anc_gravida').val(data.rows.gravida);
            }
         });
     };
 
-    $('a[data-name="btn_anc"]').click(function(){
-        var vn = $('#vn').val(),
-            hn = $('#hn').val();
+    anc.set_anc_no_select = function(data)
+    {
+        $('#sl_anc_gravida').empty();
+        _.each(data.rows, function(v){
+            $('#sl_anc_gravida').append(
+                '<option value="'+ v.gravida +'">' + v.gravida + '</option>'
+            );
+        });
 
-        pregnancies.ajax.check_registration(hn, function(err){
+    };
+    $('a[data-name="btn_anc"]').click(function(){
+        var data = {};
+
+        data.vn = $('#vn').val(),
+        data.hn = $('#hn').val();
+
+        anc.ajax.check_registration(data.hn, function(err){
            if(err)
            {
                app.alert('ข้อมูลนี้ยังไม่ได้ถูกลงทะเบียนกรุณาลงทะเบียนก่อนการให้บริการ');
            }
            else
            {
+               anc.ajax.get_gravida(data.hn, function(err, data){
+                  anc.set_anc_no_select(data);
+               });
                //get detail
-               pregnancies.get_detail(vn);
-               pregnancies.modal.show_new();
+               anc.get_detail(data);
+               anc.modal.show_new();
            }
         });
     });
@@ -104,8 +131,9 @@ head.ready(function(){
     $('#btn_anc_save').click(function(){
         var data = {};
 
-        data.hn = $('#hn').val(),
-        data.vn = $('#vn').val(),
+        data.hn = $('#hn').val();
+        data.gravida = $('#sl_anc_gravida').val();
+        data.vn = $('#vn').val();
         data.anc_no = $('#sl_anc_no').val();
         data.ga = $('#txt_anc_ga').val();
         data.anc_result = $('#sl_anc_result').val();
@@ -124,21 +152,21 @@ head.ready(function(){
         }
         else
         {
-            pregnancies.ajax.do_register(data, function(err){
+            anc.ajax.save_service(data, function(err){
                if(err)
                {
                    app.alert(err);
                }
                else
                {
-                   app.alert('เพิ่มรายการเรียบร้อยแล้ว');
-                   pregnancies.modal.hide_new();
+                   app.alert('บันทึกข้อมูลเรียบร้อยแล้ว');
+                   anc.modal.hide_new();
                }
             });
         }
     });
 
-    pregnancies.set_history = function(data)
+    anc.set_history = function(data)
     {
         $('#tbl_anc_history > tbody').empty();
 
@@ -151,6 +179,7 @@ head.ready(function(){
                     '<tr>' +
                         '<td>' + app.mongo_to_thai_date(v.date_serv) + '</td>' +
                         '<td>' + app.clear_null(v.owner_name) + '</td>' +
+                        '<td>' + app.clear_null(data.gravida) + '</td>' +
                         '<td>' + app.clear_null(v.anc_no) + '</td>' +
                         '<td>' + app.clear_null(v.ga) + '</td>' +
                         '<td>' + app.clear_null(res) + '</td>' +
@@ -163,7 +192,7 @@ head.ready(function(){
         {
             $('#tbl_anc_history > tbody').append(
                 '<tr>' +
-                    '<td colspan="6">ไม่พบรายการ</td>' +
+                    '<td colspan="7">ไม่พบรายการ</td>' +
                     '</tr>'
             );
         }
@@ -175,8 +204,8 @@ head.ready(function(){
     $('a[href="#tab_anc2"]').click(function(){
         var hn = $('#hn').val();
 
-        pregnancies.ajax.get_history(hn, function(err, data){
-           pregnancies.set_history(data);
+        anc.ajax.get_history(hn, function(err, data){
+           anc.set_history(data);
         });
     });
 });

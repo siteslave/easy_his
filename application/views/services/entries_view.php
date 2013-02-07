@@ -1243,14 +1243,6 @@
                                     <div class="controls">
                                         <select id="sl_anc_gravida" class="input-small">
                                             <option value="">ระบุ..</option>
-                                            <?php
-                                                for($i = 1; $i<=10; $i++)
-                                                {
-                                                    echo '<option value="'.$i.'">'.$i.'</option>';
-                                                }
-
-                                            ?>
-
                                         </select>
                                     </div>
                                 </div>
@@ -1308,6 +1300,7 @@
                             <th>วันที่</th>
                             <th>หน่วยบริการ</th>
                             <th>ครรภ์ที่</th>
+                            <th>ANC ช่วงที่</th>
                             <th>อายุครรภ์ (สัปดาห์)</th>
                             <th>ผลตรวจ</th>
                             <th>ผู้ให้บริการ</th>
@@ -1341,6 +1334,6 @@
             '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.fp.js',
             '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.epi.js',
             '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.nutritions.js',
-            '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.pregnancies.js'
+            '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.anc.js'
     );
 </script>

@@ -9,11 +9,11 @@ class Pregnancies_model extends CI_Model
 
     public function __construct()
     {
-        $this->clinic_code = '04';
+        //$this->clinic_code = '04';
     }
     //------------------------------------------------------------------------------------------------------------------
     /**
-     * Get EPI list
+     * Get ANC list
      *
      * @param $start
      * @param $limit
@@ -22,48 +22,23 @@ class Pregnancies_model extends CI_Model
     public function get_list($start, $limit)
     {
         $rs = $this->mongo_db
-            ->where(array(
-                'registers.clinic_code' => $this->clinic_code,
-                'registers.owner_id' => new MongoId($this->owner_id)
-            ))
+            ->where('owner_id', new MongoId($this->owner_id))
             ->offset($start)
             ->limit($limit)
-            ->get('person');
-        return $rs;
-    }
-    //------------------------------------------------------------------------------------------------------------------
-    /**
-     * Get EPI by house
-     *
-     * @param $house_id
-     * @return mixed
-     */
-    public function get_list_by_house($house_id)
-    {
-        $rs = $this->mongo_db
-            ->where(array(
-                'registers.clinic_code' => '05',
-                'registers.owner_id' => new MongoId($this->owner_id),
-                'house_code' => new MongoId($house_id)
-            ))
-            //->offset($start)
-            //->limit($limit)
-            ->get('person');
+            ->get('pregnancies');
         return $rs;
     }
 
     public function get_list_total()
     {
         $rs = $this->mongo_db
-            ->where(array(
-                        'registers.clinic_code' => $this->clinic_code,
-                        'registers.owner_id' => new MongoId($this->owner_id)
-            ))
-            ->count('person');
+            ->where(array('owner_id' => new MongoId($this->owner_id)))
+            ->count('pregnancies');
 
         return $rs;
     }
-    public function get_list_by_house_total()
+
+    public function anc_get_list_by_house_total()
     {
         $rs = $this->mongo_db
             ->where(array(
@@ -79,64 +54,72 @@ class Pregnancies_model extends CI_Model
     /**
      * Save anc visit
      */
-    public function save_service($data)
+    public function anc_save_service($data)
     {
         $rs = $this->mongo_db
-            ->insert('visit_anc', array(
+            ->where(array('hn' => (string) $data['hn'], 'gravida' => (string) $data['gravida']))
+            ->push('anc', array(
                 'vn' => $data['vn'],
-                'hn' => $data['hn'],
                 'anc_no' => $data['anc_no'],
                 'ga' => $data['ga'],
                 'anc_result' => $data['anc_result'],
                 'owner_id' => new MongoId($this->owner_id),
                 'provider_id' => new MongoId($this->provider_id),
                 'user_id' => new MongoId($this->user_id)
-            ));
+            ))->update('pregnancies');
 
         return $rs;
     }
 
-    public function update_service($data)
+    public function anc_update_service($data)
     {
         $rs = $this->mongo_db
-            ->where('vn', (string) $data['vn'])
-            ->set(array(
-                'anc_no' => $data['anc_no'],
-                'ga' => $data['ga'],
-                'anc_result' => $data['anc_result'],
-                'owner_id' => new MongoId($this->owner_id),
-                'provider_id' => new MongoId($this->provider_id),
-                'user_id' => new MongoId($this->user_id)
+            ->where(array(
+                            'hn' => $data['hn'],
+                            'gravida' => $data['gravida'],
+                            'anc.vn' => (string) $data['vn']
             ))
-            ->update('visit_anc');
+            ->set(array(
+                'anc.$.anc_no' => $data['anc_no'],
+                'anc.$.ga' => $data['ga'],
+                'anc.$.anc_result' => $data['anc_result'],
+                'anc.$.owner_id' => new MongoId($this->owner_id),
+                'anc.$.provider_id' => new MongoId($this->provider_id),
+                'anc.$.user_id' => new MongoId($this->user_id)
+            ))->update('pregnancies');
 
         return $rs;
     }
 
 
-    public function check_visit_duplicated($vn)
+    public function anc_check_visit_duplicated($hn, $vn, $gravida)
     {
         $rs = $this->mongo_db
-            ->where(array('vn' => (string) $vn))
-            ->count('visit_anc');
+            ->where(array(
+                        'anc.vn' => (string) $vn,
+                        'gravida' => (string) $gravida,
+                        'hn' => (string) $hn))
+            ->count('pregnancies');
 
         return $rs > 0 ? TRUE : FALSE;
     }
 
-    public function get_history($hn)
+    public function anc_get_history($hn)
     {
         $rs = $this->mongo_db
+            ->select(array('gravida', 'anc'))
             ->where('hn', (string) $hn)
-            ->get('visit_anc');
+            ->get('pregnancies');
 
         return $rs;
     }
-    public function get_detail($vn)
+    public function anc_get_detail($hn, $vn)
     {
         $rs = $this->mongo_db
-            ->where('vn', (string) $vn)
+            ->select(array('gravida', 'anc'))
+            ->where(array('hn' => (string) $hn, 'anc.vn' => (string) $vn))
             ->limit(1)
-            ->get('visit_anc');
+            ->get('pregnancies');
 
         return count($rs) > 0 ? $rs[0] : NULL;
     }
@@ -148,6 +131,51 @@ class Pregnancies_model extends CI_Model
             ->get('visit_epi');
 
         return $rs;
+    }
+
+    public function do_register($data)
+    {
+        $rs = $this->mongo_db
+            ->insert('pregnancies',
+                array(
+                    'hn' => $data['hn'],
+                    'anc_code' => $data['anc_code'],
+                    'reg_date' => date('Ymd'),
+                    'gravida' => $data['gravida'],
+                    'preg_status' => '0',
+                    'owner_id' => new MongoId($this->owner_id),
+                    'provider_id' => new MongoId($this->provider_id),
+                    'user_id' => new MongoId($this->user_id)
+                ));
+
+        return $rs;
+    }
+
+    public function check_register_status($hn)
+    {
+        $rs = $this->mongo_db
+            ->where(array('hn' => (string) $hn))
+            ->count('pregnancies');
+
+        return $rs > 0 ? TRUE : FALSE;
+    }
+
+    public function check_exist($hn, $gravida)
+    {
+        $rs = $this->mongo_db
+            ->where(array('hn' => $hn, 'gravida' => $gravida))
+            ->count('pregnancies');
+        return $rs > 0 ? TRUE : FALSE;
+    }
+
+    public function anc_get_gravida($hn)
+    {
+        $rs = $this->mongo_db
+            ->select(array('gravida'))
+            ->where(array('hn' => (string) $hn))
+            ->get('pregnancies');
+
+        return count($rs) > 0 ? $rs : NULL;
     }
 
 }
