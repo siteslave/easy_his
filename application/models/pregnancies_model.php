@@ -178,4 +178,47 @@ class Pregnancies_model extends CI_Model
         return count($rs) > 0 ? $rs : NULL;
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+    // Labor module
+    //------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Save labor data
+     */
+    public function labor_save($data)
+    {
+        $rs = $this->mongo_db
+            ->where(array('hn' => $data['hn'], 'gravida' => $data['gravida']))
+            ->set(array(
+                        'labor.lmp'      => to_string_date($data['lmp']),
+                        'labor.edc'      => to_string_date($data['edc']),
+                        'labor.bdate'    => to_string_date($data['bdate']),
+                        'labor.bresult'  => $data['bresult'],
+                        'labor.bplace'   => $data['bplace'],
+                        'labor.bhosp'    => $data['bhosp'],
+                        'labor.btype'    => $data['btype'],
+                        'labor.bdoctor'  => $data['bdoctor'],
+                        'labor.lborn'    => $data['lborn'],
+                        'labor.sborn'    => $data['sborn'],
+                        'preg_status'    => $data['preg_status']
+        ))->update('pregnancies');
+
+        return $rs;
+    }
+
+    /**
+     * Get labor detail
+     *
+     * @param   string  $anc_code
+     * @return  mixed
+     */
+    public function labor_get_detail($anc_code)
+    {
+        $rs = $this->mongo_db
+            ->select(array('gravida', 'preg_status', 'labor'))
+            ->where(array('anc_code' => (string) $anc_code))
+            ->get('pregnancies');
+
+        return $rs;
+    }
 }

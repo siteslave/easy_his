@@ -62,7 +62,33 @@ head.ready(function(){
             app.ajax(url, params, function(err, data){
                 err ? cb(err) : cb(null, data);
             });
+        },
+
+        labor: {
+            save: function(data, cb){
+                var url = 'pregnancies/labor_save',
+                    params = {
+                        data: data
+                    };
+
+                app.ajax(url, params, function(err, data){
+                    err ? cb(err) : cb(null, data);
+                });
+            },
+            get_detail: function(anc_code, cb)
+            {
+                var url = 'pregnancies/labor_get_detail',
+                    params = {
+                        anc_code: anc_code
+                    };
+
+                app.ajax(url, params, function(err, data){
+                    err ? cb(err) : cb(null, data);
+                });
+            }
         }
+
+
 
     };
 
@@ -122,7 +148,10 @@ head.ready(function(){
                         '<td>'+ v.preg_status +'</td>' +
                         '<td>' +
                         '<div class="btn-group">' +
-                        '<a href="javascript:void(0);" class="btn" data-name="labor" data-hn="' + v.hn + '" title="ข้อมูลการคลอด"><i class="icon-check"></i></a>' +
+                        '<a href="javascript:void(0);" class="btn" data-fullname="'+ v.first_name + ' ' + v.last_name +'" ' +
+                        'data-birthdate="'+app.mongo_to_thai_date(v.birthdate)+'" data-age="'+ v.age+'" data-hn="'+ v.hn+'" ' +
+                        'data-anc_code="'+ v.anc_code+'" data-gravida="'+ v.gravida +'" data-name="labor" data-hn="' + v.hn + '" ' +
+                        'data-cid="' + v.cid +'" title="ข้อมูลการคลอด"><i class="icon-check"></i></a>' +
                         '<a href="javascript:void(0);" class="btn" data-name="remove" data-id="' + v.id + '"><i class="icon-trash"></i></a>' +
                         '</div>' +
                         '</td>' +
@@ -334,13 +363,206 @@ head.ready(function(){
         });
     });
 
+    preg.labor = {
+        get_detail: function(anc_code)
+        {
+            preg.ajax.labor.get_detail(anc_code, function(err, data){
+                if(err)
+                {
+                    app.alert(err);
+                }
+                else
+                {
+                    preg.labor.set_detail(data);
+                }
+            });
+        },
+
+        set_detail: function(data)
+        {
+            $('#txt_labor_lmp').val(data.rows[0].lmp);
+            $('#txt_labor_edc').val(data.rows[0].edc);
+            $('#sl_labor_bdate').val(data.rows[0].bdate);
+            $('#txt_labor_bresult_icdcode').val(data.rows[0].icd_code);
+            $('#txt_labor_bresult_icdname').val(data.rows[0].icd_name);
+            $('#sl_labor_bplace').val(data.rows[0].bplace);
+            $('#txt_labor_hospcode').val(data.rows[0].bhosp);
+            $('#txt_labor_hospname').val(data.rows[0].bhosp_name);
+            $('#sl_labor_btype').val(data.rows[0].btype);
+            $('#sl_labor_bdoctor').val(data.rows[0].bdoctor);
+            $('#txt_labor_lborn').val(data.rows[0].lborn);
+            $('#txt_labor_sborn').val(data.rows[0].sborn);
+            $('#sl_labor_preg_status').val(data.rows[0].preg_status);
+        }
+    };
     //labor detail
     $('a[data-name="labor"]').live('click', function(){
-        var hn = $(this).attr('data-hn');
+        var hn = $(this).attr('data-hn'),
+            anc_code = $(this).attr('data-anc_code'),
+            fullname = $(this).attr('data-fullname'),
+            birthdate = $(this).attr('data-birthdate'),
+            age = $(this).attr('data-age'),
+            gravida = $(this).attr('data-gravida'),
+            cid = $(this).attr('data-cid');
 
-        //show labor detail
+        $('#txt_labor_hn').val(hn);
+        $('#txt_labor_cid').val(cid);
+        $('#txt_labor_fullname').val(fullname);
+        $('#txt_labor_birthdate').val(birthdate);
+        $('#txt_labor_age').val(age);
+        $('#txt_labor_gravida').val(gravida);
+
+        //get labor detail
+        preg.labor.get_detail(anc_code);
 
         preg.modal.show_labor();
+    });
+
+    //------------------------------------------------------------------------------------------------------------------
+    //save labor
+    $('#btn_labor_do_save').click(function(){
+        var data = {};
+
+        data.hn = $('#txt_labor_hn').val();
+        data.gravida = $('#txt_labor_gravida').val();
+        data.lmp = $('#txt_labor_lmp').val();
+        data.edc = $('#txt_labor_edc').val();
+        data.bdate = $('#sl_labor_bdate').val();
+        data.bresult = $('#txt_labor_bresult_icdcode').val();
+        data.bplace = $('#sl_labor_bplace').val();
+        data.bhosp = $('#txt_labor_hospcode').val();
+        data.btype = $('#sl_labor_btype').val();
+        data.bdoctor = $('#sl_labor_bdoctor').val();
+        data.lborn = $('#txt_labor_lborn').val();
+        data.sborn = $('#txt_labor_sborn').val();
+        data.preg_status = $('#sl_labor_preg_status').val();
+
+        if(!data.hn)
+        {
+            app.alert('กรุณาระบุ HN');
+        }
+        else if(!data.gravida)
+        {
+            app.alert('กรุณาระบุ ครรภ์ที่');
+        }
+        else if(!data.lmp)
+        {
+            app.alert('กรุณาระบุ LMP');
+        }
+        else if(!data.edc)
+        {
+            app.alert('กรุณาระบุ วันครบกำหนดคลอด (EDC)');
+        }
+        else if(!data.bdate)
+        {
+            app.alert('กรุณาระบุวันที่คลอด');
+        }
+        else if(!data.bresult)
+        {
+            app.alert('กรุณาระบุการวินิจฉัยการคลอด');
+        }
+        else if(!data.bplace)
+        {
+            app.alert('กรุณาระบุสถานที่คลอด');
+        }
+        else if(!data.bhosp)
+        {
+            app.alert('กรุณาระบุสถานพยาบาลที่คลอด');
+        }
+        else if(!data.btype)
+        {
+            app.alert('กรุณาระบุประเภทการคลอด');
+        }
+        else if(!data.bdoctor)
+        {
+            app.alert('กรุณาระบุประเภทของผู้ทำคลอด');
+        }
+        else if(!data.preg_status)
+        {
+            app.alert('กรุณาระบุสถานะคลอด');
+        }
+        else
+        {
+            //do save
+            preg.ajax.labor.save(data, function(err){
+               if(err)
+               {
+                   app.alert(err);
+               }
+                else
+               {
+                   app.alert('บันทึกข้อมูลเสร็จเรียบร้อยแล้ว');
+               }
+            });
+        }
+    });
+
+    //search diagnosis
+    $('#txt_labor_bresult_icdcode').typeahead({
+        ajax: {
+            url: site_url + 'basic/search_icd_ajax',
+            timeout: 500,
+            displayField: 'name',
+            triggerLength: 3,
+            preDispatch: function(query){
+                return {
+                    query: query,
+                    csrf_token: csrf_token
+                }
+            },
+
+            preProcess: function(data){
+                if(data.success){
+                    return data.rows;
+                }else{
+                    return false;
+                }
+            }
+        },
+        updater: function(data){
+            var d = data.split('#');
+            var code = d[0],
+                name = d[1];
+
+            $('#txt_labor_bresult_icdcode').val(code);
+            $('#txt_labor_bresult_icdname').val(name);
+
+            return code;
+        }
+    });
+
+    //search hospital
+    $('#txt_labor_hospcode').typeahead({
+        ajax: {
+            url: site_url + 'basic/search_hospital_ajax',
+            timeout: 500,
+            displayField: 'fullname',
+            triggerLength: 3,
+            preDispatch: function(query){
+                return {
+                    query: query,
+                    csrf_token: csrf_token
+                }
+            },
+
+            preProcess: function(data){
+                if(data.success){
+                    return data.rows;
+                }else{
+                    return false;
+                }
+            }
+        },
+        updater: function(data){
+            var d = data.split('#');
+            var code = d[1],
+                name = d[0];
+
+            $('#txt_labor_hospcode').val(code);
+            $('#txt_labor_hospname').val(name);
+
+            return code;
+        }
     });
 
     preg.get_list();

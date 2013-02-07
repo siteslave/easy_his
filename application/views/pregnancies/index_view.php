@@ -121,10 +121,18 @@
             <div class="row-fluid">
                 <div class="span2">
                     <div class="control-group">
-                        <label class="control-label" for="txt_reg_service_date">LMP</label>
+                        <label class="control-label" for="txt_labor_gravida">ครรภ์ที่</label>
+                        <div class="controls">
+                            <input type="text" class="input-small uneditable-input" id="txt_labor_gravida" disabled="disabled">
+                        </div>
+                    </div>
+                </div>
+                <div class="span2">
+                    <div class="control-group">
+                        <label class="control-label" for="txt_labor_lmp">LMP</label>
                         <div class="controls">
                             <div class="input-append date" data-name="datepicker">
-                                <input class="input-small" id="txt_reg_service_date" type="text" disabled>
+                                <input class="input-small" id="txt_labor_lmp" type="text" disabled>
                                 <span class="add-on"><i class="icon-th"></i></span>
                             </div>
                         </div>
@@ -132,10 +140,10 @@
                 </div>
                 <div class="span2">
                     <div class="control-group">
-                        <label class="control-label" for="txt_reg_service_date">EDC (กำหนดคลอด)</label>
+                        <label class="control-label" for="txt_labor_edc">EDC (กำหนดคลอด)</label>
                         <div class="controls">
                             <div class="input-append date" data-name="datepicker">
-                                <input class="input-small" id="txt_reg_service_date" type="text" disabled>
+                                <input class="input-small" id="txt_labor_edc" type="text" disabled>
                                 <span class="add-on"><i class="icon-th"></i></span>
                             </div>
                         </div>
@@ -143,11 +151,11 @@
                 </div>
                 <div class="span3">
                     <div class="control-group">
-                        <label class="control-label" for="sl_anc_no">สถานะปัจจุบัน</label>
+                        <label class="control-label" for="sl_labor_preg_status">สถานะปัจจุบัน</label>
                         <div class="controls">
-                            <select id="sl_anc_no" class="input-medium">
-                                <option value="">ยังไม่คลอด</option>
-                                <option value="">คลอดแล้ว</option>
+                            <select id="sl_labor_preg_status" class="input-medium">
+                                <option value="0">ยังไม่คลอด</option>
+                                <option value="1">คลอดแล้ว</option>
                             </select>
                         </div>
                     </div>
@@ -156,10 +164,10 @@
             <div class="row-fluid">
                 <div class="span2">
                     <div class="control-group">
-                        <label class="control-label" for="txt_reg_service_date">วันที่คลอด</label>
+                        <label class="control-label" for="sl_labor_bdate">วันที่คลอด</label>
                         <div class="controls">
                             <div class="input-append date" data-name="datepicker">
-                                <input class="input-small" id="txt_reg_service_date" type="text" disabled>
+                                <input class="input-small" id="sl_labor_bdate" type="text" disabled>
                                 <span class="add-on"><i class="icon-th"></i></span>
                             </div>
                         </div>
@@ -167,19 +175,19 @@
                 </div>
                 <div class="span10">
                     <div class="control-group">
-                        <label class="control-label" for="txt_reg_service_date">ผลวินิจฉัยการคลอด</label>
+                        <label class="control-label" for="txt_labor_bresult_icdcode">ผลวินิจฉัยการคลอด</label>
                         <div class="controls">
-                            <input type="text" class="input-mini" id="" placeholder="...">
-                            <input type="text" class="input-xxlarge uneditable-input" disabled="disabled" id="" placeholder="...">
+                            <input type="text" class="input-mini" id="txt_labor_bresult_icdcode" placeholder="...">
+                            <input type="text" class="input-xxlarge uneditable-input" disabled="disabled" id="txt_labor_bresult_icdname" placeholder="...">
                         </div>
                     </div>
                 </div>
             </div>
             <div class="row-fluid">
                 <div class="span3">
-                    <label class="control-label" for="txt_reg_service_date">สถานที่คลอด</label>
+                    <label class="control-label" for="sl_labor_bplace">สถานที่คลอด</label>
                     <div class="controls">
-                        <select class="input-medium">
+                        <select class="input-medium" id="sl_labor_bplace">
                             <option value="">--</option>
                             <option value="1">โรงพยาบาล</option>
                             <option value="2">สถานีอนามัย</option>
@@ -191,19 +199,19 @@
                 </div>
                 <div class="span8">
                     <div class="control-group">
-                        <label class="control-label" for="txt_reg_service_date">สถานพยาบาลที่คลอด</label>
+                        <label class="control-label" for="txt_labor_hospcode">สถานพยาบาลที่คลอด</label>
                         <div class="controls">
-                            <input type="text" class="input-mini" id="" placeholder="...">
-                            <input type="text" class="input-xlarge uneditable-input" disabled="disabled" id="" placeholder="...">
+                            <input type="text" class="input-mini" id="txt_labor_hospcode" placeholder="...">
+                            <input type="text" class="input-xlarge uneditable-input" disabled="disabled" id="txt_labor_hospname" placeholder="...">
                         </div>
                     </div>
                 </div>
             </div>
             <div class="row-fluid">
                 <div class="span3">
-                    <label class="control-label" for="txt_reg_service_date">วิธีการคลอด</label>
+                    <label class="control-label" for="sl_labor_btype">วิธีการคลอด</label>
                     <div class="controls">
-                        <select class="input-medium">
+                        <select class="input-medium" id="sl_labor_btype">
                             <option value="">--</option>
                             <option value="1">Normal</option>
                             <option value="2">Cesarean</option>
@@ -215,9 +223,9 @@
                     </div>
                 </div>
                 <div class="span4">
-                    <label class="control-label" for="txt_reg_service_date">ประเภทผู้ทำคลอด</label>
+                    <label class="control-label" for="sl_labor_bdoctor">ประเภทผู้ทำคลอด</label>
                     <div class="controls">
-                        <select class="input-xlarge">
+                        <select class="input-xlarge" id="sl_labor_bdoctor">
                             <option value="">--</option>
                             <option value="1">แพทย์</option>
                             <option value="2">พยาบาล</option>
@@ -229,15 +237,15 @@
                     </div>
                 </div>
                 <div class="span1">
-                    <label class="control-label" for="txt_reg_service_date">เกิดมีชีพ</label>
+                    <label class="control-label" for="txt_labor_lborn">เกิดมีชีพ</label>
                     <div class="controls">
-                        <input type="text" class="input-mini" data-type="number">
+                        <input type="text" class="input-mini" data-type="number" id="txt_labor_lborn">
                     </div>
                 </div>
                 <div class="span1">
-                    <label class="control-label" for="txt_reg_service_date">เกิดไร้ชีพ</label>
+                    <label class="control-label" for="txt_labor_sborn">เกิดไร้ชีพ</label>
                     <div class="controls">
-                        <input type="text" class="input-mini" data-type="number">
+                        <input type="text" class="input-mini" data-type="number" id="txt_labor_sborn">
                     </div>
                 </div>
             </div>
@@ -245,7 +253,7 @@
 
     </div>
     <div class="modal-footer">
-        <a href="#" class="btn btn-success"><i class="icon-plus-sign icon-white"></i> บันทึกข้อมูล</a>
+        <a href="#" class="btn btn-success" id="btn_labor_do_save"><i class="icon-plus-sign icon-white"></i> บันทึกข้อมูล</a>
         <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</a>
     </div>
 </div>

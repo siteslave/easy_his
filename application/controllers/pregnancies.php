@@ -422,6 +422,93 @@ class Pregnancies extends CI_Controller
 
         render_json($json);
     }
+
+    //------------------------------------------------------------------------------------------------------------------
+    // Labor module
+    //------------------------------------------------------------------------------------------------------------------
+
+    /**
+     * Save labor data
+     */
+    public function labor_save()
+    {
+        $data = $this->input->post('data');
+
+        if(empty($data))
+        {
+            $json = '{"success": false ,"msg": "No data for save."}';
+        }
+        else
+        {
+            //save labor data
+            $rs = $this->preg->labor_save($data);
+
+            if($rs)
+            {
+                $json = '{"success": true}';
+            }
+            else
+            {
+                $json = '{"success": false, "msg": }';
+            }
+        }
+
+        render_json($json);
+    }
+
+    /**
+     * Get labor detail
+     */
+
+    public function labor_get_detail()
+    {
+        $anc_code = $this->input->post('anc_code');
+
+        if(empty($anc_code))
+        {
+            $json = '{"success": false, "msg": "ANC Code not found."}';
+        }
+        else
+        {
+            $rs = $this->preg->labor_get_detail($anc_code);
+
+            if($rs)
+            {
+                $arr_result = array();
+                foreach($rs as $r)
+                {
+                    $obj = new stdClass();
+                    $obj->gravida = $r['gravida'];
+                    $obj->lmp = to_js_date($r['labor']['lmp']);
+                    $obj->edc = to_js_date($r['labor']['edc']);
+                    $obj->bdate = to_js_date($r['labor']['bdate']);
+                    $obj->icd_code = $r['labor']['bresult'];
+                    $obj->icd_name = get_diag_name($r['labor']['bresult']);
+                    $obj->bplace = $r['labor']['bplace'];
+                    $obj->bhosp = $r['labor']['bhosp'];
+                    $obj->bhosp_name = get_hospital_name($r['labor']['bhosp']);
+                    $obj->btype = $r['labor']['btype'];
+                    $obj->bdoctor = $r['labor']['bdoctor'];
+                    $obj->sborn = $r['labor']['sborn'];
+                    $obj->lborn = $r['labor']['lborn'];
+                    $obj->preg_status = $r['preg_status'];
+
+                    $arr_result[] = $obj;
+                }
+
+                $rows = json_encode($arr_result);
+
+                $json = '{"success": true, "rows": '.$rows.'}';
+            }
+            else
+            {
+                $json = '{"success": false, "msg": "No data."}';
+            }
+        }
+
+        render_json($json);
+    }
+
 }
 
 //End file
