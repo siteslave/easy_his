@@ -315,11 +315,11 @@ class Pregnancies extends CI_Controller
         render_json($json);
     }
 
-    public function anc_get_gravida()
+    public function get_gravida()
     {
         $hn = $this->input->post('hn');
 
-        $gravidas = $this->preg->anc_get_gravida($hn);
+        $gravidas = $this->preg->get_gravida($hn);
 
         $json = '{"success": true, "rows": '.json_encode($gravidas).'}';
 
@@ -373,10 +373,11 @@ class Pregnancies extends CI_Controller
     public function anc_get_history()
     {
         $hn = $this->input->post('hn');
+        $gravida = $this->input->post('gravida');
 
         if(!empty($hn))
         {
-            $rs = $this->preg->anc_get_history($hn);
+            $rs = $this->preg->anc_get_history($hn, $gravida);
             $gravida = $rs[0]['gravida'];
 
             if($rs)
@@ -509,6 +510,208 @@ class Pregnancies extends CI_Controller
         render_json($json);
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+    /**
+     * Save Postnatal service
+     */
+    public function postnatal_save_service()
+    {
+        $data = $this->input->post('data');
+
+        if(empty($data))
+        {
+            $json = '{"success": false, "msg": "ไม่พบข้อมูลสำหรับบันทึก"}';
+        }
+        else
+        {
+            //check duplicated
+            $duplicated = $this->preg->postnatal_check_visit_duplicated($data['hn'], $data['vn'], $data['gravida']);
+
+            $this->preg->owner_id = $this->owner_id;
+            $this->preg->user_id = $this->user_id;
+            $this->preg->provider_id = $this->provider_id;
+
+            if($duplicated)
+            {
+                //$json = '{"success": false, "msg": "ข้อมูลซ้ำ"}';
+                //do update
+                $rs = $this->preg->postnatal_update_service($data);
+            }
+            else
+            {
+                $rs = $this->preg->postnatal_save_service($data);
+            }
+
+            if($rs)
+            {
+                $json = '{"success": true}';
+            }
+            else
+            {
+                $json = '{"success": false, "msg": "ไม่สามารถบันทึกข้อมูลได้"}';
+            }
+
+        }
+
+        render_json($json);
+    }
+    public function postnatal_get_history()
+    {
+        $hn = $this->input->post('hn');
+
+        if(!empty($hn))
+        {
+            $rs = $this->preg->postnatal_get_history($hn);
+            $gravida = $rs[0]['gravida'];
+
+            if($rs)
+            {
+                $arr_result = array();
+
+                if(isset($rs[0]['postnatal']))
+                {
+                    foreach($rs[0]['postnatal'] as $r)
+                    {
+                        $obj = new stdClass();
+                        $visit = $this->service->get_visit_info($r['vn']);
+                        $obj->clinic_name = get_clinic_name(get_first_object($visit['clinic']));
+                        $obj->date_serv = $visit['date_serv'];
+                        $obj->time_serv = $visit['time_serv'];
+
+                        $obj->ppresult = $r['ppresult'];
+                        $obj->sugar = $r['sugar'];
+                        $obj->albumin = $r['albumin'];
+                        $obj->perineal = $r['perineal'];
+                        $obj->amniotic_fluid = $r['amniotic_fluid'];
+                        $obj->uterus = $r['uterus'];
+                        $obj->tits = $r['tits'];
+
+                        $obj->provider_name = get_provider_name_by_id(get_first_object($r['provider_id']));
+                        $obj->owner_name = get_owner_name(get_first_object($r['owner_id']));
+
+                        $arr_result[] = $obj;
+                    }
+
+                    $rows = json_encode($arr_result);
+                    $json = '{"success": true, "rows": '.$rows.', "gravida": "'.$gravida.'"}';
+                }
+                else
+                {
+                    $json = '{"success": false, "msg": "No result found"}';
+                }
+
+            }
+            else
+            {
+                $json = '{"success": false, "msg": "เกิดข้อผิดพลาดในการค้นหาข้อมูล"}';
+            }
+        }
+        else
+        {
+            $json = '{"success": false, "msg": "ไม่พบข้อมูล"}';
+        }
+
+        render_json($json);
+    }
+
+    public function postnatal_get_detail()
+    {
+        $data = $this->input->post('data');
+
+        if(empty($data))
+        {
+            $json = '{"success": false,"msg": "ไม่พบข้อมูลเพื่อค้นหา"}';
+        }
+        else
+        {
+            $rs = $this->preg->postnatal_get_detail($data['hn'], $data['vn']);
+
+            if($rs)
+            {
+                $rows = json_encode($rs);
+                $json = '{"success": true, "rows": '.$rows.'}';
+            }
+            else
+            {
+                $json = '{"success": false, "msg": "ไม่พบข้อมูล"}';
+            }
+        }
+
+        render_json($json);
+    }
+    //------------------------------------------------------------------------------------------------------------------
+    /**
+     * Anc info module
+     */
+
+    public function save_anc_info()
+    {
+        $data = $this->input->post('data');
+
+        if(empty($data))
+        {
+            $json = '{"success": false, "msg": "No data for save."}';
+        }
+        else
+        {
+            $this->preg->owner_id = $this->owner_id;
+            $this->preg->user_id = $this->user_id;
+            $this->preg->provider_id = $this->provider_id;
+
+            $rs = $this->preg->save_anc_info($data);
+
+            if($rs)
+            {
+                $json = '{"success": true}';
+            }
+            else
+            {
+                $json = '{"success": false, "msg": "ไม่สามารถบันทึกข้อมูลได้"}';
+            }
+        }
+
+        render_json($json);
+    }
+
+    public function get_anc_info()
+    {
+        $anc_code = $this->input->post('anc_code');
+
+        if(empty($anc_code))
+        {
+            $json = '{"success": false, "msg": "ANC Code not found."}';
+        }
+        else
+        {
+            $rs = $this->preg->get_anc_info($anc_code);
+
+            if($rs)
+            {
+                $obj = new stdClass();
+                $obj->lmp = to_js_date($rs['prenatal']['lmp']);
+                $obj->edc = to_js_date($rs['prenatal']['edc']);
+                $obj->preg_status = $rs['preg_status'];
+                $obj->vdrl = $rs['prenatal']['vdrl'];
+                $obj->hb = $rs['prenatal']['hb'];
+                $obj->hiv = $rs['prenatal']['hiv'];
+                $obj->hct_date = to_js_date($rs['prenatal']['hct_date']);
+                $obj->hct = $rs['prenatal']['hct'];
+                $obj->thalassemia = $rs['prenatal']['thalassemia'];
+                $obj->do_export = $rs['prenatal']['do_export'];
+                $obj->do_export_date = to_js_date($rs['prenatal']['do_export_date']);
+
+
+                $rows = json_encode($obj);
+                $json = '{"success": true, "rows": '.$rows.'}';
+            }
+            else
+            {
+                $json = '{"success": false, "msg": "No result."}';
+            }
+        }
+
+        render_json($json);
+    }
 }
 
 //End file

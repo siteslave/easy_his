@@ -127,39 +127,6 @@
                         </div>
                     </div>
                 </div>
-                <div class="span2">
-                    <div class="control-group">
-                        <label class="control-label" for="txt_labor_lmp">LMP</label>
-                        <div class="controls">
-                            <div class="input-append date" data-name="datepicker">
-                                <input class="input-small" id="txt_labor_lmp" type="text" disabled>
-                                <span class="add-on"><i class="icon-th"></i></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="span2">
-                    <div class="control-group">
-                        <label class="control-label" for="txt_labor_edc">EDC (กำหนดคลอด)</label>
-                        <div class="controls">
-                            <div class="input-append date" data-name="datepicker">
-                                <input class="input-small" id="txt_labor_edc" type="text" disabled>
-                                <span class="add-on"><i class="icon-th"></i></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="span3">
-                    <div class="control-group">
-                        <label class="control-label" for="sl_labor_preg_status">สถานะปัจจุบัน</label>
-                        <div class="controls">
-                            <select id="sl_labor_preg_status" class="input-medium">
-                                <option value="0">ยังไม่คลอด</option>
-                                <option value="1">คลอดแล้ว</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
             </div>
             <div class="row-fluid">
                 <div class="span2">
@@ -257,6 +224,220 @@
         <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</a>
     </div>
 </div>
+
+<!-- anc info -->
+<div class="modal hide fade" id="mdl_anc_info">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>ข้อมูลการฝากครรภ์</h3>
+    </div>
+    <div class="modal-body">
+        <form class="form-inline well">
+            <label>HN</label>
+            <input type="text" class="input-small uneditable-input" disabled="disabled" id="txt_anc_info_hn">
+            <label>CID</label>
+            <input type="text" class="input-medium uneditable-input" disabled="disabled" id="txt_anc_info_cid">
+            <label>ชื่อ - สกุล</label>
+            <input type="text" class="input-medium uneditable-input" disabled="disabled" id="txt_anc_info_fullname">
+            <label>วันเกิด</label>
+            <input type="text" class="input-small uneditable-input" disabled="disabled" id="txt_anc_info_birthdate">
+            <label>อายุ (ปี)</label>
+            <input type="text" class="input-mini uneditable-input" disabled="disabled" id="txt_anc_info_age">
+        </form>
+
+        <div class="tabbable">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab_anc_info1" data-toggle="tab"><i class="icon-info-sign"></i> ข้อมูลการฝากครรภ์</a></li>
+                <li><a href="#tab_anc_info2" data-toggle="tab"><i class="icon-refresh"></i> ประวัติการรับบริการ</a></li>
+            </ul>
+
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab_anc_info1">
+                    <form action="#">
+                        <div class="row-fluid">
+                            <div class="span2">
+                                <div class="control-group">
+                                    <label class="control-label" for="txt_anc_info_gravida">ครรภ์ที่</label>
+                                    <div class="controls">
+                                        <input type="text" class="input-small uneditable-input" id="txt_anc_info_gravida" disabled="disabled">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span2">
+                                <div class="control-group">
+                                    <label class="control-label" for="txt_anc_info_lmp">LMP</label>
+                                    <div class="controls">
+                                        <div class="input-append date" data-name="datepicker">
+                                            <input class="input-small" id="txt_anc_info_lmp" type="text" disabled>
+                                            <span class="add-on"><i class="icon-th"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span2">
+                                <div class="control-group">
+                                    <label class="control-label" for="txt_anc_info_edc">EDC (กำหนดคลอด)</label>
+                                    <div class="controls">
+                                        <div class="input-append date" data-name="datepicker">
+                                            <input class="input-small" id="txt_anc_info_edc" type="text" disabled>
+                                            <span class="add-on"><i class="icon-th"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span3">
+                                <div class="control-group">
+                                    <label class="control-label" for="sl_anc_info_preg_status">สถานะปัจจุบัน</label>
+                                    <div class="controls">
+                                        <select id="sl_anc_info_preg_status" class="input-medium">
+                                            <option value="0">ยังไม่คลอด</option>
+                                            <option value="1">คลอดแล้ว</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row-fluid">
+                            <div class="span3">
+                                <div class="control-group">
+                                    <label class="control-label" for="sl_anc_info_vdrl">VDRL</label>
+                                    <div class="controls">
+                                        <select id="sl_anc_info_vdrl" class="input-medium">
+                                            <option value="1">ปกติ</option>
+                                            <option value="2">ผิดปกติ</option>
+                                            <option value="3">ไม่ตรวจ</option>
+                                            <option value="4">รอผลตรวจ</option>
+                                            <option value="5">ไม่ทราบ</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span3">
+                                <div class="control-group">
+                                    <label class="control-label" for="sl_anc_info_hb">HB</label>
+                                    <div class="controls">
+                                        <select id="sl_anc_info_hb" class="input-medium">
+                                            <option value="1">ปกติ</option>
+                                            <option value="2">ผิดปกติ</option>
+                                            <option value="3">ไม่ตรวจ</option>
+                                            <option value="4">รอผลตรวจ</option>
+                                            <option value="5">ไม่ทราบ</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span3">
+                                <div class="control-group">
+                                    <label class="control-label" for="sl_anc_info_hiv">HIV</label>
+                                    <div class="controls">
+                                        <select id="sl_anc_info_hiv" class="input-medium">
+                                            <option value="1">ปกติ</option>
+                                            <option value="2">ผิดปกติ</option>
+                                            <option value="3">ไม่ตรวจ</option>
+                                            <option value="4">รอผลตรวจ</option>
+                                            <option value="5">ไม่ทราบ</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row-fluid">
+                            <div class="span3">
+                                <div class="control-group">
+                                    <label class="control-label" for="txt_anc_info_hct_date">วันที่ตรวจ HCT</label>
+                                    <div class="controls">
+                                        <div class="input-append date" data-name="datepicker">
+                                            <input class="input-small" id="txt_anc_info_hct_date" type="text" disabled>
+                                            <span class="add-on"><i class="icon-th"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span3">
+                                <div class="control-group">
+                                    <label class="control-label" for="sl_anc_info_hct">ผลตรวจ HCT</label>
+                                    <div class="controls">
+                                        <select id="sl_anc_info_hct" class="input-medium">
+                                            <option value="1">ปกติ</option>
+                                            <option value="2">ผิดปกติ</option>
+                                            <option value="3">ไม่ตรวจ</option>
+                                            <option value="4">รอผลตรวจ</option>
+                                            <option value="5">ไม่ทราบ</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span3">
+                                <div class="control-group">
+                                    <label class="control-label" for="sl_anc_info_thalassemia">ธาลัสซีเมีย</label>
+                                    <div class="controls">
+                                        <select id="sl_anc_info_thalassemia" class="input-medium">
+                                            <option value="1">ปกติ</option>
+                                            <option value="2">ผิดปกติ</option>
+                                            <option value="3">ไม่ตรวจ</option>
+                                            <option value="4">รอผลตรวจ</option>
+                                            <option value="5">ไม่ทราบ</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row-fluid">
+                            <div class="span1">
+                                <div class="control-group">
+                                    <label class="control-label" for="chk_anc_info_do_export">บังคับส่ง</label>
+                                    <div class="controls">
+                                        <label class="checkbox">
+                                            <input type="checkbox" id="chk_anc_info_do_export">
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span2">
+                                <div class="control-group">
+                                    <label class="control-label" for="txt_anc_info_export_date">ส่งออกวันที่</label>
+                                    <div class="controls">
+                                        <div class="input-append date" data-name="datepicker">
+                                            <input class="input-small" id="txt_anc_info_export_date" type="text" disabled>
+                                            <span class="add-on"><i class="icon-th"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <a href="#" class="btn btn-success" id="btn_anc_info_save"><i class="icon-plus-sign icon-white"></i> บันทึกข้อมูล</a>
+                    </form>
+                </div>
+
+                <div class="tab-pane" id="tab_anc_info2">
+                    <table class="table table-striped" id="tbl_anc_history">
+                        <thead>
+                        <tr>
+                            <th>วันที่</th>
+                            <th>หน่วยบริการ</th>
+                            <!--<th>ครรภ์ที่</th>-->
+                            <th>ANC ช่วงที่</th>
+                            <th>อายุครรภ์ (สัปดาห์)</th>
+                            <th>ผลตรวจ</th>
+                            <th>ผู้ให้บริการ</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td colspan="6">...</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</a>
+    </div>
+</div>
+<!-- /anc info -->
 
 <script type="text/javascript">
     head.js('<?php echo base_url(); ?>assets/apps/js/apps.pregnancies.index.js');
