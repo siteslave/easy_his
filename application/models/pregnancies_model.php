@@ -193,14 +193,15 @@ class Pregnancies_model extends CI_Model
             ->set(array(
                         //'labor.lmp'      => to_string_date($data['lmp']),
                         //'labor.edc'      => to_string_date($data['edc']),
-                        'labor.bdate'    => to_string_date($data['bdate']),
-                        'labor.bresult'  => $data['bresult'],
-                        'labor.bplace'   => $data['bplace'],
-                        'labor.bhosp'    => $data['bhosp'],
-                        'labor.btype'    => $data['btype'],
-                        'labor.bdoctor'  => $data['bdoctor'],
-                        'labor.lborn'    => $data['lborn'],
-                        'labor.sborn'    => $data['sborn']
+                        'labor.bdate'   => to_string_date($data['bdate']),
+                        'labor.btime'   => $data['btime'],
+                        'labor.bresult' => $data['bresult'],
+                        'labor.bplace'  => $data['bplace'],
+                        'labor.bhosp'   => $data['bhosp'],
+                        'labor.btype'   => $data['btype'],
+                        'labor.bdoctor' => $data['bdoctor'],
+                        'labor.lborn'   => $data['lborn'],
+                        'labor.sborn'   => $data['sborn']
         ))->update('pregnancies');
 
         return $rs;
@@ -220,6 +221,23 @@ class Pregnancies_model extends CI_Model
             ->get('pregnancies');
 
         return $rs;
+    }
+
+    /**
+     * Get labor detail
+     *
+     * @param   string  $hn
+     * @param   string  $gravida
+     * @return  mixed
+     */
+    public function labor_get_detail_by_gravida($hn, $gravida)
+    {
+        $rs = $this->mongo_db
+            ->select(array('gravida', 'preg_status', 'labor'))
+            ->where(array('gravida' => (string) $gravida, 'hn' => (string) $hn))
+            ->get('pregnancies');
+
+        return count($rs) > 0 ? $rs[0] : NULL;
     }
 
     //------------------------------------------------------------------------------------------------------------------

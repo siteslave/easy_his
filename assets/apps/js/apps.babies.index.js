@@ -63,68 +63,51 @@ head.ready(function(){
                 err ? cb(err) : cb(null, data);
             });
         },
-        anc: {
-            get_info: function(anc_code, cb){
-                var url = 'babies/get_anc_info',
-                    params = {
-                        anc_code: anc_code
-                    };
 
-                app.ajax(url, params, function(err, data){
-                    err ? cb(err) : cb(null, data);
-                });
-            },
-            get_history: function(hn, gravida, cb){
-                var url = 'babies/anc_get_history',
-                    params = {
-                        hn: hn,
-                        gravida: gravida
-                    };
+        get_labor_detail: function(hn, gravida, cb){
+            var url = 'babies/get_labor_detail',
+                params = {
+                    hn: hn,
+                    gravida: gravida
+                };
 
-                app.ajax(url, params, function(err, data){
-                    err ? cb(err) : cb(null, data);
-                });
-            },
-            save_info: function(data, cb){
-                var url = 'babies/save_anc_info',
-                    params = {
-                        data: data
-                    };
-
-                app.ajax(url, params, function(err, data){
-                    err ? cb(err) : cb(null, data);
-                });
-            }
+            app.ajax(url, params, function(err, data){
+                err ? cb(err) : cb(null, data);
+            });
         },
+        get_babies_detail: function(hn, cb){
+            var url = 'babies/get_babies_detail',
+                params = {
+                    hn: hn
+                };
 
-        labor: {
-            save: function(data, cb){
-                var url = 'babies/labor_save',
-                    params = {
-                        data: data
-                    };
+            app.ajax(url, params, function(err, data){
+                err ? cb(err) : cb(null, data);
+            });
+        },
+        get_gravida: function(hn, cb){
+            var url = 'pregnancies/get_gravida',
+                params = {
+                    hn: hn
+                };
 
-                app.ajax(url, params, function(err, data){
-                    err ? cb(err) : cb(null, data);
-                });
-            },
-            get_detail: function(anc_code, cb)
-            {
-                var url = 'babies/labor_get_detail',
-                    params = {
-                        anc_code: anc_code
-                    };
-
-                app.ajax(url, params, function(err, data){
-                    err ? cb(err) : cb(null, data);
-                });
-            }
+            app.ajax(url, params, function(err, data){
+                err ? cb(err) : cb(null, data);
+            });
         }
-
-
-
     };
 
+    babies.set_gravida_select = function(data)
+    {
+        $('#sl_labor_gravida').empty();
+        $('#sl_labor_gravida').append('<option value="">- ระบุ -</option>');
+        _.each(data.rows, function(v){
+            $('#sl_labor_gravida').append(
+                '<option value="'+ v.gravida +'">' + v.gravida + '</option>'
+            );
+        });
+
+    };
     babies.modal = {
         show_register: function()
         {
@@ -181,25 +164,24 @@ head.ready(function(){
             _.each(data.rows, function(v){
                 $('#tbl_list > tbody').append(
                     '<tr>' +
-                        '<td>'+ v.anc_code +'</td>' +
                         '<td>' + v.hn + '</td>' +
                         '<td>' + app.clear_null(v.cid) + '</td>' +
                         '<td>' + v.first_name +' '+ v.last_name + '</td>' +
                         '<td>' + app.mongo_to_thai_date(v.birthdate) + '</td>' +
                         '<td>' + v.age + '</td>' +
                         '<td>' + app.mongo_to_thai_date(v.reg_date) + '</td>' +
-                        '<td>'+ v.gravida +'</td>' +
-                        '<td>'+ v.preg_status +'</td>' +
+                        '<td>' + app.clear_null(v.anc_code) +'</td>' +
+                        '<td>' + app.clear_null(v.mother_name) +'</td>' +
                         '<td>' +
                         '<div class="btn-group">' +
                         '<a href="javascript:void(0);" class="btn" data-fullname="'+ v.first_name + ' ' + v.last_name +'" ' +
                         'data-birthdate="'+app.mongo_to_thai_date(v.birthdate)+'" data-age="'+ v.age+'" data-hn="'+ v.hn+'" ' +
-                        'data-anc_code="'+ v.anc_code+'" data-gravida="'+ v.gravida +'" data-name="labor" data-hn="' + v.hn + '" ' +
-                        'data-cid="' + v.cid +'" title="ข้อมูลการคลอด"><i class="icon-check"></i></a>' +
+                        'data-anc_code="'+ v.anc_code+'" data-name="labor" data-hn="' + v.hn + '" ' +
+                        'data-cid="' + v.cid +'" data-gravida="'+ v.gravida +'" title="ข้อมูลการคลอด"><i class="icon-check"></i></a>' +
                         '<a href="javascript:void(0);" class="btn" data-fullname="'+ v.first_name + ' ' + v.last_name +'" ' +
                         'data-birthdate="'+app.mongo_to_thai_date(v.birthdate)+'" data-age="'+ v.age+'" data-hn="'+ v.hn+'" ' +
-                        'data-anc_code="'+ v.anc_code+'" data-gravida="'+ v.gravida +'" data-name="anc_info" data-hn="' + v.hn + '" ' +
-                        'data-cid="' + v.cid +'" title="ข้อมูลการฝากครรภ์"><i class="icon-book"></i></a>' +
+                        'data-anc_code="'+ v.anc_code+'" data-name="anc_info" data-hn="' + v.hn + '" ' +
+                        'data-cid="' + v.cid +'" data-gravida="'+ v.gravida +'" title="ข้อมูลการฝากครรภ์"><i class="icon-book"></i></a>' +
                         '</div>' +
                         '</td>' +
                         '</tr>'
@@ -207,7 +189,7 @@ head.ready(function(){
             });
         }else{
             $('#tbl_list > tbody').append(
-                '<tr><td colspan="8">ไม่พบรายการ</td></tr>'
+                '<tr><td colspan="9">ไม่พบรายการ</td></tr>'
             );
         }
     };
@@ -403,9 +385,9 @@ head.ready(function(){
     });
 
     babies.labor = {
-        get_detail: function(anc_code)
+        get_detail: function(hn, gravida)
         {
-            babies.ajax.labor.get_detail(anc_code, function(err, data){
+            babies.ajax.get_labor_detail(hn, gravida, function(err, data){
                 if(err)
                 {
                     app.alert(err);
@@ -419,19 +401,29 @@ head.ready(function(){
 
         set_detail: function(data)
         {
-            //$('#txt_labor_lmp').val(data.rows[0].lmp);
-            //$('#txt_labor_edc').val(data.rows[0].edc);
-            $('#sl_labor_bdate').val(data.rows[0].bdate);
-            $('#txt_labor_bresult_icdcode').val(data.rows[0].icd_code);
-            $('#txt_labor_bresult_icdname').val(data.rows[0].icd_name);
-            $('#sl_labor_bplace').val(data.rows[0].bplace);
-            $('#txt_labor_hospcode').val(data.rows[0].bhosp);
-            $('#txt_labor_hospname').val(data.rows[0].bhosp_name);
-            $('#sl_labor_btype').val(data.rows[0].btype);
-            $('#sl_labor_bdoctor').val(data.rows[0].bdoctor);
-            $('#txt_labor_lborn').val(data.rows[0].lborn);
-            $('#txt_labor_sborn').val(data.rows[0].sborn);
-            //$('#sl_labor_preg_status').val(data.rows[0].preg_status);
+            $('#txt_labor_bdate').val(data.rows.bdate);
+            $('#txt_labor_bresult_icdcode').val(data.rows.bresult_code);
+            $('#txt_labor_bresult_icdname').val(data.rows.bresult_name);
+            $('#sl_labor_bplace').val(data.rows.bplace);
+            $('#txt_labor_hospcode').val(data.rows.bhosp);
+            $('#txt_labor_hospname').val(data.rows.bhosp_name);
+            $('#sl_labor_btype').val(data.rows.btype);
+            $('#sl_labor_bdoctor').val(data.rows.bdoctor);
+            $('#txt_labor_gravida').val(data.rows.gravida);
+            $('#txt_labor_btime').val(data.rows.btime);
+        },
+        clear_form: function()
+        {
+            $('#txt_labor_bdate').val('');
+            $('#txt_labor_bresult_icdcode').val('');
+            $('#txt_labor_bresult_icdname').val('');
+            $('#sl_labor_bplace').val('');
+            $('#txt_labor_hospcode').val('');
+            $('#txt_labor_hospname').val('');
+            $('#sl_labor_btype').val('');
+            $('#sl_labor_bdoctor').val('');
+            $('#txt_labor_gravida').val('');
+            $('#txt_labor_btime').val('');
         }
     };
     //labor detail
@@ -441,93 +433,37 @@ head.ready(function(){
             fullname = $(this).attr('data-fullname'),
             birthdate = $(this).attr('data-birthdate'),
             age = $(this).attr('data-age'),
-            gravida = $(this).attr('data-gravida'),
-            cid = $(this).attr('data-cid');
+            cid = $(this).attr('data-cid')
+            gravida = $(this).attr('data-gravida');
 
         $('#txt_labor_hn').val(hn);
         $('#txt_labor_cid').val(cid);
         $('#txt_labor_fullname').val(fullname);
         $('#txt_labor_birthdate').val(birthdate);
         $('#txt_labor_age').val(age);
-        $('#txt_labor_gravida').val(gravida);
 
-        //get labor detail
-        babies.labor.get_detail(anc_code);
+        babies.labor.clear_form();
 
         babies.modal.show_labor();
     });
 
-    //------------------------------------------------------------------------------------------------------------------
-    //save labor
-    $('#btn_labor_do_save').click(function(){
-        var data = {};
+    babies.get_gravida = function(hn)
+    {
+        babies.ajax.get_gravida(hn, function(err, data){
+           if(err)
+           {
+               app.alert(err);
+           }
+            else
+           {
+               babies.set_gravida_select(data);
+           }
+        });
+    };
 
-        data.hn = $('#txt_labor_hn').val();
-        data.gravida = $('#txt_labor_gravida').val();
-        //data.lmp = $('#txt_labor_lmp').val();
-        //data.edc = $('#txt_labor_edc').val();
-        data.bdate = $('#sl_labor_bdate').val();
-        data.bresult = $('#txt_labor_bresult_icdcode').val();
-        data.bplace = $('#sl_labor_bplace').val();
-        data.bhosp = $('#txt_labor_hospcode').val();
-        data.btype = $('#sl_labor_btype').val();
-        data.bdoctor = $('#sl_labor_bdoctor').val();
-        data.lborn = $('#txt_labor_lborn').val();
-        data.sborn = $('#txt_labor_sborn').val();
-        //data.preg_status = $('#sl_labor_preg_status').val();
-
-        if(!data.hn)
-        {
-            app.alert('กรุณาระบุ HN');
-        }
-        else if(!data.gravida)
-        {
-            app.alert('กรุณาระบุ ครรภ์ที่');
-        }
-        else if(!data.bdate)
-        {
-            app.alert('กรุณาระบุวันที่คลอด');
-        }
-        else if(!data.bresult)
-        {
-            app.alert('กรุณาระบุการวินิจฉัยการคลอด');
-        }
-        else if(!data.bplace)
-        {
-            app.alert('กรุณาระบุสถานที่คลอด');
-        }
-        else if(!data.bhosp)
-        {
-            app.alert('กรุณาระบุสถานพยาบาลที่คลอด');
-        }
-        else if(!data.btype)
-        {
-            app.alert('กรุณาระบุประเภทการคลอด');
-        }
-        else if(!data.bdoctor)
-        {
-            app.alert('กรุณาระบุประเภทของผู้ทำคลอด');
-        }
-        else
-        {
-            //do save
-            babies.ajax.labor.save(data, function(err){
-               if(err)
-               {
-                   app.alert(err);
-               }
-                else
-               {
-                   app.alert('บันทึกข้อมูลเสร็จเรียบร้อยแล้ว');
-               }
-            });
-        }
-    });
-
-    //search diagnosis
-    $('#txt_labor_bresult_icdcode').typeahead({
+    $('#txt_labor_mother_name').typeahead({
         ajax: {
-            url: site_url + 'basic/search_icd_ajax',
+            url: site_url + 'person/search_person_ajax',
             timeout: 500,
             displayField: 'name',
             triggerLength: 3,
@@ -548,200 +484,31 @@ head.ready(function(){
         },
         updater: function(data){
             var d = data.split('#');
-            var code = d[0],
+            var hn = d[0],
                 name = d[1];
 
-            $('#txt_labor_bresult_icdcode').val(code);
-            $('#txt_labor_bresult_icdname').val(name);
+            $('#txt_labor_mother_hn').val(hn);
+            $('#txt_labor_mother_name').val(name);
 
-            return code;
+            babies.get_gravida(hn);
+
+            return name;
         }
     });
 
-    //search hospital
-    $('#txt_labor_hospcode').typeahead({
-        ajax: {
-            url: site_url + 'basic/search_hospital_ajax',
-            timeout: 500,
-            displayField: 'fullname',
-            triggerLength: 3,
-            preDispatch: function(query){
-                return {
-                    query: query,
-                    csrf_token: csrf_token
-                }
-            },
-
-            preProcess: function(data){
-                if(data.success){
-                    return data.rows;
-                }else{
-                    return false;
-                }
-            }
-        },
-        updater: function(data){
-            var d = data.split('#');
-            var code = d[1],
-                name = d[0];
-
-            $('#txt_labor_hospcode').val(code);
-            $('#txt_labor_hospname').val(name);
-
-            return code;
-        }
-    });
-
-    //------------------------------------------------------------------------------------------------------------------
-    //Anc info
-    babies.anc_info = {
-        get_detail: function(anc_code)
-        {
-            babies.ajax.anc.get_info(anc_code, function(err, data){
-                if(err)
-                {
-                    app.alert('ไม่พบข้อมูลการฝากครรภ์');
-                }
-                else
-                {
-                    babies.anc_info.set_detail(data);
-                }
-            });
-        },
-
-        set_detail: function(data)
-        {
-            $('#txt_anc_info_lmp').val(data.rows.lmp);
-            $('#txt_anc_info_edc').val(data.rows.edc);
-            $('#sl_anc_info_preg_status').val(data.rows.preg_status);
-            $('#sl_anc_info_vdrl').val(data.rows.vdrl);
-            $('#sl_anc_info_hb').val(data.rows.hb);
-            $('#sl_anc_info_hiv').val(data.rows.hiv);
-            $('#txt_anc_info_hct_date').val(data.rows.hct_date);
-            $('#sl_anc_info_hct').val(data.rows.hct);
-            $('#sl_anc_info_thalassemia').val(data.rows.thalassemia);
-            //$('#chk_anc_info_do_export').attr('checked') ? '1' : '0';
-            data.rows.do_export == '1' ? $('#chk_anc_info_do_export').attr('checked', 'checked') : $('#chk_anc_info_do_export').removeAttr('checked');
-            $('#txt_anc_info_export_date').val(data.rows.do_export_date);
-        },
-
-        get_history_list: function(hn, gravida)
-        {
-            babies.ajax.anc.get_history(hn, gravida, function(err, data){
-               if(err)
-               {
-                   app.alert(err);
-               }
-                else
-               {
-                   babies.anc_info.set_history_list(data);
-               }
-            });
-        },
-        set_history_list: function(data)
-        {
-            $('#tbl_anc_history > tbody').empty();
-
-            if(data)
-            {
-                _.each(data.rows, function(v){
-
-                    var res = v.anc_result == '1' ? 'ปกติ' : v.anc_result == '2' ? 'ผิดปกติ' : 'ไม่ทราบ';
-                    $('#tbl_anc_history > tbody').append(
-                        '<tr>' +
-                            '<td>' + app.mongo_to_thai_date(v.date_serv) + '</td>' +
-                            '<td>' + app.clear_null(v.owner_name) + '</td>' +
-                            //'<td>' + app.clear_null(data.gravida) + '</td>' +
-                            '<td>' + app.clear_null(v.anc_no) + '</td>' +
-                            '<td>' + app.clear_null(v.ga) + '</td>' +
-                            '<td>' + app.clear_null(res) + '</td>' +
-                            '<td>' + app.clear_null(v.provider_name) + '</td>' +
-                            '</tr>'
-                    );
-                });
-            }
-            else
-            {
-                $('#tbl_anc_history > tbody').append(
-                    '<tr>' +
-                        '<td colspan="6">ไม่พบรายการ</td>' +
-                        '</tr>'
-                );
-            }
-        }
-    };
-
-    $('a[data-name="anc_info"]').live('click', function(){
-        var hn = $(this).attr('data-hn'),
-            anc_code = $(this).attr('data-anc_code'),
-            fullname = $(this).attr('data-fullname'),
-            birthdate = $(this).attr('data-birthdate'),
-            age = $(this).attr('data-age'),
-            gravida = $(this).attr('data-gravida'),
-            cid = $(this).attr('data-cid');
-
-        $('#txt_anc_info_hn').val(hn);
-        $('#txt_anc_info_cid').val(cid);
-        $('#txt_anc_info_fullname').val(fullname);
-        $('#txt_anc_info_birthdate').val(birthdate);
-        $('#txt_anc_info_age').val(age);
-        $('#txt_anc_info_gravida').val(gravida);
-
-        //get anc info
-        babies.anc_info.get_detail(anc_code);
-
-        babies.modal.show_anc_info();
-    });
-
-    $('#btn_anc_info_save').click(function(){
+    $('#sl_labor_gravida').on('change', function(){
         var data = {};
-        data.hn = $('#txt_anc_info_hn').val();
-        data.gravida = $('#txt_anc_info_gravida').val();
-        data.lmp = $('#txt_anc_info_lmp').val();
-        data.edc = $('#txt_anc_info_edc').val();
-        data.preg_status = $('#sl_anc_info_preg_status').val();
-        data.vdrl = $('#sl_anc_info_vdrl').val();
-        data.hb = $('#sl_anc_info_hb').val();
-        data.hiv = $('#sl_anc_info_hiv').val();
-        data.hct_date = $('#txt_anc_info_hct_date').val();
-        data.hct = $('#sl_anc_info_hct').val();
-        data.thalassemia = $('#sl_anc_info_thalassemia').val();
-        data.do_export = $('#chk_anc_info_do_export').attr('checked') ? '1' : '0';
-        data.do_export_date = $('#txt_anc_info_export_date').val();
+        data.hn_baby = $('#txt_labor_hn').val();
+        data.hn_mother = $('#txt_labor_mother_hn').val();
+        data.gravida = $(this).val();
 
-        if(!data.hn)
-        {
-            app.alert('กรุณาระบุ HN');
-        }
-        else if(!data.gravida)
-        {
-            app.alert('กรุณาระบุครรภ์ที่');
-        }
-        else if(!data.hct_date)
-        {
-            app.alert('กรุณาระบุวันที่ตรวจ HCT');
-        }
-        else
-        {
-            babies.ajax.anc.save_info(data, function(err){
-               if(err)
-               {
-                   app.alert(err);
-               }
-                else
-               {
-                   app.alert('บันทึกข้อมูลเสร็จเรียบร้อยแล้ว');
-               }
-            });
-        }
+        babies.labor.get_detail(data.hn_mother, data.gravida);
+
     });
 
+    //save mother data
+    $('#btn_labor_do_save').click(function(){
 
-    $('a[href="#tab_anc_info2"]').click(function(){
-        var hn = $('#txt_anc_info_hn').val(),
-            gravida = $('#txt_anc_info_gravida').val();
-
-        babies.anc_info.get_history_list(hn, gravida);
     });
 
     babies.get_list();

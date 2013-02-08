@@ -127,20 +127,28 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row-fluid">
                 <div class="span2">
                     <div class="control-group">
-                        <label class="control-label" for="sl_labor_bdate">วันที่คลอด</label>
+                        <label class="control-label" for="txt_labor_bdate">วันที่คลอด</label>
                         <div class="controls">
                             <div class="input-append date" data-name="datepicker">
-                                <input class="input-small" id="sl_labor_bdate" type="text" disabled>
+                                <input class="input-small" id="txt_labor_bdate" type="text" disabled>
                                 <span class="add-on"><i class="icon-th"></i></span>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="span10">
+                <div class="span1">
+                    <div class="control-group">
+                        <label class="control-label" for="sl_labor_btime">เวลา</label>
+                        <div class="controls">
+                            <input type="text" class="input-mini" data-type="time" id="txt_labor_btime">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="span9">
                     <div class="control-group">
                         <label class="control-label" for="txt_labor_bresult_icdcode">ผลวินิจฉัยการคลอด</label>
                         <div class="controls">

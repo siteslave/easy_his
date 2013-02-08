@@ -483,6 +483,7 @@ class Pregnancies extends CI_Controller
                     $obj->lmp = to_js_date($r['labor']['lmp']);
                     $obj->edc = to_js_date($r['labor']['edc']);
                     $obj->bdate = to_js_date($r['labor']['bdate']);
+                    $obj->btime = $r['labor']['btime'];
                     $obj->icd_code = $r['labor']['bresult'];
                     $obj->icd_name = get_diag_name($r['labor']['bresult']);
                     $obj->bplace = $r['labor']['bplace'];

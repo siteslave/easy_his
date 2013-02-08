@@ -629,4 +629,27 @@ class Person_model extends CI_Model
 
         return $rs;
     }
+
+    public function search_person_ajax_by_hn($query)
+    {
+        $rs = $this->mongo_db
+            ->select(array('hn', 'first_name', 'last_name'))
+            ->where(array('hn' => (string) $query))
+            ->order_by(array('hn' => 1))
+            ->limit(20)
+            ->get('person');
+
+        return $rs;
+    }
+    public function search_person_ajax_by_name($first_name, $last_name)
+    {
+        $rs = $this->mongo_db
+            ->select(array('hn', 'first_name', 'last_name'))
+            ->where(array('first_name' => (string) $first_name, 'last_name' => (string) $last_name))
+            ->order_by(array('hn' => 1))
+            ->limit(20)
+            ->get('person');
+
+        return $rs;
+    }
 }

@@ -114,112 +114,206 @@
             <label>อายุ (ปี)</label>
             <input type="text" class="input-mini uneditable-input" disabled="disabled" id="txt_labor_age">
         </form>
-
-        <form action="#">
-            <legend>ข้อมูลการคลอด</legend>
-            <div class="row-fluid">
-                <div class="span2">
-                    <div class="control-group">
-                        <label class="control-label" for="txt_labor_gravida">ครรภ์ที่</label>
-                        <div class="controls">
-                            <input type="text" class="input-small uneditable-input" id="txt_labor_gravida" disabled="disabled">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row-fluid">
-                <div class="span2">
-                    <div class="control-group">
-                        <label class="control-label" for="sl_labor_bdate">วันที่คลอด</label>
-                        <div class="controls">
-                            <div class="input-append date" data-name="datepicker">
-                                <input class="input-small" id="sl_labor_bdate" type="text" disabled>
-                                <span class="add-on"><i class="icon-th"></i></span>
+        <div class="tabbable">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab_labor_1" data-toggle="tab"><i class="icon-user"></i> ข้อมูลมารดา</a></li>
+                <li><a href="#tab_labor_2" data-toggle="tab"><i class="icon-edit"></i> การคัดกรองเด็ก</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab_labor_1">
+                    <form action="#" class="form-inline">
+                        <div class="row-fluid">
+                            <div class="span2">
+                                <div class="control-group">
+                                    <label for="txt_labor_gravida" class="control-label">HN</label>
+                                    <input type="text" class="input-small uneditable-input" id="txt_labor_mother_hn" disabled="disabled" placeholder="...">
+                                </div>
+                            </div>
+                            <div class="span5">
+                                <div class="control-group">
+                                    <label for="txt_labor_gravida" class="control-label">ชื่อ - สกุล</label>
+                                    <input type="text" class="input-xlarge" id="txt_labor_mother_name" placeholder="พิมพ์ชื่อ/HN เพื่อค้นหา...">
+                                </div>
+                            </div>
+                            <div class="span3">
+                                <div class="control-group">
+                                    <label class="control-label" for="sl_labor_gravida">ระบุครรภ์ที่</label>
+                                    <select id="sl_labor_gravida" class="input-small"></select>
+                                </div>
+                            </div>
+                            <div class="span2">
+                                <a href="#" class="btn btn-success" id="btn_labor_do_save"><i class="icon-plus-sign icon-white"></i> บันทึกมารดา</a>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="span10">
-                    <div class="control-group">
-                        <label class="control-label" for="txt_labor_bresult_icdcode">ผลวินิจฉัยการคลอด</label>
-                        <div class="controls">
-                            <input type="text" class="input-mini" id="txt_labor_bresult_icdcode" placeholder="...">
-                            <input type="text" class="input-xxlarge uneditable-input" disabled="disabled" id="txt_labor_bresult_icdname" placeholder="...">
+                        <legend>ข้อมูลการคลอด</legend>
+                        <div class="row-fluid">
+                            <div class="span2">
+                                <div class="control-group">
+                                    <label class="control-label" for="txt_labor_gravida">ครรภ์ที่</label>
+                                    <div class="controls">
+                                        <input type="text" class="input-small uneditable-input" id="txt_labor_gravida" disabled="disabled">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span2">
+                                <div class="control-group">
+                                    <label class="control-label" for="txt_labor_bdate">วันที่คลอด</label>
+                                    <div class="controls">
+                                        <input class="input-small uneditable-input" id="txt_labor_bdate" type="text" disabled="disabled">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span1">
+                                <div class="control-group">
+                                    <label class="control-label" for="sl_labor_btime">เวลา</label>
+                                    <div class="controls">
+                                        <input type="text" class="input-mini uneditable-input" data-type="time" id="txt_labor_btime" disabled="disabled">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row-fluid">
-                <div class="span3">
-                    <label class="control-label" for="sl_labor_bplace">สถานที่คลอด</label>
-                    <div class="controls">
-                        <select class="input-medium" id="sl_labor_bplace">
-                            <option value="">--</option>
-                            <option value="1">โรงพยาบาล</option>
-                            <option value="2">สถานีอนามัย</option>
-                            <option value="3">บ้าน</option>
-                            <option value="4">ระหว่างทาง</option>
-                            <option value="5">อื่นๆ</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="span8">
-                    <div class="control-group">
-                        <label class="control-label" for="txt_labor_hospcode">สถานพยาบาลที่คลอด</label>
-                        <div class="controls">
-                            <input type="text" class="input-mini" id="txt_labor_hospcode" placeholder="...">
-                            <input type="text" class="input-xlarge uneditable-input" disabled="disabled" id="txt_labor_hospname" placeholder="...">
+                        <div class="row-fluid">
+                            <div class="span10">
+                                <div class="control-group">
+                                    <label class="control-label" for="txt_labor_bresult_icdcode">ผลวินิจฉัยการคลอด</label>
+                                    <div class="controls">
+                                        <input type="text" class="input-mini uneditable-input" id="txt_labor_bresult_icdcode" placeholder="..." disabled="disabled">
+                                        <input type="text" class="input-xxlarge uneditable-input" disabled="disabled" id="txt_labor_bresult_icdname" placeholder="...">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                        <div class="row-fluid">
+                            <div class="span3">
+                                <label class="control-label" for="sl_labor_bplace">สถานที่คลอด</label>
+                                <div class="controls">
+                                    <select class="input-medium" id="sl_labor_bplace" disabled="disabled">
+                                        <option value="">--</option>
+                                        <option value="1">โรงพยาบาล</option>
+                                        <option value="2">สถานีอนามัย</option>
+                                        <option value="3">บ้าน</option>
+                                        <option value="4">ระหว่างทาง</option>
+                                        <option value="5">อื่นๆ</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="span8">
+                                <div class="control-group">
+                                    <label class="control-label" for="txt_labor_hospcode">สถานพยาบาลที่คลอด</label>
+                                    <div class="controls">
+                                        <input type="text" class="input-mini uneditable-input" disabled="disabled" id="txt_labor_hospcode" placeholder="...">
+                                        <input type="text" class="input-xlarge uneditable-input" disabled="disabled" id="txt_labor_hospname" placeholder="...">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row-fluid">
+                            <div class="span3">
+                                <label class="control-label" for="sl_labor_btype">วิธีการคลอด</label>
+                                <div class="controls">
+                                    <select class="input-medium" id="sl_labor_btype" disabled="disabled">
+                                        <option value="">--</option>
+                                        <option value="1">Normal</option>
+                                        <option value="2">Cesarean</option>
+                                        <option value="3">Vacuum</option>
+                                        <option value="4">Forceps</option>
+                                        <option value="5">ท่ากัน</option>
+                                        <option value="6">Abortion</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="span4">
+                                <label class="control-label" for="sl_labor_bdoctor">ประเภทผู้ทำคลอด</label>
+                                <div class="controls">
+                                    <select class="input-xlarge" id="sl_labor_bdoctor" disabled="disabled">
+                                        <option value="">--</option>
+                                        <option value="1">แพทย์</option>
+                                        <option value="2">พยาบาล</option>
+                                        <option value="3">จนท.สาธารณสุข (ที่ไม่ใช่แพทย์ พยาบาล)</option>
+                                        <option value="4">ผดุงครรภ์โบราณ</option>
+                                        <option value="5">คลอดเอง</option>
+                                        <option value="6">อื่นๆ</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="tab-pane" id="tab_labor_2">
+                    <form action="#">
+                        <div class="row-fluid">
+                            <div class="span2">
+                                <label class="control-label" for="sl_labor_bplace">น้ำหนักแรกคลอด</label>
+                                <div class="controls">
+                                    <div class="input-append">
+                                        <input class="input-mini" id="txt_labor_bweight" type="text" data-type="number">
+                                        <span class="add-on">กรัม</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span4">
+                                <label class="control-label" for="sl_labor_bplace">ลำดับที่การคลอด</label>
+                                <div class="controls">
+                                    <select class="input-xlarge" id="sl_labor_bplace">
+                                        <option value="">--</option>
+                                        <option value="1">คลอดเดี่ยว</option>
+                                        <option value="2">เป็นเด็กแฝดลำดับที่ 1</option>
+                                        <option value="3">เป็นเด็กแฝดลำดับที่ 2</option>
+                                        <option value="4">เป็นเด็กแฝดลำดับที่ 3</option>
+                                        <option value="5">เป็นเด็กแฝดลำดับที่ 3</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row-fluid">
+                            <div class="span3">
+                                <label class="control-label" for="sl_labor_asphyxia">ขาดออกซิเจน</label>
+                                <div class="controls">
+                                    <select class="input-medium" id="sl_labor_asphyxia">
+                                        <option value="">--</option>
+                                        <option value="1">ขาด</option>
+                                        <option value="2">ไม่ขาด</option>
+                                        <option value="9">ไม่ทราบ</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="span3">
+                                <label class="control-label" for="sl_labor_vitk">ไดัรับ Vit. K</label>
+                                <div class="controls">
+                                    <select class="input-medium" id="sl_labor_vitk">
+                                        <option value="">--</option>
+                                        <option value="1">ได้รับ</option>
+                                        <option value="2">ไม่ได้รับ</option>
+                                        <option value="9">ไม่ทราบ</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="span3">
+                                <label class="control-label" for="sl_labor_tsh">ตรวจ TSH</label>
+                                <div class="controls">
+                                    <select class="input-medium" id="sl_labor_tsh">
+                                        <option value="">--</option>
+                                        <option value="1">ไดัรับการตรวจ</option>
+                                        <option value="2">ไม่ได้รับการตรวจ</option>
+                                        <option value="9">ไม่ทราบ</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="span2">
+                                <label class="control-label" for="txt_labor_tshresult">ผล TSH</label>
+                                <div class="controls">
+                                    <input class="input-mini" id="txt_labor_tshresult" type="text" data-type="number">
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
-            <div class="row-fluid">
-                <div class="span3">
-                    <label class="control-label" for="sl_labor_btype">วิธีการคลอด</label>
-                    <div class="controls">
-                        <select class="input-medium" id="sl_labor_btype">
-                            <option value="">--</option>
-                            <option value="1">Normal</option>
-                            <option value="2">Cesarean</option>
-                            <option value="3">Vacuum</option>
-                            <option value="4">Forceps</option>
-                            <option value="5">ท่ากัน</option>
-                            <option value="6">Abortion</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="span4">
-                    <label class="control-label" for="sl_labor_bdoctor">ประเภทผู้ทำคลอด</label>
-                    <div class="controls">
-                        <select class="input-xlarge" id="sl_labor_bdoctor">
-                            <option value="">--</option>
-                            <option value="1">แพทย์</option>
-                            <option value="2">พยาบาล</option>
-                            <option value="3">จนท.สาธารณสุข (ที่ไม่ใช่แพทย์ พยาบาล)</option>
-                            <option value="4">ผดุงครรภ์โบราณ</option>
-                            <option value="5">คลอดเอง</option>
-                            <option value="6">อื่นๆ</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="span1">
-                    <label class="control-label" for="txt_labor_lborn">เกิดมีชีพ</label>
-                    <div class="controls">
-                        <input type="text" class="input-mini" data-type="number" id="txt_labor_lborn">
-                    </div>
-                </div>
-                <div class="span1">
-                    <label class="control-label" for="txt_labor_sborn">เกิดไร้ชีพ</label>
-                    <div class="controls">
-                        <input type="text" class="input-mini" data-type="number" id="txt_labor_sborn">
-                    </div>
-                </div>
-            </div>
-        </form>
+        </div>
 
     </div>
     <div class="modal-footer">
-        <a href="#" class="btn btn-success" id="btn_labor_do_save"><i class="icon-plus-sign icon-white"></i> บันทึกข้อมูล</a>
         <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</a>
     </div>
 </div>

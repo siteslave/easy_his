@@ -429,7 +429,8 @@ head.ready(function(){
         {
             //$('#txt_labor_lmp').val(data.rows[0].lmp);
             //$('#txt_labor_edc').val(data.rows[0].edc);
-            $('#sl_labor_bdate').val(data.rows[0].bdate);
+            $('#txt_labor_bdate').val(data.rows[0].bdate);
+            $('#txt_labor_btime').val(data.rows[0].btime);
             $('#txt_labor_bresult_icdcode').val(data.rows[0].icd_code);
             $('#txt_labor_bresult_icdname').val(data.rows[0].icd_name);
             $('#sl_labor_bplace').val(data.rows[0].bplace);
@@ -474,7 +475,8 @@ head.ready(function(){
         data.gravida = $('#txt_labor_gravida').val();
         //data.lmp = $('#txt_labor_lmp').val();
         //data.edc = $('#txt_labor_edc').val();
-        data.bdate = $('#sl_labor_bdate').val();
+        data.bdate = $('#txt_labor_bdate').val();
+        data.btime = $('#txt_labor_btime').val();
         data.bresult = $('#txt_labor_bresult_icdcode').val();
         data.bplace = $('#sl_labor_bplace').val();
         data.bhosp = $('#txt_labor_hospcode').val();
@@ -495,6 +497,10 @@ head.ready(function(){
         else if(!data.bdate)
         {
             app.alert('กรุณาระบุวันที่คลอด');
+        }
+        else if(!data.btime)
+        {
+            app.alert('กรุณาระบุเวลาที่คลอด');
         }
         else if(!data.bresult)
         {
