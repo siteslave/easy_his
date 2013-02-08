@@ -151,10 +151,10 @@ class Pregnancies_model extends CI_Model
         return $rs;
     }
 
-    public function check_register_status($hn)
+    public function check_register_status($hn, $gravida)
     {
         $rs = $this->mongo_db
-            ->where(array('hn' => (string) $hn))
+            ->where(array('hn' => (string) $hn, 'gravida' => $gravida))
             ->count('pregnancies');
 
         return $rs > 0 ? TRUE : FALSE;
@@ -165,6 +165,7 @@ class Pregnancies_model extends CI_Model
         $rs = $this->mongo_db
             ->where(array('hn' => $hn, 'gravida' => $gravida))
             ->count('pregnancies');
+
         return $rs > 0 ? TRUE : FALSE;
     }
 

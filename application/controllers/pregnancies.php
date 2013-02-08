@@ -226,7 +226,7 @@ class Pregnancies extends CI_Controller
             $this->preg->user_id = $this->user_id;
             $this->preg->provider_id = $this->provider_id;
 
-            $exists = $this->preg->check_register_status($data['hn']);
+            $exists = $this->preg->check_register_status($data['hn'], $data['gravida']);
 
             if($exists)
             {

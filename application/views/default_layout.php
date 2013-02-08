@@ -111,6 +111,11 @@
                                 </a>
                             </li>
                             <li>
+                                <a href="<?php echo site_url('babies'); ?>">
+                                    <i class="icon-book"></i> ทะเบียนเด็กแรกเกิด/ดูแลหลังคลอด
+                                </a>
+                            </li>
+                            <li>
                                 <a href="<?php echo site_url('appoints'); ?>">
                                     <i class="icon-tags"></i> ทะเบียนนัด
                                 </a>
