@@ -42,10 +42,10 @@ head.ready(function(){
                 err ? cb(err) : cb(null, data);
             });
         },
-        do_register: function(data, cb){
+        do_register: function(hn, cb){
             var url = 'babies/do_register',
                 params = {
-                    data: data
+                    hn: hn
                 }
 
             app.ajax(url, params, function(err, data){
@@ -359,30 +359,22 @@ head.ready(function(){
 
     $('a[data-name="btn_selected_person"]').live('click', function(){
 
-        var gravida = prompt('กรุณาระบุครรภ์ที่', 1);
-
-        if(gravida || gravida > 0)
+        var hn = $(this).attr('data-hn');
+        if(confirm('คุณต้องการลงทะเบียนข้อมูลนี้ใช่หรือไม่?'))
         {
-            var data = {};
-            data.hn = $(this).attr('data-hn');
-            data.gravida = gravida;
-
-            if(confirm('คุณต้องการลงทะเบียนข้อมูลนี้ใช่หรือไม่?'))
-            {
-                //do register
-                babies.ajax.do_register(data, function(err){
-                    if(err)
-                    {
-                        app.alert(err);
-                    }
-                    else
-                    {
-                        app.alert('ลงทะเบียนรายการเสร็จเรียบร้อยแล้ว');
-                        babies.modal.hide_register();
-                        babies.get_list();
-                    }
-                });
-            }
+            //do register
+            babies.ajax.do_register(hn, function(err){
+                if(err)
+                {
+                    app.alert(err);
+                }
+                else
+                {
+                    app.alert('ลงทะเบียนรายการเสร็จเรียบร้อยแล้ว');
+                    babies.modal.hide_register();
+                    babies.get_list();
+                }
+            });
         }
     });
 

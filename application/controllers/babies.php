@@ -128,20 +128,20 @@ class Babies extends CI_Controller
 
     public function do_register()
     {
-        $data = $this->input->post('data');
+        $hn = $this->input->post('hn');
 
-        if(empty($data))
+        if(empty($hn))
         {
-            $json = '{"success": false, "msg": "Data not found."}';
+            $json = '{"success": false, "msg": "HN not found."}';
         }
         else
         {
 
-            $this->preg->owner_id = $this->owner_id;
-            $this->preg->user_id = $this->user_id;
-            $this->preg->provider_id = $this->provider_id;
+            $this->babies->owner_id = $this->owner_id;
+            $this->babies->user_id = $this->user_id;
+            $this->babies->provider_id = $this->provider_id;
 
-            $exists = $this->preg->check_register_status($data['hn'], $data['gravida']);
+            $exists = $this->babies->check_register_status($hn);
 
             if($exists)
             {
@@ -149,8 +149,7 @@ class Babies extends CI_Controller
             }
             else
             {
-                $data['anc_code'] = generate_serial('ANC');
-                $rs = $this->preg->do_register($data);
+                $rs = $this->babies->do_register($hn);
 
                 if($rs)
                 {
