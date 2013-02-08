@@ -24,21 +24,20 @@
 <table class="table table-striped table-hover" id="tbl_list">
     <thead>
     <tr>
-        <th>ANC No.</th>
         <th>HN</th>
         <th>CID</th>
         <th>ชื่อ - สกุล</th>
         <th>วันเกิด</th>
-        <th>อายุ (ปี)</th>
+        <th>อายุ (เดือน)</th>
         <th>วันที่ลงทะเบียน</th>
-        <th>ครรภ์ที่</th>
-        <th>สถานะ</th>
+        <th>ANC No.</th>
+        <th>ชื่อมารดา</th>
         <th>#</th>
     </tr>
     </thead>
     <tbody>
     <tr>
-        <td colspan="8">กรุณากำหนดเงื่อนไขการแสดงข้อมูล</td>
+        <td colspan="9">...</td>
     </tr>
     </tbody>
 </table>
@@ -440,7 +439,7 @@
 <!-- /anc info -->
 
 <script type="text/javascript">
-    head.js('<?php echo base_url(); ?>assets/apps/js/apps.pregnancies.index.js');
+    head.js('<?php echo base_url(); ?>assets/apps/js/apps.babies.index.js');
 </script>
 
 
