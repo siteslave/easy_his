@@ -146,7 +146,7 @@ class Babies extends CI_Controller
 
             //check owner
             $is_owner = $this->person->check_owner($hn, $this->owner_id);
-            
+
             if($is_owner)
             {
                 $this->babies->owner_id = $this->owner_id;
@@ -219,6 +219,12 @@ class Babies extends CI_Controller
                 $obj->birthdate = $person['birthdate'];
                 $obj->age = count_age($person['birthdate']);
                 $obj->reg_date = $r['reg_date'];
+                $obj->gravida = isset($r['gravida']) ? $r['gravida'] : '';
+
+                if(isset($r['mother_hn']))
+                {
+                    $obj->mother_detail = $this->person->get_person_detail_with_hn($r['mother_hn']);
+                }
 
                 $arr_result[] = $obj;
             }
@@ -250,6 +256,17 @@ class Babies extends CI_Controller
         render_json($json);
     }
 
+    public function get_mother_detail()
+    {
+        $hn = $this->input->post('hn');
+        //get mother detail
+        $rs = $this->person->get_person_detail_with_hn($hn);
+        $rows = json_encode($rs);
+
+        $json = '{"success": true, "rows": '.$rows.'}';
+
+        render_json($json);
+    }
     //------------------------------------------------------------------------------------------------------------------
     /**
      * Get labor detail
@@ -264,22 +281,24 @@ class Babies extends CI_Controller
         $gravida = $this->input->post('gravida');
 
         //hn = hn of mother
+
         if(!empty($hn) AND !empty($gravida))
         {
+            //get labor detail
             $rs_labors = $this->preg->labor_get_detail_by_gravida($hn, $gravida);
 
             $obj_labors = new stdClass();
-            $obj_labors->gravida = $rs_labors['gravida'];
-            $obj_labors->bdate = to_js_date($rs_labors['labor']['bdate']);
-            $obj_labors->bdoctor = $rs_labors['labor']['bdoctor'];
-            $obj_labors->bhosp = $rs_labors['labor']['bhosp'];
-            $obj_labors->bhosp_name = get_hospital_name($obj_labors->bhosp);
-            $obj_labors->bplace = $rs_labors['labor']['bplace'];
-            $obj_labors->bresult_code = $rs_labors['labor']['bresult'];
-            $obj_labors->bresult_name = get_diag_name($rs_labors['labor']['bresult']);
-            $obj_labors->btime = $rs_labors['labor']['btime'];
-            $obj_labors->btype = $rs_labors['labor']['btype'];
-            $obj_labors->edc = to_js_date($rs_labors['labor']['edc']);
+            $obj_labors->gravida        = $rs_labors['gravida'];
+            $obj_labors->bdate          = to_js_date($rs_labors['labor']['bdate']);
+            $obj_labors->bdoctor        = $rs_labors['labor']['bdoctor'];
+            $obj_labors->bhosp          = $rs_labors['labor']['bhosp'];
+            $obj_labors->bhosp_name     = get_hospital_name($obj_labors->bhosp);
+            $obj_labors->bplace         = $rs_labors['labor']['bplace'];
+            $obj_labors->bresult_code   = $rs_labors['labor']['bresult'];
+            $obj_labors->bresult_name   = get_diag_name($rs_labors['labor']['bresult']);
+            $obj_labors->btime          = $rs_labors['labor']['btime'];
+            $obj_labors->btype          = $rs_labors['labor']['btype'];
+            $obj_labors->edc            = to_js_date($rs_labors['labor']['edc']);
 
             $labors = json_encode($obj_labors);
 
@@ -309,12 +328,12 @@ class Babies extends CI_Controller
             $rs_babies = $this->babies->get_labor_detail($hn);
 
             $obj_babies = new stdClass();
-            $obj_babies->mother_hn = isset($rs_babies['mother_hn']) ? $rs_babies['mother_hn'] : '';
-            $obj_babies->birth_no = isset($rs_babies['birth_no']) ? $rs_babies['birth_no'] : '';
-            $obj_babies->bweight = isset($rs_babies['bweight']) ? $rs_babies['bweight'] : '';
-            $obj_babies->asphyxia = isset($rs_babies['asphyxia']) ? $rs_babies['asphyxia'] : '';
-            $obj_babies->vitk = isset($rs_babies['vitk']) ? $rs_babies['vitk'] : '';
-            $obj_babies->tshresult = isset($rs_babies['tshresult']) ? $rs_babies['tshresult'] : '';
+            $obj_babies->mother_hn  = isset($rs_babies['mother_hn']) ? $rs_babies['mother_hn'] : '';
+            $obj_babies->birth_no   = isset($rs_babies['birth_no']) ? $rs_babies['birth_no'] : '';
+            $obj_babies->bweight    = isset($rs_babies['bweight']) ? $rs_babies['bweight'] : '';
+            $obj_babies->asphyxia   = isset($rs_babies['asphyxia']) ? $rs_babies['asphyxia'] : '';
+            $obj_babies->vitk       = isset($rs_babies['vitk']) ? $rs_babies['vitk'] : '';
+            $obj_babies->tshresult  = isset($rs_babies['tshresult']) ? $rs_babies['tshresult'] : '';
 
             $babies = json_encode($obj_babies);
 
@@ -323,6 +342,31 @@ class Babies extends CI_Controller
         else
         {
             $json = '{"success": false, "msg": "กรุณาระบุ HN"}';
+        }
+
+        render_json($json);
+    }
+
+    public function save_mother()
+    {
+        $data = $this->input->post('data');
+
+        if(!empty($data))
+        {
+            $rs = $this->babies->save_mother($data);
+
+            if($rs)
+            {
+                $json = '{"success": true}';
+            }
+            else
+            {
+                $json = '{"success": false, "msg": "ไม่สามารถบันทึกข้อมูลได้"}';
+            }
+        }
+        else
+        {
+            $json  = '{"success": false, "msg": "ไม่พบข้อมูลที่ต้องการบันทึก"}';
         }
 
         render_json($json);

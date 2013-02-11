@@ -30,14 +30,15 @@
         <th>วันเกิด</th>
         <th>อายุ (เดือน)</th>
         <th>วันที่ลงทะเบียน</th>
-        <th>ANC No.</th>
+        <th>ครรภ์ที่</th>
+        <th>HN มารดา</th>
         <th>ชื่อมารดา</th>
         <th>#</th>
     </tr>
     </thead>
     <tbody>
     <tr>
-        <td colspan="9">...</td>
+        <td colspan="10">...</td>
     </tr>
     </tbody>
 </table>
@@ -142,7 +143,7 @@
                                 </div>
                             </div>
                             <div class="span2">
-                                <a href="#" class="btn btn-success" id="btn_labor_do_save"><i class="icon-plus-sign icon-white"></i> บันทึกมารดา</a>
+                                <a href="#" class="btn btn-success" id="btn_labor_do_mother_save"><i class="icon-plus-sign icon-white"></i> บันทึกมารดา</a>
                             </div>
                         </div>
                         <legend>ข้อมูลการคลอด</legend>

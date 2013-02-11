@@ -85,10 +85,30 @@ head.ready(function(){
                 err ? cb(err) : cb(null, data);
             });
         },
+        get_mother_detail: function(hn, cb){
+            var url = 'babies/get_mother_detail',
+                params = {
+                    hn: hn
+                };
+
+            app.ajax(url, params, function(err, data){
+                err ? cb(err) : cb(null, data);
+            });
+        },
         get_gravida: function(hn, cb){
             var url = 'pregnancies/get_gravida',
                 params = {
                     hn: hn
+                };
+
+            app.ajax(url, params, function(err, data){
+                err ? cb(err) : cb(null, data);
+            });
+        },
+        save_mother_detail: function(data, cb){
+            var url = 'babies/save_mother',
+                params = {
+                    data: data
                 };
 
             app.ajax(url, params, function(err, data){
@@ -162,6 +182,9 @@ head.ready(function(){
         $('#tbl_list > tbody').empty();
         if(_.size(data.rows) > 0){
             _.each(data.rows, function(v){
+                var mother_fullname = v.mother_detail ? v.mother_detail.first_name + ' ' + v.mother_detail.last_name : '',
+                    mother_hn = v.mother_detail ? v.mother_detail.hn : '';
+
                 $('#tbl_list > tbody').append(
                     '<tr>' +
                         '<td>' + v.hn + '</td>' +
@@ -170,18 +193,19 @@ head.ready(function(){
                         '<td>' + app.mongo_to_thai_date(v.birthdate) + '</td>' +
                         '<td>' + v.age + '</td>' +
                         '<td>' + app.mongo_to_thai_date(v.reg_date) + '</td>' +
-                        '<td>' + app.clear_null(v.anc_code) +'</td>' +
-                        '<td>' + app.clear_null(v.mother_name) +'</td>' +
+                        '<td>' + app.clear_null(v.gravida) +'</td>' +
+                        '<td>' + app.clear_null(mother_hn) +'</td>' +
+                        '<td>' + app.clear_null(mother_fullname) +'</td>' +
                         '<td>' +
                         '<div class="btn-group">' +
                         '<a href="javascript:void(0);" class="btn" data-fullname="'+ v.first_name + ' ' + v.last_name +'" ' +
                         'data-birthdate="'+app.mongo_to_thai_date(v.birthdate)+'" data-age="'+ v.age+'" data-hn="'+ v.hn+'" ' +
                         'data-anc_code="'+ v.anc_code+'" data-name="labor" data-hn="' + v.hn + '" ' +
-                        'data-cid="' + v.cid +'" data-gravida="'+ v.gravida +'" title="ข้อมูลการคลอด"><i class="icon-check"></i></a>' +
+                        'data-cid="' + v.cid +'" data-gravida="'+ v.gravida +'" data-mother_hn="'+ mother_hn +'" title="ข้อมูลการคลอด"><i class="icon-check"></i></a>' +
                         '<a href="javascript:void(0);" class="btn" data-fullname="'+ v.first_name + ' ' + v.last_name +'" ' +
                         'data-birthdate="'+app.mongo_to_thai_date(v.birthdate)+'" data-age="'+ v.age+'" data-hn="'+ v.hn+'" ' +
                         'data-anc_code="'+ v.anc_code+'" data-name="anc_info" data-hn="' + v.hn + '" ' +
-                        'data-cid="' + v.cid +'" data-gravida="'+ v.gravida +'" title="ข้อมูลการฝากครรภ์"><i class="icon-book"></i></a>' +
+                        'data-cid="' + v.cid +'" data-gravida="'+ v.gravida +'" data-mother_hn="'+ mother_hn +'" title="ข้อมูลการฝากครรภ์"><i class="icon-book"></i></a>' +
                         '</div>' +
                         '</td>' +
                         '</tr>'
@@ -294,7 +318,8 @@ head.ready(function(){
                     '<td>'+ app.mongo_to_thai_date(v.birthdate) +'</td>' +
                     '<td>'+ v.age +'</td>' +
                     '<td>'+ v.sex +'</td>' +
-                    '<td><a href="javascript:void(0);" data-name="btn_selected_person" class="btn" data-hn="'+ v.hn +'"><i class="icon-ok"></i></a></td>' +
+                    '<td><a href="javascript:void(0);" data-name="btn_selected_person" class="btn" data-hn="'+ v.hn +'">' +
+                    '<i class="icon-ok"></i></a></td>' +
                     '</tr>'
             );
         });
@@ -410,7 +435,13 @@ head.ready(function(){
             $('#sl_labor_btype').val(data.rows.btype);
             $('#sl_labor_bdoctor').val(data.rows.bdoctor);
             $('#txt_labor_gravida').val(data.rows.gravida);
+            $('#sl_labor_gravida').val(data.rows.gravida);
             $('#txt_labor_btime').val(data.rows.btime);
+        },
+        set_mother_detail: function(data)
+        {
+            $('#txt_labor_mother_hn').val(data.hn);
+            $('#txt_labor_mother_hn').val(data.first_name + ' ' + data.last_name);
         },
         clear_form: function()
         {
@@ -433,19 +464,34 @@ head.ready(function(){
             fullname = $(this).attr('data-fullname'),
             birthdate = $(this).attr('data-birthdate'),
             age = $(this).attr('data-age'),
-            cid = $(this).attr('data-cid')
-            gravida = $(this).attr('data-gravida');
+            cid = $(this).attr('data-cid'),
+            gravida = $(this).attr('data-gravida'),
+            mother_hn = $(this).attr('data-mother_hn');
 
         $('#txt_labor_hn').val(hn);
         $('#txt_labor_cid').val(cid);
         $('#txt_labor_fullname').val(fullname);
         $('#txt_labor_birthdate').val(birthdate);
         $('#txt_labor_age').val(age);
-
         babies.labor.clear_form();
 
+        //get detail
+        babies.get_gravida(mother_hn);
+        babies.get_mother_detail(mother_hn);
+        babies.labor.get_detail(mother_hn, gravida);
         babies.modal.show_labor();
     });
+
+    babies.get_mother_detail = function(hn)
+    {
+        babies.ajax.get_mother_detail(hn, function(err, data){
+            if(!err)
+            {
+                $('#txt_labor_mother_hn').val(data.rows.hn);
+                $('#txt_labor_mother_name').val(data.rows.first_name + ' ' + data.rows.last_name);
+            }
+        });
+    };
 
     babies.get_gravida = function(hn)
     {
@@ -456,7 +502,10 @@ head.ready(function(){
            }
             else
            {
-               babies.set_gravida_select(data);
+               if(data)
+               {
+                   babies.set_gravida_select(data);
+               }
            }
         });
     };
@@ -507,8 +556,38 @@ head.ready(function(){
     });
 
     //save mother data
-    $('#btn_labor_do_save').click(function(){
+    $('#btn_labor_do_mother_save').click(function(){
+        var data = {};
 
+        data.baby_hn = $('#txt_labor_hn').val();
+        data.mother_hn = $('#txt_labor_mother_hn').val();
+        data.gravida = $('#sl_labor_gravida').val();
+
+        if(!data.baby_hn)
+        {
+            app.alert('กรุณาระบุ HN ของเด็ก');
+        }
+        else if(!data.mother_hn)
+        {
+            app.alert('กรุณาระบุ HN มารดา');
+        }
+        else if(!data.gravida)
+        {
+            app.alert('กรุณาระบุครรภ์ที่คลอด');
+        }
+        else
+        {
+            babies.ajax.save_mother_detail(data ,function(err){
+               if(err)
+               {
+                   app.alert(err);
+               }
+               else
+               {
+                    app.alert('บันทึกข้อมูลมารดาเสร็จเรียบร้อยแล้ว');
+               }
+            });
+        }
     });
 
     babies.get_list();

@@ -76,5 +76,21 @@ class Babies_model extends CI_Model
         return count($rs) > 0 ? $rs[0] : NULL;
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+    /**
+     * Save mother detail
+     *
+     * @param   mixed   $data
+     * @return  boolean
+     */
+    public function save_mother($data)
+    {
+        $rs = $this->mongo_db
+            ->where(array('hn' => (string) $data['baby_hn']))
+            ->set(array('mother_hn' => (string) $data['mother_hn'], 'gravida' => (string) $data['gravida']))
+            ->update('babies');
+
+        return $rs;
+    }
 
 }

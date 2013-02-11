@@ -254,6 +254,15 @@ class Epis extends CI_Controller
         else
         {
 
+            //check owner
+            $is_owner = $this->person->check_owner($hn, $this->owner_id);
+
+            if($is_owner)
+            {
+
+            }
+            else
+
             $this->person->owner_id = $this->owner_id;
             $this->person->user_id = $this->user_id;
 
