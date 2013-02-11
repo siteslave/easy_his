@@ -65,7 +65,8 @@ class Pregnancies_model extends CI_Model
                 'anc_result' => $data['anc_result'],
                 'owner_id' => new MongoId($this->owner_id),
                 'provider_id' => new MongoId($this->provider_id),
-                'user_id' => new MongoId($this->user_id)
+                'user_id' => new MongoId($this->user_id),
+                'last_update' => date('Ymd H:i:s')
             ))->update('pregnancies');
 
         return $rs;
@@ -201,7 +202,8 @@ class Pregnancies_model extends CI_Model
                         'labor.btype'   => $data['btype'],
                         'labor.bdoctor' => $data['bdoctor'],
                         'labor.lborn'   => $data['lborn'],
-                        'labor.sborn'   => $data['sborn']
+                        'labor.sborn'   => $data['sborn'],
+                        'last_update'   => date('Ymd H:i:s')
         ))->update('pregnancies');
 
         return $rs;
@@ -278,14 +280,15 @@ class Pregnancies_model extends CI_Model
                 'postnatal.vn' => (string) $data['vn']
             ))
             ->set(array(
-                'postnatal.$.ppresult' => $data['ppresult'],
-                'postnatal.$.sugar' => $data['sugar'],
-                'postnatal.$.albumin' => $data['albumin'],
-                'postnatal.$.perineal' => $data['perineal'],
-                'postnatal.$.amniotic_fluid' => $data['amniotic_fluid'],
-                'postnatal.$.uterus' => $data['uterus'],
-                'postnatal.$.tits' => $data['tits'],
-                'postnatal.$.user_id' => new MongoId($this->user_id)
+                'postnatal.$.ppresult'          => $data['ppresult'],
+                'postnatal.$.sugar'             => $data['sugar'],
+                'postnatal.$.albumin'           => $data['albumin'],
+                'postnatal.$.perineal'          => $data['perineal'],
+                'postnatal.$.amniotic_fluid'    => $data['amniotic_fluid'],
+                'postnatal.$.uterus'            => $data['uterus'],
+                'postnatal.$.tits'              => $data['tits'],
+                'postnatal.$.user_id'           => new MongoId($this->user_id),
+                'last_update'                   => date('Ymd H:i:s')
             ))->update('pregnancies');
 
         return $rs;
@@ -296,9 +299,10 @@ class Pregnancies_model extends CI_Model
     {
         $rs = $this->mongo_db
             ->where(array(
-            'postnatal.vn' => (string) $vn,
-            'gravida' => (string) $gravida,
-            'hn' => (string) $hn))
+                'postnatal.vn'  => (string) $vn,
+                'gravida'       => (string) $gravida,
+                'hn'            => (string) $hn)
+                )
             ->count('pregnancies');
 
         return $rs > 0 ? TRUE : FALSE;

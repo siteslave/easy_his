@@ -52,6 +52,16 @@ head.ready(function(){
                 return err ? cb(err) : cb(null, data);
             });
         },
+        save_babies_detail: function(data, cb){
+            var url = 'babies/save_babies_detail',
+                params = {
+                    data: data
+                }
+
+            app.ajax(url, params, function(err, data){
+                return err ? cb(err) : cb(null, data);
+            });
+        },
 
         check_registration: function(hn, cb){
             var url = 'babies/check_registration',
@@ -201,11 +211,13 @@ head.ready(function(){
                         '<a href="javascript:void(0);" class="btn" data-fullname="'+ v.first_name + ' ' + v.last_name +'" ' +
                         'data-birthdate="'+app.mongo_to_thai_date(v.birthdate)+'" data-age="'+ v.age+'" data-hn="'+ v.hn+'" ' +
                         'data-anc_code="'+ v.anc_code+'" data-name="labor" data-hn="' + v.hn + '" ' +
-                        'data-cid="' + v.cid +'" data-gravida="'+ v.gravida +'" data-mother_hn="'+ mother_hn +'" title="ข้อมูลการคลอด"><i class="icon-check"></i></a>' +
+                        'data-cid="' + v.cid +'" data-gravida="'+ v.gravida +'" data-mother_hn="'+ mother_hn +'" ' +
+                        'title="ข้อมูลการคลอด"><i class="icon-check"></i></a>' +
                         '<a href="javascript:void(0);" class="btn" data-fullname="'+ v.first_name + ' ' + v.last_name +'" ' +
                         'data-birthdate="'+app.mongo_to_thai_date(v.birthdate)+'" data-age="'+ v.age+'" data-hn="'+ v.hn+'" ' +
                         'data-anc_code="'+ v.anc_code+'" data-name="anc_info" data-hn="' + v.hn + '" ' +
-                        'data-cid="' + v.cid +'" data-gravida="'+ v.gravida +'" data-mother_hn="'+ mother_hn +'" title="ข้อมูลการฝากครรภ์"><i class="icon-book"></i></a>' +
+                        'data-cid="' + v.cid +'" data-gravida="'+ v.gravida +'" data-mother_hn="'+ mother_hn +'" ' +
+                        'title="ข้อมูลหลังคลอด"><i class="icon-time"></i></a>' +
                         '</div>' +
                         '</td>' +
                         '</tr>'
@@ -448,13 +460,21 @@ head.ready(function(){
             $('#txt_labor_bdate').val('');
             $('#txt_labor_bresult_icdcode').val('');
             $('#txt_labor_bresult_icdname').val('');
-            $('#sl_labor_bplace').val('');
+            app.set_first_selected($('#sl_labor_bplace'));
             $('#txt_labor_hospcode').val('');
             $('#txt_labor_hospname').val('');
-            $('#sl_labor_btype').val('');
-            $('#sl_labor_bdoctor').val('');
+            app.set_first_selected($('#sl_labor_btype'));
+            app.set_first_selected($('#sl_labor_bdoctor'));
             $('#txt_labor_gravida').val('');
             $('#txt_labor_btime').val('');
+            $('#txt_labor_mother_hn').val('');
+            $('#txt_labor_mother_name').val('');
+            app.set_first_selected($('#sl_labor_birthno'));
+            $('#txt_labor_bweight').val('');
+            app.set_first_selected($('#sl_labor_asphyxia'));
+            app.set_first_selected($('#sl_labor_vitk'));
+            app.set_first_selected($('#sl_labor_tsh'));
+            $('#txt_labor_tshresult').val('');
         }
     };
     //labor detail
@@ -479,6 +499,9 @@ head.ready(function(){
         babies.get_gravida(mother_hn);
         babies.get_mother_detail(mother_hn);
         babies.labor.get_detail(mother_hn, gravida);
+
+        $('a[href="#tab_labor_1"]').tab('show');
+
         babies.modal.show_labor();
     });
 
@@ -508,6 +531,30 @@ head.ready(function(){
                }
            }
         });
+    };
+
+    babies.get_babies_detail = function(hn)
+    {
+        babies.ajax.get_babies_detail(hn, function(err, data){
+           if(err)
+           {
+               app.alert(err);
+           }
+           else
+           {
+                babies.set_babies_detail(data);
+           }
+        });
+    };
+
+    babies.set_babies_detail = function(data)
+    {
+        $('#sl_labor_birthno').val(data.rows.birthno);
+        $('#txt_labor_bweight').val(data.rows.bweight);
+        $('#sl_labor_asphyxia').val(data.rows.asphyxia);
+        $('#sl_labor_vitk').val(data.rows.vitk);
+        $('#sl_labor_tsh').val(data.rows.tsh);
+        $('#txt_labor_tshresult').val(data.rows.tshresult);
     };
 
     $('#txt_labor_mother_name').typeahead({
@@ -590,5 +637,80 @@ head.ready(function(){
         }
     });
 
+    //------------------------------------------------------------------------------------------------------------------
+    /**
+     * Save babies detail
+     */
+    $('#btn_labor_save_babies').click(function(){
+        var data = {};
+        data.birthno = $('#sl_labor_birthno').val();
+        data.bweight = $('#txt_labor_bweight').val();
+        data.asphyxia = $('#sl_labor_asphyxia').val();
+        data.vitk = $('#sl_labor_vitk').val();
+        data.tsh = $('#sl_labor_tsh').val();
+        data.tshresult = $('#txt_labor_tshresult').val();
+        data.mother_hn = $('#txt_labor_mother_hn').val();
+        data.gravida = $('#sl_labor_gravida').val();
+
+        data.hn = $('#txt_labor_hn').val();
+
+        if(!data.hn)
+        {
+            app.alert('กรุณาระบุ HN ของเด็ก');
+        }else if(!data.mother_hn)
+        {
+            app.alert('กรุณาระบุข้อมูลมารดา');
+        }
+        else if(!data.gravida)
+        {
+            app.alert('กรุณาระบุข้อมูลครรภ์ที่');
+        }
+        else if(!data.birthno)
+        {
+            app.alert('กรุณาระบุลำที่ของการคลอด');
+        }
+        else if(!data.bweight)
+        {
+            app.alert('กรุณาระบุน้ำหนักคลอด (หน่วยเป็นกรัม)');
+        }
+        else if(!data.asphyxia)
+        {
+            app.alert('กรุณาระบุภาวะขาดออกซิเจน');
+        }
+        else if(!data.vitk)
+        {
+            app.alert('กรุณาระบุการให้วิตามิน K');
+        }
+        else if(!data.tsh)
+        {
+            app.alert('กรุณาระบุการตรวจ TSH');
+        }
+        else if(!data.tshresult)
+        {
+            app.alert('กรุณาระบุผลการตรวจ TSH');
+        }
+        else
+        {
+            babies.ajax.save_babies_detail(data, function(err){
+               if(err)
+               {
+                   app.alert(err);
+               }
+               else
+               {
+                   app.alert('การบันทึกข้อมูลเสร็จเรียบร้อยแล้ว');
+               }
+            });
+        }
+    });
+
+    $('a[href="#tab_labor_2"]').click(function(){
+        var hn = $('#txt_labor_hn').val();
+
+        babies.get_babies_detail(hn);
+    });
+
+
+    //Load list on page loaded.
     babies.get_list();
 });

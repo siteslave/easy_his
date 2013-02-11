@@ -33,6 +33,7 @@
             <li><a href="javascript:void(0);" data-name="btn_epi"><i class="icon-user"></i> บันทึกข้อมูลการรับวัคซีน (EPI)</a></li>
             <li><a href="javascript:void(0);" data-name="btn_anc"><i class="icon-eye-open"></i> บันทึกข้อมูลการฝากครรภ์ (ANC)</a></li>
             <li><a href="javascript:void(0);" data-name="btn_postnatal"><i class="icon-headphones"></i> เยี่ยมหลังคลอดมารดา</a></li>
+            <li><a href="javascript:void(0);" data-name="btn_baby_care"><i class="icon-headphones"></i> เยี่ยมหลังคลอดเด็ก</a></li>
         </ul>
     </div>
     <div class="btn-group">

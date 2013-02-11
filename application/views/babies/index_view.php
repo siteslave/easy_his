@@ -244,7 +244,7 @@
                     <form action="#">
                         <div class="row-fluid">
                             <div class="span2">
-                                <label class="control-label" for="sl_labor_bplace">น้ำหนักแรกคลอด</label>
+                                <label class="control-label" for="txt_labor_bweight">น้ำหนักแรกคลอด</label>
                                 <div class="controls">
                                     <div class="input-append">
                                         <input class="input-mini" id="txt_labor_bweight" type="text" data-type="number">
@@ -253,9 +253,9 @@
                                 </div>
                             </div>
                             <div class="span4">
-                                <label class="control-label" for="sl_labor_bplace">ลำดับที่การคลอด</label>
+                                <label class="control-label" for="sl_labor_birthno">ลำดับที่การคลอด</label>
                                 <div class="controls">
-                                    <select class="input-xlarge" id="sl_labor_bplace">
+                                    <select class="input-xlarge" id="sl_labor_birthno">
                                         <option value="">--</option>
                                         <option value="1">คลอดเดี่ยว</option>
                                         <option value="2">เป็นเด็กแฝดลำดับที่ 1</option>
@@ -309,6 +309,8 @@
                             </div>
                         </div>
                     </form>
+                    <a href="#" class="btn btn-success" id="btn_labor_save_babies">
+                        <i class="icon-plus-sign icon-white"></i> บันทึกข้อมูล</a>
                 </div>
             </div>
         </div>

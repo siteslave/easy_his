@@ -256,6 +256,13 @@ class Babies extends CI_Controller
         render_json($json);
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+    /**
+     * Get mother detail
+     *
+     * @internal    param   string  $hn
+     * @return      json
+     */
     public function get_mother_detail()
     {
         $hn = $this->input->post('hn');
@@ -325,15 +332,15 @@ class Babies extends CI_Controller
 
         if(!empty($hn))
         {
-            $rs_babies = $this->babies->get_labor_detail($hn);
+            $rs_babies = $this->babies->get_babies_detail($hn);
 
             $obj_babies = new stdClass();
-            $obj_babies->mother_hn  = isset($rs_babies['mother_hn']) ? $rs_babies['mother_hn'] : '';
-            $obj_babies->birth_no   = isset($rs_babies['birth_no']) ? $rs_babies['birth_no'] : '';
+            $obj_babies->birthno    = isset($rs_babies['birthno']) ? $rs_babies['birthno'] : '';
             $obj_babies->bweight    = isset($rs_babies['bweight']) ? $rs_babies['bweight'] : '';
             $obj_babies->asphyxia   = isset($rs_babies['asphyxia']) ? $rs_babies['asphyxia'] : '';
             $obj_babies->vitk       = isset($rs_babies['vitk']) ? $rs_babies['vitk'] : '';
             $obj_babies->tshresult  = isset($rs_babies['tshresult']) ? $rs_babies['tshresult'] : '';
+            $obj_babies->tsh        = isset($rs_babies['tsh']) ? $rs_babies['tsh'] : '';
 
             $babies = json_encode($obj_babies);
 
@@ -347,6 +354,13 @@ class Babies extends CI_Controller
         render_json($json);
     }
 
+    //------------------------------------------------------------------------------------------------------------------
+    /**
+     * Save mother detail
+     *
+     * @internal    param   array   $data
+     * @return      json
+     */
     public function save_mother()
     {
         $data = $this->input->post('data');
@@ -367,6 +381,54 @@ class Babies extends CI_Controller
         else
         {
             $json  = '{"success": false, "msg": "ไม่พบข้อมูลที่ต้องการบันทึก"}';
+        }
+
+        render_json($json);
+    }
+
+    //------------------------------------------------------------------------------------------------------------------
+    /**
+     *
+     */
+    public function save_babies_detail()
+    {
+        $data = $this->input->post('data');
+        if(!empty($data))
+        {
+
+            $duplicate = FALSE;
+            if($data['birthno'] == '1')
+            {
+                //check duplicate
+                $duplicate =
+                    $this->babies->check_mother_babies_gravida($data['hn'], $data['mother_hn'], $data['gravida']);
+            }
+
+            if($duplicate)
+            {
+                $json = '{"success": false, "msg": "[ข้อมูลซ้ำ] ไม่ใช่ลูกแฝด แต่ข้อมูลคลอดแม่ 1 ครั้งมีลูก 2 คน กรุณาตรวจสอบ กรุณาตรวจสอบข้อมูลการคลอดของแม่"}';
+            }
+            else
+            {
+                $this->babies->provider_id = $this->provider_id;
+                $this->babies->user_id = $this->user_id;
+                $this->babies->owner_id = $this->owner_id;
+
+                $rs = $this->babies->save_babies_detail($data);
+
+                if($rs)
+                {
+                    $json = '{"success": true}';
+                }
+                else
+                {
+                    $json = '{"success": false, "msg": "ไม่สามารถบันทึกข้อมูลได้"}';
+                }
+            }
+        }
+        else
+        {
+            $json = '{"success": false, "msg": "ไม่พบข้อมูลสำหรับบันทึก"}';
         }
 
         render_json($json);
