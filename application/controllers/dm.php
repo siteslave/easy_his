@@ -3,7 +3,7 @@
      * DM Controller
      *
      * @package     Controller
-     * @author      Utit Sairat <soodteeruk@gmail.com>
+     * @author      Mr.Utit Sairat <soodteeruk@gmail.com>
      * @since       Version 1.0.0
      * @copyright   Copyright 2013 Data center of Maha Sarakham Hospital
      * @license     http://his.mhkdc.com/licenses
@@ -189,20 +189,21 @@ class Dm extends CI_Controller
         }
         else
         {
-
+            $this->person->owner_id = $this->owner_id;
             if($filter == '0') //by cid
             {
-                $rs = $this->person->search_person_by_cid($query);
+                $rs = $this->person->search_person_by_cid_with_owner($query);
             }
             else
             {
-                $rs = $this->person->search_person_by_hn($query);
+                $rs = $this->person->search_person_by_hn_with_owner($query);
             }
 
             if($rs)
             {
 
                 $arr_result = array();
+                $type_area_check = false;
 
                 foreach($rs as $r)
                 {
@@ -215,16 +216,25 @@ class Dm extends CI_Controller
                     $obj->birthdate = $r['birthdate'];
                     $obj->sex = $r['sex'] == '1' ? 'ชาย' : 'หญิง';
                     $obj->age = count_age($r['birthdate']);
+                    //$type_area_check = $r['typearea'][0]['typearea'];
+                    foreach($r['typearea'] as $typearea) {
+                        if(($typearea['typearea']== "1" || $typearea['typearea'] == "3") && $typearea['owner_id'] == $this->owner_id)
+                            $type_area_check = true;
+                    }
 
                     $arr_result[] = $obj;
                 }
-
-                $rows = json_encode($arr_result);
-                $json = '{"success": true, "rows": '.$rows.'}';
+                
+                if($type_area_check) {
+                    $rows = json_encode($arr_result);
+                    $json = '{"success": true, "rows": '.$rows.'}';
+                } else {
+                    $json = '{ "success": false, "msg": "ไม่ใช่บุคคลในเขตรับผิดชอบ" }';
+                }
             }
             else
             {
-                $json = '{"success": false, "msg ": "ไม่พบรายการ"}';
+                $json = '{ "success": false, "msg": "ไม่พบรายการ" }';
             }
 
         }
