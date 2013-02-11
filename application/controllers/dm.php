@@ -194,17 +194,6 @@ class Dm extends CI_Controller
             {
                 $rs = $this->person->search_person_by_cid($query);
             }
-            else if($filter == '2')
-            {
-                //get hn by first name and last name
-                $name = explode(' ', $query); // [0] = first name, [1] = last name
-
-                $first_name = count($name) == 2 ? $name[0] : '';
-                $last_name = count($name) == 2 ? $name[1] : '';
-
-                $rs = $this->person->search_person_by_first_last_name($first_name, $last_name);
-
-            }
             else
             {
                 $rs = $this->person->search_person_by_hn($query);

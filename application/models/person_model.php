@@ -577,6 +577,14 @@ class Person_model extends CI_Model
 		return $rs;
 	}
 	
+	public function get_all_person2()
+	{
+		$rs = $this->mongo_db
+                    ->where('hn', '')
+                    ->get('person');
+		return $rs;
+	}
+	
 	public function set_hn($person_id, $hn)
 	{
 		$rs = $this->mongo_db
