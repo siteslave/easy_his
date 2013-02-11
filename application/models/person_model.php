@@ -652,4 +652,19 @@ class Person_model extends CI_Model
 
         return $rs;
     }
+
+    /**
+     * Check Owner
+     *
+     * @param   string  $hn
+     * @param   string  $owner_id
+     * @return bool
+     */
+    public function check_owner($hn, $owner_id)
+    {
+        $rs = $this->mongo_db
+            ->where(array('owner_id' => new MongoId($owner_id), 'hn' => (string) $hn))
+            ->count('person');
+        return $rs > 0 ? TRUE : FALSE;
+    }
 }

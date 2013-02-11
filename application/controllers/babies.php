@@ -144,30 +144,39 @@ class Babies extends CI_Controller
         else
         {
 
-            $this->babies->owner_id = $this->owner_id;
-            $this->babies->user_id = $this->user_id;
-            $this->babies->provider_id = $this->provider_id;
-
-            $exists = $this->babies->check_register_status($hn);
-
-            if($exists)
+            //check owner
+            $is_owner = $this->person->check_owner($hn, $this->owner_id);
+            
+            if($is_owner)
             {
-                $json = '{"success": false, "msg": "ทะเบียนซ้ำ - ชื่อนี้มีอยู่ในทะเบียนเรียบร้อยแล้ว"}';
-            }
-            else
-            {
-                $rs = $this->babies->do_register($hn);
+                $this->babies->owner_id = $this->owner_id;
+                $this->babies->user_id = $this->user_id;
+                $this->babies->provider_id = $this->provider_id;
 
-                if($rs)
+                $exists = $this->babies->check_register_status($hn);
+
+                if($exists)
                 {
-                    $json = '{"success": true}';
+                    $json = '{"success": false, "msg": "ทะเบียนซ้ำ - ชื่อนี้มีอยู่ในทะเบียนเรียบร้อยแล้ว"}';
                 }
                 else
                 {
-                    $json = '{"success": false, "msg": "ไม่สามารถบันทึกข้อมูลได้"}';
+                    $rs = $this->babies->do_register($hn);
+
+                    if($rs)
+                    {
+                        $json = '{"success": true}';
+                    }
+                    else
+                    {
+                        $json = '{"success": false, "msg": "ไม่สามารถบันทึกข้อมูลได้"}';
+                    }
                 }
             }
-
+            else
+            {
+                $json = '{"success": false, "msg": "เนื่องจากไม่ใช่ประชากรในการดูแลของหน่วยงาน จึงไม่สามารถลงทะเบียนได้"}';
+            }
         }
 
         render_json($json);
