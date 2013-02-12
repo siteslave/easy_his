@@ -433,6 +433,28 @@ class Babies extends CI_Controller
 
         render_json($json);
     }
+
+    //------------------------------------------------------------------------------------------------------------------
+    /**
+     * Service module
+     */
+
+    public function check_registration()
+    {
+        $hn = $this->input->post('hn');
+
+        $rs = $this->babies->check_register_status($hn);
+        if($rs)
+        {
+            $json = '{"success": true}';
+        }
+        else
+        {
+            $json = '{"success": false, "msg": "ไม่พบข้อมูลการลงทะเบียน"}';
+        }
+
+        render_json($json);
+    }
 }
 
 //End file

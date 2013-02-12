@@ -1228,7 +1228,6 @@
         <h3>ข้อมูลการฝากครรภ์</h3>
     </div>
     <div class="modal-body">
-
         <div class="tabbable">
             <ul class="nav nav-tabs">
                 <li class="active"><a href="#tab_anc1" data-toggle="tab"><i class="icon-plus"></i> เพิ่มข้อมูล</a></li>
@@ -1484,6 +1483,84 @@
     </div>
 </div>
 <!-- /Mother care -->
+
+<!-- เยี่ยมหลังคลอด เด็ก -->
+<div class="modal hide fade" id="mdl_babies_care">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>ข้อมูลการตรวจหลังคลอด เด็ก</h3>
+    </div>
+    <div class="modal-body">
+        <div class="tabbable">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab_babies_care1" data-toggle="tab"><i class="icon-plus"></i> เพิ่มข้อมูล</a></li>
+                <li><a href="#tab_babies_care2" data-toggle="tab"><i class="icon-refresh"></i> ประวัติการรับบริการ</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab_babies_care1">
+                    <form class="form-horizontal">
+                        <legend>การให้บริการวันนี้</legend>
+                        <div class="control-group">
+                            <label class="control-label" for="sl_babies_care_result">ผลตรวจ</label>
+                            <div class="controls">
+                                <select id="sl_babies_care_result">
+                                    <option value="">--</option>
+                                    <option value="1">ปกติ</option>
+                                    <option value="2">ผิดปกติ</option>
+                                    <option value="9">ไม่ทราบ</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="sl_babies_care_food">อาหาร</label>
+                            <div class="controls">
+                                <select id="sl_babies_care_food">
+                                    <option value="">--</option>
+                                    <option value="1">นมแม่อย่างเดียว</option>
+                                    <option value="2">นมแม่นและน้ำ</option>
+                                    <option value="3">นมแม่และนมผสม</option>
+                                    <option value="4">นมผสมอย่างเดียว</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="btn_babies_care_save">&nbsp;</label>
+                            <div class="controls">
+                                <button class="btn btn-success" type="button" id="btn_babies_care_save">
+                                    <i class="icon-plus-sign icon-white"></i> บันทึกข้อมูล
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="tab-pane" id="tab_babies_care2">
+                    <legend>ประวัติการรับบริการ</legend>
+                    <table class="table table-striped" id="tbl_babies_care_history">
+                        <thead>
+                        <tr>
+                            <th>วันที่</th>
+                            <th>หน่วยบริการ</th>
+                            <th>ผลตรวจ</th>
+                            <th>ผู้ให้บริการ</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td colspan="4">อยู่ในระหว่างปรับปรุงระบบ</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</a>
+    </div>
+</div>
+<!-- /เยี่ยมหลังคลอด เด็ก -->
+
 <!-- <script type="text/javascript" src="{{ base_url }}assets/apps/js/apps.services.js"></script> -->
 <script type="text/javascript">
     head.js(
@@ -1497,6 +1574,7 @@
             '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.epi.js',
             '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.nutritions.js',
             '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.anc.js',
-            '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.postnatal.js'
+            '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.postnatal.js',
+            '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.babies_care.js'
     );
 </script>
