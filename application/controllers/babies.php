@@ -455,6 +455,42 @@ class Babies extends CI_Controller
 
         render_json($json);
     }
+
+    //------------------------------------------------------------------------------------------------------------------
+    public function save_service()
+    {
+        $data = $this->input->post('data');
+        if(!empty($data))
+        {
+            //check duplicate
+            $is_duplicated = $this->babies->check_service_duplicate($data['vn'], $data['hn']);
+            if($is_duplicated)
+            {
+                //update
+                $rs = $this->babies->update_service($data);
+            }
+            else
+            {
+                //insert
+                $rs = $this->babies->save_service($data);
+            }
+
+            if($rs)
+            {
+                $json = '{"success": true}';
+            }
+            else
+            {
+                $json = '{"success": false ,"msg": "ไม่สามารถบันทึกข้อมูลได้"}';
+            }
+        }
+        else
+        {
+            $json = '{"success": false, "msg": ""}';
+        }
+
+        render_json($json);
+    }
 }
 
 //End file

@@ -142,4 +142,50 @@ class Babies_model extends CI_Model
 
         return count($rs) > 0 ? $rs[0] : NULL;
     }
+
+    #==================================================================================================================
+    # Service Module
+    #==================================================================================================================
+    /**
+     * Check duplicate
+     */
+    public function check_service_duplicate($vn, $hn)
+    {
+        $rs = $this->mongo_db
+            ->where(array('cares.vn' => (string) $vn, 'cares.hn' => (string) $hn))
+            ->count('babies');
+        return $rs > 0 ? TRUE : FALSE;
+    }
+
+    public function save_service($data)
+    {
+        $rs = $this->mongo_db
+            ->where(array('hn' => (string) $data['hn']))
+            ->push('cares', array(
+                'result'  => $data['result'],
+                'food'    => $data['food'],
+                'provider_id'   => new MongoId($this->provider_id),
+                'user_id'       => new MongoId($this->user_id),
+                'owner_id'      => new MongoId($this->owner_id),
+                'last_update'   => date('Ymd H:i:s')
+            ))->update('babies');
+
+        return $rs;
+    }
+
+    public function update_service($data)
+    {
+        $rs = $this->mongo_db
+            ->where(array('hn' => (string) $data['hn'], 'cares.vn' => (string) $data['vn']))
+            ->set(array(
+                'result'  => $data['result'],
+                'food'    => $data['food'],
+                //'provider_id'   => new MongoId($this->provider_id),
+                'user_id'       => new MongoId($this->user_id),
+                //'owner_id'      => new MongoId($this->owner_id),
+                'last_update'   => date('Ymd H:i:s')
+            ))->update('babies');
+
+        return $rs;
+    }
 }
