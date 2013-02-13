@@ -420,7 +420,7 @@ $(document).ready(function(){
         });
     });
 
-    $('button[data-name="btnGetRightInfo"]').live('click', function(){
+    $('button[data-name="btnGetRightInfo"]').on('click', function(){
 
         var pid = $(this).attr('data-pid');
 

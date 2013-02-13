@@ -291,7 +291,7 @@ head.ready(function(){
         $('input[data-name="txt_search_person_filter"]').val(filter);
     });
 
-    $('a[data-name="btn_selected_person"]').live('click', function(){
+    $('a[data-name="btn_selected_person"]').on('click', function(){
         var hn = $(this).attr('data-hn');
 
         if(confirm('คุณต้องการลงทะเบียนข้อมูลนี้ใช่หรือไม่?'))

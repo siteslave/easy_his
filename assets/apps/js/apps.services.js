@@ -329,7 +329,7 @@ head.ready(function(){
         }
     });
 
-    $('a[data-name="btn_selected_person"]').live('click', function(){
+    $('a[data-name="btn_selected_person"]').on('click', function(){
         var hn = $(this).attr('data-hn'),
             cid = $(this).attr('data-cid'),
             fullname = $(this).attr('data-fullname'),
@@ -408,7 +408,7 @@ head.ready(function(){
 
     });
 
-    $('a[data-name="btn_selected_visit"]').live('click', function(){
+    $('a[data-name="btn_selected_visit"]').on('click', function(){
         var vn = $(this).attr('data-vn'),
             person_id = $(this).attr('data-id');
 

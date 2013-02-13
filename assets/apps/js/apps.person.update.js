@@ -473,7 +473,7 @@ head.ready(function(){
         }
     });
 
-    $('a[data-name="button_set_data_from_dbopo"]').live('click', function(){
+    $('a[data-name="button_set_data_from_dbopo"]').on('click', function(){
         var cid         = $(this).attr('data-cid'),
             fname       = $(this).attr('data-fname'),
             lname       = $(this).attr('data-lname'),
@@ -587,7 +587,7 @@ head.ready(function(){
         person.update.modal.show_search_hospital();
     });
 
-    $('a[data-name="btn_set_hospital"]').live('click', function(){
+    $('a[data-name="btn_set_hospital"]').on('click', function(){
         var act = $('#txt_search_by').val(),
             hospcode = $(this).attr('data-code'),
             hospname = $(this).attr('data-vname');
@@ -878,7 +878,7 @@ head.ready(function(){
     });
 /*
     //set drug allergy info
-    $('a[data-name="btn_set_drug_allergy_info"]').live('click', function(){
+    $('a[data-name="btn_set_drug_allergy_info"]').on('click', function(){
 
         var isupdate = $('#txt_drug_isupdate').val();
 
@@ -940,7 +940,7 @@ head.ready(function(){
 
     //edit drug allergy
 
-    $('a[data-name="btn_edit_drug_allergy"]').live('click', function(){
+    $('a[data-name="btn_edit_drug_allergy"]').on('click', function(){
         //set detail
         var drug_id = $(this).attr('data-id'),
             person_id = $('#person_id').val();
@@ -949,7 +949,7 @@ head.ready(function(){
     });
 
     //remove drug allergy
-    $('a[data-name="btn_remove_drug_allergy"]').live('click', function(){
+    $('a[data-name="btn_remove_drug_allergy"]').on('click', function(){
 
         var drug_id = $(this).attr('data-id'),
             person_id = $('#person_id').val();
@@ -1172,7 +1172,7 @@ head.ready(function(){
      '<td><a href="javascript:void(0)" data-code="'+ v.code +'" data-name="btn_select_chronic_diag" data-vname="'+ v.desc_r +'" '+
      'data-valid="'+ v.valid +'" class="btn btn-info">' +
      */
-    $('a[data-name="btn_select_chronic_diag"]').live('click', function(){
+    $('a[data-name="btn_select_chronic_diag"]').on('click', function(){
         var valid = $(this).attr('data-valid'),
             chronic = $(this).attr('data-chronic'),
             isupdate = $('#txt_chronic_isupdate').val();
@@ -1260,7 +1260,7 @@ head.ready(function(){
     }
 
     //remove chronic
-    $('a[data-name="btn_chronic_remove"]').live('click', function(){
+    $('a[data-name="btn_chronic_remove"]').on('click', function(){
         var diag_code = $(this).attr('data-id'),
             person_id = $('#person_id').val();
 
@@ -1322,7 +1322,7 @@ head.ready(function(){
         person.update.get_chronic_list(person_id);
     });
 
-    $('a[data-name="btn_chronic_edit"]').live('click', function(){
+    $('a[data-name="btn_chronic_edit"]').on('click', function(){
         var chronic = $(this).attr('data-code'),
             chronic_name = $(this).attr('data-desc_r'),
             diag_date = $(this).attr('data-diag_date'),

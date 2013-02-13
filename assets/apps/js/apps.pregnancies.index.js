@@ -357,7 +357,7 @@ head.ready(function(){
         $('input[data-name="txt_search_person_filter"]').val(filter);
     });
 
-    $('a[data-name="btn_selected_person"]').live('click', function(){
+    $('a[data-name="btn_selected_person"]').on('click', function(){
 
         var gravida = prompt('กรุณาระบุครรภ์ที่', 1);
 
@@ -444,7 +444,7 @@ head.ready(function(){
         }
     };
     //labor detail
-    $('a[data-name="labor"]').live('click', function(){
+    $('a[data-name="labor"]').on('click', function(){
         var hn = $(this).attr('data-hn'),
             anc_code = $(this).attr('data-anc_code'),
             fullname = $(this).attr('data-fullname'),
@@ -685,7 +685,7 @@ head.ready(function(){
         }
     };
 
-    $('a[data-name="anc_info"]').live('click', function(){
+    $('a[data-name="anc_info"]').on('click', function(){
         var hn = $(this).attr('data-hn'),
             anc_code = $(this).attr('data-anc_code'),
             fullname = $(this).attr('data-fullname'),

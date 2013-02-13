@@ -213,7 +213,7 @@ head.ready(function(){
         }
     });
 
-    $('a[data-name="button_set_data_from_dbopo"]').live('click', function(){
+    $('a[data-name="button_set_data_from_dbopo"]').on('click', function(){
         var cid         = $(this).attr('data-cid'),
             fname       = $(this).attr('data-fname'),
             lname       = $(this).attr('data-lname'),
@@ -308,7 +308,7 @@ head.ready(function(){
         person.register.modal.show_search_hospital();
     });
 
-    $('a[data-name="btn_set_hospital"]').live('click', function(){
+    $('a[data-name="btn_set_hospital"]').on('click', function(){
         var act = $('#txt_search_by').val(),
             hospcode = $(this).attr('data-code'),
             hospname = $(this).attr('data-vname');

@@ -229,7 +229,7 @@ head.ready(document).ready(function(){
         Person.modal.showNewHouse();
     });
 
-    $('a[data-name="btnHouseSurvey"]').live('click', function(){
+    $('a[data-name="btnHouseSurvey"]').on('click', function(){
 
         var house_id = $(this).attr('data-id');
 
@@ -270,7 +270,7 @@ head.ready(document).ready(function(){
     });
 
 
-    $('a[data-name="btnSelectedVillage"]').live('click', function(){
+    $('a[data-name="btnSelectedVillage"]').on('click', function(){
         //clear old address
         $('#txtHouseId').val('');
         $('#txt_show_house_address').html('');
@@ -372,7 +372,7 @@ head.ready(document).ready(function(){
     $('#txtHouseId').val('');
 
     //get person list
-    $('a[data-name="btn_get_person"]').live('click', function(){
+    $('a[data-name="btn_get_person"]').on('click', function(){
         var id = $(this).attr('data-id'),
             house = $(this).attr('data-house');
         $('#txtHouseId').val(id);
@@ -424,7 +424,7 @@ head.ready(document).ready(function(){
         Person.clear_servey_form();
     });
 
-    $('a[data-name="btn_get_person"]').live('click', function(){
+    $('a[data-name="btn_get_person"]').on('click', function(){
         var house_code = $(this).attr('data-id');
 
         $('#divPersonList').fadeIn('slow');
