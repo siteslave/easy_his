@@ -34,6 +34,12 @@
             <li><a href="javascript:void(0);" data-name="btn_anc"><i class="icon-eye-open"></i> บันทึกข้อมูลการฝากครรภ์ (ANC)</a></li>
             <li><a href="javascript:void(0);" data-name="btn_postnatal"><i class="icon-headphones"></i> เยี่ยมหลังคลอดมารดา</a></li>
             <li><a href="javascript:void(0);" data-name="btn_baby_care"><i class="icon-headphones"></i> เยี่ยมหลังคลอดเด็ก</a></li>
+            <li class="dropdown-submenu">
+                <a tabindex="-1" href="#"><i class="icon-th-list"></i> บริการอื่นๆ...</a>
+                <ul class="dropdown-menu">
+                    <li><a href="javascript:void(0);" data-name="btn_specialpp"><i class="icon-eye-close"></i> ให้บริการส่งเสริมป้องกัน (Special PP)</a></li>
+                </ul>
+            </li>
         </ul>
     </div>
     <div class="btn-group">
@@ -1541,6 +1547,7 @@
                             <th>วันที่</th>
                             <th>หน่วยบริการ</th>
                             <th>ผลตรวจ</th>
+                            <th>อาหาร</th>
                             <th>ผู้ให้บริการ</th>
                         </tr>
                         </thead>
@@ -1561,6 +1568,86 @@
 </div>
 <!-- /เยี่ยมหลังคลอด เด็ก -->
 
+<!-- SPECIAL PP -->
+<div class="modal hide fade" id="mdl_special_pp">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>การให้บริการส่งเสริมสุขภาพป้องกันโรคเฉพาะ (Special PP)</h3>
+    </div>
+    <div class="modal-body">
+        <div class="tabbable">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab_special_pp1" data-toggle="tab"><i class="icon-plus"></i> เพิ่มข้อมูล</a></li>
+                <li><a href="#tab_special_pp2" data-toggle="tab"><i class="icon-refresh"></i> ประวัติการรับบริการ</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab_special_pp1">
+                    <form class="form-horizontal">
+                        <legend>การให้บริการวันนี้</legend>
+                        <div class="control-group">
+                            <label class="control-label" for="sl_spp_servplace">สถานบริการ</label>
+                            <div class="controls">
+                                <select id="sl_spp_servplace">
+                                    <option value="">--</option>
+                                    <option value="1">ในสถานบริการ</option>
+                                    <option value="2">นอกสถานบริการ</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="sl_spp_ppspecial">ประเภทบริการ</label>
+                            <div class="controls">
+                                <select id="sl_spp_ppspecial">
+                                    <option value="">--</option>
+                                    <?php
+                                    $specials = get_pp_special_list();
+                                    foreach($specials as $r)
+                                    {
+                                        echo '<option value="'.$r->id.'">' . $r->name . '</option>';
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="btn_special_pp_save">&nbsp;</label>
+                            <div class="controls">
+                                <button class="btn btn-success" type="button" id="btn_special_pp_save">
+                                    <i class="icon-plus-sign icon-white"></i> บันทึกข้อมูล
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="tab-pane" id="tab_special_pp2">
+                    <legend>ประวัติการรับบริการ</legend>
+                    <table class="table table-striped" id="tbl_special_pp_history">
+                        <thead>
+                        <tr>
+                            <th>วันที่</th>
+                            <th>หน่วยบริการ</th>
+                            <th>ผลตรวจ</th>
+                            <th>อาหาร</th>
+                            <th>ผู้ให้บริการ</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td colspan="4">อยู่ในระหว่างปรับปรุงระบบ</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</a>
+    </div>
+</div>
+<!-- /SPECIAL PP -->
+
 <!-- <script type="text/javascript" src="{{ base_url }}assets/apps/js/apps.services.js"></script> -->
 <script type="text/javascript">
     head.js(
@@ -1575,6 +1662,7 @@
             '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.nutritions.js',
             '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.anc.js',
             '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.postnatal.js',
-            '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.babies_care.js'
+            '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.babies_care.js',
+            '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.special_pp.js'
     );
 </script>

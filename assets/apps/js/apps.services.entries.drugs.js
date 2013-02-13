@@ -206,7 +206,7 @@ head.ready(function(){
         }
     });
 
-    $('a[data-name="btn_selected_drug"]').live('click', function(){
+    $('a[data-name="btn_selected_drug"]').on('click', function(){
         var id = $(this).attr('data-id'),
             name = $(this).attr('data-vname'),
             price = $(this).attr('data-price');
@@ -260,7 +260,7 @@ head.ready(function(){
         }
     });
 
-    $('a[data-name="btn_selected_drug_usage"]').live('click', function(){
+    $('a[data-name="btn_selected_drug_usage"]').on('click', function(){
         var id = $(this).attr('data-id'),
             name = $(this).attr('data-vname');
 
@@ -321,7 +321,7 @@ head.ready(function(){
         drug.get_list();
     });
 
-    $('a[data-name="btn_drug_edit"]').live('click', function(){
+    $('a[data-name="btn_drug_edit"]').on('click', function(){
         var id = $(this).attr('data-id'),
             drug_id = $(this).attr('data-drug_id'),
             drug_name = $(this).attr('data-drug_name'),
@@ -350,7 +350,7 @@ head.ready(function(){
     });
 
     //remove drug
-    $('a[data-name="btn_drug_remove"]').live('click', function(){
+    $('a[data-name="btn_drug_remove"]').on('click', function(){
 
         var id = $(this).attr('data-id');
        // alert(id);

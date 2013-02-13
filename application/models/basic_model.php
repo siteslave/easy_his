@@ -1170,6 +1170,24 @@ class Basic_model extends CI_Model
         return $arr_result;
     }
 
+    public function get_pp_special_list()
+    {
+        $result = $this->mongo_db->order_by(array('export_code' => 1))->get('ref_pp_specials');
+
+        $arr_result = array();
+
+        foreach($result as $r)
+        {
+            $obj = new stdClass();
+            $obj->id = get_first_object($r['_id']);
+            $obj->export_code = $r['export_code'];
+            $obj->name = $r['name'];
+            $arr_result[] = $obj;
+        }
+
+        return $arr_result;
+    }
+
 }
 
 //End file

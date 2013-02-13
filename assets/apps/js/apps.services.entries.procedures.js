@@ -242,7 +242,7 @@ head.ready(function(){
     });
 
     //remove proced
-    $('a[data-name="btn_proced_remove"]').live('click', function(){
+    $('a[data-name="btn_proced_remove"]').on('click', function(){
         var obj = $(this).parent().parent().parent(),
             code = $(this).attr('data-code'),
             vn = $('#vn').val();
@@ -261,7 +261,7 @@ head.ready(function(){
         });
     });
 
-    $('a[data-name="btn_proced_edit"]').live('click', function(){
+    $('a[data-name="btn_proced_edit"]').on('click', function(){
         /*
          '<a href="javascript:void(0);" class="btn" data-name="btn_proced_edit" data-code="'+ v.code +'"' +
          'data-proced_name="'+ v.proced_name +'" data-provider="' + v.provider + '"' +
