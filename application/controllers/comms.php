@@ -1,6 +1,6 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
     /**
-     * Babies Controller
+     * Community service Controller
      *
      * @package     Controller
      * @author      Satit Rianpit <rianpit@gmail.com>
@@ -9,7 +9,7 @@
      * @license     http://his.mhkdc.com/licenses
      */
 
-class Spp extends CI_Controller
+class Comms extends CI_Controller
 {
     //------------------------------------------------------------------------------------------------------------------
     /*
@@ -39,7 +39,7 @@ class Spp extends CI_Controller
 
         $this->load->model('Service_model', 'service');
         $this->load->model('Person_model', 'person');
-        $this->load->model('Spp_model', 'spp');
+        $this->load->model('Comms_model', 'comms');
 
         $this->load->helper(array('person'));
     }
@@ -50,22 +50,23 @@ class Spp extends CI_Controller
     public function save_service()
     {
         $data = $this->input->post('data');
+
         if(!empty($data))
         {
             //check duplicated
-            $is_duplicated = $this->spp->check_duplicated($data['hn'], $data['vn']);
+            $is_duplicated = $this->comms->check_duplicated($data['hn'], $data['vn']);
 
-            $this->spp->owner_id = $this->owner_id;
-            $this->spp->provider_id = $this->provider_id;
-            $this->spp->user_id = $this->user_id;
+            $this->comms->owner_id = $this->owner_id;
+            $this->comms->provider_id = $this->provider_id;
+            $this->comms->user_id = $this->user_id;
 
             if(!$is_duplicated)
             {
-                $rs = $this->spp->save_service($data);
+                $rs = $this->comms->save_service($data);
             }
             else
             {
-                $rs = $this->spp->update_service($data);
+                $rs = $this->comms->update_service($data);
             }
 
             if($rs)
@@ -95,16 +96,18 @@ class Spp extends CI_Controller
         $data = $this->input->post('data');
         if(!empty($data))
         {
-            $rs = $this->spp->get_service_detail($data['hn'], $data['vn']);
+            $rs = $this->comms->get_service_detail($data['hn'], $data['vn']);
             if($rs)
             {
                 $obj = new stdClass();
-                $obj->servplace = $rs['servplace'];
-                $obj->ppspecial = get_first_object($rs['ppspecial']);
+                $obj->comservice = get_first_object($rs['comservice']);
 
                 $rows = json_encode($obj);
-
                 $json = '{"success": true, "rows": '. $rows .'}';
+            }
+            else
+            {
+                $json = '{"success": false, "msg": "ไม่พบข้อมูล"}';
             }
         }
         else
@@ -124,7 +127,7 @@ class Spp extends CI_Controller
 
         if(!empty($hn))
         {
-            $rs = $this->spp->get_service_history($hn);
+            $rs = $this->comms->get_service_history($hn);
             if($rs)
             {
                 foreach($rs as $r)
@@ -135,8 +138,7 @@ class Spp extends CI_Controller
                     $obj->date_serv = $visit['date_serv'];
                     $obj->time_serv = $visit['time_serv'];
 
-                    $obj->ppspecial_name = get_pp_special_name($r['ppspecial']);
-                    $obj->servplace_name = $r['servplace'] == '1' ? 'ในสถานบริการ' : 'นอกสถานบริการ';
+                    $obj->comservice_name = get_community_service_name($r['comservice']);
 
                     $obj->provider_name = get_provider_name_by_id(get_first_object($r['provider_id']));
                     $obj->owner_name = get_owner_name(get_first_object($r['owner_id']));

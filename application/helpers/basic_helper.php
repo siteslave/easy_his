@@ -177,6 +177,17 @@ if(!function_exists('get_pp_special_name')){
         return $result;
     }
 }
+if(!function_exists('get_community_service_name')){
+    function get_community_service_name($id){
+        $ci =& get_instance();
+
+        $ci->load->model('Basic_model', 'basic');
+
+        $result = $ci->basic->get_community_service_name($id);
+
+        return $result;
+    }
+}
 
 if(!function_exists('get_diag_name')){
     function get_diag_name($code){
@@ -372,6 +383,18 @@ if(!function_exists('get_pp_special_list'))
         $ci->load->model('Basic_model', 'basic');
 
         $rs = $ci->basic->get_pp_special_list();
+
+        return $rs;
+    }
+}
+if(!function_exists('get_community_service_list'))
+{
+    function get_community_service_list()
+    {
+        $ci =& get_instance();
+        $ci->load->model('Basic_model', 'basic');
+
+        $rs = $ci->basic->get_community_service_list();
 
         return $rs;
     }
