@@ -3,7 +3,7 @@
      * ncd Controller
      *
      * @package     Controller
-     * @author      Satit Rianpit <rianpit@gmail.com>
+     * @author      Mr.Utit Sairat <soodteeruk@gmail.com>
      * @since       Version 1.0.0
      * @copyright   Copyright 2013 Data center of Maha Sarakham Hospital
      * @license     http://his.mhkdc.com/licenses
@@ -214,6 +214,7 @@ class Ncd extends CI_Controller
             {
 
                 $arr_result = array();
+                $owner_id_check = '';
 
                 foreach($rs as $r)
                 {
@@ -226,16 +227,21 @@ class Ncd extends CI_Controller
                     $obj->birthdate = $r['birthdate'];
                     $obj->sex = $r['sex'] == '1' ? 'ชาย' : 'หญิง';
                     $obj->age = count_age($r['birthdate']);
+                    $owner_id_check = $r['owner_id'];
 
                     $arr_result[] = $obj;
                 }
 
-                $rows = json_encode($arr_result);
-                $json = '{"success": true, "rows": '.$rows.'}';
+                if($owner_id_check == $this->owner_id) {
+                    $rows = json_encode($arr_result);
+                    $json = '{"success": true, "rows": '.$rows.'}';
+                } else {
+                    $json = '{ "success": false, "msg": "ไม่ใช่บุคคลในเขตรับผิดชอบ" }';
+                }
             }
             else
             {
-                $json = '{"success": false, "msg ": "ไม่พบรายการ"}';
+                $json = '{"success": false, "msg": "ไม่พบรายการ"}';
             }
 
         }

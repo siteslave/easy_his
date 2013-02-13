@@ -573,12 +573,6 @@ class Person_model extends CI_Model
 	
 	public function get_all_person()
 	{
-		$rs = $this->mongo_db->get('person');
-		return $rs;
-	}
-	
-	public function get_all_person2()
-	{
 		$rs = $this->mongo_db
                     ->where('hn', '')
                     ->get('person');
@@ -624,6 +618,17 @@ class Person_model extends CI_Model
 
         return $rs;
     }
+    
+    public function search_person_by_cid_with_owner($cid) {
+        $rs = $this->mongo_db
+            ->where(array(
+                    'cid' => (string)$cid,
+                    'typearea.owner_id' => new MongoId($this->owner_id)
+                ))
+            ->get('person');
+        
+        return $rs;
+    }
 
     //------------------------------------------------------------------------------------------------------------------
     /**
@@ -635,6 +640,17 @@ class Person_model extends CI_Model
             ->where('hn', $hn)
             ->get('person');
 
+        return $rs;
+    }
+    
+    public function search_person_by_hn_with_owner($hn) {
+        $rs = $this->mongo_db
+            ->where(array(
+                    'hn' => (string)$hn,
+                    'typearea.owner_id' => new MongoId($this->owner_id)
+                ))
+            ->get('person');
+        
         return $rs;
     }
 }
