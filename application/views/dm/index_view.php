@@ -135,7 +135,7 @@
                     <div class="control-group">
                         <label class="control-label" for="tboRegCenterNumber">เลขทะเบียนกลาง</label>
                         <div class="controls">
-                            <input type="text" id="tboRegCenterNumber" placeholder="เลขทะเบียนกลาง" class="input-medium" />
+                            <input type="text" id="tboRegCenterNumber" placeholder="เลขทะเบียนกลาง" class="input-medium" disabled />
                         </div>
                     </div>
                 </div>
@@ -153,7 +153,7 @@
                     <div class="control-group">
                         <label class="control-label" for="tboYear">ปีที่เริ่มเป็น</label>
                         <div class="controls">
-                            <input type="text" id="tboYear" placeholder="พ.ศ. เช่น 2556" class="input-small" />
+                            <input type="text" id="tboYear" placeholder="พ.ศ. เช่น 2556" class="input-small" data-type="year" />
                         </div>
                     </div>
                 </div>
@@ -184,6 +184,11 @@
                         <div class="controls">
                             <select id="cboDoctor">
                                 <option value="">----------------</option>
+                                <?php
+                                    foreach($providers as $prov) {
+                                        echo '<option value="'.$prov->id.'">'.$prov->name.'</option>';
+                                    }
+                                ?>
                             </select>
                         </div>
                     </div>
@@ -234,7 +239,7 @@
         </form>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-success" id="btn_do_register"><i class="icon-plus-sign icon-white"></i>ลงทะเบียน</button>
+        <button type="button" class="btn btn-success" id="btn_dm_do_register"><i class="icon-plus-sign icon-white"></i>ลงทะเบียน</button>
         <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="icon-off icon-white"></i>ปิดหน้าต่าง</button>
     </div>
 </div>

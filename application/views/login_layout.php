@@ -59,9 +59,10 @@
         var csrf_token = '<?php echo $this->security->get_csrf_hash(); ?>';
     </script>
 
+	<script src="<?php echo base_url(); ?>assets/js/jquery.js"></script>
+
     <script>
         head.js(
-                '<?php echo base_url(); ?>assets/js/jquery.js',
                 '<?php echo base_url(); ?>assets/js/bootstrap.min.js',
                 '<?php echo base_url(); ?>assets/js/underscore.min.js',
                 '<?php echo base_url(); ?>assets/js/taffy.js',
@@ -76,13 +77,12 @@
                 '<?php echo base_url(); ?>assets/js/spin.min.js',
                 '<?php echo base_url(); ?>assets/js/jquery.paging.min.js',
                 '<?php echo base_url(); ?>assets/js/jquery.numeric.js',
-                '<?php echo base_url(); ?>assets/js/numeral.min.js',
-                '<?php echo base_url(); ?>assets/apps/js/apps.js',
-                '<?php echo base_url(); ?>assets/apps/js/apps.users.js'
+                '<?php echo base_url(); ?>assets/js/numeral.min.js'
         );
-
     </script>
 
+    <script src="<?php echo base_url(); ?>assets/apps/js/apps.js"></script>
+    <script src="<?php echo base_url(); ?>assets/apps/js/apps.users.js"></script>
 </head>
 
 <body>

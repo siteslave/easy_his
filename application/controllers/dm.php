@@ -40,7 +40,7 @@ class Dm extends CI_Controller
 
         $this->clinic_code = '01';
 
-        //$this->load->model('Dm_model', 'dm');
+        $this->load->model('Dm_model', 'dm');
         $this->load->model('Service_model', 'service');
         $this->load->model('Basic_model', 'basic');
         $this->load->model('Person_model', 'person');
@@ -55,8 +55,11 @@ class Dm extends CI_Controller
     {
         $this->person->owner_id = $this->owner_id;
         $this->person->clinic_code = $this->clinic_code;
+        $this->dm->owner_id = $this->owner_id;
 
         $data['villages'] = $this->person->get_villages();
+        $data['providers'] = $this->get_providers_by_active();
+        
         $this->layout->view('dm/index_view', $data);
     }
 
@@ -71,8 +74,8 @@ class Dm extends CI_Controller
 
         $limit = (int) $stop - (int) $start;
 
-        $this->ncd->owner_id = $this->owner_id;
-        $rs = $this->ncd->get_list($start, $limit);
+        $this->dm->owner_id = $this->owner_id;
+        $rs = $this->dm->get_list($start, $limit);
 
         if($rs)
         {
@@ -117,8 +120,8 @@ class Dm extends CI_Controller
 
         $limit = (int) $stop - (int) $start;
 
-        $this->ncd->owner_id = $this->owner_id;
-        $rs = $this->ncd->get_list_by_house($house_id);
+        $this->dm->owner_id = $this->owner_id;
+        $rs = $this->dm->get_list_by_house($house_id);
 
         if($rs)
         {
@@ -154,8 +157,8 @@ class Dm extends CI_Controller
 
     public function get_list_total()
     {
-        $this->ncd->owner_id = $this->owner_id;
-        $total = $this->ncd->get_list_total();
+        $this->dm->owner_id = $this->owner_id;
+        $total = $this->dm->get_list_total();
         $json = '{"success": true, "total": '.$total.'}';
 
         render_json($json);
@@ -163,8 +166,8 @@ class Dm extends CI_Controller
 
     public function get_list_by_village_total()
     {
-        $this->ncd->owner_id = $this->owner_id;
-        $total = $this->ncd->get_list_by_village_total();
+        $this->dm->owner_id = $this->owner_id;
+        $total = $this->dm->get_list_by_village_total();
         $json = '{"success": true, "total": '.$total.'}';
 
         render_json($json);
@@ -320,7 +323,7 @@ class Dm extends CI_Controller
         if(empty($person_id)) {
             $json = '{ "success": false, "msg": "No person id found." }';
         } else {
-            $rs = $this->ncd->remove_ncd_register($person_id);
+            $rs = $this->dm->remove_dm_register($person_id);
             if($rs) {
                 $json = '{ "success": true }';
             } else {
@@ -329,6 +332,22 @@ class Dm extends CI_Controller
         }
         
         render_json($json);
+    }
+    
+    public function get_providers_by_active() {
+        $rs = $this->dm->get_providers_by_active();
+        if($rs) {
+            $arr_result = array();
+            foreach($rs as $r) {
+                $obj = new stdClass();
+                $obj->id = get_first_object($r['_id']);
+                $obj->name = $r['first_name'].' '.$r['last_name'];
+                
+                array_push($arr_result, $obj);
+            }
+            
+            return $arr_result;
+        }
     }
 }
 

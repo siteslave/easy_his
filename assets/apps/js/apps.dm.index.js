@@ -257,7 +257,7 @@ head.ready(function(){
             $('#tboAge').val(v.age);
             $('#slSex').val(v.sex);
             
-            $('#tboRegCenterNumber').focus();
+            $('#tboRegHosNumber').focus();
         });
     };
 
@@ -372,7 +372,7 @@ head.ready(function(){
         
     };
     
-    $('#mdlNewRegister').do('hidden', function() {
+    $('#mdlNewRegister').on('hidden', function() {
         dm.clear_register_form();
     });
     
@@ -393,6 +393,10 @@ head.ready(function(){
             }
         });
     });
-
+    
+    $('#btn_dm_do_register').click(function() {
+        app.alert("Save");
+    });
+    
     dm.get_list();
 });
