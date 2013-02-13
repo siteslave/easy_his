@@ -5,16 +5,6 @@ head.ready(function(){
     var spp = {};
 
     spp.ajax = {
-        check_registration: function(hn, cb){
-            var url = 'spp/check_registration',
-                params = {
-                    hn: hn
-                };
-
-            app.ajax(url, params, function(err, data){
-                err ? cb(err) : cb(null, data);
-            });
-        },
         get_history: function(hn, cb){
             var url = 'spp/get_service_history',
                 params = {
@@ -76,8 +66,8 @@ head.ready(function(){
            }
             else
            {
-               $('#sl_spp_servplace').val(data.rows[0].result);
-               $('#sl_spp_ppspecial').val(data.rows[0].food);
+               $('#sl_spp_servplace').val(data.rows.servplace);
+               $('#sl_spp_ppspecial').val(data.rows.ppspecial);
            }
         });
     };
@@ -105,8 +95,8 @@ head.ready(function(){
                     '<tr>' +
                         '<td>' + app.mongo_to_thai_date(v.date_serv) + '</td>' +
                         '<td>' + app.clear_null(v.owner_name) + '</td>' +
-                        '<td>' + app.clear_null(v.result) + '</td>' +
-                        '<td>' + app.clear_null(v.food) + '</td>' +
+                        '<td>' + app.clear_null(v.ppspecial_name) + '</td>' +
+                        '<td>' + app.clear_null(v.servplace_name) + '</td>' +
                         '<td>' + app.clear_null(v.provider_name) + '</td>' +
                         '</tr>'
                 );
@@ -137,13 +127,13 @@ head.ready(function(){
         data.servplace = $('#sl_spp_servplace').val();
         data.ppspecial = $('#sl_spp_ppspecial').val();
 
-        if(!data.result)
+        if(!data.servplace)
         {
-            app.alert('กรุณาระบุผลการตรวจ');
+            app.alert('กรุณาระบุสถานที่ตรวจ');
         }
-        else if(!data.food)
+        else if(!data.ppspecial)
         {
-            app.alert('กรุณาระบุอาหารที่รับประทาน');
+            app.alert('กรุณาระบุประเภทการให้บริการ');
         }
         else
         {

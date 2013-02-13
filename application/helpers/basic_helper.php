@@ -166,6 +166,18 @@ if(!function_exists('get_informant_name')){
         return $result;
     }
 }
+if(!function_exists('get_pp_special_name')){
+    function get_pp_special_name($id){
+        $ci =& get_instance();
+
+        $ci->load->model('Basic_model', 'basic');
+
+        $result = $ci->basic->get_pp_special_name($id);
+
+        return $result;
+    }
+}
+
 if(!function_exists('get_diag_name')){
     function get_diag_name($code){
         $ci =& get_instance();

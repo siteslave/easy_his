@@ -725,6 +725,12 @@ class Basic_model extends CI_Model
 
         return count($result) > 0 ? $result[0]['desc_r'] : '-';
     }
+
+    public function get_pp_special_name($code){
+        $result = $this->mongo_db->where(array('_id' => new MongoId($code)))->get('ref_pp_specials');
+
+        return count($result) > 0 ? $result[0]['name'] : '-';
+    }
     public function get_insurance_name($code){
         $result = $this->mongo_db->where(array('code' => new MongoInt32($code)))->get('ref_insurances');
 
