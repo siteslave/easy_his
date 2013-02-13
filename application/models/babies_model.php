@@ -23,7 +23,7 @@ class Babies_model extends CI_Model
                 'owner_id' => new MongoId($this->owner_id),
                 'provider_id' => new MongoId($this->provider_id),
                 'user_id' => new MongoId($this->user_id),
-                'last_update' => date('Ymd H:i:s')
+                'last_update' => date('Y-m-d H:i:s')
             ));
 
         return $rs;
@@ -91,7 +91,7 @@ class Babies_model extends CI_Model
             ->set(array(
                     'mother_hn' => (string) $data['mother_hn'],
                     'gravida' => (string) $data['gravida'],
-                    'last_update' => date('Ymd H:i:s')
+                    'last_update' => date('Y-m-d H:i:s')
                 ))
             ->update('babies');
 
@@ -117,7 +117,7 @@ class Babies_model extends CI_Model
                     'vitk'      => (string) $data['vitk'],
                     'tsh'       => (string) $data['tsh'],
                     'tshresult' => (string) $data['tshresult'],
-                    'last_update' => date('Ymd H:i:s')
+                    'last_update' => date('Y-m-d H:i:s')
                  ))
             ->update('babies');
 
