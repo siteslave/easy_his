@@ -1,5 +1,5 @@
 /**
- * Service EPI script
+ * Service Special PP script
  */
 head.ready(function(){
     var spp = {};
