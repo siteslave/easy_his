@@ -372,7 +372,7 @@ head.ready(function(){
         
     };
     
-    $('#mdlNewRegister').do('hidden', function() {
+    $('#mdlNewRegister').on('hidden', function() {
         dm.clear_register_form();
     });
     
@@ -392,6 +392,10 @@ head.ready(function(){
                 });
             }
         });
+    });
+    
+    $('#btn_do_register').click(function() {
+        app.alert('Test');
     });
 
     dm.get_list();
