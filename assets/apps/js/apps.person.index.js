@@ -229,7 +229,7 @@ head.ready(document).ready(function(){
         Person.modal.showNewHouse();
     });
 
-    $('a[data-name="btnHouseSurvey"]').on('click', function(){
+    $(document).on('click', 'a[data-name="btnHouseSurvey"]', function(){
 
         var house_id = $(this).attr('data-id');
 
@@ -270,7 +270,7 @@ head.ready(document).ready(function(){
     });
 
 
-    $('a[data-name="btnSelectedVillage"]').on('click', function(){
+    $(document).on('click', 'a[data-name="btnSelectedVillage"]', function(){
         //clear old address
         $('#txtHouseId').val('');
         $('#txt_show_house_address').html('');
@@ -317,6 +317,7 @@ head.ready(document).ready(function(){
 
 
     Person.clear_register_form = function(){
+        $('#txtAddress').val('');
         $('#txtHouse').val('');
         $('#txtHouseId').val('');
         $('#txtHouseCode').val('');
@@ -328,7 +329,7 @@ head.ready(document).ready(function(){
         $('#txtRoad').val('');
     };
 
-    $('#mdlNewHouse').on('hidden', function(){
+    $(document).on('hidden', '#mdlNewHouse', function(){
         Person.clear_register_form();
     });
 
@@ -372,7 +373,7 @@ head.ready(document).ready(function(){
     $('#txtHouseId').val('');
 
     //get person list
-    $('a[data-name="btn_get_person"]').on('click', function(){
+    $(document).on('click', 'a[data-name="btn_get_person"]', function(){
         var id = $(this).attr('data-id'),
             house = $(this).attr('data-house');
         $('#txtHouseId').val(id);
@@ -424,7 +425,7 @@ head.ready(document).ready(function(){
         Person.clear_servey_form();
     });
 
-    $('a[data-name="btn_get_person"]').on('click', function(){
+    $(document).on('click', 'a[data-name="btn_get_person"]', function(){
         var house_code = $(this).attr('data-id');
 
         $('#divPersonList').fadeIn('slow');
