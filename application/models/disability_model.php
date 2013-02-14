@@ -81,9 +81,9 @@ class Disability_model extends CI_Model {
         $rs = $this->mongo_db
             ->where(array(
                 'person_id' => new MongoId($person_id),
-                'did' => (string) $did,
-                'dtype' => new MongoId($dtype)
-            ))->count('visit_special_pp');
+                'disabilities.did' => (string) $did,
+                'disabilities.dtype' => new MongoId($dtype)
+            ))->count('person');
 
         return $rs > 0 ? TRUE : FALSE;
     }
