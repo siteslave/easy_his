@@ -373,7 +373,6 @@ $(document).ready(function(){
 
         var chat = chw + amp + tmb + moo;
 
-
         Care.get_person(chat, function(err, data){
 
             $('#tblPersonResult tbody').empty();
