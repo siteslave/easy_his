@@ -1,6 +1,6 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
     /**
-     * EPI Controller
+     * ncd Controller
      *
      * @package     Controller
      * @author      Satit Rianpit <rianpit@gmail.com>
@@ -9,7 +9,7 @@
      * @license     http://his.mhkdc.com/licenses
      */
 
-class Epis extends CI_Controller
+class Ncd extends CI_Controller
 {
     //------------------------------------------------------------------------------------------------------------------
     /*
@@ -38,9 +38,9 @@ class Epis extends CI_Controller
         $this->user_id = $this->session->userdata('user_id');
         $this->provider_id = $this->session->userdata('provider_id');
 
-        $this->clinic_code = '05';
+        $this->clinic_code = '06';
 
-        $this->load->model('Epi_model', 'epi');
+        $this->load->model('Ncd_model', 'ncd');
         $this->load->model('Service_model', 'service');
         $this->load->model('Basic_model', 'basic');
         $this->load->model('Person_model', 'person');
@@ -57,7 +57,7 @@ class Epis extends CI_Controller
         $this->person->clinic_code = $this->clinic_code;
 
         $data['villages'] = $this->person->get_villages();
-        $this->layout->view('epis/index_view', $data);
+        $this->layout->view('ncd/index_view', $data);
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -71,8 +71,8 @@ class Epis extends CI_Controller
 
         $limit = (int) $stop - (int) $start;
 
-        $this->epi->owner_id = $this->owner_id;
-        $rs = $this->epi->get_list($start, $limit);
+        $this->ncd->owner_id = $this->owner_id;
+        $rs = $this->ncd->get_list($start, $limit);
 
         if($rs)
         {
@@ -117,8 +117,8 @@ class Epis extends CI_Controller
 
         $limit = (int) $stop - (int) $start;
 
-        $this->epi->owner_id = $this->owner_id;
-        $rs = $this->epi->get_list_by_house($house_id);
+        $this->ncd->owner_id = $this->owner_id;
+        $rs = $this->ncd->get_list_by_house($house_id);
 
         if($rs)
         {
@@ -154,8 +154,8 @@ class Epis extends CI_Controller
 
     public function get_list_total()
     {
-        $this->epi->owner_id = $this->owner_id;
-        $total = $this->epi->get_list_total();
+        $this->ncd->owner_id = $this->owner_id;
+        $total = $this->ncd->get_list_total();
         $json = '{"success": true, "total": '.$total.'}';
 
         render_json($json);
@@ -163,8 +163,8 @@ class Epis extends CI_Controller
 
     public function get_list_by_village_total()
     {
-        $this->epi->owner_id = $this->owner_id;
-        $total = $this->epi->get_list_by_village_total();
+        $this->ncd->owner_id = $this->owner_id;
+        $total = $this->ncd->get_list_by_village_total();
         $json = '{"success": true, "total": '.$total.'}';
 
         render_json($json);
@@ -254,15 +254,6 @@ class Epis extends CI_Controller
         else
         {
 
-            //check owner
-            $is_owner = $this->person->check_owner($hn, $this->owner_id);
-
-            if($is_owner)
-            {
-
-            }
-            else
-
             $this->person->owner_id = $this->owner_id;
             $this->person->user_id = $this->user_id;
 
@@ -306,7 +297,7 @@ class Epis extends CI_Controller
         }
         else
         {
-            $rs = $this->epi->sevice_save($data);
+            $rs = $this->ncd->sevice_save($data);
 
             if($rs)
             {
@@ -322,7 +313,7 @@ class Epis extends CI_Controller
     }
 
     /**
-     * Check EPI registration
+     * Check NCD registration
      *
      * @return void
      * @internal param string $hn
@@ -338,7 +329,7 @@ class Epis extends CI_Controller
         }
         else
         {
-            $rs = $this->person->check_clinic_exist($hn, $this->clinic_code);
+            $rs = $this->person->do_register_clinic($hn, $this->clinic_code);
 
             if($rs)
             {
@@ -355,11 +346,11 @@ class Epis extends CI_Controller
 
     //------------------------------------------------------------------------------------------------------------------
     /**
-     * Get epi vaccines list
+     * Get ncd vaccines list
      */
-    public function get_epi_vaccine_list()
+    public function get_ncd_vaccine_list()
     {
-        $rs = $this->basic->get_epi_vaccine_list();
+        $rs = $this->basic->get_ncd_vaccine_list();
 
         if($rs)
         {
@@ -377,7 +368,7 @@ class Epis extends CI_Controller
 
     //------------------------------------------------------------------------------------------------------------------
     /**
-     * Save epi service
+     * Save ncd service
      */
     public function save_service()
     {
@@ -390,7 +381,7 @@ class Epis extends CI_Controller
         else
         {
             //check duplicated
-            $duplicated = $this->epi->check_visit_duplicated($data['vn'], $data['vaccine_id']);
+            $duplicated = $this->ncd->check_visit_duplicated($data['vn'], $data['vaccine_id']);
 
             if($duplicated)
             {
@@ -398,11 +389,11 @@ class Epis extends CI_Controller
             }
             else
             {
-                $this->epi->owner_id = $this->owner_id;
-                $this->epi->user_id = $this->user_id;
-                $this->epi->provider_id = $this->provider_id;
+                $this->ncd->owner_id = $this->owner_id;
+                $this->ncd->user_id = $this->user_id;
+                $this->ncd->provider_id = $this->provider_id;
 
-                $rs = $this->epi->save_service($data);
+                $rs = $this->ncd->save_service($data);
 
                 if($rs)
                 {
@@ -419,13 +410,13 @@ class Epis extends CI_Controller
         render_json($json);
     }
 
-    public function get_epi_visit_list()
+    public function get_ncd_visit_list()
     {
         $vn = $this->input->post('vn');
 
         if(!empty($vn))
         {
-            $rs = $this->epi->get_list_by_visit($vn);
+            $rs = $this->ncd->get_list_by_visit($vn);
 
             if($rs)
             {
@@ -454,13 +445,13 @@ class Epis extends CI_Controller
 
         render_json($json);
     }
-    public function get_epi_visit_history()
+    public function get_ncd_visit_history()
     {
         $hn = $this->input->post('hn');
 
         if(!empty($hn))
         {
-            $rs = $this->epi->get_history($hn);
+            $rs = $this->ncd->get_history($hn);
 
             if($rs)
             {
@@ -496,16 +487,23 @@ class Epis extends CI_Controller
 
         render_json($json);
     }
-
-	public function ncd()
-	{
-
-	}
-
-	public function hello_world()
-	{
-		echo 'Hello world';
-	}
+    
+    public function remove_ncd_register() {
+        $person_id = $this->input->post('person_id');
+        
+        if(empty($person_id)) {
+            $json = '{ "success": false, "msg": "No person id found." }';
+        } else {
+            $rs = $this->ncd->remove_ncd_register($person_id);
+            if($rs) {
+                $json = '{ "success": true }';
+            } else {
+                $json = '{ "success": false, "msg": "Cann\'t remove ncd register." }';
+            }
+        }
+        
+        render_json($json);
+    }
 }
 
 
