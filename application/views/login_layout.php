@@ -62,7 +62,6 @@
 
     <script>
         head.js(
-                //'<?php echo base_url(); ?>assets/js/jquery.js',
                 '<?php echo base_url(); ?>assets/js/bootstrap.min.js',
                 '<?php echo base_url(); ?>assets/js/underscore.min.js',
                 '<?php echo base_url(); ?>assets/js/taffy.js',

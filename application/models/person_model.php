@@ -677,4 +677,25 @@ class Person_model extends CI_Model
             ->count('person');
         return $rs > 0 ? TRUE : FALSE;
     }
+
+    public function search_person_by_hn_with_owner($hn) {
+        $rs = $this->mongo_db
+            ->where(array(
+            'hn' => (string)$hn,
+            'typearea.owner_id' => new MongoId($this->owner_id)
+        ))
+            ->get('person');
+
+        return $rs;
+    }
+    public function search_person_by_cid_with_owner($cid) {
+        $rs = $this->mongo_db
+            ->where(array(
+            'cid' => (string)$cid,
+            'typearea.owner_id' => new MongoId($this->owner_id)
+        ))
+            ->get('person');
+
+        return $rs;
+    }
 }
