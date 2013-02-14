@@ -60,22 +60,22 @@ class Person extends CI_Controller
             $vstatus        = $this->basic->get_vstatus();
             $house_type     = $this->basic->get_house_type();
 
-            $this->twiggy->set('educations', $educations);
-            $this->twiggy->set('titles', $titles);
-            $this->twiggy->set('inscls', $inscls);
-            $this->twiggy->set('occupations', $occupations);
-            $this->twiggy->set('races', $races);
-            $this->twiggy->set('nationalities', $nationalities);
-            $this->twiggy->set('religions', $religions);
-            $this->twiggy->set('marry_statuses', $marry_status);
-            $this->twiggy->set('provinces', $provinces);
-            $this->twiggy->set('typearea', $typearea);
-            $this->twiggy->set('labor_types', $labor_types);
-            $this->twiggy->set('vstatus', $vstatus);
-            $this->twiggy->set('house_type', $house_type);
+            $data['educations'] = $educations;
+            $data['titles'] = $titles;
+            $data['inscls'] = $inscls;
+            $data['occupations'] = $occupations;
+            $data['races'] = $races;
+            $data['nationalities'] = $nationalities;
+            $data['religions'] = $religions;
+            $data['marry_statuses'] = $marry_status;
+            $data['provinces'] = $provinces;
+            $data['typearea'] = $typearea;
+            $data['labor_types'] = $labor_types;
+            $data['vstatus'] = $vstatus;
+            $data['house_type'] = $house_type;
 
-            $this->twiggy->set('house_id', $house_id);
-            $this->twiggy->template('person/register')->display();
+            $data['house_id'] = $house_id;
+            $this->layout->view('person/register_view', $data);
         }
 
     }
