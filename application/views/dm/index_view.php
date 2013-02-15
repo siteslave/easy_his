@@ -73,10 +73,11 @@
                                 <li><a href="javascript:void(0);" data-name="btn_set_search_person_filter" data-value="1"><i class="icon-th-list"></i> ค้นจาก HN</a></li>
                             </ul>
                         </div>
+                        <input type="hidden" id="tboCheckRegis" value="" />
                     </div>
                 </div>
             </div>
-            <legend></legend>
+            <br><hr>
             <div class="row-fluid">
                 <div class="span2">
                     <div class="control-group">
@@ -135,7 +136,7 @@
                     <div class="control-group">
                         <label class="control-label" for="tboRegCenterNumber">เลขทะเบียนกลาง</label>
                         <div class="controls">
-                            <input type="text" id="tboRegCenterNumber" placeholder="เลขทะเบียนกลาง" class="input-medium" />
+                            <input type="text" id="tboRegCenterNumber" placeholder="เลขทะเบียนกลาง" class="input-medium" disabled />
                         </div>
                     </div>
                 </div>
@@ -153,7 +154,7 @@
                     <div class="control-group">
                         <label class="control-label" for="tboYear">ปีที่เริ่มเป็น</label>
                         <div class="controls">
-                            <input type="text" id="tboYear" placeholder="พ.ศ. เช่น 2556" class="input-small" />
+                            <input type="text" id="tboYear" placeholder="พ.ศ. เช่น 2556" class="input-small" data-type="year" />
                         </div>
                     </div>
                 </div>
@@ -161,7 +162,7 @@
                     <div class="control-group">
                         <label class="control-label" for="dtpRegisDate">วันที่ขึ้นทะเบียน</label>
                         <div class="input-append date" data-name="datepicker">
-                            <input type="text" id="dtpRegisDate" placeholder="วันที่ขึ้นทะเบียน" class="input-small" value="<?=date('d/m/Y')?>" disabled />
+                            <input value="<?=date('d/m/Y')?>" type="text" id="dtpRegisDate" class="input-small" disabled />
                             <span class="add-on"><i class="icon-th"></i></span>
                         </div>
                     </div>
@@ -184,6 +185,11 @@
                         <div class="controls">
                             <select id="cboDoctor">
                                 <option value="">----------------</option>
+                                <?php
+                                    foreach($providers as $prov) {
+                                        echo '<option value="'.$prov->id.'">'.$prov->name.'</option>';
+                                    }
+                                ?>
                             </select>
                         </div>
                     </div>
@@ -193,7 +199,7 @@
                 <div class="span2">
                     <div class="control-group">
                         <div class="controls">
-                            <input type="checkbox" id="ch_pre_register" placeholder="Pre register" class="input-small" value="1" />
+                            <input type="checkbox" id="ch_pre_register" placeholder="Pre register" class="input-small" />
                             <label class="control-label" for="ch_pre_register">Pre register</label>
                         </div>
                     </div>
@@ -201,7 +207,7 @@
                 <div class="span2">
                     <div class="control-group">
                         <div class="controls">
-                            <input type="checkbox" id="ch_pregnancy" placeholder="Pregnancy" class="input-small" value="1" />
+                            <input type="checkbox" id="ch_pregnancy" placeholder="Pregnancy" class="input-small" />
                             <label class="control-label" for="ch_pregnancy">Pregnancy</label>
                         </div>
                     </div>
@@ -209,7 +215,7 @@
                 <div class="span3">
                     <div class="control-group">
                         <div class="controls">
-                            <input type="checkbox" id="ch_hypertension" placeholder="with Hypertension/DM" class="input-small" value="1" />
+                            <input type="checkbox" id="ch_hypertension" placeholder="with Hypertension/DM" class="input-small" />
                             <label class="control-label" for="ch_hypertension">with Hypertension/DM</label>
                         </div>
                     </div>
@@ -217,7 +223,7 @@
                 <div class="span2">
                     <div class="control-group">
                         <div class="controls">
-                            <input type="checkbox" id="ch_insulin" placeholder="with Insulin" class="input-small" value="1" />
+                            <input type="checkbox" id="ch_insulin" placeholder="with Insulin" class="input-small" />
                             <label class="control-label" for="ch_insulin">with Insulin</label>
                         </div>
                     </div>
@@ -225,7 +231,7 @@
                 <div class="span3">
                     <div class="control-group">
                         <div class="controls">
-                            <input type="checkbox" id="ch_newcase" placeholder="เป็นผู้ป่วยรายใหม่" class="input-small" value="1" />
+                            <input type="checkbox" id="ch_newcase" placeholder="เป็นผู้ป่วยรายใหม่" class="input-small" />
                             <label class="control-label" for="ch_newcase">เป็นผู้ป่วยรายใหม่</label>
                         </div>
                     </div>
@@ -234,7 +240,7 @@
         </form>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-success" id="btn_do_register"><i class="icon-plus-sign icon-white"></i>ลงทะเบียน</button>
+        <button type="button" class="btn btn-success" id="btn_dm_do_register"><i class="icon-plus-sign icon-white"></i>ลงทะเบียน</button>
         <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="icon-off icon-white"></i>ปิดหน้าต่าง</button>
     </div>
 </div>
