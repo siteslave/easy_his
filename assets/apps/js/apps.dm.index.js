@@ -423,6 +423,12 @@ head.ready(function(){
         });
     });
     
+<<<<<<< HEAD
+    $('#btn_do_register').click(function() {
+        app.alert('Test');
+    });
+
+=======
     $('#btn_dm_do_register').click(function() {
         if($('#tboHN').val() == '') {
             app.alert('กรุณาเลือกบุคคลที่ต้องการลงทะเบียนด้วย !');
@@ -460,5 +466,6 @@ head.ready(function(){
         }
     });
     
+>>>>>>> ncd
     dm.get_list();
 });

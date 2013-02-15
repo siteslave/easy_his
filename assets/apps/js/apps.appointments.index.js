@@ -170,7 +170,7 @@ head.ready(function(){
 								'data-vn="'+ v.vn +'" data-hn="'+ v.hn +'"><i class="icon-ok"></i></a></td>' +
 	 */
 	
-	$('a[data-name="btn_selected_visit"]').live('click', function(){
+	$(document).on('click', 'a[data-name="btn_selected_visit"]', function(){
 		var hn = $(this).attr('data-hn'),
 			vn = $(this).attr('data-vn');
 		
@@ -181,7 +181,7 @@ head.ready(function(){
 	/*
 	 * Remove appointment
 	 */
-	$('a[data-name="btn_remove"]').live('click', function(){
+	$(document).on('click', 'a[data-name="btn_remove"]', function(){
 		var id = $(this).attr('data-id'),
 			obj = $(this).parent().parent().parent();
 		

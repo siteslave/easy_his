@@ -58,7 +58,8 @@ class Person_model extends CI_Model
             'soi_main'      => $data['soi_main'],
             'road'          => $data['road'],
             'village_name'  => $data['village_name'],
-            'village_id'    => new MongoId($data['village_id'])
+            'village_id'    => new MongoId($data['village_id']),
+            'last_update' => date('Ymd H:i:s')
         ));
 
         return $result;
@@ -125,7 +126,8 @@ class Person_model extends CI_Model
                                     'surveys.mfood'         => $data['mfood'],
                                     'surveys.bcontrol'      => $data['bcontrol'],
                                     'surveys.acontrol'      => $data['acontrol'],
-                                    'surveys.chemical'      => $data['chemical']
+                                    'surveys.chemical'      => $data['chemical'],
+                                    'last_update'           => date('Ymd H:i:s')
                                 )
                         )
                         ->update('houses');
@@ -160,7 +162,8 @@ class Person_model extends CI_Model
             'rhgroup'           => $data['rhgroup'],
             'labor_type'        => new MongoId($data['labor_type']),
             'passport'          => $data['passport'],
-            'typearea'          => $data['typearea']
+            'typearea'          => array('typearea' => $data['typearea'], 'owner_id' => new MongoId($this->owner_id)),
+            'last_update' => date('Ymd H:i:s')
         ));
 
         return $result; //return _id
@@ -168,34 +171,39 @@ class Person_model extends CI_Model
 
     public function update_person($data){
         $result = $this->mongo_db->where('_id', new MongoId($data['person_id']))
-                                ->set(array(
-                                            'cid'               => $data['cid'],
-                                            'owner_id'          => new MongoId($this->owner_id),
-                                            'title'             => new MongoId($data['title']),
-                                            'first_name'        => $data['first_name'],
-                                            'last_name'         => $data['last_name'],
-                                            'sex'               => $data['sex'],
-                                            'birthdate'         => to_string_date($data['birthdate']),
-                                            'mstatus'           => new MongoId($data['mstatus']),
-                                            'occupation'        => new MongoId($data['occupation']),
-                                            'race'              => new MongoId($data['race']),
-                                            'nation'            => new MongoId($data['nation']),
-                                            'religion'          => new MongoId($data['religion']),
-                                            'education'         => new MongoId($data['education']),
-                                            'fstatus'           => $data['fstatus'],
-                                            'father_cid'        => $data['father_cid'],
-                                            'mother_cid'        => $data['mother_cid'],
-                                            'couple_cid'        => $data['couple_cid'],
-                                            'vstatus'           => new MongoId($data['vstatus']),
-                                            'movein_date'       => to_string_date($data['movein_date']),
-                                            'discharge_status'  => $data['discharge_status'],
-                                            'discharge_date'    => to_string_date($data['discharge_date']),
-                                            'abogroup'           => $data['abogroup'],
-                                            'rhgroup'           => $data['rhgroup'],
-                                            'labor_type'        => new MongoId($data['labor_type']),
-                                            'passport'          => $data['passport'],
-                                            'typearea'          => $data['typearea']
-                                        ))->update('person');
+                ->set(array(
+                    'cid'               => $data['cid'],
+                    'owner_id'          => new MongoId($this->owner_id),
+                    'title'             => new MongoId($data['title']),
+                    'first_name'        => $data['first_name'],
+                    'last_name'         => $data['last_name'],
+                    'sex'               => $data['sex'],
+                    'birthdate'         => to_string_date($data['birthdate']),
+                    'mstatus'           => new MongoId($data['mstatus']),
+                    'occupation'        => new MongoId($data['occupation']),
+                    'race'              => new MongoId($data['race']),
+                    'nation'            => new MongoId($data['nation']),
+                    'religion'          => new MongoId($data['religion']),
+                    'education'         => new MongoId($data['education']),
+                    'fstatus'           => $data['fstatus'],
+                    'father_cid'        => $data['father_cid'],
+                    'mother_cid'        => $data['mother_cid'],
+                    'couple_cid'        => $data['couple_cid'],
+                    'vstatus'           => new MongoId($data['vstatus']),
+                    'movein_date'       => to_string_date($data['movein_date']),
+                    'discharge_status'  => $data['discharge_status'],
+                    'discharge_date'    => to_string_date($data['discharge_date']),
+                    'abogroup'           => $data['abogroup'],
+                    'rhgroup'           => $data['rhgroup'],
+                    'labor_type'        => new MongoId($data['labor_type']),
+                    'passport'          => $data['passport'],
+                    'typearea'          => array(
+                                                'typearea' => $data['typearea'],
+                                                'owner_id' => new MongoId($this->owner_id)
+                                            ),
+                    'last_update'       => date('Ymd H:i:s')
+
+                ))->update('person');
 
         return $result;
     }
@@ -256,7 +264,8 @@ class Person_model extends CI_Model
                     'address.changwat'      => $data['changwat'],
                     'address.postcode'      => $data['postcode'],
                     'address.telephone'     => $data['telephone'],
-                    'address.mobile'        => $data['mobile']
+                    'address.mobile'        => $data['mobile'],
+                    'last_update'           => date('Ymd H:i:s')
                 ))->update('person');
 
         return $result;
@@ -279,7 +288,8 @@ class Person_model extends CI_Model
                     'insurances.start_date'     => to_string_date($data['start_date']),
                     'insurances.expire_date'    => to_string_date($data['expire_date']),
                     'insurances.hmain'          => $data['hmain'],
-                    'insurances.hsub'           => $data['hsub']
+                    'insurances.hsub'           => $data['hsub'],
+                    'last_update'               => date('Ymd H:i:s')
                 ))->update('person');
 
         return $result;
@@ -335,17 +345,17 @@ class Person_model extends CI_Model
         $result = $this->mongo_db
             ->where('_id', new MongoId($data['person_id']))
             ->push('allergies',
-            array(
-                'record_date'   => to_string_date($data['record_date']),
-                'drug_id'       => new MongoId($data['drug_id']),
-                'diag_type_id'  => new MongoId($data['diag_type_id']),
-                'alevel_id'     => new MongoId($data['alevel_id']),
-                'symptom_id'    => new MongoId($data['symptom_id']),
-                'informant_id'  => new MongoId($data['informant_id']),
-                'hospcode'      => $data['hospcode'],
-                'user_id'       => new MongoId($this->user_id)
+                array(
+                    'record_date'   => to_string_date($data['record_date']),
+                    'drug_id'       => new MongoId($data['drug_id']),
+                    'diag_type_id'  => new MongoId($data['diag_type_id']),
+                    'alevel_id'     => new MongoId($data['alevel_id']),
+                    'symptom_id'    => new MongoId($data['symptom_id']),
+                    'informant_id'  => new MongoId($data['informant_id']),
+                    'hospcode'      => $data['hospcode'],
+                    'user_id'       => new MongoId($this->user_id)
+                )
             )
-        )
             ->update('person');
         return $result;
     }
@@ -642,6 +652,7 @@ class Person_model extends CI_Model
 
         return $rs;
     }
+<<<<<<< HEAD
     
     public function search_person_by_hn_with_owner($hn) {
         $rs = $this->mongo_db
@@ -651,6 +662,65 @@ class Person_model extends CI_Model
                 ))
             ->get('person');
         
+=======
+
+    public function search_person_ajax_by_hn($query)
+    {
+        $rs = $this->mongo_db
+            ->select(array('hn', 'first_name', 'last_name'))
+            ->where(array('hn' => (string) $query))
+            ->order_by(array('hn' => 1))
+            ->limit(20)
+            ->get('person');
+
+        return $rs;
+    }
+    public function search_person_ajax_by_name($first_name, $last_name)
+    {
+        $rs = $this->mongo_db
+            ->select(array('hn', 'first_name', 'last_name'))
+            ->where(array('first_name' => (string) $first_name, 'last_name' => (string) $last_name))
+            ->order_by(array('hn' => 1))
+            ->limit(20)
+            ->get('person');
+
+        return $rs;
+    }
+
+    /**
+     * Check Owner
+     *
+     * @param   string  $hn
+     * @param   string  $owner_id
+     * @return bool
+     */
+    public function check_owner($hn, $owner_id)
+    {
+        $rs = $this->mongo_db
+            ->where(array('owner_id' => new MongoId($owner_id), 'hn' => (string) $hn))
+            ->count('person');
+        return $rs > 0 ? TRUE : FALSE;
+    }
+
+    public function search_person_by_hn_with_owner($hn) {
+        $rs = $this->mongo_db
+            ->where(array(
+            'hn' => (string)$hn,
+            'typearea.owner_id' => new MongoId($this->owner_id)
+        ))
+            ->get('person');
+
+        return $rs;
+    }
+    public function search_person_by_cid_with_owner($cid) {
+        $rs = $this->mongo_db
+            ->where(array(
+            'cid' => (string)$cid,
+            'typearea.owner_id' => new MongoId($this->owner_id)
+        ))
+            ->get('person');
+
+>>>>>>> 3b8ed1d2d4d20efa98b3bb8b6f806129b0050a97
         return $rs;
     }
 }
