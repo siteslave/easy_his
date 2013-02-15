@@ -85,4 +85,41 @@ class Dm_model extends CI_Model
         
         return $rs;
     }
+    
+    public function do_regis_dm_clinic($hn, $hid_regis, $year_regis, $date_regis, $diag_type, $doctor, $pre_register, $pregnancy, $hypertension, $insulin, $newcase, $hosp_serial, $reg_serial) {
+        $date = $date_regis;
+        $date = substr($date, 6).substr($date, 3, 2).substr($date, 0, 2);
+        
+        $rs = $this->mongo_db
+            ->where('hn', (string)$hn)
+            ->push('registers', array(
+                    'clinic_code' => $this->clinic_code,
+                    'owner_id' => new MongoId($this->owner_id),
+                    'user_id' => new MongoId($this->user_id),
+                    'reg_date' => $date,
+                    'reg_year' => $year_regis,
+                    'reg_serial' => $reg_serial,
+                    'hosp_serial' => $hosp_serial,
+                    'diag_type' => $diag_type,
+                    'doctor' => new MongoId($doctor),
+                    'pre_regis' => $pre_register=='true'?true:false,
+                    'pregnancy' => $pregnancy=='true'?true:false,
+                    'hypertension' => $hypertension=='true'?true:false,
+                    'insulin' => $insulin=='true'?true:false,
+                    'newcase' => $newcase=='true'?true:false,
+                    'last_update' => date('Y-m-d H:i:s')
+                ))
+            ->update('person');
+        
+        return $rs;
+    }
+    
+    public function remove_dm_register($person_id) {
+        $rs = $this->mongo_db
+            ->where('_id', new MongoId($person_id))
+            ->pull('registers', array('clinic_code' => $this->clinic_code))
+            ->update('person');
+            
+        return $rs;
+    }
 }
