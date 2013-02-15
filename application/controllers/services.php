@@ -1146,10 +1146,19 @@ class Services extends CI_Controller
             $rs = $this->service->get_nutrition($vn);
             if($rs)
             {
-                $data = $rs['nutritions'];
-                $rows = $data ? json_encode($data) : NULL;
+                $data = isset($rs['nutritions']) ? $rs['nutritions'] : NULL;
 
-                $json = '{"success": true, "rows": '.$rows.'}';
+                if(count($data) > 0)
+                {
+                    $rows = $data ? json_encode($data) : NULL;
+
+                    $json = '{"success": true, "rows": '.$rows.'}';
+                }
+                else
+                {
+                    $json = '{"success": false, "msg": "ไม่พบข้อมูล"}';
+                }
+
             }
             else
             {

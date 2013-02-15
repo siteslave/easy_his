@@ -884,4 +884,53 @@ class Person extends CI_Controller
     		$this->person->set_hn(get_first_object($r['_id']), $hn);
     	}
     }
+
+    public function search_person_ajax(){
+        $query = $this->input->post('query');
+
+        if(!empty($query))
+        {
+
+            if(is_numeric($query))
+            {
+                //search by code
+                $rs = $this->person->search_person_ajax_by_hn($query);
+            }
+            else
+            {
+                //search by name
+                $fullname = explode(' ', $query);
+                $first_name = $fullname[0];
+                $last_name = $fullname[1] ? $fullname[1] : ' ';
+
+                $rs = $this->person->search_person_ajax_by_name($first_name, $last_name);
+            }
+
+            if($rs)
+            {
+                $arr_result = array();
+                foreach ($rs as $r)
+                {
+                    $obj = new stdClass();
+                    $obj->name = $r['hn'] . '#' . $r['first_name'] . ' ' . $r['last_name'];
+
+                    $arr_result[] = $obj;
+                }
+                $rows = json_encode($arr_result);
+                $json = '{"success": true, "rows": '.$rows.'}';
+
+            }
+            else
+            {
+                $json = '{"success": false, "msg": "No data."}';
+            }
+        }
+        else
+        {
+            $json = '{"success": false, "msg": "Query empty."}';
+        }
+
+        render_json($json);
+
+    }
 }

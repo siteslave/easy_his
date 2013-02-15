@@ -88,7 +88,8 @@ class Epi_model extends CI_Model
                 'vaccine_id' => new MongoId($data['vaccine_id']),
                 'owner_id' => new MongoId($this->owner_id),
                 'provider_id' => new MongoId($this->provider_id),
-                'user_id' => new MongoId($this->user_id)
+                'user_id' => new MongoId($this->user_id),
+                'last_update' => date('Ymd H:i:s')
             ));
 
         return $rs;

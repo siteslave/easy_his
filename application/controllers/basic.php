@@ -355,6 +355,15 @@ class Basic extends CI_Controller
         render_json($json);
     }
 
+    public function get_pp_special_list()
+    {
+        $rs = $this->basic->get_pp_special_list();
+
+        $rows = json_encode($rs);
+        $json = '{"success": true, "rows": '. $rows .'}';
+
+        render_json($json);
+    }
 /*
     public function get_inscl(){
 

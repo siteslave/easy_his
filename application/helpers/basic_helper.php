@@ -166,6 +166,29 @@ if(!function_exists('get_informant_name')){
         return $result;
     }
 }
+if(!function_exists('get_pp_special_name')){
+    function get_pp_special_name($id){
+        $ci =& get_instance();
+
+        $ci->load->model('Basic_model', 'basic');
+
+        $result = $ci->basic->get_pp_special_name($id);
+
+        return $result;
+    }
+}
+if(!function_exists('get_community_service_name')){
+    function get_community_service_name($id){
+        $ci =& get_instance();
+
+        $ci->load->model('Basic_model', 'basic');
+
+        $result = $ci->basic->get_community_service_name($id);
+
+        return $result;
+    }
+}
+
 if(!function_exists('get_diag_name')){
     function get_diag_name($code){
         $ci =& get_instance();
@@ -326,7 +349,8 @@ if(!function_exists('get_appoint_type_name')){
 }
 
 
-if(!function_exists('get_fp_type_name')){
+if(!function_exists('get_fp_type_name'))
+{
 	function get_fp_type_name($code){
 		$ci =& get_instance();
 
@@ -337,8 +361,10 @@ if(!function_exists('get_fp_type_name')){
 		return $result;
 	}
 }
-if(!function_exists('get_vaccine_name')){
-	function get_vaccine_name($vaccine_id){
+if(!function_exists('get_vaccine_name'))
+{
+	function get_vaccine_name($vaccine_id)
+    {
 		$ci =& get_instance();
 
 		$ci->load->model('Basic_model', 'basic');
@@ -347,6 +373,59 @@ if(!function_exists('get_vaccine_name')){
 
 		return $result;
 	}
+}
+
+if(!function_exists('get_pp_special_list'))
+{
+    function get_pp_special_list()
+    {
+        $ci =& get_instance();
+        $ci->load->model('Basic_model', 'basic');
+
+        $rs = $ci->basic->get_pp_special_list();
+
+        return $rs;
+    }
+}
+if(!function_exists('get_community_service_list'))
+{
+    function get_community_service_list()
+    {
+        $ci =& get_instance();
+        $ci->load->model('Basic_model', 'basic');
+
+        $rs = $ci->basic->get_community_service_list();
+
+        return $rs;
+    }
+}
+
+if(!function_exists('get_bresult_name'))
+{
+    function get_bresult_name($code)
+    {
+        switch($code)
+        {
+            case '1': return 'ปกติ'; break;
+            case '2': return 'ผิดปกติ'; break;
+            case '9': return 'ไม่ทราบ'; break;
+            default: return '-'; break;
+        }
+    }
+}
+if(!function_exists('get_bfood_name'))
+{
+    function get_bfood_name($code)
+    {
+        switch($code)
+        {
+            case '1': return 'นมแม่อย่างเดียว'; break;
+            case '2': return 'นมแม่และน้ำ'; break;
+            case '3': return 'นมแม่และนมผสม'; break;
+            case '4': return 'นมผสมอย่างเดียว'; break;
+            default: return '-'; break;
+        }
+    }
 }
 
 

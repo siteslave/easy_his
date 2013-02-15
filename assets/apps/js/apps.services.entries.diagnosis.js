@@ -190,7 +190,7 @@ head.ready(function(){
     });
 
     //remove diag
-    $('a[data-name="btn_diag_remove"]').live('click', function(){
+    $(document).on('click', 'a[data-name="btn_diag_remove"]', function(){
         var obj = $(this).parent().parent(),
             code = $(this).attr('data-code'),
             vn = $('#vn').val();

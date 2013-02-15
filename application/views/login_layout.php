@@ -47,6 +47,7 @@
     <link href="<?php echo base_url(); ?>assets/css/datepicker.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/css/alertify.default.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/css/freeow/freeow.css" rel="stylesheet">
+    <script src="<?php echo base_url(); ?>assets/js/jquery.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/head.load.min.js"></script>
 
     <script src="<?php echo base_url(); ?>assets/js/html5.js"></script>

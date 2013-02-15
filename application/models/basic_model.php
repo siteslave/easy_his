@@ -725,6 +725,17 @@ class Basic_model extends CI_Model
 
         return count($result) > 0 ? $result[0]['desc_r'] : '-';
     }
+
+    public function get_pp_special_name($code){
+        $result = $this->mongo_db->where(array('_id' => new MongoId($code)))->get('ref_pp_specials');
+
+        return count($result) > 0 ? $result[0]['name'] : '-';
+    }
+    public function get_community_service_name($code){
+        $result = $this->mongo_db->where(array('_id' => new MongoId($code)))->get('ref_community_services');
+
+        return count($result) > 0 ? $result[0]['name'] : '-';
+    }
     public function get_insurance_name($code){
         $result = $this->mongo_db->where(array('code' => new MongoInt32($code)))->get('ref_insurances');
 
@@ -1164,6 +1175,41 @@ class Basic_model extends CI_Model
             $obj->th_name = $r['th_name'];
             $obj->eng_name = $r['eng_name'];
 
+            $arr_result[] = $obj;
+        }
+
+        return $arr_result;
+    }
+
+    public function get_pp_special_list()
+    {
+        $result = $this->mongo_db->order_by(array('export_code' => 1))->get('ref_pp_specials');
+
+        $arr_result = array();
+
+        foreach($result as $r)
+        {
+            $obj = new stdClass();
+            $obj->id = get_first_object($r['_id']);
+            $obj->export_code = $r['export_code'];
+            $obj->name = $r['name'];
+            $arr_result[] = $obj;
+        }
+
+        return $arr_result;
+    }
+    public function get_community_service_list()
+    {
+        $result = $this->mongo_db->order_by(array('export_code' => 1))->get('ref_community_services');
+
+        $arr_result = array();
+
+        foreach($result as $r)
+        {
+            $obj = new stdClass();
+            $obj->id = get_first_object($r['_id']);
+            $obj->export_code = $r['export_code'];
+            $obj->name = $r['name'];
             $arr_result[] = $obj;
         }
 

@@ -31,6 +31,16 @@
         	<li><a href="javascript:void(0);" data-name="btn_fp"><i class="icon-tags"></i> วางแผนครอบครัว (Family Planing)</a></li>
             <li><a href="javascript:void(0);" data-name="btn_nutri"><i class="icon-text-height"></i> บันทึกโภชนาการ (Nutrition)</a></li>
             <li><a href="javascript:void(0);" data-name="btn_epi"><i class="icon-user"></i> บันทึกข้อมูลการรับวัคซีน (EPI)</a></li>
+            <li><a href="javascript:void(0);" data-name="btn_anc"><i class="icon-eye-open"></i> บันทึกข้อมูลการฝากครรภ์ (ANC)</a></li>
+            <li><a href="javascript:void(0);" data-name="btn_postnatal"><i class="icon-headphones"></i> เยี่ยมหลังคลอดมารดา</a></li>
+            <li><a href="javascript:void(0);" data-name="btn_baby_care"><i class="icon-headphones"></i> เยี่ยมหลังคลอดเด็ก</a></li>
+            <li class="dropdown-submenu">
+                <a tabindex="-1" href="#"><i class="icon-th-list"></i> บริการอื่นๆ...</a>
+                <ul class="dropdown-menu">
+                    <li><a href="javascript:void(0);" data-name="btn_specialpp"><i class="icon-eye-close"></i> ให้บริการส่งเสริมป้องกัน (Special PP)</a></li>
+                    <li><a href="javascript:void(0);" data-name="btn_community_service"><i class="icon-eye-close"></i> ให้บริการในชุมชน (Community Service)</a></li>
+                </ul>
+            </li>
         </ul>
     </div>
     <div class="btn-group">
@@ -1217,6 +1227,496 @@
     </div>
 </div>
 <!-- end Nutrition -->
+
+<!-- ANC -->
+<div class="modal hide fade" id="mdl_anc">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>ข้อมูลการฝากครรภ์</h3>
+    </div>
+    <div class="modal-body">
+        <div class="tabbable">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab_anc1" data-toggle="tab"><i class="icon-plus"></i> เพิ่มข้อมูล</a></li>
+                <li><a href="#tab_anc2" data-toggle="tab"><i class="icon-refresh"></i> ประวัติการรับบริการ</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab_anc1">
+                    <form class="form-horizontal">
+                        <legend>การให้บริการวันนี้</legend>
+                        <div class="row-fluid">
+                            <div class="span4">
+                                <div class="control-group">
+                                    <label class="control-label" for="sl_anc_gravida">ครรภ์ที่</label>
+                                    <div class="controls">
+                                        <select id="sl_anc_gravida" class="input-small">
+                                            <option value="">ระบุ..</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span5">
+                                <div class="control-group">
+                                    <label class="control-label" for="sl_anc_no">ANC ช่วงที่</label>
+                                    <div class="controls">
+                                        <select id="sl_anc_no">
+                                            <option value="1">ช่วงที่ 1 (อายุครรภ์ <= 12 สัปดาห์)</option>
+                                            <option value="2">ช่วงที่ 2 (อายุครรภ์ 18 สัปดาห์)</option>
+                                            <option value="3">ช่วงที่ 3 (อายุครรภ์ 26 สัปดาห์)</option>
+                                            <option value="4">ช่วงที่ 4 (อายุครรภ์ 32 สัปดาห์)</option>
+                                            <option value="5">ช่วงที่ 5 (อายุครรภ์ 38 สัปดาห์)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row-fluid">
+                            <div class="span4">
+                                <div class="control-group">
+                                    <label class="control-label" for="txt_anc_ga">อายุครรภ์ (สัปดาห์)</label>
+                                    <div class="controls">
+                                        <input type="text" class="input-mini" data-type="number" id="txt_anc_ga">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="span5">
+                                <div class="control-group">
+                                    <label class="control-label" for="sl_anc_result">ผลตรวจ</label>
+                                    <div class="controls">
+                                        <select id="sl_anc_result">
+                                            <option value="1">ปกติ</option>
+                                            <option value="2">ผิดปกติ</option>
+                                            <option value="9">ไม่ทราบ</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <button class="btn btn-success" type="button" id="btn_anc_save">
+                            <i class="icon-plus-sign icon-white"></i> บันทึกข้อมูล
+                        </button>
+                    </form>
+                </div>
+                <div class="tab-pane" id="tab_anc2">
+                    <legend>ประวัติการรับบริการ</legend>
+                    <form action="#" class="form-inline">
+                        <label for="sl_anc_gravida2">ครรภ์ที่</label>
+                        <select id="sl_anc_gravida2" class="input-small">
+                            <option value="">ระบุ..</option>
+                        </select>
+                    </form>
+                    <table class="table table-striped" id="tbl_anc_history">
+                        <thead>
+                        <tr>
+                            <th>วันที่</th>
+                            <th>หน่วยบริการ</th>
+                            <th>ครรภ์ที่</th>
+                            <th>ANC ช่วงที่</th>
+                            <th>อายุครรภ์ (สัปดาห์)</th>
+                            <th>ผลตรวจ</th>
+                            <th>ผู้ให้บริการ</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td colspan="6">อยู่ในระหว่างปรับปรุงระบบ</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</a>
+    </div>
+</div>
+<!-- /ANC -->
+<!-- Mother care -->
+<div class="modal hide fade" id="mdl_postnatal">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>ข้อมูลการดูแลมารดาหลังคลอด (Postnatal)</h3>
+    </div>
+    <div class="modal-body">
+
+        <div class="tabbable">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab_postnatal1" data-toggle="tab"><i class="icon-plus"></i> เพิ่มข้อมูล</a></li>
+                <li><a href="#tab_postnatal2" data-toggle="tab"><i class="icon-refresh"></i> ประวัติการรับบริการ</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab_postnatal1">
+                    <form class="form-horizontal">
+                        <legend>การให้บริการวันนี้</legend>
+                        <div class="row-fluid">
+                            <div class="span5">
+                                <div class="control-group">
+                                    <label class="control-label" for="sl_postnatal_gravida">ครรภ์ที่</label>
+                                    <div class="controls">
+                                        <select id="sl_postnatal_gravida" class="input-small">
+                                            <option value="">ระบุ..</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span5">
+                                <div class="control-group">
+                                    <label class="control-label" for="sl_postnatal_ppresult">ผลการตรวจ</label>
+                                    <div class="controls">
+                                        <select id="sl_postnatal_ppresult">
+                                            <option value="1">ปกติ</option>
+                                            <option value="2">ผิดปกติ</option>
+                                            <option value="9">ไม่ทราบ</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row-fluid">
+                            <div class="span5">
+                                <div class="control-group">
+                                    <label class="control-label" for="sl_postnatal_sugar">ระดับน้ำตาล</label>
+                                    <div class="controls">
+                                        <select id="sl_postnatal_sugar">
+                                            <option value="1">ปกติ</option>
+                                            <option value="2">ผิดปกติ</option>
+                                            <option value="9">ไม่ทราบ</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span5">
+                                <div class="control-group">
+                                    <label class="control-label" for="sl_postnatal_albumin">Albumin</label>
+                                    <div class="controls">
+                                        <select id="sl_postnatal_albumin">
+                                            <option value="1">ปกติ</option>
+                                            <option value="2">ผิดปกติ</option>
+                                            <option value="9">ไม่ทราบ</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row-fluid">
+                            <div class="span5">
+                                <div class="control-group">
+                                    <label class="control-label" for="sl_postnatal_amniotic_fluid">น้ำคาวปลา</label>
+                                    <div class="controls">
+                                        <select id="sl_postnatal_amniotic_fluid">
+                                            <option value="1">ปกติ</option>
+                                            <option value="2">ผิดปกติ</option>
+                                            <option value="9">ไม่ทราบ</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span5">
+                                <div class="control-group">
+                                    <label class="control-label" for="sl_postnatal_uterus">ระดับมดลูก</label>
+                                    <div class="controls">
+                                        <select id="sl_postnatal_uterus">
+                                            <option value="1">ปกติ</option>
+                                            <option value="2">ผิดปกติ</option>
+                                            <option value="9">ไม่ทราบ</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row-fluid">
+                            <div class="span5">
+                                <div class="control-group">
+                                    <label class="control-label" for="sl_postnatal_perineal">ฝีเย็บ</label>
+                                    <div class="controls">
+                                        <select id="sl_postnatal_perineal">
+                                            <option value="1">ปกติ</option>
+                                            <option value="2">ผิดปกติ</option>
+                                            <option value="9">ไม่ทราบ</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span5">
+                                <div class="control-group">
+                                    <label class="control-label" for="sl_postnatal_tits">หัวนม</label>
+                                    <div class="controls">
+                                        <select id="sl_postnatal_tits">
+                                            <option value="1">ปกติ</option>
+                                            <option value="2">ผิดปกติ</option>
+                                            <option value="9">ไม่ทราบ</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-success" type="button" id="btn_postnatal_save">
+                            <i class="icon-plus-sign icon-white"></i> บันทึกข้อมูล
+                        </button>
+                    </form>
+                </div>
+                <div class="tab-pane" id="tab_postnatal2">
+                    <legend>ประวัติการรับบริการ</legend>
+                    <table class="table table-striped" id="tbl_postnatal_history">
+                        <thead>
+                        <tr>
+                            <th>วันที่</th>
+                            <th>หน่วยบริการ</th>
+                            <th>ครรภ์ที่</th>
+                            <th>ผลตรวจ</th>
+                            <th>ผู้ให้บริการ</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td colspan="5">...</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</a>
+    </div>
+</div>
+<!-- /Mother care -->
+
+<!-- เยี่ยมหลังคลอด เด็ก -->
+<div class="modal hide fade" id="mdl_babies_care">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>ข้อมูลการตรวจหลังคลอด เด็ก</h3>
+    </div>
+    <div class="modal-body">
+        <div class="tabbable">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab_babies_care1" data-toggle="tab"><i class="icon-plus"></i> เพิ่มข้อมูล</a></li>
+                <li><a href="#tab_babies_care2" data-toggle="tab"><i class="icon-refresh"></i> ประวัติการรับบริการ</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab_babies_care1">
+                    <form class="form-horizontal">
+                        <legend>การให้บริการวันนี้</legend>
+                        <div class="control-group">
+                            <label class="control-label" for="sl_babies_care_result">ผลตรวจ</label>
+                            <div class="controls">
+                                <select id="sl_babies_care_result">
+                                    <option value="">--</option>
+                                    <option value="1">ปกติ</option>
+                                    <option value="2">ผิดปกติ</option>
+                                    <option value="9">ไม่ทราบ</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="sl_babies_care_food">อาหาร</label>
+                            <div class="controls">
+                                <select id="sl_babies_care_food">
+                                    <option value="">--</option>
+                                    <option value="1">นมแม่อย่างเดียว</option>
+                                    <option value="2">นมแม่นและน้ำ</option>
+                                    <option value="3">นมแม่และนมผสม</option>
+                                    <option value="4">นมผสมอย่างเดียว</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="btn_babies_care_save">&nbsp;</label>
+                            <div class="controls">
+                                <button class="btn btn-success" type="button" id="btn_babies_care_save">
+                                    <i class="icon-plus-sign icon-white"></i> บันทึกข้อมูล
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="tab-pane" id="tab_babies_care2">
+                    <legend>ประวัติการรับบริการ</legend>
+                    <table class="table table-striped" id="tbl_babies_care_history">
+                        <thead>
+                        <tr>
+                            <th>วันที่</th>
+                            <th>หน่วยบริการ</th>
+                            <th>ผลตรวจ</th>
+                            <th>อาหาร</th>
+                            <th>ผู้ให้บริการ</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td colspan="4">อยู่ในระหว่างปรับปรุงระบบ</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</a>
+    </div>
+</div>
+<!-- /เยี่ยมหลังคลอด เด็ก -->
+
+<!-- SPECIAL PP -->
+<div class="modal hide fade" id="mdl_special_pp">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>การให้บริการส่งเสริมสุขภาพป้องกันโรคเฉพาะ (Special PP)</h3>
+    </div>
+    <div class="modal-body">
+        <div class="tabbable">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab_special_pp1" data-toggle="tab"><i class="icon-plus"></i> เพิ่มข้อมูล</a></li>
+                <li><a href="#tab_special_pp2" data-toggle="tab"><i class="icon-refresh"></i> ประวัติการรับบริการ</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab_special_pp1">
+                    <form class="form-horizontal">
+                        <legend>การให้บริการวันนี้</legend>
+                        <div class="control-group">
+                            <label class="control-label" for="sl_spp_servplace">สถานบริการ</label>
+                            <div class="controls">
+                                <select id="sl_spp_servplace">
+                                    <option value="">--</option>
+                                    <option value="1">ในสถานบริการ</option>
+                                    <option value="2">นอกสถานบริการ</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="sl_spp_ppspecial">ประเภทบริการ</label>
+                            <div class="controls">
+                                <select id="sl_spp_ppspecial">
+                                    <option value="">--</option>
+                                    <?php
+                                    $specials = get_pp_special_list();
+                                    foreach($specials as $r)
+                                    {
+                                        echo '<option value="'.$r->id.'">' . $r->name . '</option>';
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="btn_special_pp_save">&nbsp;</label>
+                            <div class="controls">
+                                <button class="btn btn-success" type="button" id="btn_special_pp_save">
+                                    <i class="icon-plus-sign icon-white"></i> บันทึกข้อมูล
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="tab-pane" id="tab_special_pp2">
+                    <legend>ประวัติการรับบริการ</legend>
+                    <table class="table table-striped" id="tbl_special_pp_history">
+                        <thead>
+                        <tr>
+                            <th>วันที่</th>
+                            <th>หน่วยบริการ</th>
+                            <th>กิจกรรม</th>
+                            <th>สถานที่</th>
+                            <th>ผู้ให้บริการ</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td colspan="5">อยู่ในระหว่างปรับปรุงระบบ</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</a>
+    </div>
+</div>
+<!-- /SPECIAL PP -->
+<!-- Community Service -->
+<div class="modal hide fade" id="mdl_comms">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>การให้บริการในชุมชน (Community Service)</h3>
+    </div>
+    <div class="modal-body">
+        <div class="tabbable">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab_comms1" data-toggle="tab"><i class="icon-plus"></i> เพิ่มข้อมูล</a></li>
+                <li><a href="#tab_comms2" data-toggle="tab"><i class="icon-refresh"></i> ประวัติการรับบริการ</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab_comms1">
+                    <form class="form-horizontal">
+                        <legend>การให้บริการวันนี้</legend>
+                        <div class="control-group">
+                            <label class="control-label" for="sl_comms">ประเภทบริการ</label>
+                            <div class="controls">
+                                <select id="sl_comms" class="input-xxlarge">
+                                    <option value="">--</option>
+                                    <?php
+                                    $comms = get_community_service_list();
+                                    foreach($comms as $r)
+                                    {
+                                        echo '<option value="'.$r->id.'">' . $r->name . '</option>';
+                                    }
+                                    ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="btn_comms_save">&nbsp;</label>
+                            <div class="controls">
+                                <button class="btn btn-success" type="button" id="btn_comms_save">
+                                    <i class="icon-plus-sign icon-white"></i> บันทึกข้อมูล
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="tab-pane" id="tab_comms2">
+                    <legend>ประวัติการรับบริการ</legend>
+                    <table class="table table-striped" id="tbl_comms_history">
+                        <thead>
+                        <tr>
+                            <th>วันที่</th>
+                            <th>หน่วยบริการ</th>
+                            <th>กิจกรรม</th>
+                            <th>ผู้ให้บริการ</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td colspan="4">...</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</a>
+    </div>
+</div>
+<!-- /Community service -->
+
 <!-- <script type="text/javascript" src="{{ base_url }}assets/apps/js/apps.services.js"></script> -->
 <script type="text/javascript">
     head.js(
@@ -1228,6 +1728,11 @@
             '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.charges.js',
             '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.fp.js',
             '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.epi.js',
-            '<?php echo base_url(); ?>assets/apps/js/apps.services.nutritions.js'
+            '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.nutritions.js',
+            '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.anc.js',
+            '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.postnatal.js',
+            '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.babies_care.js',
+            '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.special_pp.js',
+            '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.comms.js'
     );
 </script>
