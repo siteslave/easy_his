@@ -652,7 +652,6 @@ class Person_model extends CI_Model
 
         return $rs;
     }
-<<<<<<< HEAD
     
     public function search_person_by_hn_with_owner($hn) {
         $rs = $this->mongo_db
@@ -662,7 +661,8 @@ class Person_model extends CI_Model
                 ))
             ->get('person');
         
-=======
+        return $rs;
+    }
 
     public function search_person_ajax_by_hn($query)
     {
@@ -700,27 +700,5 @@ class Person_model extends CI_Model
             ->where(array('owner_id' => new MongoId($owner_id), 'hn' => (string) $hn))
             ->count('person');
         return $rs > 0 ? TRUE : FALSE;
-    }
-
-    public function search_person_by_hn_with_owner($hn) {
-        $rs = $this->mongo_db
-            ->where(array(
-            'hn' => (string)$hn,
-            'typearea.owner_id' => new MongoId($this->owner_id)
-        ))
-            ->get('person');
-
-        return $rs;
-    }
-    public function search_person_by_cid_with_owner($cid) {
-        $rs = $this->mongo_db
-            ->where(array(
-            'cid' => (string)$cid,
-            'typearea.owner_id' => new MongoId($this->owner_id)
-        ))
-            ->get('person');
-
->>>>>>> 3b8ed1d2d4d20efa98b3bb8b6f806129b0050a97
-        return $rs;
     }
 }

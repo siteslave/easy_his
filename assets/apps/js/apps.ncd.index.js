@@ -304,7 +304,7 @@ head.ready(function(){
         $('input[data-name="txt_search_person_filter"]').val(filter);
     });
 
-    $('a[data-name="btn_selected_person"]').live('click', function(){
+    $(document).on('click', 'a[data-name="btn_selected_person"]', function(){
         var hn = $(this).attr('data-hn');
 
         if(confirm('คุณต้องการลงทะเบียนข้อมูลนี้ใช่หรือไม่?'))
@@ -380,7 +380,7 @@ head.ready(function(){
         });
     });
     
-    $('a[data-name="remove"]').live('click', function() {
+    $(document).on('click', 'a[data-name="remove"]', function() {
         var person_id = $(this).attr('data-id');
         //Confirm remove NCD data
         app.confirm('คุณต้องการจะลบรายการนี้หรือไม่?', function(cb) {

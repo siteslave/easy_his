@@ -3,7 +3,7 @@
      * HT Controller
      *
      * @package     Controller
-     * @author      Utit Sairat <soodteeruk@gmail.com>
+     * @author      Mr.Utit Sairat <soodteeruk@gmail.com>
      * @since       Version 1.0.0
      * @copyright   Copyright 2013 Data center of Maha Sarakham Hospital
      * @license     http://his.mhkdc.com/licenses
@@ -40,7 +40,7 @@ class Ht extends CI_Controller
 
         $this->clinic_code = '02';
 
-        //$this->load->model('Ht_model', 'ht');
+        $this->load->model('Ht_model', 'ht');
         $this->load->model('Service_model', 'service');
         $this->load->model('Basic_model', 'basic');
         $this->load->model('Person_model', 'person');
@@ -55,8 +55,11 @@ class Ht extends CI_Controller
     {
         $this->person->owner_id = $this->owner_id;
         $this->person->clinic_code = $this->clinic_code;
+        $this->ht->owner_id = $this->owner_id;
 
         $data['villages'] = $this->person->get_villages();
+        $data['providers'] = $this->get_providers_by_active();
+        
         $this->layout->view('ht/index_view', $data);
     }
 
@@ -71,8 +74,8 @@ class Ht extends CI_Controller
 
         $limit = (int) $stop - (int) $start;
 
-        $this->ncd->owner_id = $this->owner_id;
-        $rs = $this->ncd->get_list($start, $limit);
+        $this->ht->owner_id = $this->owner_id;
+        $rs = $this->ht->get_list($start, $limit);
 
         if($rs)
         {
@@ -117,8 +120,8 @@ class Ht extends CI_Controller
 
         $limit = (int) $stop - (int) $start;
 
-        $this->ncd->owner_id = $this->owner_id;
-        $rs = $this->ncd->get_list_by_house($house_id);
+        $this->ht->owner_id = $this->owner_id;
+        $rs = $this->ht->get_list_by_house($house_id);
 
         if($rs)
         {
@@ -154,8 +157,8 @@ class Ht extends CI_Controller
 
     public function get_list_total()
     {
-        $this->ncd->owner_id = $this->owner_id;
-        $total = $this->ncd->get_list_total();
+        $this->ht->owner_id = $this->owner_id;
+        $total = $this->ht->get_list_total();
         $json = '{"success": true, "total": '.$total.'}';
 
         render_json($json);
@@ -163,8 +166,8 @@ class Ht extends CI_Controller
 
     public function get_list_by_village_total()
     {
-        $this->ncd->owner_id = $this->owner_id;
-        $total = $this->ncd->get_list_by_village_total();
+        $this->ht->owner_id = $this->owner_id;
+        $total = $this->ht->get_list_by_village_total();
         $json = '{"success": true, "total": '.$total.'}';
 
         render_json($json);
@@ -178,8 +181,8 @@ class Ht extends CI_Controller
     */
     public function search_person()
     {
-        $query = $this->input->post('query');
-        $filter = $this->input->post('filter');
+        $query = (string)$this->input->post('query');
+        $filter = (string)$this->input->post('filter');
 
         $filter = empty($filter) ? '0' : $filter;
 
@@ -189,31 +192,33 @@ class Ht extends CI_Controller
         }
         else
         {
-
+            $this->person->owner_id = $this->owner_id;
             if($filter == '0') //by cid
             {
-                $rs = $this->person->search_person_by_cid($query);
-            }
-            else if($filter == '2')
-            {
-                //get hn by first name and last name
-                $name = explode(' ', $query); // [0] = first name, [1] = last name
-
-                $first_name = count($name) == 2 ? $name[0] : '';
-                $last_name = count($name) == 2 ? $name[1] : '';
-
-                $rs = $this->person->search_person_by_first_last_name($first_name, $last_name);
-
+                $rs = $this->person->search_person_by_cid_with_owner($query);
             }
             else
             {
-                $rs = $this->person->search_person_by_hn($query);
+                $rs = $this->person->search_person_by_hn_with_owner($query);
             }
 
             if($rs)
             {
 
                 $arr_result = array();
+                $type_area_check = false;
+                $chk_ht_regis = "0";
+                $reg_serial = "";
+                $hosp_serial = "";
+                $year = "";
+                $reg_date = date('Ymd');
+                $diag_type = "";
+                $doctor = "";
+                $pre_register = false;
+                $pregnancy = false;
+                $hypertension = false;
+                $insulin = false;
+                $newcase = false;
 
                 foreach($rs as $r)
                 {
@@ -226,16 +231,56 @@ class Ht extends CI_Controller
                     $obj->birthdate = $r['birthdate'];
                     $obj->sex = $r['sex'] == '1' ? 'ชาย' : 'หญิง';
                     $obj->age = count_age($r['birthdate']);
+                    //$type_area_check = $r['typearea'][0]['typearea'];
+                    foreach($r['typearea'] as $typearea) {
+                        if(($typearea['typearea']== "1" || $typearea['typearea'] == "3") && $typearea['owner_id'] == $this->owner_id)
+                            $type_area_check = true;
+                    }
+                    
+                    if(isset($r['registers'])) {
+                        foreach($r['registers'] as $reg) {
+                            if($reg['clinic_code'] == '02') {
+                                $chk_ht_regis = "1";
+                                $reg_serial = $reg['reg_serial'];
+                                $hosp_serial = $reg['hosp_serial'];
+                                $year = $reg['reg_year'];
+                                $reg_date = $reg['reg_date'];
+                                $diag_type = $reg['diag_type'];
+                                $doctor = get_first_object($reg['doctor']);
+                                $pre_register = $reg['pre_regis'];
+                                $pregnancy = $reg['pregnancy'];
+                                $hypertension = $reg['hypertension'];
+                                $insulin = $reg['insulin'];
+                                $newcase = $reg['newcase'];
+                            }
+                        }
+                    }
+                    $obj->chk_regis = $chk_ht_regis;
+                    $obj->reg_serial = $reg_serial;
+                    $obj->hosp_serial = $hosp_serial;
+                    $obj->year = $year;
+                    $obj->reg_date = substr($reg_date, 6, 2).'/'.substr($reg_date, 4, 2).'/'.substr($reg_date, 0, 4);
+                    $obj->diag_type = $diag_type;
+                    $obj->doctor = $doctor;
+                    $obj->pre_register = $pre_register;
+                    $obj->pregnancy = $pregnancy;
+                    $obj->hypertension = $hypertension;
+                    $obj->insulin = $insulin;
+                    $obj->newcase = $newcase;
 
                     $arr_result[] = $obj;
                 }
-
-                $rows = json_encode($arr_result);
-                $json = '{"success": true, "rows": '.$rows.'}';
+                
+                if($type_area_check) {
+                    $rows = json_encode($arr_result);
+                    $json = '{"success": true, "rows": '.$rows.'}';
+                } else {
+                    $json = '{ "success": false, "msg": "ไม่ใช่บุคคลในเขตรับผิดชอบ" }';
+                }
             }
             else
             {
-                $json = '{"success": false, "msg ": "ไม่พบรายการ"}';
+                $json = '{ "success": false, "msg": "ไม่พบรายการ" }';
             }
 
         }
@@ -246,6 +291,17 @@ class Ht extends CI_Controller
     public function do_register()
     {
         $hn = $this->input->post('hn');
+        $hid_regis = $this->input->post('hid_regis');
+        $year_regis = $this->input->post('year_regis');
+        $date_regis = $this->input->post('date_regis');
+        $diag_type = $this->input->post('diag_type');
+        $doctor = $this->input->post('doctor');
+        $pre_register = $this->input->post('pre_register');
+        $pregnancy = $this->input->post('pregnancy');
+        $hypertension = $this->input->post('hypertension');
+        $insulin = $this->input->post('insulin');
+        $newcase = $this->input->post('newcase');
+        $hosp_serial = $this->input->post('hosp_serial');
 
         if(empty($hn))
         {
@@ -254,29 +310,61 @@ class Ht extends CI_Controller
         else
         {
 
-            $this->person->owner_id = $this->owner_id;
-            $this->person->user_id = $this->user_id;
+            $this->ht->owner_id = $this->owner_id;
+            $this->ht->user_id = $this->user_id;
+            $reg_serial = generate_serial('HT');
 
-            $exists = $this->person->check_clinic_exist($hn, $this->clinic_code);
+            $rs = $this->ht->do_regis_ht_clinic($hn, $hid_regis, $year_regis, $date_regis, $diag_type, $doctor, $pre_register, $pregnancy, $hypertension, $insulin, $newcase, $hosp_serial, $reg_serial);
 
-            if($exists)
+            if($rs)
             {
-                $json = '{"success": false, "msg": "ทะเบียนซ้ำ - ชื่อนี้มีอยู่ในทะเบียนเรียบร้อยแล้ว"}';
+                $json = '{"success": true}';
             }
             else
             {
-                $rs = $this->person->do_register_clinic($hn, $this->clinic_code);
-
-                if($rs)
-                {
-                    $json = '{"success": true}';
-                }
-                else
-                {
-                    $json = '{"success": false, "msg": "ไม่สามารถบันทึกข้อมูลได้"}';
-                }
+                $json = '{"success": false, "msg": "ไม่สามารถบันทึกข้อมูลได้"}';
             }
+        }
 
+        render_json($json);
+    }
+
+    public function do_update()
+    {
+        $hn = $this->input->post('hn');
+        $hid_regis = $this->input->post('hid_regis');
+        $year_regis = $this->input->post('year_regis');
+        $date_regis = $this->input->post('date_regis');
+        $diag_type = $this->input->post('diag_type');
+        $doctor = $this->input->post('doctor');
+        $pre_register = $this->input->post('pre_register');
+        $pregnancy = $this->input->post('pregnancy');
+        $hypertension = $this->input->post('hypertension');
+        $insulin = $this->input->post('insulin');
+        $newcase = $this->input->post('newcase');
+        $hosp_serial = $this->input->post('hosp_serial');
+
+        if(empty($hn))
+        {
+            $json = '{"success": false, "msg": "HN not found."}';
+        }
+        else
+        {
+
+            $this->ht->owner_id = $this->owner_id;
+            $this->ht->user_id = $this->user_id;
+            //$reg_serial = //generate_serial('DM');
+
+            $rs = $this->ht->do_update_ht_clinic($hn, $hid_regis, $year_regis, $date_regis, $diag_type, $doctor, $pre_register, $pregnancy, $hypertension, $insulin, $newcase, $hosp_serial);
+
+            if($rs)
+            {
+                $json = '{"success": true}';
+            }
+            else
+            {
+                $json = '{"success": false, "msg": "ไม่สามารถแก้ไขข้อมูลได้"}';
+            }
         }
 
         render_json($json);
@@ -315,13 +403,13 @@ class Ht extends CI_Controller
         render_json($json);
     }
 
-    public function remove_dm_register() {
+    public function remove_ht_register() {
         $person_id = $this->input->post('person_id');
         
         if(empty($person_id)) {
             $json = '{ "success": false, "msg": "No person id found." }';
         } else {
-            $rs = $this->ncd->remove_ncd_register($person_id);
+            $rs = $this->ht->remove_ht_register($person_id);
             if($rs) {
                 $json = '{ "success": true }';
             } else {
@@ -330,6 +418,22 @@ class Ht extends CI_Controller
         }
         
         render_json($json);
+    }
+    
+    public function get_providers_by_active() {
+        $rs = $this->ht->get_providers_by_active();
+        if($rs) {
+            $arr_result = array();
+            foreach($rs as $r) {
+                $obj = new stdClass();
+                $obj->id = get_first_object($r['_id']);
+                $obj->name = $r['first_name'].' '.$r['last_name'];
+                
+                array_push($arr_result, $obj);
+            }
+            
+            return $arr_result;
+        }
     }
 }
 

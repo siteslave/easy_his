@@ -7,12 +7,12 @@
  */
 head.ready(function(){
     // DM name space with object.
-    var dm = {};
-    dm.update = {};
+    var ht = {};
+    ht.update = {};
 
     //------------------------------------------------------------------------------------------------------------------
     //ajax object
-    dm.ajax = {
+    ht.ajax = {
         /**
          * Get person list
          *
@@ -21,7 +21,7 @@ head.ready(function(){
          * @param   cb
          */
         get_list: function(start, stop, cb){
-            var url = 'dm/get_list',
+            var url = 'ht/get_list',
                 params = {
                     start: start,
                     stop: stop
@@ -32,7 +32,7 @@ head.ready(function(){
             });
         },
         get_list_total: function(cb){
-            var url = 'dm/get_list_total',
+            var url = 'ht/get_list_total',
                 params = {};
 
             app.ajax(url, params, function(err, data){
@@ -52,7 +52,7 @@ head.ready(function(){
         },
 
         get_list_by_house: function(house_id, cb){
-            var url = 'dm/get_list_by_house',
+            var url = 'ht/get_list_by_house',
                 params = {
                     house_id: house_id
                 };
@@ -63,7 +63,7 @@ head.ready(function(){
         },
 
         search_person: function(query, filter, cb){
-            var url = 'dm/search_person',
+            var url = 'ht/search_person',
                 params = {
                     query: query,
                     filter: filter
@@ -75,7 +75,7 @@ head.ready(function(){
         },
 
         do_register: function(hn, hid_regis, year_regis, date_regis, diag_type, doctor, pre_register, pregnancy, hypertension, insulin, newcase, hosp_serial, cb){
-            var url = 'dm/do_register',
+            var url = 'ht/do_register',
                 params = {
                     hn: hn,
                     hid_regis: hid_regis,
@@ -97,7 +97,7 @@ head.ready(function(){
         },
 
         do_update: function(hn, hid_regis, year_regis, date_regis, diag_type, doctor, pre_register, pregnancy, hypertension, insulin, newcase, hosp_serial, cb){
-            var url = 'dm/do_update',
+            var url = 'ht/do_update',
                 params = {
                     hn: hn,
                     hid_regis: hid_regis,
@@ -119,7 +119,7 @@ head.ready(function(){
         },
 
         check_registration: function(hn, cb){
-            var url = 'dm/check_registration',
+            var url = 'ht/check_registration',
                 params = {
                     hn: hn
                 };
@@ -130,9 +130,9 @@ head.ready(function(){
         }
     };
     
-    dm.update.ajax = {
+    ht.update.ajax = {
         remove_ncd_register: function(person_id, cb) {
-            var url = 'dm/remove_dm_register',
+            var url = 'ht/remove_ht_register',
                 params = {
                     person_id: person_id
                 };
@@ -143,7 +143,7 @@ head.ready(function(){
         }
     };
 
-    dm.modal = {
+    ht.modal = {
         show_register: function()
         {
             $('#mdlNewRegister').modal({
@@ -158,7 +158,7 @@ head.ready(function(){
         hide_register: function()
         {
             $('#tboSearch').val('');
-            dm.clear_register_form();
+            ht.clear_register_form();
             $('#mdlNewRegister').modal('hide');
         }
     };
@@ -169,7 +169,7 @@ head.ready(function(){
      * @param data
      */
 
-    dm.set_list = function(data){
+    ht.set_list = function(data){
         if(_.size(data.rows) > 0){
             _.each(data.rows, function(v){
                 $('#tbl_list > tbody').append(
@@ -184,7 +184,7 @@ head.ready(function(){
                         '<td>' +
                         '<div class="btn-group">' +
                         '<a href="javascript:void(0);" class="btn btn-danger" data-name="remove" data-id="' + v.id + '"><i class="icon-trash"></i></a>' +
-                        '<a href="javascript:void(0);" class="btn" data-name="edit_dm" data-id="' + v.hn + '"><i class="icon-edit"></i></a>' +
+                        '<a href="javascript:void(0);" class="btn" data-name="edit_ht" data-id="' + v.hn + '"><i class="icon-edit"></i></a>' +
                         '</div>' +
                         '</td>' +
                         '</tr>'
@@ -196,9 +196,9 @@ head.ready(function(){
             );
         }
     };
-    dm.get_list = function(){
+    ht.get_list = function(){
         $('#main_paging').fadeIn('slow');
-        dm.ajax.get_list_total(function(err, data){
+        ht.ajax.get_list_total(function(err, data){
             if(err){
                 app.alert(err);
             }else{
@@ -208,12 +208,12 @@ head.ready(function(){
                     lapping: 1,
                     page: 1,
                     onSelect: function(page){
-                        dm.ajax.get_list(this.slice[0], this.slice[1], function(err, data){
+                        ht.ajax.get_list(this.slice[0], this.slice[1], function(err, data){
                             $('#tbl_list > tbody').empty();
                             if(err){
                                 app.alert(err);
                             }else{
-                                dm.set_list(data);
+                                ht.set_list(data);
                             }
 
                         });
@@ -282,10 +282,10 @@ head.ready(function(){
         $('div[data-name="blog_search"]').show();
         $('#lblRegis').html('ลงทะเบียน');
         $('#lblRegis').attr('title', 'add');
-        dm.modal.show_register();
+        ht.modal.show_register();
     });
 
-    dm.set_search_person_result = function(data)
+    ht.set_search_person_result = function(data)
     {
         _.each(data.rows, function(v)
         {
@@ -324,9 +324,9 @@ head.ready(function(){
         else
         {
             //do search
-            dm.clear_register_form();
+            ht.clear_register_form();
 
-            dm.ajax.search_person(query, filter, function(err, data){
+            ht.ajax.search_person(query, filter, function(err, data){
 
                 if(err)
                 {
@@ -338,7 +338,7 @@ head.ready(function(){
                 }
                 else
                 {
-                   dm.set_search_person_result(data);
+                   ht.set_search_person_result(data);
                 }
             });
         }
@@ -354,7 +354,7 @@ head.ready(function(){
     $('#sl_village').on('change', function(){
         var village_id = $(this).val();
 
-        dm.ajax.get_house_list(village_id, function(err, data){
+        ht.ajax.get_house_list(village_id, function(err, data){
             if(err)
             {
                 app.alert(err);
@@ -378,7 +378,7 @@ head.ready(function(){
     $('#btn_do_get_list').click(function(){
         var house_id = $('#sl_house').val();
 
-        dm.ajax.get_list_by_house(house_id, function(err, data){
+        ht.ajax.get_list_by_house(house_id, function(err, data){
 
             $('#tbl_list > tbody').empty();
 
@@ -394,7 +394,7 @@ head.ready(function(){
                if(data)
                {
                    $('#main_paging').fadeOut('slow');
-                   dm.set_list(data);
+                   ht.set_list(data);
                }
                else
                {
@@ -406,7 +406,7 @@ head.ready(function(){
         });
     });
     
-    dm.clear_register_form = function() {
+    ht.clear_register_form = function() {
         var d = new Date();
         $('#tboHN').val('');
         $('#tboCid').val('');
@@ -428,7 +428,7 @@ head.ready(function(){
     };
     
     $('#mdlNewRegister').on('hidden', function() {
-        dm.clear_register_form();
+        ht.clear_register_form();
     });
     
     $(document).on('click', 'a[data-name="remove"]', function() {
@@ -436,13 +436,13 @@ head.ready(function(){
         //Confirm remove DM data
         app.confirm('คุณต้องการจะลบรายการนี้หรือไม่?', function(cb) {
             if(cb) {
-                dm.update.ajax.remove_ncd_register(person_id, function(err) {
+                ht.update.ajax.remove_ncd_register(person_id, function(err) {
                     if(err) {
                         app.alert(err);
                     } else {
                         app.alert('ลบรายการเรียบร้อยแล้ว');
                         
-                        dm.get_list();
+                        ht.get_list();
                     }
                 });
             }
@@ -453,7 +453,7 @@ head.ready(function(){
         app.alert('Test');
     });
 
-    $('#btn_dm_do_register').click(function() {
+    $('#btn_ht_do_register').click(function() {
         if($('#tboHN').val() == '') {
             app.alert('กรุณาเลือกบุคคลที่ต้องการลงทะเบียนด้วย !');
         } else {
@@ -466,9 +466,6 @@ head.ready(function(){
             } else if($('#tboYear').val() == "") {
                 app.alert("กรุณาระบุปีที่เริ่มเป็นด้วย !");
                 $('#tboYear').focus()
-            } else if($('#cboDiseaseType').val() == "") {
-                app.alert('กรุณาระบุประเภทโรคด้วย !');
-                $('#cboDiseaseType').focus();
             } else if($('#cboDoctor').val() == '') {
                 app.alert('กรุณาระบุแพทย์ผู้ดูแลด้วย !');
                 $('#cboDoctor').focus();
@@ -478,16 +475,16 @@ head.ready(function(){
                     if(confirm('คุณต้องการจะแก้ไขผู้ป่วยรายนี้หรือไม่ ?')) {
                         var reg_date = $('#dtpRegisDate').val();
                         
-                        dm.ajax.do_update($('#tboHN').val(), $('#tboRegHosNumber').val(), $('#tboYear').val(), reg_date, $('#cboDiseaseType').val(), $('#cboDoctor').val(), $('#ch_pre_register').is(":checked"), $('#ch_pregnancy').is(":checked"), $('#ch_hypertension').is(":checked"), $('#ch_insulin').is(":checked"), $('#ch_newcase').is(":checked"), $('#tboRegHosNumber').val(), function(err) {
+                        ht.ajax.do_update($('#tboHN').val(), $('#tboRegHosNumber').val(), $('#tboYear').val(), reg_date, $('#cboDiseaseType').val(), $('#cboDoctor').val(), $('#ch_pre_register').is(":checked"), $('#ch_pregnancy').is(":checked"), $('#ch_hypertension').is(":checked"), $('#ch_insulin').is(":checked"), $('#ch_newcase').is(":checked"), $('#tboRegHosNumber').val(), function(err) {
                             if(err) {
                                 app.alert(err);
                             } else { 
                                 app.alert('แก้ไขรายการเรียบร้อยแล้ว');
                                 
-                                //dm.clear_register_form();
-                                dm.modal.hide_register();
+                                //ht.clear_register_form();
+                                ht.modal.hide_register();
                                 
-                                dm.get_list();
+                                ht.get_list();
                             }
                         });
                     }
@@ -495,16 +492,16 @@ head.ready(function(){
                     if(confirm('คุณต้องการจะลงทะเบียนผู้ป่วยรายนี้หรือไม่ ?')) {
                         var reg_date = $('#dtpRegisDate').val();
                         
-                        dm.ajax.do_register($('#tboHN').val(), $('#tboRegHosNumber').val(), $('#tboYear').val(), reg_date, $('#cboDiseaseType').val(), $('#cboDoctor').val(), $('#ch_pre_register').is(":checked"), $('#ch_pregnancy').is(":checked"), $('#ch_hypertension').is(":checked"), $('#ch_insulin').is(":checked"), $('#ch_newcase').is(":checked"), $('#tboRegHosNumber').val(), function(err) {
+                        ht.ajax.do_register($('#tboHN').val(), $('#tboRegHosNumber').val(), $('#tboYear').val(), reg_date, $('#cboDiseaseType').val(), $('#cboDoctor').val(), $('#ch_pre_register').is(":checked"), $('#ch_pregnancy').is(":checked"), $('#ch_hypertension').is(":checked"), $('#ch_insulin').is(":checked"), $('#ch_newcase').is(":checked"), $('#tboRegHosNumber').val(), function(err) {
                             if(err) {
                                 app.alert(err);
                             } else { 
                                 app.alert('ลงทะเบียนเรียบร้อยแล้ว');
                                 
-                                //dm.clear_register_form();
-                                dm.modal.hide_register();
+                                //ht.clear_register_form();
+                                ht.modal.hide_register();
                                 
-                                dm.get_list();
+                                ht.get_list();
                             }
                         });
                     }
@@ -513,8 +510,8 @@ head.ready(function(){
         }
     });
     
-    $(document).on('click', 'a[data-name="edit_dm"]', function() {
-        dm.modal.show_register();
+    $(document).on('click', 'a[data-name="edit_ht"]', function() {
+        ht.modal.show_register();
         $('div[data-name="blog_search"]').hide();
         $('#lblRegis').html('แก้ไขรายการ');
         $('#lblRegis').attr('title', 'edit');
@@ -529,10 +526,10 @@ head.ready(function(){
         else
         {
             //do search
-            dm.clear_register_form();
+            ht.clear_register_form();
             //$('#tboCid').val(query);
 
-            dm.ajax.search_person(query, filter, function(err, data){
+            ht.ajax.search_person(query, filter, function(err, data){
 
                 if(err)
                 {
@@ -544,12 +541,12 @@ head.ready(function(){
                 }
                 else
                 {
-                   dm.set_search_person_result(data);
+                   ht.set_search_person_result(data);
                 }
             });
         }
 
     });
     
-    dm.get_list();
+    ht.get_list();
 });

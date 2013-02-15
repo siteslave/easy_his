@@ -181,8 +181,8 @@ class Dm extends CI_Controller
     */
     public function search_person()
     {
-        $query = $this->input->post('query');
-        $filter = $this->input->post('filter');
+        $query = (string)$this->input->post('query');
+        $filter = (string)$this->input->post('filter');
 
         $filter = empty($filter) ? '0' : $filter;
 
@@ -323,6 +323,47 @@ class Dm extends CI_Controller
             else
             {
                 $json = '{"success": false, "msg": "ไม่สามารถบันทึกข้อมูลได้"}';
+            }
+        }
+
+        render_json($json);
+    }
+
+    public function do_update()
+    {
+        $hn = $this->input->post('hn');
+        $hid_regis = $this->input->post('hid_regis');
+        $year_regis = $this->input->post('year_regis');
+        $date_regis = $this->input->post('date_regis');
+        $diag_type = $this->input->post('diag_type');
+        $doctor = $this->input->post('doctor');
+        $pre_register = $this->input->post('pre_register');
+        $pregnancy = $this->input->post('pregnancy');
+        $hypertension = $this->input->post('hypertension');
+        $insulin = $this->input->post('insulin');
+        $newcase = $this->input->post('newcase');
+        $hosp_serial = $this->input->post('hosp_serial');
+
+        if(empty($hn))
+        {
+            $json = '{"success": false, "msg": "HN not found."}';
+        }
+        else
+        {
+
+            $this->dm->owner_id = $this->owner_id;
+            $this->dm->user_id = $this->user_id;
+            //$reg_serial = //generate_serial('DM');
+
+            $rs = $this->dm->do_update_dm_clinic($hn, $hid_regis, $year_regis, $date_regis, $diag_type, $doctor, $pre_register, $pregnancy, $hypertension, $insulin, $newcase, $hosp_serial);
+
+            if($rs)
+            {
+                $json = '{"success": true}';
+            }
+            else
+            {
+                $json = '{"success": false, "msg": "ไม่สามารถแก้ไขข้อมูลได้"}';
             }
         }
 
