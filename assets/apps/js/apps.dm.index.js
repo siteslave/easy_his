@@ -446,7 +446,7 @@ head.ready(function(){
                     dm.ajax.do_register($('#tboHN').val(), $('#tboRegHosNumber').val(), $('#tboYear').val(), reg_date, $('#cboDiseaseType').val(), $('#cboDoctor').val(), $('#ch_pre_register').is(":checked"), $('#ch_pregnancy').is(":checked"), $('#ch_hypertension').is(":checked"), $('#ch_insulin').is(":checked"), $('#ch_newcase').is(":checked"), $('#tboRegHosNumber').val(), function(err) {
                         if(err) {
                             app.alert(err);
-                        } else {
+                        } else { 
                             app.alert('ลงทะเบียนเรียบร้อยแล้ว');
                             
                             //dm.clear_register_form();
