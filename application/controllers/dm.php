@@ -181,8 +181,8 @@ class Dm extends CI_Controller
     */
     public function search_person()
     {
-        $query = $this->input->post('query');
-        $filter = $this->input->post('filter');
+        $query = (string)$this->input->post('query');
+        $filter = (string)$this->input->post('filter');
 
         $filter = empty($filter) ? '0' : $filter;
 
@@ -207,6 +207,18 @@ class Dm extends CI_Controller
 
                 $arr_result = array();
                 $type_area_check = false;
+                $chk_dm_regis = "0";
+                $reg_serial = "";
+                $hosp_serial = "";
+                $year = "";
+                $reg_date = date('Ymd');
+                $diag_type = "";
+                $doctor = "";
+                $pre_register = false;
+                $pregnancy = false;
+                $hypertension = false;
+                $insulin = false;
+                $newcase = false;
 
                 foreach($rs as $r)
                 {
@@ -224,6 +236,37 @@ class Dm extends CI_Controller
                         if(($typearea['typearea']== "1" || $typearea['typearea'] == "3") && $typearea['owner_id'] == $this->owner_id)
                             $type_area_check = true;
                     }
+                    
+                    if(isset($r['registers'])) {
+                        foreach($r['registers'] as $reg) {
+                            if($reg['clinic_code'] == '01') {
+                                $chk_dm_regis = "1";
+                                $reg_serial = $reg['reg_serial'];
+                                $hosp_serial = $reg['hosp_serial'];
+                                $year = $reg['reg_year'];
+                                $reg_date = $reg['reg_date'];
+                                $diag_type = $reg['diag_type'];
+                                $doctor = get_first_object($reg['doctor']);
+                                $pre_register = $reg['pre_regis'];
+                                $pregnancy = $reg['pregnancy'];
+                                $hypertension = $reg['hypertension'];
+                                $insulin = $reg['insulin'];
+                                $newcase = $reg['newcase'];
+                            }
+                        }
+                    }
+                    $obj->chk_regis = $chk_dm_regis;
+                    $obj->reg_serial = $reg_serial;
+                    $obj->hosp_serial = $hosp_serial;
+                    $obj->year = $year;
+                    $obj->reg_date = substr($reg_date, 6, 2).'/'.substr($reg_date, 4, 2).'/'.substr($reg_date, 0, 4);
+                    $obj->diag_type = $diag_type;
+                    $obj->doctor = $doctor;
+                    $obj->pre_register = $pre_register;
+                    $obj->pregnancy = $pregnancy;
+                    $obj->hypertension = $hypertension;
+                    $obj->insulin = $insulin;
+                    $obj->newcase = $newcase;
 
                     $arr_result[] = $obj;
                 }
@@ -248,6 +291,17 @@ class Dm extends CI_Controller
     public function do_register()
     {
         $hn = $this->input->post('hn');
+        $hid_regis = $this->input->post('hid_regis');
+        $year_regis = $this->input->post('year_regis');
+        $date_regis = $this->input->post('date_regis');
+        $diag_type = $this->input->post('diag_type');
+        $doctor = $this->input->post('doctor');
+        $pre_register = $this->input->post('pre_register');
+        $pregnancy = $this->input->post('pregnancy');
+        $hypertension = $this->input->post('hypertension');
+        $insulin = $this->input->post('insulin');
+        $newcase = $this->input->post('newcase');
+        $hosp_serial = $this->input->post('hosp_serial');
 
         if(empty($hn))
         {
@@ -256,29 +310,61 @@ class Dm extends CI_Controller
         else
         {
 
-            $this->person->owner_id = $this->owner_id;
-            $this->person->user_id = $this->user_id;
+            $this->dm->owner_id = $this->owner_id;
+            $this->dm->user_id = $this->user_id;
+            $reg_serial = generate_serial('DM');
 
-            $exists = $this->person->check_clinic_exist($hn, $this->clinic_code);
+            $rs = $this->dm->do_regis_dm_clinic($hn, $hid_regis, $year_regis, $date_regis, $diag_type, $doctor, $pre_register, $pregnancy, $hypertension, $insulin, $newcase, $hosp_serial, $reg_serial);
 
-            if($exists)
+            if($rs)
             {
-                $json = '{"success": false, "msg": "ทะเบียนซ้ำ - ชื่อนี้มีอยู่ในทะเบียนเรียบร้อยแล้ว"}';
+                $json = '{"success": true}';
             }
             else
             {
-                $rs = $this->person->do_register_clinic($hn, $this->clinic_code);
-
-                if($rs)
-                {
-                    $json = '{"success": true}';
-                }
-                else
-                {
-                    $json = '{"success": false, "msg": "ไม่สามารถบันทึกข้อมูลได้"}';
-                }
+                $json = '{"success": false, "msg": "ไม่สามารถบันทึกข้อมูลได้"}';
             }
+        }
 
+        render_json($json);
+    }
+
+    public function do_update()
+    {
+        $hn = $this->input->post('hn');
+        $hid_regis = $this->input->post('hid_regis');
+        $year_regis = $this->input->post('year_regis');
+        $date_regis = $this->input->post('date_regis');
+        $diag_type = $this->input->post('diag_type');
+        $doctor = $this->input->post('doctor');
+        $pre_register = $this->input->post('pre_register');
+        $pregnancy = $this->input->post('pregnancy');
+        $hypertension = $this->input->post('hypertension');
+        $insulin = $this->input->post('insulin');
+        $newcase = $this->input->post('newcase');
+        $hosp_serial = $this->input->post('hosp_serial');
+
+        if(empty($hn))
+        {
+            $json = '{"success": false, "msg": "HN not found."}';
+        }
+        else
+        {
+
+            $this->dm->owner_id = $this->owner_id;
+            $this->dm->user_id = $this->user_id;
+            //$reg_serial = //generate_serial('DM');
+
+            $rs = $this->dm->do_update_dm_clinic($hn, $hid_regis, $year_regis, $date_regis, $diag_type, $doctor, $pre_register, $pregnancy, $hypertension, $insulin, $newcase, $hosp_serial);
+
+            if($rs)
+            {
+                $json = '{"success": true}';
+            }
+            else
+            {
+                $json = '{"success": false, "msg": "ไม่สามารถแก้ไขข้อมูลได้"}';
+            }
         }
 
         render_json($json);

@@ -131,7 +131,7 @@ head.ready(function(){
         charge.modal.show_new();
     });
 
-    $('a[data-name="btn_selected_charge"]').live('click', function(){
+    $(document).on('click', 'a[data-name="btn_selected_charge"]', function(){
         var id = $(this).attr('data-id'),
             name = $(this).attr('data-vname'),
             price = $(this).attr('data-price');
@@ -185,7 +185,7 @@ head.ready(function(){
         }
     });
 
-    $('a[data-name="btn_selected_charge_usage"]').live('click', function(){
+    $(document).on('click', 'a[data-name="btn_selected_charge_usage"]', function(){
         var id = $(this).attr('data-id'),
             name = $(this).attr('data-vname');
 
@@ -241,7 +241,7 @@ head.ready(function(){
         charge.get_list();
     });
 
-    $('a[data-name="btn_charge_edit"]').live('click', function(){
+    $(document).on('click', 'a[data-name="btn_charge_edit"]', function(){
         var id = $(this).attr('data-id'),
             charge_code = $(this).attr('data-charge_code'),
             charge_name = $(this).attr('data-charge_name'),
@@ -267,7 +267,7 @@ head.ready(function(){
     });
 
     //remove charge
-    $('a[data-name="btn_charge_remove"]').live('click', function(){
+    $(document).on('click', 'a[data-name="btn_charge_remove"]', function(){
 
         var id = $(this).attr('data-id');
        // alert(id);

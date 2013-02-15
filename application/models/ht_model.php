@@ -1,5 +1,5 @@
 <?php
-class Dm_model extends CI_Model
+class Ht_model extends CI_Model
 {
     public $owner_id;
     public $user_id;
@@ -9,7 +9,7 @@ class Dm_model extends CI_Model
 
     public function __construct()
     {
-        $this->clinic_code = '01';
+        $this->clinic_code = '02';
     }
     //------------------------------------------------------------------------------------------------------------------
     /**
@@ -86,7 +86,7 @@ class Dm_model extends CI_Model
         return $rs;
     }
     
-    public function do_regis_dm_clinic($hn, $hid_regis, $year_regis, $date_regis, $diag_type, $doctor, $pre_register, $pregnancy, $hypertension, $insulin, $newcase, $hosp_serial, $reg_serial) {
+    public function do_regis_ht_clinic($hn, $hid_regis, $year_regis, $date_regis, $diag_type, $doctor, $pre_register, $pregnancy, $hypertension, $insulin, $newcase, $hosp_serial, $reg_serial) {
         $date = $date_regis;
         $date = substr($date, 6).substr($date, 3, 2).substr($date, 0, 2);
         
@@ -114,7 +114,7 @@ class Dm_model extends CI_Model
         return $rs;
     }
     
-    public function do_update_dm_clinic($hn, $hid_regis, $year_regis, $date_regis, $diag_type, $doctor, $pre_register, $pregnancy, $hypertension, $insulin, $newcase, $hosp_serial) {
+    public function do_update_ht_clinic($hn, $hid_regis, $year_regis, $date_regis, $diag_type, $doctor, $pre_register, $pregnancy, $hypertension, $insulin, $newcase, $hosp_serial) {
         $date = $date_regis;
         $date = substr($date, 6).substr($date, 3, 2).substr($date, 0, 2);
         
@@ -140,7 +140,7 @@ class Dm_model extends CI_Model
         return $rs;
     }
     
-    public function remove_dm_register($person_id) {
+    public function remove_ht_register($person_id) {
         $rs = $this->mongo_db
             ->where('_id', new MongoId($person_id))
             ->pull('registers', array('clinic_code' => $this->clinic_code))

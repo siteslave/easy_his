@@ -318,7 +318,7 @@ $(document).ready(function(){
         });
     });
 
-    $('#slAmpur').on('change', function(){
+    $(document).on('change', '#slAmpur', function(){
         var chw = $('#slProvinces').val();
         var amp = $('#slAmpur').val();
 
@@ -340,7 +340,7 @@ $(document).ready(function(){
         });
     });
 
-    $('#slTambon').on('change', function(){
+    $(document).on('change', '#slTambon', function(){
         var chw = $('#slProvinces').val();
         var amp = $('#slAmpur').val();
         $('#divPersonResult').fadeOut('slow');
@@ -365,14 +365,13 @@ $(document).ready(function(){
         });
     });
 
-    $('#slMooban').on('change', function(){
+    $(document).on('change', '#slMooban',function(){
         var chw = $('#slProvinces').val(),
             amp = $('#slAmpur').val(),
             tmb = $('#slTambon').val(),
             moo = $('#slMooban').val();
 
         var chat = chw + amp + tmb + moo;
-
 
         Care.get_person(chat, function(err, data){
 
@@ -420,7 +419,7 @@ $(document).ready(function(){
         });
     });
 
-    $('button[data-name="btnGetRightInfo"]').live('click', function(){
+    $(document).on('click', 'button[data-name="btnGetRightInfo"]', function(){
 
         var pid = $(this).attr('data-pid');
 

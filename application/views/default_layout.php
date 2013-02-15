@@ -23,7 +23,7 @@
     </style>
     <link href="<?php echo base_url(); ?>assets/css/bootstrap-responsive.min.css" rel="stylesheet">
     <script src="<?php echo base_url(); ?>assets/js/html5.js"></script>
-	<script src="<?php echo base_url(); ?>assets/js/jquery.js"></script>
+    <script src="<?php echo base_url(); ?>assets/js/jquery.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/head.load.min.js"></script>
     <script>
         head.js(
@@ -108,10 +108,11 @@
                             </li>
                             <li>
                                 <a href="<?php echo site_url('ncd'); ?>">
-                                    <i class="icon-book"></i> ทะเบียนคัดกรองเบาหวาน/ความดัน 15 ปีขึ้นไป
+                                    <i class="icon-book"></i> ทะเบียนคัดกรองเบาหวาน/ความดัน 15 ปีขึ้นไป</a>
                                 <a href="<?php echo site_url('pregnancies'); ?>">
-                                    <i class="icon-book"></i> ทะเบียนฝากครรภ์/คลอด/การดูแลหลังคลอด
-                                </a>
+                                    <i class="icon-book"></i> ทะเบียนฝากครรภ์/คลอด/การดูแลหลังคลอด</a>
+				<a href="<?php echo site_url('ncd'); ?>">
+                                    <i class="icon-book"></i> ทะเบียนโรคเรื้อรัง (NCD)</a>
                             </li>
                             <li>
                                 <a href="<?php echo site_url('appoints'); ?>">
