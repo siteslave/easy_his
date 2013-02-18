@@ -1237,6 +1237,61 @@ class Services extends CI_Controller
 
         render_json($json);
     }
+    public function icf_get_history()
+    {
+        $hn = $this->input->post('hn');
+        if(!empty($hn))
+        {
+            $rs = $this->service->icf_get_history($hn);
+            $arr_result = array();
+            foreach($rs as $r)
+            {
+                $obj = new stdClass();
+
+                $visit = $this->service->get_visit_info($r['vn']);
+                $obj->clinic_name = get_clinic_name(get_first_object($visit['clinic']));
+                $obj->date_serv = from_mongo_to_thai_date($visit['date_serv']);
+                $obj->time_serv = $visit['time_serv'];
+
+                $obj->id = get_first_object($r['_id']);
+                $obj->icf = get_first_object($r['icf']);
+                $obj->icf_name = $this->basic->get_icf_name($obj->icf);
+                $obj->qualifier = get_first_object($r['qualifier']);
+                $obj->qualifier_name = $this->basic->get_icf_qualifier_name($obj->qualifier);
+                $obj->provider_name = $this->basic->get_provider_name_by_id(get_first_object($r['provider_id']));
+                $obj->owner_name = $this->basic->get_owner_name(get_first_object($r['owner_id']));
+
+                $arr_result[] = $obj;
+            }
+
+            $rows = json_encode($arr_result);
+
+            $json = '{"success": true, "rows": '.$rows.'}';
+        }
+        else
+        {
+            $json = '{"success": false, "msg": "ไม่พบ HN"}';
+        }
+
+        render_json($json);
+    }
+
+    public function icf_remove()
+    {
+        $id = $this->input->post('id');
+        $rs = $this->service->icf_remove($id);
+
+        if($rs)
+        {
+            $json = '{"success": true}';
+        }
+        else
+        {
+            $json = '{"success": false, "msg": "ไม่สามารถลบรายการได้"}';
+        }
+
+        render_json($json);
+    }
 }
 
 /* End of file services.php */

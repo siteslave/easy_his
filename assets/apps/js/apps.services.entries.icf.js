@@ -48,11 +48,36 @@ head.ready(function(){
             app.ajax(url, params, function(err, data){
                 return err ? cb(err) : cb(null, data);
             });
+        },
+        get_history: function(hn, cb){
+
+            var url = 'services/icf_get_history',
+                params = {
+                    hn: hn
+                };
+
+            app.ajax(url, params, function(err, data){
+                return err ? cb(err) : cb(null, data);
+            });
+        },
+        remove: function(id, cb){
+
+            var url = 'services/icf_remove',
+                params = {
+                    id: id
+                };
+
+            app.ajax(url, params, function(err, data){
+                return err ? cb(err) : cb(null, data);
+            });
         }
     };
 
     $('a[data-name="btn_icf"]').on('click', function(){
         icf.get_list();
+        app.set_first_selected($('#sl_icf'));
+        app.set_first_selected($('#sl_icf_qualifier'));
+        app.set_first_selected($('#sl_icf_disb_type'));
         icf.modal.show_register();
     });
 
@@ -124,10 +149,66 @@ head.ready(function(){
                           '<td>' + v.icf_name + '</td>' +
                           '<td>' + v.qualifier_name + '</td>' +
                           '<td>' + v.provider_name + '</td>' +
+                          '<td><a href="#" class="btn" data-name="btn_icf_remove" ' +
+                          'data-id="' + v.id + '" title="ลบ"><i class="icon-trash"></i></a></td>' +
                       '</tr>'
                   );
                });
            }
         });
     };
+
+    icf.get_history = function()
+    {
+        var hn = $('#hn').val();
+
+        icf.ajax.get_history(hn, function(err, data){
+           if(err)
+           {
+               app.alert(err);
+
+               $('#tbl_icf_history > tbody').empty();
+               $('#tbl_icf_history > tbody').append('<tr><td colspan="5">ไม่พบรายการ</td></tr>');
+           }
+            else
+           {
+               $('#tbl_icf_history > tbody').empty();
+               _.each(data.rows, function(v){
+                  $('#tbl_icf_history > tbody').append(
+                      '<tr>' +
+                          '<td>' + v.date_serv + '</td>' +
+                          '<td>' + v.owner_name + '</td>' +
+                          '<td>' + v.icf_name + '</td>' +
+                          '<td>' + v.qualifier_name + '</td>' +
+                          '<td>' + v.provider_name + '</td>' +
+                      '</tr>'
+                  );
+               });
+           }
+        });
+    };
+
+    $('a[href="#tab_icf2"]').on('click', function(){
+       icf.get_history();
+    });
+
+    $(document).on('click', 'a[data-name="btn_icf_remove"]', function(e){
+        var id = $(this).attr('data-id');
+
+        if(confirm('คุณต้องการลบรายการนี้ใช่หรือไม่?'))
+        {
+            icf.ajax.remove(id, function(err){
+                if(err)
+                {
+                    app.alert(err);
+                }
+                else
+                {
+                    app.alert('ลบรายการเสร็จเรียบร้อยแล้ว');
+                    icf.get_list();
+                }
+            });
+        }
+        e.preventDefault();
+    });
 });

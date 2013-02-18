@@ -667,6 +667,14 @@ class Service_model extends CI_Model
             ->get('visit_icf');
         return $rs;
     }
+
+    public function icf_get_history($hn)
+    {
+        $rs = $this->mongo_db
+            ->where(array('hn' => (string) $hn))
+            ->get('visit_icf');
+        return $rs;
+    }
 }
 
 /* End of file service_model.php */

@@ -817,8 +817,25 @@ class Basic_model extends CI_Model
     
     	return $result ? $result[0]['pcucode'] : '-';
     }
-    
-    
+    public function get_owner_name($id)
+    {
+        $pcucode = $this->get_owner_pcucode($id);
+
+        return $pcucode ? $this->get_hospital_name($pcucode) : '-';
+    }
+
+    public function get_hospital_name($hospital_code){
+        if(empty($hospital_code)){
+            return '-';
+        }else{
+            $result = $this->mongo_db
+                ->where(array('hospcode' => $hospital_code))
+                ->get('ref_hospitals');
+
+            return count($result) > 0 ? $result[0]['hospname'] : '-';
+        }
+    }
+
     public function get_drug_detail($id){
         $result = $this->mongo_db->where(array('_id' => new MongoId($id)))->get('ref_drugs');
 
