@@ -41,6 +41,7 @@
                     <li><a href="javascript:void(0);" data-name="btn_community_service"><i class="icon-eye-close"></i> ให้บริการในชุมชน (Community Service)</a></li>
                     <li><a href="javascript:void(0);" data-name="btn_icf"><i class="icon-briefcase"></i> ประเมินภาวะสุขภาพผู้พิการ (ICF)</a></li>
                     <li><a href="javascript:void(0);" data-name="btn_rehabilitation"><i class="icon-refresh"></i> การฟื้นฟูสมรรถภาพ (ผู้พิการหรือผู้สูงอายุ)</a></li>
+                    <li><a href="javascript:void(0);" data-name="btn_dental"><i class="icon-th"></i> ตรวจสภาวะทันตสุขภาพของฟัน (หญิงตั้งครรภ์/นักเรียน/ผู้มารับบริการ)</a></li>
                 </ul>
             </li>
         </ul>
@@ -1816,6 +1817,318 @@
     </div>
 </div>
 <!-- /ICF -->
+<!-- dental -->
+<div class="modal hide fade" id="mdl_dental">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>ประเมินสุขภาพฟัน</h3>
+    </div>
+    <div class="modal-body">
+        <div class="tabbable">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab_dental1" data-toggle="tab"><i class="icon-plus"></i> เพิ่มข้อมูล</a></li>
+                <li><a href="#tab_dental2" data-toggle="tab"><i class="icon-refresh"></i> ประวัติการรับบริการ</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab_dental1">
+                    <form class="form-horizontal">
+                        <legend>การให้บริการวันนี้</legend>
+                        <div class="row-fluid">
+                            <div class="span4">
+                                <div class="control-group">
+                                    <label class="control-label" for="sl_dental_type">ประเภทผู้รับบริการ</label>
+                                    <div class="controls">
+                                        <select id="sl_dental_type" class="input-xlarge">
+                                            <option value="">--</option>
+                                            <option value="1">กลุ่มหญิงตั้งครรภ์</option>
+                                            <option value="2">กลุ่มเด็กก่อนวัยเรียน</option>
+                                            <option value="3">กลุ่มเด็กวัยเรียน</option>
+                                            <option value="4">กลุ่มผู้สูงอายุ</option>
+                                            <option value="5">กลุ่มอื่นๆ</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row-fluid">
+                            <div class="span3">
+                                <div class="control-group">
+                                    <label class="control-label" for="sl_icf_qualifier">ฟันแท้ที่มีอยู่ (ซี่)</label>
+                                    <div class="controls">
+                                        <input type="text" class="input-mini" id="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span3">
+                                <div class="control-group">
+                                    <label class="control-label" for="sl_icf_qualifier">ฟันแท้ผุที่ไม่ได้อุด (ซี่)</label>
+                                    <div class="controls">
+                                        <input type="text" class="input-mini" id="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span3">
+                                <div class="control-group">
+                                    <label class="control-label" for="sl_icf_qualifier">ฟันแท้ที่ได้อุด (ซี่)</label>
+                                    <div class="controls">
+                                        <input type="text" class="input-mini" id="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row-fluid">
+                            <div class="span3">
+                                <div class="control-group">
+                                    <label class="control-label" for="sl_icf_qualifier">ฟันแท้ถอน/หลุด (ซี่)</label>
+                                    <div class="controls">
+                                        <input type="text" class="input-mini" id="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span3">
+                                <div class="control-group">
+                                    <label class="control-label" for="sl_icf_qualifier">ฟันน้ำนมที่มีอยู่ (ซี่)</label>
+                                    <div class="controls">
+                                        <input type="text" class="input-mini" id="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span3">
+                                <div class="control-group">
+                                    <label class="control-label" for="sl_icf_qualifier">ฟันน้ำนมที่ได้อุด (ซี่)</label>
+                                    <div class="controls">
+                                        <input type="text" class="input-mini" id="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row-fluid">
+                            <div class="span3">
+                                <div class="control-group">
+                                    <label class="control-label" for="sl_icf_qualifier">ฟันน้ำนมผุไม่ได้อุด(ซี่)</label>
+                                    <div class="controls">
+                                        <input type="text" class="input-mini" id="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span3">
+                                <div class="control-group">
+                                    <label class="control-label" for="sl_icf_qualifier">ฟันน้ำนมที่ถอน/หลุด(ซี่)</label>
+                                    <div class="controls">
+                                        <input type="text" class="input-mini" id="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row-fluid">
+                            <div class="span5">
+                                <div class="control-group">
+                                    <label class="control-label" for="sl_icf_qualifier">เคลือบฟลูออไรด์</label>
+                                    <div class="controls">
+                                        <select>
+                                            <option value="">--</option>
+                                            <option value="">ต้องทา/เคลือบฟลูออไรด์</option>
+                                            <option value="">ไม่ต้องทา/เคลือบฟลูออไรด์</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span5">
+                                <div class="control-group">
+                                    <label class="control-label" for="sl_icf_qualifier">ขุดหินน้ำลาย</label>
+                                    <div class="controls">
+                                        <select>
+                                            <option value="">--</option>
+                                            <option value="">ต้องขูดหินน้ำลาย</option>
+                                            <option value="">ไม่ต้องขูดหินน้ำลาย</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row-fluid">
+                            <div class="span3">
+                                <div class="control-group">
+                                    <label class="control-label" for="sl_icf_qualifier">จำนวนที่ต้องเคลือบ(ซี่)</label>
+                                    <div class="controls">
+                                        <input type="text" class="input-mini" id="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span3">
+                                <div class="control-group">
+                                    <label class="control-label" for="sl_icf_qualifier">ฟันแท้ที่ต้องอุด(ซี่)</label>
+                                    <div class="controls">
+                                        <input type="text" class="input-mini" id="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span3">
+                                <div class="control-group">
+                                    <label class="control-label" for="sl_icf_qualifier">ฟันน้ำนมที่ต้องอุด(ซี่)</label>
+                                    <div class="controls">
+                                        <input type="text" class="input-mini" id="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row-fluid">
+                            <div class="span3">
+                                <div class="control-group">
+                                    <label class="control-label" for="sl_icf_qualifier">ฟันที่ที่ต้องถอน(ซี่)</label>
+                                    <div class="controls">
+                                        <input type="text" class="input-mini" id="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span3">
+                                <div class="control-group">
+                                    <label class="control-label" for="sl_icf_qualifier">ฟันน้ำนมที่ต้องถอน(ซี่)</label>
+                                    <div class="controls">
+                                        <input type="text" class="input-mini" id="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span3">
+                                <div class="control-group">
+                                    <label class="control-label" for="sl_icf_qualifier">ต้องใส่ฟันเทียม(ซี่)</label>
+                                    <div class="controls">
+                                        <input type="text" class="input-mini" id="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row-fluid">
+                            <div class="span3">
+                                <div class="control-group">
+                                    <label class="control-label" for="sl_icf_qualifier">คู่สบฟันแท้กับฟันแท้</label>
+                                    <div class="controls">
+                                        <input type="text" class="input-mini" id="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span3">
+                                <div class="control-group">
+                                    <label class="control-label" for="sl_icf_qualifier">คู่สบฟันแท้กับฟันเทียม</label>
+                                    <div class="controls">
+                                        <input type="text" class="input-mini" id="">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span3">
+                                <div class="control-group">
+                                    <label class="control-label" for="sl_icf_qualifier">คู่สบฟันเทียมกับฟันเทียม</label>
+                                    <div class="controls">
+                                        <input type="text" class="input-mini" id="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row-fluid">
+                            <div class="span5">
+                                <div class="control-group">
+                                    <label class="control-label" for="sl_icf_qualifier">สภาวะปริทันต์</label>
+                                    <div class="controls">
+                                        <select class="input-xlarge">
+                                            <option value="">--</option>
+                                            <option value="0">ปกติ</option>
+                                            <option value="1">มีเลือดออกภายหลังจากการตรวจ</option>
+                                            <option value="2">มีหินน้ำลายแต่ยังเห็นแถบดำบนเครื่องมือ</option>
+                                            <option value="3">มีร่องลึกปริทันต์ 4-5 ม.ม. (ขอบเงือกอยู่ภายในแถบดำ)</option>
+                                            <option value="4">มีร่องลึกปริทันต์ 6 ม.ม. หรือ มากกว่า (มองไม่เห็นแถบดำบนเครื่องมือ)</option>
+                                            <option value="5">มีหินน้ำลายและมีเลือดออกภายหลังการตรวจ</option>
+                                            <option value="9">ตรวจไม่ได้/ไม่ตรวจ</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span5">
+                                <div class="control-group">
+                                    <label class="control-label" for="sl_icf_qualifier">สถานศึกษา</label>
+                                    <div class="controls">
+                                        <select class="input-xlarge">
+                                            <option value="">--</option>
+                                            <option value="0">ศพด.</option>
+                                            <option value="1">ประถมศึกษารัฐบาล</option>
+                                            <option value="2">ประถมศึกษาเทศบาล</option>
+                                            <option value="3">ประถมศึกษาท้องถิ่น</option>
+                                            <option value="4">ประถมศึกษาเอกชน</option>
+                                            <option value="5">มัธยมศึกษารัฐบาล</option>
+                                            <option value="9">มัธยมศึกษาเทศบาล</option>
+                                            <option value="9">มัธยมศึกษาท้องถิ่น</option>
+                                            <option value="9">มัธยมศึกษาเอกชน</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row-fluid">
+                            <div class="span3">
+                                <div class="control-group">
+                                    <label class="control-label" for="sl_icf_qualifier">ระดับการศึกษา</label>
+                                    <div class="controls">
+                                        <input type="text" class="input-mini" id="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="control-group">
+                            <label class="control-label" for="btn_icf_save">&nbsp;</label>
+                            <div class="controls">
+                                <button class="btn btn-success" type="button" id="btn_icf_save">
+                                    <i class="icon-plus-sign icon-white"></i> บันทึกข้อมูล
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    <table class="table table-striped" id="tbl_icf_list">
+                        <thead>
+                        <tr>
+                            <th>ภาวะสุขภาพ</th>
+                            <th>ระดับ</th>
+                            <th>ผู้ให้บริการ</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td colspan="3">...</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tab-pane" id="tab_icf2">
+                    <legend>ประวัติการรับบริการ</legend>
+                    <table class="table table-striped" id="tbl_icf_history">
+                        <thead>
+                        <tr>
+                            <th>วันที่</th>
+                            <th>หน่วยบริการ</th>
+                            <th>ภาวะสุขภาพ</th>
+                            <th>ระดับ</th>
+                            <th>ผู้ให้บริการ</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td colspan="5">...</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</a>
+    </div>
+</div>
+<!-- /dental -->
 
 <!-- <script type="text/javascript" src="{{ base_url }}assets/apps/js/apps.services.js"></script> -->
 <script type="text/javascript">
@@ -1834,6 +2147,7 @@
             '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.babies_care.js',
             '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.special_pp.js',
             '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.comms.js',
-            '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.icf.js'
+            '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.icf.js',
+            '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.dental.js'
     );
 </script>
