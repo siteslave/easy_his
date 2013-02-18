@@ -78,6 +78,8 @@ head.ready(function(){
         app.set_first_selected($('#sl_icf'));
         app.set_first_selected($('#sl_icf_qualifier'));
         app.set_first_selected($('#sl_icf_disb_type'));
+        $('#txt_icf_disabid').val('');
+
         icf.modal.show_register();
     });
 
@@ -102,6 +104,7 @@ head.ready(function(){
         var data = {};
         data.icf = $('#sl_icf').val();
         data.qualifier = $('#sl_icf_qualifier').val();
+        data.disabid = $('#txt_icf_disabid').val();
 
         data.vn = $('#vn').val();
         data.hn = $('#hn').val();

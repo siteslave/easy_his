@@ -40,6 +40,7 @@
                     <li><a href="javascript:void(0);" data-name="btn_specialpp"><i class="icon-eye-close"></i> ให้บริการส่งเสริมป้องกัน (Special PP)</a></li>
                     <li><a href="javascript:void(0);" data-name="btn_community_service"><i class="icon-eye-close"></i> ให้บริการในชุมชน (Community Service)</a></li>
                     <li><a href="javascript:void(0);" data-name="btn_icf"><i class="icon-briefcase"></i> ประเมินภาวะสุขภาพผู้พิการ (ICF)</a></li>
+                    <li><a href="javascript:void(0);" data-name="btn_rehabilitation"><i class="icon-refresh"></i> การฟื้นฟูสมรรถภาพ (ผู้พิการหรือผู้สูงอายุ)</a></li>
                 </ul>
             </li>
         </ul>
@@ -1733,6 +1734,12 @@
                 <div class="tab-pane active" id="tab_icf1">
                     <form class="form-horizontal">
                         <legend>การให้บริการวันนี้</legend>
+                        <div class="control-group">
+                            <label class="control-label" for="txt_icf_disabid">เลขทะเบียนผู้พิการ</label>
+                            <div class="controls">
+                                <input type="text" id="txt_icf_disabid" class="input-medium">
+                            </div>
+                        </div>
                         <div class="control-group">
                             <label class="control-label" for="sl_icf_disb_type">ประเภทความพิการ</label>
                             <div class="controls">

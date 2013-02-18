@@ -627,14 +627,15 @@ class Service_model extends CI_Model
     {
         $rs = $this->mongo_db
             ->insert('visit_icf', array(
-            'vn'            => (string) $data['vn'],
-            'hn'            => (string) $data['hn'],
-            'icf'           => new MongoId($data['icf']),
-            'qualifier'     => new MongoId($data['qualifier']),
-            'user_id'       => new MongoId($this->user_id),
-            'owner_id'      => new MongoId($this->owner_id),
-            'provider_id'   => new MongoId($this->provider_id)
-        ));
+                'vn'            => (string) $data['vn'],
+                'hn'            => (string) $data['hn'],
+                'icf'           => new MongoId($data['icf']),
+                'qualifier'     => new MongoId($data['qualifier']),
+                'disabid'       => $data['disabid'],
+                'user_id'       => new MongoId($this->user_id),
+                'owner_id'      => new MongoId($this->owner_id),
+                'provider_id'   => new MongoId($this->provider_id)
+            ));
 
         return $rs;
     }

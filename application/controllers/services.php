@@ -241,7 +241,7 @@ class Services extends CI_Controller
         if($by == '1'){
             /*
              * 1 = no diagnosis
-             * 2 = diagnosised
+             * 2 = diagnosis
              */
             $diag_status = $this->input->post('diag_status');
             $rs = $this->service->get_list_by_diag_status($diag_status, $offset, $limit);
@@ -945,9 +945,9 @@ class Services extends CI_Controller
     /**
      * Save FP data
      * 
-     * @param	string	$vn
-     * @param	string	$hn
-     * @param	string 	$fp_type
+     * @internal param	string	$vn
+     * @internal param	string	$hn
+     * @internal param	string 	$fp_type
      * 
      * @return 	json
      */
@@ -1254,6 +1254,7 @@ class Services extends CI_Controller
                 $obj->time_serv = $visit['time_serv'];
 
                 $obj->id = get_first_object($r['_id']);
+                $obj->disabid = $r['disabid'];
                 $obj->icf = get_first_object($r['icf']);
                 $obj->icf_name = $this->basic->get_icf_name($obj->icf);
                 $obj->qualifier = get_first_object($r['qualifier']);
