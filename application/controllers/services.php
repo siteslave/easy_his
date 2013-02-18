@@ -100,14 +100,15 @@ class Services extends CI_Controller
             $data['smokings'] = $smokings;
             $data['diag_types'] = $diag_types;
 			$data['fp_types'] = $fp_types;
-            
+
             $data['hn'] = $hn;
             $data['person_id'] = $person_id;
             $data['cid'] =$cid;
             $data['vn'] = $vn;
             $data['sex'] = $sex;
-            
 
+            $data['disabilities_types'] = $this->basic->get_disabilities_list();
+            $data['icf_qualifiers'] = $this->basic->get_icf_qualifiers();
             $data['patient_name'] = $patient_name;
             $this->layout->view('services/entries_view', $data);
             //$this->twiggy->template('services/entries')->display();
@@ -1164,6 +1165,74 @@ class Services extends CI_Controller
             {
                 $json = '{"success": false, "msg": "ไม่พบข้อมูล"}';
             }
+        }
+
+        render_json($json);
+    }
+
+    public function icf_save()
+    {
+        $data = $this->input->post('data');
+        if(!empty($data))
+        {
+            //check duplicate
+            $is_duplicated = $this->service->icf_check_duplicated($data);
+            if($is_duplicated)
+            {
+                $json = '{"success": false, "msg": "รายการซ้ำ"}';
+            }
+            else
+            {
+                $this->service->user_id = $this->user_id;
+                $this->service->owner_id = $this->owner_id;
+                $this->service->provider_id = $this->provider_id;
+
+                $rs = $this->service->icf_save($data);
+                if($rs)
+                {
+                    $json = '{"success": true}';
+                }
+                else
+                {
+                    $json = '{"success": false, "msg": "ไม่สามารถบันทึกรายการได้"}';
+                }
+            }
+        }
+        else
+        {
+            $json = '{"success": false, "msg": "ไม่พบข้อมูลที่ต้องการบันทึก"}';
+        }
+
+        render_json($json);
+    }
+
+    public function icf_get_list()
+    {
+        $vn = $this->input->post('vn');
+        if(!empty($vn))
+        {
+            $rs = $this->service->icf_get_list($vn);
+            $arr_result = array();
+            foreach($rs as $r)
+            {
+                $obj = new stdClass();
+                $obj->id = get_first_object($r['_id']);
+                $obj->icf = get_first_object($r['icf']);
+                $obj->icf_name = $this->basic->get_icf_name($obj->icf);
+                $obj->qualifier = get_first_object($r['qualifier']);
+                $obj->qualifier_name = $this->basic->get_icf_qualifier_name($obj->qualifier);
+                $obj->provider_name = $this->basic->get_provider_name_by_id(get_first_object($r['provider_id']));
+
+                $arr_result[] = $obj;
+            }
+
+            $rows = json_encode($arr_result);
+
+            $json = '{"success": true, "rows": '.$rows.'}';
+        }
+        else
+        {
+            $json = '{"success": false, "msg": "ไม่พบ VN"}';
         }
 
         render_json($json);

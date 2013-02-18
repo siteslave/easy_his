@@ -120,6 +120,12 @@
                                     <i class="icon-tags"></i> ทะเบียนนัด
                                 </a>
                             </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="<?php echo site_url('disabilities'); ?>">
+                                    <i class="icon-tags"></i> ทะเบียนผู้พิการ
+                                </a>
+                            </li>
                         </ul>
                     </li>
                     <li class="dropdown">

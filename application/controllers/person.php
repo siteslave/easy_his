@@ -932,4 +932,78 @@ class Person extends CI_Controller
         render_json($json);
 
     }
+
+    //------------------------------------------------------------------------------------------------------------------
+    /*
+     * Search person
+    *
+    * @internal param	string 	$query	The query for search
+    * @internal param	string	$filter	The filter type. 0 = CID, 1 = HN, 2 = First name and last name
+    */
+    public function search_person()
+    {
+        $query = $this->input->post('query');
+        $filter = $this->input->post('filter');
+
+        $filter = empty($filter) ? '0' : $filter;
+
+        if(empty($query))
+        {
+            $json = '{"success": false, "msg": "No query found"}';
+        }
+        else
+        {
+
+            if($filter == '0') //by cid
+            {
+                $rs = $this->person->search_person_by_cid($query);
+            }
+            else if($filter == '2')
+            {
+                //get hn by first name and last name
+                $name = explode(' ', $query); // [0] = first name, [1] = last name
+
+                $first_name = count($name) == 2 ? $name[0] : '';
+                $last_name = count($name) == 2 ? $name[1] : '';
+
+                $rs = $this->person->search_person_by_first_last_name($first_name, $last_name);
+
+            }
+            else
+            {
+                $rs = $this->person->search_person_by_hn($query);
+            }
+
+            if($rs)
+            {
+
+                $arr_result = array();
+
+                foreach($rs as $r)
+                {
+                    $obj = new stdClass();
+                    $obj->id = get_first_object($r['_id']);
+                    $obj->hn = $r['hn'];
+                    $obj->cid = $r['cid'];
+                    $obj->first_name = $r['first_name'];
+                    $obj->last_name = $r['last_name'];
+                    $obj->birthdate = $r['birthdate'];
+                    $obj->sex = $r['sex'] == '1' ? 'ชาย' : 'หญิง';
+                    $obj->age = count_age($r['birthdate']);
+
+                    $arr_result[] = $obj;
+                }
+
+                $rows = json_encode($arr_result);
+                $json = '{"success": true, "rows": '.$rows.'}';
+            }
+            else
+            {
+                $json = '{"success": false, "msg ": "ไม่พบรายการ"}';
+            }
+
+        }
+
+        render_json($json);
+    }
 }

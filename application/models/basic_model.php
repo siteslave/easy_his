@@ -718,8 +718,18 @@ class Basic_model extends CI_Model
 
         return count($result) > 0 ? $result[0]['name'] : '-';
     }
-    
-    
+
+    public function get_icf_name($id){
+        $result = $this->mongo_db->where(array('_id' => new MongoId($id)))->get('ref_icf');
+
+        return count($result) > 0 ? $result[0]['name'] : '-';
+    }
+    public function get_icf_qualifier_name($id){
+        $result = $this->mongo_db->where(array('_id' => new MongoId($id)))->get('ref_icf_qualifiers');
+
+        return count($result) > 0 ? $result[0]['name'] : '-';
+    }
+
     public function get_diag_name($code){
         $result = $this->mongo_db->where(array('code' => $code))->get('ref_icd10');
 
@@ -767,6 +777,13 @@ class Basic_model extends CI_Model
 
         return count($result) > 0 ? $result[0]['name'] : '-';
     }
+
+    public function get_disability_type_name($id){
+        $result = $this->mongo_db->where(array('_id' => new MongoId($id)))->get('ref_disability_types');
+
+        return count($result) > 0 ? $result[0]['name'] : '-';
+    }
+
     public function get_diag_type_name($code){
         $result = $this->mongo_db->where(array('code' => $code))->get('ref_diag_types');
 
@@ -1214,6 +1231,49 @@ class Basic_model extends CI_Model
         }
 
         return $arr_result;
+    }
+
+    public function get_disabilities_list()
+    {
+        $result = $this->mongo_db->order_by(array('export_code' => 1))->get('ref_disability_types');
+
+        $arr_result = array();
+
+        foreach($result as $r)
+        {
+            $obj = new stdClass();
+            $obj->id = get_first_object($r['_id']);
+            $obj->export_code = $r['export_code'];
+            $obj->name = $r['name'];
+            $arr_result[] = $obj;
+        }
+
+        return $arr_result;
+    }
+    public function get_icf_qualifiers()
+    {
+        $result = $this->mongo_db->order_by(array('export_code' => 1))->get('ref_icf_qualifiers');
+
+        $arr_result = array();
+
+        foreach($result as $r)
+        {
+            $obj = new stdClass();
+            $obj->id = get_first_object($r['_id']);
+            $obj->export_code = $r['export_code'];
+            $obj->name = $r['name'];
+            $arr_result[] = $obj;
+        }
+
+        return $arr_result;
+    }
+    public function get_icf_list($disb_id)
+    {
+        $rs = $this->mongo_db
+            ->where(array('disb_id' => new MongoId($disb_id)))
+            ->order_by(array('name' => 1))->get('ref_icf');
+
+        return $rs;
     }
 
 }

@@ -1,8 +1,8 @@
 <?php if (!defined('BASEPATH')) exit('No direct script access allowed');
 /**
- * Appointment controller
+ * Appointment model
  *
- * @package     Controllers
+ * @package     Model
  * @author      Satit Rianpit <rianpit@gmail.com>
  * @since       Version 1.0.0
  * @copyright   Copyright 2013 Data center of Maha Sarakham Hospital

@@ -15,6 +15,7 @@ class Service_model extends CI_Model
 {
     public $owner_id;
     public $user_id;
+    public $provider_id;
 
     public function search_person_by_name($query)
     {
@@ -622,7 +623,50 @@ class Service_model extends CI_Model
         return $rs ? $rs[0] : NULL;
     }
     
-    
+    public function icf_save($data)
+    {
+        $rs = $this->mongo_db
+            ->insert('visit_icf', array(
+            'vn'            => (string) $data['vn'],
+            'hn'            => (string) $data['hn'],
+            'icf'           => new MongoId($data['icf']),
+            'qualifier'     => new MongoId($data['qualifier']),
+            'user_id'       => new MongoId($this->user_id),
+            'owner_id'      => new MongoId($this->owner_id),
+            'provider_id'   => new MongoId($this->provider_id)
+        ));
+
+        return $rs;
+    }
+
+    public function icf_remove($id)
+    {
+        $rs = $this->mongo_db
+            ->where(array('_id' => new MongoId($id)))
+            ->delete('visit_icf');
+
+        return $rs;
+    }
+
+    public function icf_check_duplicated($data)
+    {
+        $rs = $this->mongo_db
+            ->where(array(
+                        'vn' => (string) $data['vn'],
+                        'hn' => (string) $data['hn'],
+                        'icf'=> new MongoId($data['icf'])
+            ))->count('visit_icf');
+
+        return $rs > 0 ? TRUE : FALSE;
+    }
+
+    public function icf_get_list($vn)
+    {
+        $rs = $this->mongo_db
+            ->where(array('vn' => (string) $vn))
+            ->get('visit_icf');
+        return $rs;
+    }
 }
 
 /* End of file service_model.php */

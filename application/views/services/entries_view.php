@@ -39,6 +39,7 @@
                 <ul class="dropdown-menu">
                     <li><a href="javascript:void(0);" data-name="btn_specialpp"><i class="icon-eye-close"></i> ให้บริการส่งเสริมป้องกัน (Special PP)</a></li>
                     <li><a href="javascript:void(0);" data-name="btn_community_service"><i class="icon-eye-close"></i> ให้บริการในชุมชน (Community Service)</a></li>
+                    <li><a href="javascript:void(0);" data-name="btn_icf"><i class="icon-briefcase"></i> ประเมินภาวะสุขภาพผู้พิการ (ICF)</a></li>
                 </ul>
             </li>
         </ul>
@@ -1716,6 +1717,98 @@
     </div>
 </div>
 <!-- /Community service -->
+<!-- ICF -->
+<div class="modal hide fade" id="mdl_icf">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>ประเมินภาวะสุขภาพผู้พิการ (ICF)</h3>
+    </div>
+    <div class="modal-body">
+        <div class="tabbable">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab_icf1" data-toggle="tab"><i class="icon-plus"></i> เพิ่มข้อมูล</a></li>
+                <li><a href="#tab_icf2" data-toggle="tab"><i class="icon-refresh"></i> ประวัติการรับบริการ</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab_icf1">
+                    <form class="form-horizontal">
+                        <legend>การให้บริการวันนี้</legend>
+                        <div class="control-group">
+                            <label class="control-label" for="sl_icf_disb_type">ประเภทความพิการ</label>
+                            <div class="controls">
+                                <select id="sl_icf_disb_type" class="input-xxlarge">
+                                    <option value="">--</option>
+                                    <?php foreach($disabilities_types as $t) echo '<option value="'.$t->id.'">'.$t->name.'</option>'; ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="sl_icf">ภาวะสุขภาพ</label>
+                            <div class="controls">
+                                <select id="sl_icf" class="input-xxlarge"></select>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="sl_icf_qualifier">ระดับภาวะสุขภาพ</label>
+                            <div class="controls">
+                                <select id="sl_icf_qualifier" class="input-xlarge">
+                                    <option value="">--</option>
+                                    <?php foreach($icf_qualifiers as $t) echo '<option value="'.$t->id.'">'.$t->name.'</option>'; ?>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="btn_icf_save">&nbsp;</label>
+                            <div class="controls">
+                                <button class="btn btn-success" type="button" id="btn_icf_save">
+                                    <i class="icon-plus-sign icon-white"></i> บันทึกข้อมูล
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    <table class="table table-striped" id="tbl_icf_list">
+                        <thead>
+                        <tr>
+                            <th>ภาวะสุขภาพ</th>
+                            <th>ระดับ</th>
+                            <th>ผู้ให้บริการ</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td colspan="3">...</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tab-pane" id="tab_icf2">
+                    <legend>ประวัติการรับบริการ</legend>
+                    <table class="table table-striped" id="tbl_icf_history">
+                        <thead>
+                        <tr>
+                            <th>วันที่</th>
+                            <th>หน่วยบริการ</th>
+                            <th>ภาวะสุขภาพ</th>
+                            <th>ระดับ</th>
+                            <th>ผู้ให้บริการ</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td colspan="5">...</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</a>
+    </div>
+</div>
+<!-- /ICF -->
 
 <!-- <script type="text/javascript" src="{{ base_url }}assets/apps/js/apps.services.js"></script> -->
 <script type="text/javascript">
@@ -1733,6 +1826,7 @@
             '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.postnatal.js',
             '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.babies_care.js',
             '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.special_pp.js',
-            '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.comms.js'
+            '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.comms.js',
+            '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.icf.js'
     );
 </script>
