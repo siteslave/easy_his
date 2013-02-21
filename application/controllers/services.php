@@ -60,6 +60,10 @@ class Services extends CI_Controller
         {
             show_error('VN don\'t exist, please check visit number and try again.', 404);
         }
+        else if(!$this->service->check_owner($vn ,$this->owner_id))
+        {
+            show_error('Invalid owner.');
+        }
         else
         {
             $hn         = $this->service->get_person_hn($vn);
@@ -193,6 +197,7 @@ class Services extends CI_Controller
 
             $this->service->owner_id = $this->owner_id;
             $this->service->user_id = $this->user_id;
+            $this->service->provider_id = $this->provider_id;
 
             if(empty($data['vn'])){
                 //insert
@@ -214,40 +219,19 @@ class Services extends CI_Controller
     }
 
     public function get_list(){
-        $offset = $this->input->post('offset');
-        $limit = $this->input->post('limit');
+        $start = $this->input->post('start');
+        $stop = $this->input->post('stop');
+        $date = $this->input->post('date');
 
-        $offset = empty($offset) ? 0 : $offset;
-        $limit = empty($limit) ? 25 : $limit;
+        $date = empty($date) ? date('Ymd') : to_string_date($date);
 
-        $by = $this->input->post('by');
-        /*
-         * Query by
-         * 1 = by diagnosis
-         * 2 = by clinic
-         * defaul by date
-         */
-        if($by == '1'){
-            /*
-             * 1 = no diagnosis
-             * 2 = diagnosis
-             */
-            $diag_status = $this->input->post('diag_status');
-            $rs = $this->service->get_list_by_diag_status($diag_status, $offset, $limit);
+        $start = empty($start) ? 0 : $start;
+        $stop = empty($stop) ? 25 : $stop;
 
-        }else if($by == '2'){
-            $clinic = $this->input->post('clinic');
-            $rs = $this->service->get_list_by_clinic($clinic, $offset, $limit);
+        $limit = (int) $stop - (int) $start;
 
-        }else{
-            $date = $this->input->post('date');
-
-            if(empty($date)){
-                $date = to_string_date(date('d/m/Y'));
-            }
-
-            $rs = $this->service->get_list_by_date($date, $offset, $limit);
-        }
+        $this->service->owner_id = $this->owner_id;
+        $rs = $this->service->get_list($date, $start, $limit);
 
         if($rs){
             $arr_result = array();
@@ -260,6 +244,10 @@ class Services extends CI_Controller
                 $obj->person_id = isset($r['person_id']) ? get_first_object($r['person_id']) : null;
 
                 $person_detail = get_person_detail_with_hn($r['hn']);
+
+                $obj->diag = $this->service->get_visit_pdx($obj->vn);
+                $obj->diag_name = get_diag_name($obj->diag);
+                $obj->provider_name = get_provider_name_by_id(get_first_object($r['provider_id']));
 
                 if($person_detail){
                     $obj->hn = $person_detail['hn'];
@@ -301,6 +289,100 @@ class Services extends CI_Controller
 
         render_json($json);
 
+    }
+
+    public function get_list_search(){
+        $start = $this->input->post('start');
+        $stop = $this->input->post('stop');
+        $hn = $this->input->post('hn');
+
+        $start = empty($start) ? 0 : $start;
+        $stop = empty($stop) ? 25 : $stop;
+
+        $limit = (int) $stop - (int) $start;
+
+        $this->service->owner_id = $this->owner_id;
+        $rs = $this->service->get_list_search($hn, $start, $limit);
+
+        if($rs){
+            $arr_result = array();
+
+            foreach($rs as $r){
+
+                $obj = new stdClass();
+
+                $obj->vn = isset($r['vn']) ? $r['vn'] : '-';
+                $obj->person_id = isset($r['person_id']) ? get_first_object($r['person_id']) : null;
+
+                $person_detail = get_person_detail_with_hn($r['hn']);
+
+                $obj->diag = $this->service->get_visit_pdx($obj->vn);
+                $obj->diag_name = get_diag_name($obj->diag);
+                $obj->provider_name = get_provider_name_by_id(get_first_object($r['provider_id']));
+
+                if($person_detail){
+                    $obj->hn = $person_detail['hn'];
+                    $obj->cid = $person_detail['cid'];
+                    $obj->fullname = $person_detail['first_name'] . ' ' . $person_detail['last_name'];
+                    $obj->birthdate = to_js_date($person_detail['birthdate']);
+                }else{
+                    $obj->cid = '-';
+                    $obj->fullname = '-';
+                    $obj->birthdate = '-';
+                }
+
+                $obj->clinic_name = get_clinic_name(get_first_object($r['clinic']));
+
+                if(isset($r['insurances'])){
+                    $obj->insurance_name = get_insurance_name($r['insurances']['id']);
+                    $obj->insurance_id = $r['insurances']['id'];
+                    $obj->insurance_code = $r['insurances']['code'];
+                }else{
+                    $obj->insurance_name = '-';
+                    $obj->insurance_id = '-';
+                    $obj->insurance_code = '-';
+                }
+
+                $screenings = $this->service->get_service_screening($r['vn']);
+                //echo var_dump($screenings);
+                $obj->cc = isset($screenings) ? $screenings['cc'] : '-';
+
+                array_push($arr_result, $obj);
+            }
+
+            //echo var_dump($rs);
+
+            $rows = json_encode($arr_result);
+            $json = '{"success": true, "rows": '.$rows.'}';
+        }else{
+            $json = '{"success": false, "msg": "No result."}';
+        }
+
+        render_json($json);
+
+    }
+
+    public function get_list_total()
+    {
+        $date = $this->input->post('date');
+        $date = to_string_date($date);
+
+        $this->service->owner_id = $this->owner_id;
+        $total = $this->service->get_list_total($date);
+        $json = '{"success": true, "total": '.$total.'}';
+
+        render_json($json);
+    }
+
+    public function get_list_search_total()
+    {
+        $hn = $this->input->post('hn');
+
+        $this->service->owner_id = $this->owner_id;
+        $total = $this->service->get_list_search_total($hn);
+        $json = '{"success": true, "total": '.$total.'}';
+
+        render_json($json);
     }
 
     public function save_screening(){
@@ -1465,6 +1547,25 @@ class Services extends CI_Controller
         {
             show_error('Not ajax.', 404);
         }
+    }
+
+    public function search()
+    {
+        $is_ajax = $this->input->is_ajax_request();
+
+        if($is_ajax)
+        {
+            $hn = $this->input->post('hn');
+
+            $rs = $this->service->search_by_hn($hn);
+
+
+        }
+        else
+        {
+            show_error('Not ajax.', 404);
+        }
+
     }
 }
 

@@ -43,7 +43,11 @@
             <th>#</th>
         </tr>
     </thead>
-    <tbody></tbody>
+    <tbody>
+    <tr>
+        <td colspan="9">กรุณาเลือกเงื่อนไขการค้นหา</td>
+    </tr>
+    </tbody>
 </table>
 
 <div class="pagination pagination-centered" id="main_paging">

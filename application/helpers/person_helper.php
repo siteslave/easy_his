@@ -48,6 +48,18 @@ if( ! function_exists('get_person_detail_with_hn')){
         return $rs;
     }
 }
+if( ! function_exists('get_person_detail_with_cid')){
+
+    function get_person_detail_with_cid($hn){
+        $ci =& get_instance();
+
+        $ci->load->model('Person_model', 'person');
+
+        $rs = $ci->person->get_person_detail_with_cid($hn);
+
+        return $rs;
+    }
+}
 /**
  * Count age
  *

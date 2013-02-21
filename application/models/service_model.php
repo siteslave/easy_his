@@ -61,7 +61,7 @@ class Service_model extends CI_Model
         $rs = $this->mongo_db
             ->insert('visit', array(
                 'owner_id'      => new MongoId($this->owner_id),
-                //'person_id'     => new MongoId($data['person_id']),
+                'provider_id'   => new MongoId($this->provider_id),
                 'hn'            => $data['hn'],
                 'vn'            => $data['vn'],
                 'date_serv'     => to_string_date($data['date_serv']),
@@ -95,13 +95,43 @@ class Service_model extends CI_Model
 
     }
 
-    public function get_list_by_date($date, $offset, $limit)
+    public function get_list($date, $start, $limit)
     {
         $rs = $this->mongo_db
-            ->where('date_serv', $date)
-            ->offset($offset)
+            ->where(array('date_serv' => $date, 'owner_id' => new MongoId($this->owner_id)))
+            ->offset($start)
             ->limit($limit)
             ->get('visit');
+
+        return $rs;
+
+    }
+    public function get_list_search($hn, $start, $limit)
+    {
+        $rs = $this->mongo_db
+            ->where(array('hn' => (string) $hn, 'owner_id' => new MongoId($this->owner_id)))
+            ->offset($start)
+            ->limit($limit)
+            ->get('visit');
+
+        return $rs;
+
+    }
+    public function get_list_total($date)
+    {
+        $rs = $this->mongo_db
+            ->where(array('date_serv' => $date, 'owner_id' => new MongoId($this->owner_id)))
+            ->count('visit');
+
+        return $rs;
+
+    }
+
+    public function get_list_search_total($hn)
+    {
+        $rs = $this->mongo_db
+            ->where(array('hn' => (string) $hn, 'owner_id' => new MongoId($this->owner_id)))
+            ->count('visit');
 
         return $rs;
 
@@ -910,6 +940,34 @@ class Service_model extends CI_Model
             ->count('visit');
         return $rs > 0 ? TRUE : FALSE;
     }
+
+    public function get_visit_pdx($vn)
+    {
+        $rs = $this->mongo_db
+            ->select(array('code'))
+            ->where(array('vn' => (string) $vn, 'diag_type' => '1'))
+            ->get('diagnosis_opd');
+
+        return count($rs) > 0 ? $rs[0]['code'] : '-';
+    }
+
+    public function search_by_hn($hn)
+    {
+        $rs = $this->mongo_db
+            ->where(array('hn' => (string) $hn, 'owner_id' => new MongoId($this->owner_id)))
+            ->get('visit');
+
+        return $rs;
+    }
+    public function search_by_vn($vn)
+    {
+        $rs = $this->mongo_db
+            ->where(array('vn' => (string) $vn, 'owner_id' => new MongoId($this->owner_id)))
+            ->get('visit');
+
+        return $rs;
+    }
+
 }
 
 /* End of file service_model.php */

@@ -515,27 +515,29 @@ class Person_model extends CI_Model
             ->limit(1)
             ->get('person');
 
-        if($rs){
-            return count($rs) ? $rs[0] : NULL;
-        }else{
-            return NULL;
-        }
+        return count($rs) ? $rs[0] : NULL;
     }
     
     public function get_person_detail_with_hn($hn){
-    	$rs = $this->mongo_db
-    	->select(array('hn', 'first_name', 'last_name', 'cid', 'birthdate', 'sex'))
-    	->where('hn', $hn)
-    	->limit(1)
-    	->get('person');
-    
-    	if($rs){
-    		return count($rs) ? $rs[0] : NULL;
-    	}else{
-    		return NULL;
-    	}
+        $rs = $this->mongo_db
+            ->select(array('hn', 'first_name', 'last_name', 'cid', 'birthdate', 'sex'))
+            ->where('hn', $hn)
+            ->limit(1)
+            ->get('person');
+
+        return count($rs) ? $rs[0] : NULL;
     }
-    
+
+    public function get_person_detail_with_cid($cid){
+        $rs = $this->mongo_db
+            ->select(array('hn', 'first_name', 'last_name', 'cid', 'birthdate', 'sex'))
+            ->where('cid', $cid)
+            ->limit(1)
+            ->get('person');
+
+        return count($rs) ? $rs[0] : NULL;
+    }
+
     public function get_cid($hn){
         $rs = $this->mongo_db
             ->select(array('cid'))
@@ -543,11 +545,7 @@ class Person_model extends CI_Model
             ->limit(1)
             ->get('person');
 
-        if($rs){
-            return count($rs) ? $rs[0]['cid'] : '-';
-        }else{
-            return '-';
-        }
+        return count($rs) ? $rs[0]['cid'] : '-';
     }
 
 	public function get_hn_from_cid($cid){
@@ -644,7 +642,7 @@ class Person_model extends CI_Model
     {
         $rs = $this->mongo_db
             ->select(array('hn', 'first_name', 'last_name'))
-            ->where(array('hn' => (string) $query))
+            ->like('hn', (string) $query)
             ->order_by(array('hn' => 1))
             ->limit(20)
             ->get('person');

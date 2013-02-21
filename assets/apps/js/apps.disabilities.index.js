@@ -320,6 +320,7 @@ head.ready(function(){
         $('#txt_detect_date').val('');
         $('#txt_disab_date').val('');
         $('#txt_update_id').val('');
+        $('#btn_search_person').removeAttr('disabled');
     };
 
     $('#btn_save_disb').click(function(){
@@ -496,6 +497,7 @@ head.ready(function(){
             birthdate = $(this).attr('data-birthdate'),
             id = $(this).attr('data-id');
 
+        $('#btn_search_person').attr('disabled', 'disabled');
         $('#txt_fullname').val(fullname);
         $('#txt_hn').val(hn);
         $('#txt_cid').val(cid);

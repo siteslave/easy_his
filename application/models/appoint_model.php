@@ -253,5 +253,14 @@ class Appoint_model extends CI_Model {
 
         return $rs;
     }
+
+    public function check_visit_exist($id)
+    {
+        $rs = $this->mongo_db
+            ->where(array('_id' => new MongoId($id), 'visit_status' => '1'))
+            ->count('appoints');
+
+        return $rs > 0 ? TRUE : FALSE;
+    }
 }
 

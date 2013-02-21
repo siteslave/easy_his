@@ -365,28 +365,46 @@ class Appoints extends CI_Controller
      */
     public function remove()
     {
+        $is_ajax = $this->input->is_ajax_request();
 
-        $id = $this->input->post('id');
-        if(empty($id))
+        if($is_ajax)
         {
-            $json = '{"success": false, "msg": "ไม่พบรหัสการนัดที่ต้องการลบ"}';
-        }
-        else
-        {
-            //do remove
-            $rs = $this->appoint->do_remove($id);
+            $id = $this->input->post('id');
 
-            if($rs)
+            if(empty($id))
             {
-                $json = '{"success": true}';
+                $json = '{"success": false, "msg": "ไม่พบรหัสการนัดที่ต้องการลบ"}';
             }
             else
             {
-                $json = '{"success": false, "msg": "ไม่สามารถลบรายการได้ กรุณาตรวจสอบ"}';
-            }
-        }
+                $is_visit = $this->appoint->check_visit_exist($id);
 
-        render_json($json);
+                if($is_visit)
+                {
+                    $json = '{"success": false, "msg": "รายการนี้ถูกลงทะเบียนส่งตรวจแล้วไม่สามารถลบได้"}';
+                }
+                else
+                {
+                    //do remove
+                    $rs = $this->appoint->do_remove($id);
+
+                    if($rs)
+                    {
+                        $json = '{"success": true}';
+                    }
+                    else
+                    {
+                        $json = '{"success": false, "msg": "ไม่สามารถลบรายการได้ กรุณาตรวจสอบ"}';
+                    }
+                }
+            }
+
+            render_json($json);
+        }
+        else
+        {
+            show_eror('Not ajax.', 404);
+        }
     }
 
     public function detail()

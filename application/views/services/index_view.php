@@ -7,14 +7,15 @@
 </blockquote>
 <form action="#" class="form-actions form-search">
     <div class="input-append">
-        <input type="text" class="input-medium search-query" placeholder="HN, VN, CID...">
-        <button type="button" class="btn btn-info"><i class="icon-search icon-white"></i> ค้นหา</button>
+        <input type="text" class="input-xlarge search-query" id="txt_query_visit" placeholder="HN, ชื่อ สกุล...">
+        <button type="button" id="btn_do_search_visit" class="btn btn-info"><i class="icon-search icon-white"></i> ค้นหา</button>
     </div>
     |
     <div class="input-append date" data-name="datepicker">
-        <input class="input-small" id="txt_query_service_date" type="text" disabled>
+        <input class="input-small" id="txt_service_date" type="text" value="<?php echo date('d/m/Y'); ?>" disabled>
         <span class="add-on"><i class="icon-th"></i></span>
     </div>
+    <!--
     <select id="sl_query_filter_by_diag" class="input-medium">
         <option value="1">ทั้งหมด</option>
         <option value="1">ยังไม่ลงรหัสวินิจฉัย</option>
@@ -24,10 +25,11 @@
         <option value="">--- แผนก ---</option>
         <?php foreach($clinics as $t) echo '<option value="'.$t->id.'">'.$t->name.'</option>'; ?>
     </select>
-    <button class="btn btn-info">
+    -->
+    <button class="btn btn-info" id="btn_do_filter">
         <i class="icon-search icon-white"></i> แสดง
     </button>
-    <button type="button" class="btn btn-success" id="btn_new_visit">
+    <button type="button" class="btn btn-success pull-right" id="btn_new_visit">
         <i class="icon-plus-sign icon-white"></i> ลงทะเบียน
     </button>
 </form>
@@ -41,6 +43,7 @@
         <th>อาการสำคัญ</th>
         <th>คลินิค</th>
         <th>การวินิจฉัย</th>
+        <th>ผู้ให้บริการ</th>
         <th>#</th>
     </tr>
     </thead>
@@ -54,18 +57,12 @@
         <td>...</td>
         <td>...</td>
         <td>...</td>
+        <td>...</td>
     </tr>
     </tbody>
 </table>
-<div class="pagination pagination-centered">
-    <ul>
-        <li><a href="#">«</a></li>
-        <li><a href="#">1</a></li>
-        <li><a href="#">2</a></li>
-        <li><a href="#">3</a></li>
-        <li><a href="#">4</a></li>
-        <li><a href="#">»</a></li>
-    </ul>
+<div class="pagination pagination-centered" id="main_paging">
+    <ul></ul>
 </div>
 <!-- modal new -->
 <div class="modal hide fade" id="mdl_register_new_service">
@@ -77,15 +74,6 @@
         <blockquote>
             บันทึกข้อมูลการส่งตรวจ
         </blockquote>
-        <!--
-        <form action="#" class="form-actions form-search">
-            <div class="input-append">
-                <input type="text" id="txt_service_search" class="input-xlarge search-query" placeholder="ชื่อผู้ป่วย....">
-                <input type="hidden" id="txt_service_hn">
-                <button type="button" class="btn btn-info" id="btn_reg_search_person"><i class="icon-search icon-white"></i> ค้นหา</button>
-            </div>
-        </form>
-        -->
         <ul class="nav nav-tabs" id="myTab">
             <li class="active"><a href="#tab_user_profile" data-toggle="tab"><i class="icon-user"></i> ข้อมูลทั่วไป</a></li>
             <li><a href="#tab_service_detail" data-toggle="tab"><i class="icon-th-list"></i> ข้อมูลการรับบริการ</a></li>
