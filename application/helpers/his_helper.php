@@ -80,7 +80,7 @@ if(!function_exists('get_hospital_name')){
     function get_hospital_name($hospital_code){
         $ci =& get_instance();
         $ci->load->model('Basic_model', 'basic');
-        $hospital_name = $ci->bisic->get_hospital_name($hospital_code);
+        $hospital_name = $ci->basic->get_hospital_name($hospital_code);
 
         return $hospital_name;
     }

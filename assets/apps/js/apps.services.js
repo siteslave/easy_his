@@ -75,16 +75,6 @@ head.ready(function(){
             app.ajax(url, params, function(err, data){
                 return err ? cb(err) : cb(null, data);
             });
-        },
-        check_epi_registration: function(hn, cb){
-            var url = '/epis/check_registration',
-                params = {
-                    hn: hn
-                };
-
-            app.ajax(url, params, function(err, data){
-                err ? cb(err) : cb(null, data);
-            });
         }
     };
 
@@ -120,7 +110,9 @@ head.ready(function(){
             }
         });
     };
-    $('#btn_new_visit').click(function(){
+
+    service.clear_register_form = function()
+    {
         $('#txt_service_profile_hn').val('');
         $('#txt_service_profile_cid').val('');
         $('#txt_service_profile_fullname').val('');
@@ -131,8 +123,8 @@ head.ready(function(){
         $('#txt_person_id').val('');
         $('#txt_service_vn').val('');
         $('#txt_service_hn').val('');
-        $('#txt_reg_service_date').val();
-        $('#txt_reg_service_time').val();
+        $('#txt_reg_service_date').val('');
+        $('#txt_reg_service_time').val('');
 
         app.set_first_selected($('#sl_reg_service_clinic'));
         app.set_first_selected($('#sl_reg_service_doctor_room'));
@@ -149,7 +141,10 @@ head.ready(function(){
         $('#txt_reg_service_insc_hosp_sub_code').val('');
         $('#txt_reg_service_insc_hosp_sub_name').val('');
         $('#txt_reg_service_cc').val('');
+    };
 
+    $('#btn_new_visit').click(function(){
+        service.clear_register_form();
         service.modal.register();
     });
 
@@ -221,7 +216,7 @@ head.ready(function(){
             }
         },
         updater: function(data){
-            var d = data.split('/');
+            var d = data.split('#');
             var name = d[0],
                 code = d[1];
 

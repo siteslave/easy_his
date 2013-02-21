@@ -61,7 +61,6 @@
 
 <input type="hidden" id="vn" value="<?php echo $vn; ?>">
 <input type="hidden" id="hn" value="<?php echo $hn; ?>">
-<input type="hidden" id="person_id" value="<?php echo $person_id; ?>">
 <input type="hidden" id="person_sex" value="<?php echo $sex; ?>">
 
 <div class="tabbable">
@@ -1836,9 +1835,9 @@
                         <div class="row-fluid">
                             <div class="span4">
                                 <div class="control-group">
-                                    <label class="control-label" for="sl_dental_type">ประเภทผู้รับบริการ</label>
+                                    <label class="control-label" for="sl_dental_denttype">ประเภทผู้รับบริการ</label>
                                     <div class="controls">
-                                        <select id="sl_dental_type" class="input-xlarge">
+                                        <select id="sl_dental_denttype" class="input-xlarge">
                                             <option value="">--</option>
                                             <option value="1">กลุ่มหญิงตั้งครรภ์</option>
                                             <option value="2">กลุ่มเด็กก่อนวัยเรียน</option>
@@ -1854,51 +1853,25 @@
                         <div class="row-fluid">
                             <div class="span3">
                                 <div class="control-group">
-                                    <label class="control-label" for="sl_icf_qualifier">ฟันแท้ที่มีอยู่ (ซี่)</label>
+                                    <label class="control-label" for="txt_dental_pteeth">ฟันแท้ที่มีอยู่ (ซี่)</label>
                                     <div class="controls">
-                                        <input type="text" class="input-mini" id="">
+                                        <input type="text" class="input-mini" data-type="number" id="txt_dental_pteeth">
                                     </div>
                                 </div>
                             </div>
                             <div class="span3">
                                 <div class="control-group">
-                                    <label class="control-label" for="sl_icf_qualifier">ฟันแท้ผุที่ไม่ได้อุด (ซี่)</label>
+                                    <label class="control-label" for="txt_dental_pcaries">ฟันแท้ผุที่ไม่ได้อุด (ซี่)</label>
                                     <div class="controls">
-                                        <input type="text" class="input-mini" id="">
+                                        <input type="text" class="input-mini" data-type="number" id="txt_dental_pcaries">
                                     </div>
                                 </div>
                             </div>
                             <div class="span3">
                                 <div class="control-group">
-                                    <label class="control-label" for="sl_icf_qualifier">ฟันแท้ที่ได้อุด (ซี่)</label>
+                                    <label class="control-label" for="txt_dental_pfilling">ฟันแท้ที่ได้อุด (ซี่)</label>
                                     <div class="controls">
-                                        <input type="text" class="input-mini" id="">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row-fluid">
-                            <div class="span3">
-                                <div class="control-group">
-                                    <label class="control-label" for="sl_icf_qualifier">ฟันแท้ถอน/หลุด (ซี่)</label>
-                                    <div class="controls">
-                                        <input type="text" class="input-mini" id="">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="span3">
-                                <div class="control-group">
-                                    <label class="control-label" for="sl_icf_qualifier">ฟันน้ำนมที่มีอยู่ (ซี่)</label>
-                                    <div class="controls">
-                                        <input type="text" class="input-mini" id="">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="span3">
-                                <div class="control-group">
-                                    <label class="control-label" for="sl_icf_qualifier">ฟันน้ำนมที่ได้อุด (ซี่)</label>
-                                    <div class="controls">
-                                        <input type="text" class="input-mini" id="">
+                                        <input type="text" class="input-mini" data-type="number" id="txt_dental_pfilling">
                                     </div>
                                 </div>
                             </div>
@@ -1906,17 +1879,51 @@
                         <div class="row-fluid">
                             <div class="span3">
                                 <div class="control-group">
-                                    <label class="control-label" for="sl_icf_qualifier">ฟันน้ำนมผุไม่ได้อุด(ซี่)</label>
+                                    <label class="control-label" for="txt_dental_pextract">ฟันแท้ถอน/หลุด (ซี่)</label>
                                     <div class="controls">
-                                        <input type="text" class="input-mini" id="">
+                                        <input type="text" class="input-mini" data-type="number" id="txt_dental_pextract">
                                     </div>
                                 </div>
                             </div>
                             <div class="span3">
                                 <div class="control-group">
-                                    <label class="control-label" for="sl_icf_qualifier">ฟันน้ำนมที่ถอน/หลุด(ซี่)</label>
+                                    <label class="control-label" for="txt_dental_dteeth">ฟันน้ำนมที่มีอยู่ (ซี่)</label>
                                     <div class="controls">
-                                        <input type="text" class="input-mini" id="">
+                                        <input type="text" class="input-mini" data-type="number" id="txt_dental_dteeth">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span3">
+                                <div class="control-group">
+                                    <label class="control-label" for="txt_dental_dfilling">ฟันน้ำนมที่ได้อุด (ซี่)</label>
+                                    <div class="controls">
+                                        <input type="text" class="input-mini" data-type="number" id="txt_dental_dfilling">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row-fluid">
+                            <div class="span3">
+                                <div class="control-group">
+                                    <label class="control-label" for="txt_dental_dcaries">ฟันน้ำนมผุไม่ได้อุด(ซี่)</label>
+                                    <div class="controls">
+                                        <input type="text" class="input-mini" data-type="number" id="txt_dental_dcaries">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span3">
+                                <div class="control-group">
+                                    <label class="control-label" for="txt_dental_dextract">ฟันน้ำนมที่ถอน/หลุด(ซี่)</label>
+                                    <div class="controls">
+                                        <input type="text" class="input-mini" data-type="number" id="txt_dental_dextract">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="span3">
+                                <div class="control-group">
+                                    <label class="control-label" for="txt_dental_need_sealant">ต้องเคลือบ(ซี่)</label>
+                                    <div class="controls">
+                                        <input type="text" class="input-mini" data-type="number" id="txt_dental_need_sealant">
                                     </div>
                                 </div>
                             </div>
@@ -1924,24 +1931,24 @@
                         <div class="row-fluid">
                             <div class="span5">
                                 <div class="control-group">
-                                    <label class="control-label" for="sl_icf_qualifier">เคลือบฟลูออไรด์</label>
+                                    <label class="control-label" for="sl_dental_need_fluoride">เคลือบฟลูออไรด์</label>
                                     <div class="controls">
-                                        <select>
+                                        <select id="sl_dental_need_fluoride">
                                             <option value="">--</option>
-                                            <option value="">ต้องทา/เคลือบฟลูออไรด์</option>
-                                            <option value="">ไม่ต้องทา/เคลือบฟลูออไรด์</option>
+                                            <option value="1">ต้องทา/เคลือบฟลูออไรด์</option>
+                                            <option value="2">ไม่ต้องทา/เคลือบฟลูออไรด์</option>
                                         </select>
                                     </div>
                                 </div>
                             </div>
                             <div class="span5">
                                 <div class="control-group">
-                                    <label class="control-label" for="sl_icf_qualifier">ขุดหินน้ำลาย</label>
+                                    <label class="control-label" for="sl_dental_need_scaling">ขุดหินน้ำลาย</label>
                                     <div class="controls">
-                                        <select>
+                                        <select id="sl_dental_need_scaling">
                                             <option value="">--</option>
-                                            <option value="">ต้องขูดหินน้ำลาย</option>
-                                            <option value="">ไม่ต้องขูดหินน้ำลาย</option>
+                                            <option value="1">ต้องขูดหินน้ำลาย</option>
+                                            <option value="2">ไม่ต้องขูดหินน้ำลาย</option>
                                         </select>
                                     </div>
                                 </div>
@@ -1951,53 +1958,44 @@
                         <div class="row-fluid">
                             <div class="span3">
                                 <div class="control-group">
-                                    <label class="control-label" for="sl_icf_qualifier">จำนวนที่ต้องเคลือบ(ซี่)</label>
+                                    <label class="control-label" for="txt_dental_need_pfilling">ฟันแท้ที่ต้องอุด(ซี่)</label>
                                     <div class="controls">
-                                        <input type="text" class="input-mini" id="">
+                                        <input type="text" class="input-mini" data-type="number" id="txt_dental_need_pfilling">
                                     </div>
                                 </div>
                             </div>
                             <div class="span3">
                                 <div class="control-group">
-                                    <label class="control-label" for="sl_icf_qualifier">ฟันแท้ที่ต้องอุด(ซี่)</label>
+                                    <label class="control-label" for="txt_dental_need_dfilling">ฟันน้ำนมที่ต้องอุด(ซี่)</label>
                                     <div class="controls">
-                                        <input type="text" class="input-mini" id="">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="span3">
-                                <div class="control-group">
-                                    <label class="control-label" for="sl_icf_qualifier">ฟันน้ำนมที่ต้องอุด(ซี่)</label>
-                                    <div class="controls">
-                                        <input type="text" class="input-mini" id="">
+                                        <input type="text" class="input-mini" data-type="number" id="txt_dental_need_dfilling">
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-
                         <div class="row-fluid">
                             <div class="span3">
                                 <div class="control-group">
-                                    <label class="control-label" for="sl_icf_qualifier">ฟันที่ที่ต้องถอน(ซี่)</label>
+                                    <label class="control-label" for="txt_dental_need_pextract">ฟันแท้ที่ต้องถอน(ซี่)</label>
                                     <div class="controls">
-                                        <input type="text" class="input-mini" id="">
+                                        <input type="text" class="input-mini" data-type="number" id="txt_dental_need_pextract">
                                     </div>
                                 </div>
                             </div>
                             <div class="span3">
                                 <div class="control-group">
-                                    <label class="control-label" for="sl_icf_qualifier">ฟันน้ำนมที่ต้องถอน(ซี่)</label>
+                                    <label class="control-label" for="txt_dental_need_dextract">ฟันน้ำนมที่ต้องถอน(ซี่)</label>
                                     <div class="controls">
-                                        <input type="text" class="input-mini" id="">
+                                        <input type="text" class="input-mini" data-type="number" id="txt_dental_need_dextract">
                                     </div>
                                 </div>
                             </div>
                             <div class="span3">
                                 <div class="control-group">
-                                    <label class="control-label" for="sl_icf_qualifier">ต้องใส่ฟันเทียม(ซี่)</label>
+                                    <label class="control-label" for="txt_dental_nprosthesis">ต้องใส่ฟันเทียม(ซี่)</label>
                                     <div class="controls">
-                                        <input type="text" class="input-mini" id="">
+                                        <input type="text" class="input-mini" data-type="number" id="txt_dental_nprosthesis">
                                     </div>
                                 </div>
                             </div>
@@ -2005,25 +2003,25 @@
                         <div class="row-fluid">
                             <div class="span3">
                                 <div class="control-group">
-                                    <label class="control-label" for="sl_icf_qualifier">คู่สบฟันแท้กับฟันแท้</label>
+                                    <label class="control-label" for="txt_dental_permanent_perma">คู่สบฟันแท้กับฟันแท้</label>
                                     <div class="controls">
-                                        <input type="text" class="input-mini" id="">
+                                        <input type="text" class="input-mini" data-type="number" id="txt_dental_permanent_perma">
                                     </div>
                                 </div>
                             </div>
                             <div class="span3">
                                 <div class="control-group">
-                                    <label class="control-label" for="sl_icf_qualifier">คู่สบฟันแท้กับฟันเทียม</label>
+                                    <label class="control-label" for="txt_dental_permanent_prost">คู่สบฟันแท้กับฟันเทียม</label>
                                     <div class="controls">
-                                        <input type="text" class="input-mini" id="">
+                                        <input type="text" class="input-mini" data-type="number" id="txt_dental_permanent_prost">
                                     </div>
                                 </div>
                             </div>
                             <div class="span3">
                                 <div class="control-group">
-                                    <label class="control-label" for="sl_icf_qualifier">คู่สบฟันเทียมกับฟันเทียม</label>
+                                    <label class="control-label" for="txt_dental_prosthesis_prost">คู่สบฟันเทียมกับฟันเทียม</label>
                                     <div class="controls">
-                                        <input type="text" class="input-mini" id="">
+                                        <input type="text" class="input-mini" data-type="number" id="txt_dental_prosthesis_prost">
                                     </div>
                                 </div>
                             </div>
@@ -2031,9 +2029,9 @@
                         <div class="row-fluid">
                             <div class="span5">
                                 <div class="control-group">
-                                    <label class="control-label" for="sl_icf_qualifier">สภาวะปริทันต์</label>
+                                    <label class="control-label" for="sl_dental_gum">สภาวะปริทันต์</label>
                                     <div class="controls">
-                                        <select class="input-xlarge">
+                                        <select class="input-xlarge" id="sl_dental_gum">
                                             <option value="">--</option>
                                             <option value="0">ปกติ</option>
                                             <option value="1">มีเลือดออกภายหลังจากการตรวจ</option>
@@ -2048,18 +2046,18 @@
                             </div>
                             <div class="span5">
                                 <div class="control-group">
-                                    <label class="control-label" for="sl_icf_qualifier">สถานศึกษา</label>
+                                    <label class="control-label" for="sl_dental_schooltype">สถานศึกษา</label>
                                     <div class="controls">
-                                        <select class="input-xlarge">
+                                        <select class="input-xlarge" id="sl_dental_schooltype">
                                             <option value="">--</option>
-                                            <option value="0">ศพด.</option>
-                                            <option value="1">ประถมศึกษารัฐบาล</option>
-                                            <option value="2">ประถมศึกษาเทศบาล</option>
-                                            <option value="3">ประถมศึกษาท้องถิ่น</option>
-                                            <option value="4">ประถมศึกษาเอกชน</option>
-                                            <option value="5">มัธยมศึกษารัฐบาล</option>
-                                            <option value="9">มัธยมศึกษาเทศบาล</option>
-                                            <option value="9">มัธยมศึกษาท้องถิ่น</option>
+                                            <option value="1">ศพด.</option>
+                                            <option value="2">ประถมศึกษารัฐบาล</option>
+                                            <option value="3">ประถมศึกษาเทศบาล</option>
+                                            <option value="4">ประถมศึกษาท้องถิ่น</option>
+                                            <option value="5">ประถมศึกษาเอกชน</option>
+                                            <option value="6">มัธยมศึกษารัฐบาล</option>
+                                            <option value="7">มัธยมศึกษาเทศบาล</option>
+                                            <option value="8">มัธยมศึกษาท้องถิ่น</option>
                                             <option value="9">มัธยมศึกษาเอกชน</option>
                                         </select>
                                     </div>
@@ -2069,9 +2067,9 @@
                         <div class="row-fluid">
                             <div class="span3">
                                 <div class="control-group">
-                                    <label class="control-label" for="sl_icf_qualifier">ระดับการศึกษา</label>
+                                    <label class="control-label" for="txt_dental_school_class">ระดับการศึกษา</label>
                                     <div class="controls">
-                                        <input type="text" class="input-mini" id="">
+                                        <input type="text" class="input-mini" data-type="number" id="txt_dental_school_class">
                                     </div>
                                 </div>
                             </div>
@@ -2080,42 +2078,32 @@
                         <div class="control-group">
                             <label class="control-label" for="btn_icf_save">&nbsp;</label>
                             <div class="controls">
-                                <button class="btn btn-success" type="button" id="btn_icf_save">
+                                <button class="btn btn-success" type="button" id="btn_dental_save">
                                     <i class="icon-plus-sign icon-white"></i> บันทึกข้อมูล
+                                </button>
+                                <button class="btn btn-danger" type="button" id="btn_dental_remove">
+                                    <i class="icon-trash icon-white"></i> ลบข้อมูลการให้บริการ
                                 </button>
                             </div>
                         </div>
                     </form>
-                    <table class="table table-striped" id="tbl_icf_list">
-                        <thead>
-                        <tr>
-                            <th>ภาวะสุขภาพ</th>
-                            <th>ระดับ</th>
-                            <th>ผู้ให้บริการ</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td colspan="3">...</td>
-                        </tr>
-                        </tbody>
-                    </table>
                 </div>
-                <div class="tab-pane" id="tab_icf2">
+                <div class="tab-pane" id="tab_dental2">
                     <legend>ประวัติการรับบริการ</legend>
-                    <table class="table table-striped" id="tbl_icf_history">
+                    <table class="table table-striped" id="tbl_dental_history">
                         <thead>
                         <tr>
                             <th>วันที่</th>
                             <th>หน่วยบริการ</th>
-                            <th>ภาวะสุขภาพ</th>
-                            <th>ระดับ</th>
+                            <th>ประเภทผู้รับบริการ</th>
+                            <th>สถานที่</th>
+                            <th>สภาวะปริทันต์</th>
                             <th>ผู้ให้บริการ</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
-                            <td colspan="5">...</td>
+                            <td colspan="6">...</td>
                         </tr>
                         </tbody>
                     </table>

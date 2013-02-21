@@ -26,14 +26,26 @@ if( ! function_exists('count_person')){
 }
 if( ! function_exists('get_person_detail')){
 
-    function get_person_detail($hn){
+    function get_person_detail($id){
         $ci =& get_instance();
 
         $ci->load->model('Person_model', 'person');
 
-        $fullname = $ci->person->get_person_detail($hn);
+        $rs = $ci->person->get_person_detail($id);
 
-        return $fullname;
+        return $rs;
+    }
+}
+if( ! function_exists('get_person_detail_with_hn')){
+
+    function get_person_detail_with_hn($hn){
+        $ci =& get_instance();
+
+        $ci->load->model('Person_model', 'person');
+
+        $rs = $ci->person->get_person_detail_with_hn($hn);
+
+        return $rs;
     }
 }
 /**

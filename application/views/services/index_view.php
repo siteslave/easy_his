@@ -362,46 +362,6 @@
     </div>
 </div>
 
-<div class="modal hide fade" id="modal_search_hospital">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>ค้นหาสถานบริการ</h3>
-    </div>
-    <div class="modal-body">
-        <form action="#" class="form-inline form-actions">
-            <input type="hidden" id="txt_search_by" />
-            <div class="control-group">
-                <div class="controls">
-                    <label for="text_query_search_hospital">ชื่อ/รหัส สถานบริการ</label>
-                    <div class="input-append">
-                        <input class="input-xlarge" placeholder="..." id="text_query_search_hospital" type="text">
-                        <button class="btn btn-info" type="button" id="btn_do_search_hospital"><i class="icon-search icon-white"></i> ค้นหา</button>
-                    </div>
-
-                    <label class="checkbox inline">
-                        <input type="checkbox" id="chk_search_by_name" checked="checked"> ค้นจากชื่อ
-                    </label>
-
-                </div>
-            </div>
-        </form>
-        <table class="table table-striped" id="table_search_hospital_result_list">
-            <thead>
-            <tr>
-                <th>รหัส</th>
-                <th>ชื่อสถานบริการ</th>
-                <th>จังหวัด</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</button>
-    </div>
-</div>
-
 <div class="modal hide fade" id="modal_search_person">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
