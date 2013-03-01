@@ -29,8 +29,8 @@ class User_model extends CI_Model
     public function do_login($username, $password)
     {
 
-        $this->mongo_db->add_index('users', array('username' => -1), array('unique' => TRUE));
-        $this->mongo_db->add_index('users', array('password' => -1), array('unique' => FALSE));
+        //$this->mongo_db->add_index('users', array('username' => -1), array('unique' => TRUE));
+        //$this->mongo_db->add_index('users', array('password' => -1), array('unique' => FALSE));
 
         $result = $this->mongo_db
                         ->where('username', $username)

@@ -21,11 +21,12 @@
         <option value="1">ยังไม่ลงรหัสวินิจฉัย</option>
         <option value="1">ลงวินิจฉัยแล้ว</option>
     </select>
-    <select class="input-medium" id="sl_filter_service_by_clinic">
-        <option value="">--- แผนก ---</option>
-        <?php foreach($clinics as $t) echo '<option value="'.$t->id.'">'.$t->name.'</option>'; ?>
-    </select>
     -->
+    <select class="input-medium" id="sl_service_doctor_room">
+        <option value="">--- ห้องตรวจ ---</option>
+        <?php foreach($doctor_rooms as $t) echo '<option value="'.$t->id.'">'.$t->name.'</option>'; ?>
+    </select>
+
     <button class="btn btn-info" id="btn_do_filter">
         <i class="icon-search icon-white"></i> แสดง
     </button>

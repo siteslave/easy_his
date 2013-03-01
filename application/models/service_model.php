@@ -95,13 +95,30 @@ class Service_model extends CI_Model
 
     }
 
-    public function get_list($date, $start, $limit)
+    public function get_list($date, $doctor_room, $start, $limit)
     {
-        $rs = $this->mongo_db
-            ->where(array('date_serv' => $date, 'owner_id' => new MongoId($this->owner_id)))
-            ->offset($start)
-            ->limit($limit)
-            ->get('visit');
+        if(empty($doctor_room))
+        {
+            $rs = $this->mongo_db
+                ->where(array(
+                    'date_serv' => $date,
+                    'owner_id' => new MongoId($this->owner_id)
+                ))
+                ->offset($start)
+                ->limit($limit)
+                ->get('visit');
+        }
+        else
+        {
+            $rs = $this->mongo_db
+                ->where(array(
+                    'date_serv' => $date,
+                    'owner_id' => new MongoId($this->owner_id),
+                    'doctor_room' => new MongoId($doctor_room)))
+                ->offset($start)
+                ->limit($limit)
+                ->get('visit');
+        }
 
         return $rs;
 
@@ -117,11 +134,27 @@ class Service_model extends CI_Model
         return $rs;
 
     }
-    public function get_list_total($date)
+    public function get_list_total($date, $doctor_room)
     {
-        $rs = $this->mongo_db
-            ->where(array('date_serv' => $date, 'owner_id' => new MongoId($this->owner_id)))
-            ->count('visit');
+        if(empty($doctor_room))
+        {
+            $rs = $this->mongo_db
+                ->where(array(
+                    'date_serv' => $date,
+                    'owner_id' => new MongoId($this->owner_id)
+                ))
+                ->count('visit');
+        }
+        else
+        {
+            $rs = $this->mongo_db
+                ->where(array(
+                    'date_serv' => $date,
+                    'owner_id' => new MongoId($this->owner_id),
+                    'doctor_room' => new MongoId($doctor_room)
+                ))
+                ->count('visit');
+        }
 
         return $rs;
 

@@ -66,12 +66,13 @@ head.ready(function(){
             });
         },
 
-        get_list: function(date, start, stop, cb){
+        get_list: function(date, doctor_room, start, stop, cb){
             var url = 'services/get_list',
                 params = {
                     start: start,
                     stop: stop,
-                    date: date
+                    date: date,
+                    doctor_room: doctor_room
                 };
 
             app.ajax(url, params, function(err, data){
@@ -90,10 +91,11 @@ head.ready(function(){
                 return err ? cb(err) : cb(null, data);
             });
         },
-        get_list_total: function(date, cb){
+        get_list_total: function(date, doctor_room, cb){
             var url = 'services/get_list_total',
                 params = {
-                    date: date
+                    date: date,
+                    doctor_room: doctor_room
                 };
 
             app.ajax(url, params, function(err, data){
@@ -150,11 +152,12 @@ head.ready(function(){
 
     service.get_list = function(){
 
-        var date = $('#txt_service_date').val();
+        var date = $('#txt_service_date').val(),
+            doctor_room = $('#sl_service_doctor_room').val();
 
         $('#tbl_service_list > tbody').empty();
 
-        service.ajax.get_list_total(date, function(err, data){
+        service.ajax.get_list_total(date, doctor_room, function(err, data){
             if(err){
                 app.alert(err);
                 $('#tbl_service_list > tbody').append('<tr><td colspan="9">ไม่พบรายการ</td></tr>');
@@ -165,7 +168,7 @@ head.ready(function(){
                     lapping: 1,
                     page: 1,
                     onSelect: function(page){
-                        service.ajax.get_list(date, this.slice[0], this.slice[1], function(err, data){
+                        service.ajax.get_list(date, doctor_room, this.slice[0], this.slice[1], function(err, data){
                             $('#tbl_service_list > tbody').empty();
                             if(err){
                                 app.alert(err);

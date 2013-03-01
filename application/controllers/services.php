@@ -83,6 +83,7 @@ class Services extends CI_Controller
 
             $diag_types                 = $this->basic->get_diag_type();
             $fp_types                   = $this->basic->get_fp_type();
+            $lab_groups                 = $this->basic->get_lab_groups_list();
 
             $data['drug_allergy_informants']    = $drug_allergy_informants;
             $data['drug_allergy_symptoms']      = $drug_allergy_symptoms;
@@ -99,6 +100,7 @@ class Services extends CI_Controller
             $data['cid']        =$cid;
             $data['vn']         = $vn;
             $data['sex']        = $sex;
+            $data['lab_groups'] = $lab_groups;
 
             $data['disabilities_types'] = $this->basic->get_disabilities_list();
             $data['icf_qualifiers']     = $this->basic->get_icf_qualifiers();
@@ -222,6 +224,7 @@ class Services extends CI_Controller
         $start = $this->input->post('start');
         $stop = $this->input->post('stop');
         $date = $this->input->post('date');
+        $doctor_room = $this->input->post('doctor_room');
 
         $date = empty($date) ? date('Ymd') : to_string_date($date);
 
@@ -231,7 +234,7 @@ class Services extends CI_Controller
         $limit = (int) $stop - (int) $start;
 
         $this->service->owner_id = $this->owner_id;
-        $rs = $this->service->get_list($date, $start, $limit);
+        $rs = $this->service->get_list($date, $doctor_room, $start, $limit);
 
         if($rs){
             $arr_result = array();
@@ -365,10 +368,11 @@ class Services extends CI_Controller
     public function get_list_total()
     {
         $date = $this->input->post('date');
+        $doctor_room = $this->input->post('doctor_room');
         $date = to_string_date($date);
 
         $this->service->owner_id = $this->owner_id;
-        $total = $this->service->get_list_total($date);
+        $total = $this->service->get_list_total($date, $doctor_room);
         $json = '{"success": true, "total": '.$total.'}';
 
         render_json($json);

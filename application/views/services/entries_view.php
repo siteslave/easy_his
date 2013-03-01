@@ -20,8 +20,21 @@
 <form action="#" class="form-actions">
     <a href="<?php echo site_url('accidents/register/' . $vn . '/' . $hn); ?>" class="btn btn-danger"><i class="icon-th-list icon-white"></i> ข้อมูลอุบัติเหตุ</a>
     <a href="<?php echo site_url('appoints/register/' . $vn . '/' . $hn); ?>" class="btn btn-warning"><i class="icon-calendar icon-white"></i> ลงทะเบียนนัด</a>
-    <a href="javascript:void(0);" class="btn btn-info"><i class="icon-share-alt icon-white"></i> สั่ง LAB</a>
-
+    <a href="#" class="btn btn-info" id="btn_labs"><i class="icon-tasks icon-white"></i> สั่ง/ลงผล LAB</a>
+    <!--
+    <div class="btn-group">
+        <button class="btn btn-info"><i class="icon-tasks icon-white"></i> LAB</button>
+        <button class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li>
+                <a href="#"><i class="icon-share-alt"></i> สั่ง LAB</a>
+                <a href="#"><i class="icon-edit"></i> ลงผล LAB</a>
+            </li>
+        </ul>
+    </div>
+-->
     <div class="btn-group">
         <button class="btn btn-primary" type="button"><i class="icon-th-large icon-white"></i> งานส่งเสริม</button>
         <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
@@ -2118,6 +2131,86 @@
 </div>
 <!-- /dental -->
 
+<!-- Lab order -->
+<div class="modal hide fade" id="mdl_lab_order">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>สั่ง LAB</h3>
+    </div>
+    <div class="modal-body">
+        <div class="tabbable">
+            <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab_lab1" data-toggle="tab"><i class="icon-plus"></i> สั่ง LAB</a></li>
+                <li><a href="#tab_lab2" data-toggle="tab"><i class="icon-refresh"></i> บันทึกผล</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab_lab1">
+                    <form class="form-horizontal">
+                        <div class="control-group">
+                            <label class="control-label" for="sl_lab_group">ชุด LAB</label>
+                            <div class="controls">
+                                <select id="sl_lab_group" class="input-xlarge">
+                                    <option value="">--</option>
+                                    <?php foreach($lab_groups as $t) echo '<option value="'.$t->id.'">'.$t->name.'</option>'; ?>
+                                </select>
+                                <button class="btn btn-info" id="btn_lab_do_order"><i class="icon-plus-sign icon-white"></i> เพิ่ม</button>
+                            </div>
+                        </div>
+                    </form>
+                    <table class="table table-striped" id="tbl_lab_group_list">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>รายการ</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td colspan="3">...</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="tab-pane" id="tab_lab2">
+                    <legend>บันทึกผล LAB</legend>
+                    <form class="form-horizontal">
+                        <div class="control-group">
+                            <label class="control-label" for="sl_lab_group_result">ชุด LAB</label>
+                            <div class="controls">
+                                <select id="sl_lab_group_result" class="input-xlarge">
+
+                                </select>
+
+                            </div>
+                        </div>
+                    </form>
+                    <table class="table table-striped" id="tbl_lab_result">
+                        <thead>
+                        <tr>
+                            <th>รายการ</th>
+                            <th>ผล</th>
+                            <th>หน่วย</th>
+                            <th>#</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td colspan="4">...</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="modal-footer">
+        <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</a>
+    </div>
+</div>
+<!-- /ICF -->
+
 <!-- <script type="text/javascript" src="{{ base_url }}assets/apps/js/apps.services.js"></script> -->
 <script type="text/javascript">
     head.js(
@@ -2136,6 +2229,7 @@
             '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.special_pp.js',
             '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.comms.js',
             '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.icf.js',
-            '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.dental.js'
+            '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.dental.js',
+            '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.labs.js'
     );
 </script>
