@@ -66,61 +66,291 @@ head.ready(function(){
             });
         },
 
-        get_list: function(cb){
+        get_list: function(date, doctor_room, start, stop, cb){
             var url = 'services/get_list',
                 params = {
-
+                    start: start,
+                    stop: stop,
+                    date: date,
+                    doctor_room: doctor_room
                 };
 
             app.ajax(url, params, function(err, data){
                 return err ? cb(err) : cb(null, data);
             });
         },
-        check_epi_registration: function(hn, cb){
-            var url = '/epis/check_registration',
+        get_list_search: function(hn, start, stop, cb){
+            var url = 'services/get_list_search',
+                params = {
+                    start: start,
+                    stop: stop,
+                    hn: hn
+                };
+
+            app.ajax(url, params, function(err, data){
+                return err ? cb(err) : cb(null, data);
+            });
+        },
+        get_list_total: function(date, doctor_room, cb){
+            var url = 'services/get_list_total',
+                params = {
+                    date: date,
+                    doctor_room: doctor_room
+                };
+
+            app.ajax(url, params, function(err, data){
+                return err ? cb(err) : cb(null, data);
+            });
+        },
+        get_list_search_total: function(hn, cb){
+            var url = 'services/get_list_search_total',
                 params = {
                     hn: hn
                 };
 
             app.ajax(url, params, function(err, data){
-                err ? cb(err) : cb(null, data);
+                return err ? cb(err) : cb(null, data);
+            });
+        },
+        search_visit: function(query, cb){
+            var url = 'services/search',
+                params = {
+                    query: query
+                };
+
+            app.ajax(url, params, function(err, data){
+                return err ? cb(err) : cb(null, data);
             });
         }
     };
 
+    service.set_list = function(data)
+    {
+        if(_.size(data.rows)){
+            _.each(data.rows, function(v){
+                $('#tbl_service_list > tbody').append(
+                    '<tr>' +
+                        // '<td>' + v.vn + '</td>' +
+                        '<td>' + v.hn + '</td>' +
+                        //'<td>' + v.cid + '</td>' +
+                        '<td>' + v.fullname + '</td>' +
+                        '<td>' + app.count_age(v.birthdate) + '</td>' +
+                        '<td>' + v.insurance_name + '</td>' +
+                        '<td>' + v.cc + '</td>' +
+                        '<td>' + v.clinic_name + '</td>' +
+                        '<td>[<strong>' + v.diag + '</strong>] ' + v.diag_name.substr(0, 20) + '...</td>' +
+                        '<td>' + v.provider_name + '</td>' +
+                        '<td><a href="javascript:void(0)" data-name="btn_selected_visit" class="btn btn-info" ' +
+                        'data-id="'+ v.person_id +'" data-vn="' + v.vn + '"> <i class="icon-edit icon-white"></i></a></td>' +
+                        '</tr>'
+                );
+            });
+        }else{
+            $('#tbl_service_list > tbody').append('<tr><td colspan="9">ไม่พบรายการ</td></tr>');
+        }
+    };
+
     service.get_list = function(){
+
+        var date = $('#txt_service_date').val(),
+            doctor_room = $('#sl_service_doctor_room').val();
+
+        $('#tbl_service_list > tbody').empty();
+
+        service.ajax.get_list_total(date, doctor_room, function(err, data){
+            if(err){
+                app.alert(err);
+                $('#tbl_service_list > tbody').append('<tr><td colspan="9">ไม่พบรายการ</td></tr>');
+            }else{
+                $('#main_paging > ul').paging(data.total, {
+                    format: " < . (qq -) nnncnnn (- pp) . >",
+                    perpage: app.record_per_page,
+                    lapping: 1,
+                    page: 1,
+                    onSelect: function(page){
+                        service.ajax.get_list(date, doctor_room, this.slice[0], this.slice[1], function(err, data){
+                            $('#tbl_service_list > tbody').empty();
+                            if(err){
+                                app.alert(err);
+                                $('#tbl_service_list > tbody').append('<tr><td colspan="9">ไม่พบรายการ</td></tr>');
+                            }else{
+                                service.set_list(data);
+                            }
+
+                        });
+
+                    },
+                    onFormat: function(type){
+                        switch (type) {
+
+                            case 'block':
+
+                                if (!this.active)
+                                    return '<li class="disabled"><a href="">' + this.value + '</a></li>';
+                                else if (this.value != this.page)
+                                    return '<li><a href="#' + this.value + '">' + this.value + '</a></li>';
+                                return '<li class="active"><a href="#">' + this.value + '</a></li>';
+
+                            case 'right':
+                            case 'left':
+
+                                if (!this.active) {
+                                    return "";
+                                }
+                                return '<li><a href="#' + this.value + '">' + this.value + '</a></li>';
+
+                            case 'next':
+
+                                if (this.active) {
+                                    return '<li><a href="#' + this.value + '">&raquo;</a></li>';
+                                }
+                                return '<li class="disabled"><a href="">&raquo;</a></li>';
+
+                            case 'prev':
+
+                                if (this.active) {
+                                    return '<li><a href="#' + this.value + '">&laquo;</a></li>';
+                                }
+                                return '<li class="disabled"><a href="">&laquo;</a></li>';
+
+                            case 'first':
+
+                                if (this.active) {
+                                    return '<li><a href="#' + this.value + '">&lt;</a></li>';
+                                }
+                                return '<li class="disabled"><a href="">&lt;</a></li>';
+
+                            case 'last':
+
+                                if (this.active) {
+                                    return '<li><a href="#' + this.value + '">&gt;</a></li>';
+                                }
+                                return '<li class="disabled"><a href="">&gt;</a></li>';
+
+                            case 'fill':
+                                if (this.active) {
+                                    return '<li class="disabled"><a href="#">...</a></li>';
+                                }
+                        }
+                        return ""; // return nothing for missing branches
+                    }
+                });
+            }
+        });
+        /*
         service.ajax.get_list(function(err, data){
             $('#tbl_service_list > tbody').empty();
-
             if(err){
                 app.alert(err);
                 $('#tbl_service_list > tbody').append('<tr><td colspan="8">ไม่พบรายการ</td></tr>');
             }else{
-                if(_.size(data.rows)){
-                    _.each(data.rows, function(v){
-                        $('#tbl_service_list > tbody').append(
-                            '<tr>' +
-                               // '<td>' + v.vn + '</td>' +
-                                '<td>' + v.hn + '</td>' +
-                                //'<td>' + v.cid + '</td>' +
-                                '<td>' + v.fullname + '</td>' +
-                                '<td>' + app.count_age(v.birthdate) + '</td>' +
-                                '<td>' + v.insurance_name + '</td>' +
-                                '<td>' + v.cc + '</td>' +
-                                '<td>' + v.clinic_name + '</td>' +
-                                '<td>-</td>' +
-                                '<td><a href="javascript:void(0)" data-name="btn_selected_visit" class="btn btn-info" ' +
-                                'data-id="'+ v.person_id +'" data-vn="' + v.vn + '"> <i class="icon-edit icon-white"></i></a></td>' +
-                                '</tr>'
-                        );
-                    });
-                }else{
-                    $('#tbl_service_list > tbody').append('<tr><td colspan="8">ไม่พบรายการ</td></tr>');
-                }
+                service.set_list(data);
             }
         });
+        */
     };
-    $('#btn_new_visit').click(function(){
+
+    service.get_list_search = function(){
+
+        var hn = $('#txt_query_visit').val();
+
+        $('#tbl_service_list > tbody').empty();
+
+        service.ajax.get_list_search_total(hn, function(err, data){
+            if(err){
+                app.alert(err);
+                $('#tbl_service_list > tbody').append('<tr><td colspan="9">ไม่พบรายการ</td></tr>');
+            }else{
+                $('#main_paging > ul').paging(data.total, {
+                    format: " < . (qq -) nnncnnn (- pp) . >",
+                    perpage: app.record_per_page,
+                    lapping: 1,
+                    page: 1,
+                    onSelect: function(page){
+                        service.ajax.get_list_search(hn, this.slice[0], this.slice[1], function(err, data){
+                            $('#tbl_service_list > tbody').empty();
+                            if(err){
+                                app.alert(err);
+                                $('#tbl_service_list > tbody').append('<tr><td colspan="9">ไม่พบรายการ</td></tr>');
+                            }else{
+                                service.set_list(data);
+                            }
+
+                        });
+
+                    },
+                    onFormat: function(type){
+                        switch (type) {
+
+                            case 'block':
+
+                                if (!this.active)
+                                    return '<li class="disabled"><a href="">' + this.value + '</a></li>';
+                                else if (this.value != this.page)
+                                    return '<li><a href="#' + this.value + '">' + this.value + '</a></li>';
+                                return '<li class="active"><a href="#">' + this.value + '</a></li>';
+
+                            case 'right':
+                            case 'left':
+
+                                if (!this.active) {
+                                    return "";
+                                }
+                                return '<li><a href="#' + this.value + '">' + this.value + '</a></li>';
+
+                            case 'next':
+
+                                if (this.active) {
+                                    return '<li><a href="#' + this.value + '">&raquo;</a></li>';
+                                }
+                                return '<li class="disabled"><a href="">&raquo;</a></li>';
+
+                            case 'prev':
+
+                                if (this.active) {
+                                    return '<li><a href="#' + this.value + '">&laquo;</a></li>';
+                                }
+                                return '<li class="disabled"><a href="">&laquo;</a></li>';
+
+                            case 'first':
+
+                                if (this.active) {
+                                    return '<li><a href="#' + this.value + '">&lt;</a></li>';
+                                }
+                                return '<li class="disabled"><a href="">&lt;</a></li>';
+
+                            case 'last':
+
+                                if (this.active) {
+                                    return '<li><a href="#' + this.value + '">&gt;</a></li>';
+                                }
+                                return '<li class="disabled"><a href="">&gt;</a></li>';
+
+                            case 'fill':
+                                if (this.active) {
+                                    return '<li class="disabled"><a href="#">...</a></li>';
+                                }
+                        }
+                        return ""; // return nothing for missing branches
+                    }
+                });
+            }
+        });
+        /*
+        service.ajax.get_list(function(err, data){
+            $('#tbl_service_list > tbody').empty();
+            if(err){
+                app.alert(err);
+                $('#tbl_service_list > tbody').append('<tr><td colspan="8">ไม่พบรายการ</td></tr>');
+            }else{
+                service.set_list(data);
+            }
+        });
+        */
+    };
+
+    service.clear_register_form = function()
+    {
         $('#txt_service_profile_hn').val('');
         $('#txt_service_profile_cid').val('');
         $('#txt_service_profile_fullname').val('');
@@ -131,8 +361,8 @@ head.ready(function(){
         $('#txt_person_id').val('');
         $('#txt_service_vn').val('');
         $('#txt_service_hn').val('');
-        $('#txt_reg_service_date').val();
-        $('#txt_reg_service_time').val();
+        $('#txt_reg_service_date').val('');
+        $('#txt_reg_service_time').val('');
 
         app.set_first_selected($('#sl_reg_service_clinic'));
         app.set_first_selected($('#sl_reg_service_doctor_room'));
@@ -149,7 +379,10 @@ head.ready(function(){
         $('#txt_reg_service_insc_hosp_sub_code').val('');
         $('#txt_reg_service_insc_hosp_sub_name').val('');
         $('#txt_reg_service_cc').val('');
+    };
 
+    $('#btn_new_visit').click(function(){
+        service.clear_register_form();
         service.modal.register();
     });
 
@@ -221,7 +454,7 @@ head.ready(function(){
             }
         },
         updater: function(data){
-            var d = data.split('/');
+            var d = data.split('#');
             var name = d[0],
                 code = d[1];
 
@@ -419,8 +652,60 @@ head.ready(function(){
         }
     });
 
+    $('#btn_do_filter').on('click', function(){
+        service.get_list();
+    });
 
-    //------------------------------------------------------------------------------------------------------------------
+    //search visit
+    $('#btn_do_search_visit').on('click', function(){
+        var query = $('#txt_query_visit').val();
+
+        if(!query)
+        {
+            service.get_list();
+        }
+        else
+        {
+            service.get_list_search();
+        }
+    });
+
+
+
+    $('#txt_query_visit').typeahead({
+        ajax: {
+            url: site_url + 'person/search_person_ajax',
+            timeout: 500,
+            displayField: 'name',
+            triggerLength: 3,
+            preDispatch: function(query){
+                return {
+                    query: query,
+                    csrf_token: csrf_token
+                }
+            },
+
+            preProcess: function(data){
+                if(data.success){
+                    return data.rows;
+                }else{
+                    return false;
+                }
+            }
+        },
+        updater: function(data){
+
+            var d = data.split('#');
+
+            var hn = d[0],
+                name = d[1];
+
+           // $('#txt_reg_service_insc_hosp_sub_code').val(code);
+           // $('#txt_reg_service_insc_hosp_sub_name').val(name);
+
+            return hn;
+        }
+    });
 
     service.get_list();
 });

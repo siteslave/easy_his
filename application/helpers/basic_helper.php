@@ -71,28 +71,28 @@ if(!function_exists('get_provider_type_name')){
 
 
 if(!function_exists('get_provider_name')){
-	function get_provider_name($code){
-		$ci =& get_instance();
+    function get_provider_name($code){
+        $ci =& get_instance();
 
-		$ci->load->model('Basic_model', 'basic');
+        $ci->load->model('Basic_model', 'basic');
 
-		$result = $ci->basic->get_provider_name($code);
+        $result = $ci->basic->get_provider_name($code);
 
-		return $result;
-	}
+        return $result;
+    }
 }
 
 if(!function_exists('get_owner_name')){
-	function get_owner_name($id){
-		$ci =& get_instance();
+    function get_owner_name($id){
+        $ci =& get_instance();
 
-		$ci->load->model('Basic_model', 'basic');
+        $ci->load->model('Basic_model', 'basic');
 
-		$pcucode = $ci->basic->get_owner_pcucode($id);
-		
+        $pcucode = $ci->basic->get_owner_pcucode($id);
 
-		return $pcucode ? get_hospital_name($pcucode) : '-';
-	}
+
+        return $pcucode ? get_hospital_name($pcucode) : '-';
+    }
 }
 
 if(!function_exists('get_streng_name')){
@@ -269,23 +269,23 @@ if(!function_exists('get_drug_allergy_level_name')){
 }
 
 if(!function_exists('get_appoint_type')){
-	function get_appoint_type(){
-		$ci =& get_instance();
-		$ci->load->model('Basic_model', 'basic');
-		$rs = $ci->basic->get_appoint_type();
-		
-		$arr_result = array();
-		foreach($rs as $r){
-			$obj = new stdClass();
-			$obj->id = get_first_object($r['_id']);
-			$obj->name = $r['name'];
-			$obj->desc = $r['desc'];
-		
-			array_push($arr_result, $obj);
-		}
-		
-		return $arr_result;
-	}
+    function get_appoint_type(){
+        $ci =& get_instance();
+        $ci->load->model('Basic_model', 'basic');
+        $rs = $ci->basic->get_appoint_type();
+
+        $arr_result = array();
+        foreach($rs as $r){
+            $obj = new stdClass();
+            $obj->id = get_first_object($r['_id']);
+            $obj->name = $r['name'];
+            $obj->desc = $r['desc'];
+
+            array_push($arr_result, $obj);
+        }
+
+        return $arr_result;
+    }
 }
 
 /**
@@ -337,42 +337,42 @@ if(!function_exists('get_insurance_name')){
 
 
 if(!function_exists('get_appoint_type_name')){
-	function get_appoint_type_name($id){
-		$ci =& get_instance();
+    function get_appoint_type_name($id){
+        $ci =& get_instance();
 
-		$ci->load->model('Basic_model', 'basic');
+        $ci->load->model('Basic_model', 'basic');
 
-		$result = $ci->basic->get_appoint_type_name($id);
+        $result = $ci->basic->get_appoint_type_name($id);
 
-		return $result;
-	}
+        return $result;
+    }
 }
 
 
 if(!function_exists('get_fp_type_name'))
 {
-	function get_fp_type_name($code){
-		$ci =& get_instance();
+    function get_fp_type_name($code){
+        $ci =& get_instance();
 
-		$ci->load->model('Basic_model', 'basic');
+        $ci->load->model('Basic_model', 'basic');
 
-		$result = $ci->basic->get_fp_type_name($code);
+        $result = $ci->basic->get_fp_type_name($code);
 
-		return $result;
-	}
+        return $result;
+    }
 }
 if(!function_exists('get_vaccine_name'))
 {
-	function get_vaccine_name($vaccine_id)
+    function get_vaccine_name($vaccine_id)
     {
-		$ci =& get_instance();
+        $ci =& get_instance();
 
-		$ci->load->model('Basic_model', 'basic');
+        $ci->load->model('Basic_model', 'basic');
 
-		$result = $ci->basic->get_vaccine_name($vaccine_id);
+        $result = $ci->basic->get_vaccine_name($vaccine_id);
 
-		return $result;
-	}
+        return $result;
+    }
 }
 
 if(!function_exists('get_pp_special_list'))
@@ -423,6 +423,38 @@ if(!function_exists('get_bfood_name'))
             case '2': return 'นมแม่และน้ำ'; break;
             case '3': return 'นมแม่และนมผสม'; break;
             case '4': return 'นมผสมอย่างเดียว'; break;
+            default: return '-'; break;
+        }
+    }
+}
+if(!function_exists('get_gum_name'))
+{
+    function get_gum_name($code)
+    {
+        switch($code)
+        {
+            case '0': return 'ปกติ'; break;
+            case '1': return 'มีเลือดออกภายหลังจากการตรวจ'; break;
+            case '2': return 'มีหินน้ำลายแต่ยังเห็นแถบดำบนเครื่องมือ'; break;
+            case '3': return 'มีร่องลึกปริทันต์ 4-5 ม.ม. (ขอบเงือกอยู่ภายในแถบดำ)'; break;
+            case '4': return 'มีร่องลึกปริทันต์ 6 ม.ม. หรือ มากกว่า (มองไม่เห็นแถบดำบนเครื่องมือ)'; break;
+            case '5': return 'มีหินน้ำลายและมีเลือดออกภายหลังการตรวจ'; break;
+            case '9': return 'ตรวจไม่ได้/ไม่ตรวจ'; break;
+            default: return '-'; break;
+        }
+    }
+}
+if(!function_exists('get_denttype_name'))
+{
+    function get_denttype_name($code)
+    {
+        switch($code)
+        {
+            case '1': return 'กลุ่มหญิงตั้งครรภ์'; break;
+            case '2': return 'กลุ่มเด็กก่อนวัยเรียน'; break;
+            case '3': return 'กลุ่มเด็กวัยเรียน'; break;
+            case '4': return 'กลุ่มผู้สูงอายุ'; break;
+            case '5': return 'กลุ่มอื่นๆ'; break;;
             default: return '-'; break;
         }
     }

@@ -1293,6 +1293,37 @@ class Basic_model extends CI_Model
         return $rs;
     }
 
+    public function get_lab_groups_list()
+    {
+        $rs = $this->mongo_db
+            ->order_by(array('name' => 1))->get('ref_lab_groups');
+
+        $arr_result = array();
+
+        foreach($rs as $r)
+        {
+            $obj = new stdClass();
+            $obj->id = get_first_object($r['_id']);
+            $obj->name = $r['name'];
+            $arr_result[] = $obj;
+        }
+
+        return $arr_result;
+    }
+
+    public function get_lab_group_name($order_id)
+    {
+        $result = $this->mongo_db->where(array('_id' => new MongoId($order_id)))->get('ref_lab_groups');
+
+        return count($result) > 0 ? $result[0]['name'] : '-';
+    }
+
+    public function get_lab_name($id)
+    {
+        $result = $this->mongo_db->where(array('_id' => new MongoId($id)))->get('ref_lab_items');
+
+        return count($result) > 0 ? $result[0]['name'] : '-';
+    }
 }
 
 //End file
