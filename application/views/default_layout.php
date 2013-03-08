@@ -11,6 +11,7 @@
 
     <!-- Le styles -->
     <link href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/css/bootstrap-timepicker.min.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/css/docs.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/css/datepicker.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/css/alertify.core.css" rel="stylesheet">
@@ -32,6 +33,7 @@
                 '<?php echo base_url(); ?>assets/js/taffy.js',
                 '<?php echo base_url(); ?>assets/js/bootstrap-datepicker.js',
                 '<?php echo base_url(); ?>assets/js/bootstrap-datepicker.th.js',
+                '<?php echo base_url(); ?>assets/js/bootstrap-timepicker.min.js',
                 '<?php echo base_url(); ?>assets/js/jquery.blockUI.js',
                 '<?php echo base_url(); ?>assets/js/jquery.cookie.js',
                 '<?php echo base_url(); ?>assets/js/jquery.freeow.min.js',
@@ -111,8 +113,6 @@
                                     <i class="icon-book"></i> ทะเบียนคัดกรองเบาหวาน/ความดัน 15 ปีขึ้นไป</a>
                                 <a href="<?php echo site_url('pregnancies'); ?>">
                                     <i class="icon-book"></i> ทะเบียนฝากครรภ์/คลอด/การดูแลหลังคลอด</a>
-				<a href="<?php echo site_url('ncd'); ?>">
-                                    <i class="icon-book"></i> ทะเบียนโรคเรื้อรัง (NCD)</a>
                             </li>
                             <li>
                                 <a href="<?php echo site_url('appoints'); ?>">

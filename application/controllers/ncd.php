@@ -44,6 +44,7 @@ class Ncd extends CI_Controller
         $this->load->model('Service_model', 'service');
         $this->load->model('Basic_model', 'basic');
         $this->load->model('Person_model', 'person');
+        $this->load->model('Dm_model', 'dm');
 
         $this->load->helper(array('person'));
     }
@@ -55,8 +56,11 @@ class Ncd extends CI_Controller
     {
         $this->person->owner_id = $this->owner_id;
         $this->person->clinic_code = $this->clinic_code;
+        $this->dm->owner_id = $this->owner_id;
 
         $data['villages'] = $this->person->get_villages();
+        $data['providers'] = $this->get_providers_by_active();
+
         $this->layout->view('ncd/index_view', $data);
     }
 
@@ -88,6 +92,7 @@ class Ncd extends CI_Controller
                 $obj->first_name = $r['first_name'];
                 $obj->last_name = $r['last_name'];
                 $obj->sex = $r['sex'] == '1' ? 'ชาย' : 'หญิง';
+                $obj->screen = $this->ncd->get_last_screen(get_first_object($r['_id']));
                 $obj->birthdate = $r['birthdate'];
                 $obj->age = count_age($r['birthdate']);
                 $obj->reg_date = isset($r['registers'][0]['reg_date']) ? $r['registers'][0]['reg_date'] : '';
@@ -105,6 +110,10 @@ class Ncd extends CI_Controller
 
         render_json($json);
     }
+
+    public function test() {
+        echo $this->ncd->get_last_screen('5111cc6d0ca4061b3c17ed52');
+    }
     //------------------------------------------------------------------------------------------------------------------
     public function get_list_by_house()
     {
@@ -112,13 +121,13 @@ class Ncd extends CI_Controller
         $stop = $this->input->post('stop');
         $house_id = $this->input->post('house_id');
 
-        //$start = empty($start) ? 0 : $start;
-        //$stop = empty($stop) ? 25 : $stop;
+        $start = empty($start) ? 0 : $start;
+        $stop = empty($stop) ? 25 : $stop;
 
         $limit = (int) $stop - (int) $start;
 
         $this->ncd->owner_id = $this->owner_id;
-        $rs = $this->ncd->get_list_by_house($house_id);
+        $rs = $this->ncd->get_list_by_house($house_id, $start, $limit);
 
         if($rs)
         {
@@ -251,68 +260,32 @@ class Ncd extends CI_Controller
 
     public function do_register()
     {
-        $hn = $this->input->post('hn');
+        $data = $this->input->post('data');
+        $this->ncd->owner_id = $this->owner_id;
+        $this->ncd->user_id = $this->user_id;
 
-        if(empty($hn))
-        {
-            $json = '{"success": false, "msg": "HN not found."}';
-        }
-        else
-        {
+        $rs = $this->ncd->register($data);
 
-            $this->person->owner_id = $this->owner_id;
-            $this->person->user_id = $this->user_id;
-
-            $exists = $this->person->check_clinic_exist($hn, $this->clinic_code);
-
-            if($exists)
-            {
-                $json = '{"success": false, "msg": "ทะเบียนซ้ำ - ชื่อนี้มีอยู่ในทะเบียนเรียบร้อยแล้ว"}';
-            }
-            else
-            {
-                $rs = $this->person->do_register_clinic($hn, $this->clinic_code);
-
-                if($rs)
-                {
-                    $json = '{"success": true}';
-                }
-                else
-                {
-                    $json = '{"success": false, "msg": "ไม่สามารถบันทึกข้อมูลได้"}';
-                }
-            }
-
+        if($rs) {
+            $json = '{ "success": true }';
+        } else {
+            $json = '{ "success": false, "msg": "ไม่สามารถเพิ่มข้อมูลได้." }';
         }
 
         render_json($json);
     }
 
-    //------------------------------------------------------------------------------------------------------------------
-    /**
-     * Service module
-     */
-
-    public function service_save()
-    {
+    public function update_ncd_detail() {
         $data = $this->input->post('data');
+        $this->ncd->owner_id = $this->owner_id;
+        $this->ncd->user_id = $this->user_id;
 
-        if(empty($data))
-        {
-            $json = '{"success": false, "msg": "ไม่พบข้อมูลสำหรับบันทึก"}';
-        }
-        else
-        {
-            $rs = $this->ncd->sevice_save($data);
+        $rs = $this->ncd->update_ncd_detail($data);
 
-            if($rs)
-            {
-                $json = '{"success": true}';
-            }
-            else
-            {
-                $json = '{"success": false, "msg": "ไม่สามารถบันทึกข้อมูลได้"}';
-            }
+        if($rs) {
+            $json = '{ "success": true }';
+        } else {
+            $json = '{ "success": false, "msg": "ไม่สามารถแก้ไขข้อมูลได้." }';
         }
 
         render_json($json);
@@ -349,150 +322,6 @@ class Ncd extends CI_Controller
 
         render_json($json);
     }
-
-    //------------------------------------------------------------------------------------------------------------------
-    /**
-     * Get ncd vaccines list
-     */
-    public function get_ncd_vaccine_list()
-    {
-        $rs = $this->basic->get_ncd_vaccine_list();
-
-        if($rs)
-        {
-            $rows = json_encode($rs);
-
-            $json = '{"success": true, "rows": '.$rows.'}';
-        }
-        else
-        {
-            $json = '{"success": false, "msg": "ไม่พบข้อมูล"}';
-        }
-
-        render_json($json);
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    /**
-     * Save ncd service
-     */
-    public function save_service()
-    {
-        $data = $this->input->post('data');
-
-        if(empty($data))
-        {
-            $json = '{"success": false, "msg": "ไม่พบข้อมูลสำหรับบันทึก"}';
-        }
-        else
-        {
-            //check duplicated
-            $duplicated = $this->ncd->check_visit_duplicated($data['vn'], $data['vaccine_id']);
-
-            if($duplicated)
-            {
-                $json = '{"success": false, "msg": "ข้อมูลซ้ำ [มีการให้วัคซีนนี้แล้วในครั้งนี้]"}';
-            }
-            else
-            {
-                $this->ncd->owner_id = $this->owner_id;
-                $this->ncd->user_id = $this->user_id;
-                $this->ncd->provider_id = $this->provider_id;
-
-                $rs = $this->ncd->save_service($data);
-
-                if($rs)
-                {
-                    $json = '{"success": true}';
-                }
-                else
-                {
-                    $json = '{"success": false, "msg": "ไม่สามารถบันทึกข้อมูลได้"}';
-                }
-            }
-
-        }
-
-        render_json($json);
-    }
-
-    public function get_ncd_visit_list()
-    {
-        $vn = $this->input->post('vn');
-
-        if(!empty($vn))
-        {
-            $rs = $this->ncd->get_list_by_visit($vn);
-
-            if($rs)
-            {
-                $arr_result = array();
-
-                foreach($rs as $r)
-                {
-                    $obj = new stdClass();
-                    $obj->id = get_first_object($r['_id']);
-                    $obj->vaccine_name = get_vaccine_name(get_first_object($r['vaccine_id']));
-                    $obj->provider_name = get_provider_name_by_id(get_first_object($r['provider_id']));
-                    array_push($arr_result, $obj);
-                }
-                $rows = json_encode($arr_result);
-                $json = '{"success": true, "rows": '.$rows.'}';
-            }
-            else
-            {
-                $json = '{"success": false, "msg": "ไม่สามารถบันทึกข้อมูลได้"}';
-            }
-        }
-        else
-        {
-            $json = '{"success": false, "msg": "ไม่พบข้อมูล"}';
-        }
-
-        render_json($json);
-    }
-    public function get_ncd_visit_history()
-    {
-        $hn = $this->input->post('hn');
-
-        if(!empty($hn))
-        {
-            $rs = $this->ncd->get_history($hn);
-
-            if($rs)
-            {
-                $arr_result = array();
-
-                foreach($rs as $r)
-                {
-                    $obj = new stdClass();
-
-                    $visit = $this->service->get_visit_info($r['vn']);
-                    $obj->clinic_name = get_clinic_name(get_first_object($visit['clinic']));
-                    $obj->date_serv = $visit['date_serv'];
-                    $obj->time_serv = $visit['time_serv'];
-
-                    $obj->vaccine_name = get_vaccine_name(get_first_object($r['vaccine_id']));
-                    $obj->provider_name = get_provider_name_by_id(get_first_object($r['provider_id']));
-                    $obj->owner_name = get_owner_name(get_first_object($r['owner_id']));
-
-                    $arr_result[] = $obj;
-                }
-                $rows = json_encode($arr_result);
-                $json = '{"success": true, "rows": '.$rows.'}';
-            }
-            else
-            {
-                $json = '{"success": false, "msg": "ไม่สามารถบันทึกข้อมูลได้"}';
-            }
-        }
-        else
-        {
-            $json = '{"success": false, "msg": "ไม่พบข้อมูล"}';
-        }
-
-        render_json($json);
-    }
     
     public function remove_ncd_register() {
         $person_id = $this->input->post('person_id');
@@ -510,7 +339,156 @@ class Ncd extends CI_Controller
         
         render_json($json);
     }
+
+    public function get_providers_by_active() {
+        $rs = $this->dm->get_providers_by_active();
+        if($rs) {
+            $arr_result = array();
+            foreach($rs as $r) {
+                $obj = new stdClass();
+                $obj->id = get_first_object($r['_id']);
+                $obj->name = $r['first_name'].' '.$r['last_name'];
+
+                array_push($arr_result, $obj);
+            }
+
+            return $arr_result;
+        }
+    }
+
+    public function get_ncd_list() {
+        $id = $this->input->post('person_id');
+        $rs = $this->ncd->get_ncd_list($id);
+        if($rs) {
+            $arr_result = array();
+            foreach($rs as $r) {
+                $obj = new stdClass();
+                $obj->id = get_first_object($r['_id']);
+                $obj->date = $r['date'];
+                $obj->time = $r['time'];
+                $obj->weight = $r['weight'];
+                $obj->height = $r['height'];
+                $obj->waist_line = $r['waist_line'];
+                $obj->bmi = $r['bmi'];
+
+                $arr_result[] = $obj;
+            }
+            $rows = json_encode($arr_result);
+            $json = '{ "success": true, "rows": '.$rows.' }';
+        } else {
+            $json = '{ "success": false, "msg": "ไม่มีข้อมูล" }';
+        }
+
+        render_json($json);
+    }
+
+    public function get_standard_detail() {
+        $id = $this->input->post('person_id');
+        $rs = $this->ncd->get_standard_detail($id);
+
+        if($rs) {
+            $rows = json_encode($rs);
+            $json = '{ "success": true, "rows": '.$rows.' }';
+        } else {
+            $json = '{ "success": false, "msg": "ไม่มีข้อมูล" }';
+        }
+
+        render_json($json);
+    }
+
+    public function remove_ncd() {
+        $id = $this->input->post('id');
+
+        $rs = $this->ncd->remove_ncd($id);
+        if($rs) {
+            $json = '{ "success": true }';
+        } else {
+            $json = '{ "success": false }';
+        }
+        render_json($json);
+    }
+
+    public function get_ncd_detail() {
+        $id = $this->input->post('id');
+        $rs = $this->ncd->get_ncd_detail($id);
+        if($rs) {
+            $arr_result = array();
+            foreach($rs as $r) {
+                $obj = new stdClass();
+                $obj->date = $r['date'];
+                $obj->time = $r['time'];
+                $obj->weight = $r['weight'];
+                $obj->height = $r['height'];
+                $obj->waist_line = $r['waist_line'];
+                $obj->bmi = $r['bmi'];
+                $obj->service_local = $r['service_local'];
+                $obj->doctor = get_first_object($r['doctor']);
+                $obj->service_place = $r['service_place'];
+
+                $obj->pcu_name = $this->basic->search_hospital_by_code($r['service_place'])[0]->name;
+
+                $obj->parental_illness_history_dm = $r['parental_illness_history_dm'];
+                $obj->parental_illness_history_ht = $r['parental_illness_history_ht'];
+                $obj->parental_illness_history_gout = $r['parental_illness_history_gout'];
+                $obj->parental_illness_history_crf = $r['parental_illness_history_crf'];
+                $obj->parental_illness_history_mi = $r['parental_illness_history_mi'];
+                $obj->parental_illness_history_stroke = $r['parental_illness_history_stroke'];
+                $obj->parental_illness_history_copd = $r['parental_illness_history_copd'];
+                $obj->parental_illness_history_unknown = $r['parental_illness_history_unknown'];
+                $obj->sibling_illness_history_dm = $r['sibling_illness_history_dm'];
+                $obj->sibling_illness_history_ht = $r['sibling_illness_history_ht'];
+                $obj->sibling_illness_history_gout = $r['sibling_illness_history_gout'];
+                $obj->sibling_illness_history_crf = $r['sibling_illness_history_crf'];
+                $obj->sibling_illness_history_mi = $r['sibling_illness_history_mi'];
+                $obj->sibling_illness_history_stroke = $r['sibling_illness_history_stroke'];
+                $obj->sibling_illness_history_copd = $r['sibling_illness_history_copd'];
+                $obj->sibling_illness_history_unknown = $r['sibling_illness_history_unknown'];
+                $obj->history_illness_dm = $r['history_illness_dm'];
+                $obj->history_illness_ht = $r['history_illness_ht'];
+                $obj->history_illness_liver = $r['history_illness_liver'];
+                $obj->history_illness_paralysis = $r['history_illness_paralysis'];
+                $obj->history_illness_heart = $r['history_illness_heart'];
+                $obj->history_illness_lipid = $r['history_illness_lipid'];
+                $obj->history_illness_footUlcers = $r['history_illness_footUlcers'];
+                $obj->history_illness_confined = $r['history_illness_confined'];
+                $obj->history_illness_drink_water_frequently = $r['history_illness_drink_water_frequently'];
+                $obj->history_illness_night_urination = $r['history_illness_night_urination'];
+                $obj->history_illness_batten = $r['history_illness_batten'];
+                $obj->history_illness_weight_down = $r['history_illness_weight_down'];
+                $obj->history_illness_ulcerated_lips = $r['history_illness_ulcerated_lips'];
+                $obj->history_illness_itchy_skin = $r['history_illness_itchy_skin'];
+                $obj->history_illness_bleary_eyed = $r['history_illness_bleary_eyed'];
+                $obj->history_illness_tea_by_hand = $r['history_illness_tea_by_hand'];
+                $obj->history_illness_how_to_behave = $r['history_illness_how_to_behave'];
+                $obj->history_illness_creased_neck = $r['history_illness_creased_neck'];
+                $obj->history_illness_history_fpg = $r['history_illness_history_fpg'];
+                $obj->smoking = $r['smoking'];
+                $obj->of_smoked = $r['of_smoked'];
+                $obj->time_smoke = $r['time_smoke'];
+                $obj->smoking_number_per_day = $r['smoking_number_per_day'];
+                $obj->smoking_number_per_year = $r['smoking_number_per_year'];
+                $obj->of_smoking = $r['of_smoking'];
+                $obj->smoking_year = $r['smoking_year'];
+                $obj->alcohol = $r['alcohol'];
+                $obj->alcohol_per_week = $r['alcohol_per_week'];
+                $obj->exercise = $r['exercise'];
+                $obj->food = $r['food'];
+                $obj->fcg = $r['fcg'];
+                $obj->fpg = $r['fpg'];
+                $obj->ppg = $r['ppg'];
+                $obj->ppg_hours = $r['ppg_hours'];
+                $obj->pressure_measurements = $r['pressure_measurements'];
+                $obj->body_screen = $r['body_screen'];
+
+                $arr_result[] = $obj;
+            }
+            $rows = json_encode($arr_result);
+            $json = '{ "success": true, "rows":'.$rows.' }';
+        } else {
+            $json = '{ "success": false }';
+        }
+
+        render_json($json);
+    }
 }
-
-
 //End file
