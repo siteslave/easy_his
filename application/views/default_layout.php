@@ -127,6 +127,11 @@
                                     <i class="icon-tags"></i> ทะเบียนผู้ป่วยความดัน (HT)
                                 </a>
                             </li>
+                            <li>
+                                <a href="<?php echo site_url('refer'); ?>">
+                                    <i class="icon-tags"></i> Refer
+                                </a>
+                            </li>
                         </ul>
                     </li>
                     <li class="dropdown">
