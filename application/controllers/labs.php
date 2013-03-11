@@ -61,11 +61,14 @@ class Labs extends CI_Controller
                 {
 
                     $arr_result = array();
-                    foreach($rs['lab_items'] as $ri)
+                    foreach($rs['lab_items'] as $r)
                     {
                         $obj = new stdClass();
-                        $obj->id = get_first_object($ri);
+                        $obj->id = get_first_object($r['id']);
                         $obj->name = $this->basic->get_lab_name($obj->id);
+                        $obj->unit = $this->basic->get_lab_unit($obj->id);
+                        $obj->default_value = $this->basic->get_lab_default_value($obj->id);
+                        $obj->result = isset($r['result']) ? $r['result'] : '';
 
                         $arr_result[] = $obj;
                     }
@@ -104,7 +107,7 @@ class Labs extends CI_Controller
                     $arr_labs = array();
                     foreach($items as $r)
                     {
-                        $arr_labs[] = $r['_id'];
+                        $arr_labs[] = array('id' => $r['_id']);
                     }
 
                     $rs = $this->lab->save_order($data, $arr_labs);
@@ -178,4 +181,99 @@ class Labs extends CI_Controller
             show_error('Not ajax.', 404);
         }
     }
+
+    public function save_result()
+    {
+        $is_ajax = $this->input->is_ajax_request();
+        if($is_ajax)
+        {
+            $data = $this->input->post('data');
+            if(!empty($data))
+            {
+                $rs = $this->lab->save_result($data);
+                if($rs)
+                {
+                    $json = '{"success": true}';
+                }
+                else
+                {
+                    $json = '{"success": false, "msg": "ไม่สามารถบันทึกได้"}';
+                }
+            }
+            else
+            {
+                $json = '{"success": false, "msg": "ไม่พบข้อมูลสำหรับบันทึก"}';
+            }
+
+            render_json($json);
+        }
+        else
+        {
+            show_error('Not ajax.', 404);
+        }
+    }
+
+    public function remove_item()
+    {
+        $is_ajax = $this->input->is_ajax_request();
+        if($is_ajax)
+        {
+            $data = $this->input->post('data');
+            if(empty($data))
+            {
+                $json = '{"success": false, "msg": "ไม่พบข้อมูลของเงื่อนไขที่ต้องการ"}';
+            }
+            else
+            {
+                $rs = $this->lab->remove_item($data);
+                if($rs)
+                {
+                    $json = '{"success": true}';
+                }
+                else
+                {
+                    $json = '{"success": false, "msg": "ไม่สามารถลบรายการได้"}';
+                }
+            }
+
+            render_json($json);
+        }
+        else
+        {
+            show_error('Not ajax', 404);
+        }
+    }
+
+    public function remove_order()
+    {
+        $is_ajax = $this->input->is_ajax_request();
+        if($is_ajax)
+        {
+            $data = $this->input->post('data');
+            if(!empty($data))
+            {
+                $rs = $this->lab->remove_order($data);
+                if($rs)
+                {
+                    $json = '{"success": true}';
+                }
+                else
+                {
+                    $json = '{"success": false, "msg": "ไม่สามารถลบรายการได้"}';
+                }
+            }
+            else
+            {
+                $json = '{"success": false, "msg": "ไม่พบเงื่อนไขในการลบ"}';
+            }
+
+            render_json($json);
+        }
+        else
+        {
+            show_error('Not ajax.', 404);
+        }
+    }
 }
+
+//End of file

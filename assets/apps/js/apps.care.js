@@ -388,11 +388,11 @@ $(document).ready(function(){
                     var btn = null;
 
                     if(v.maininscl == null){
-                        btn = '<button class="btn btn-danger" disabled><i class="icon-info-sign icon-white"></i></button>';
+                        btn = '<button class="btn btn-danger" disabled><i class="icon-info-sign"></i></button>';
                     }else{
                         btn = '<button data-name="btnGetRightInfo" ' +
                             'data-pid="' + v.pid + '" type="button" class="btn btn-info">' +
-                            '<i class="icon-info-sign icon-white"></i> ' +
+                            '<i class="icon-info-sign"></i> ' +
                         '</button>'
                     }
 

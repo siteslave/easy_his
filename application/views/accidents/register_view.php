@@ -17,7 +17,7 @@
             <h4 class="alert-heading">พบข้อมูลเดิมที่เคยบันทึกไว้แล้ว!</h4>
             <p>เนื่องจากมีการตรวจสอบพบว่ามีการบันทึกข้อมูลเดิมของผู้ป่วยที่มารับบริการในครั้งนี้อยู่แล้ว คุณต้องการเรียกข้อมูลเดิมขึ้นมาแก้ไขหรือไม่</p>
             <p>
-              <a class="btn btn-danger" href="#" id="btn_get_data"><i class="icon-refresh icon-white"></i> เรียกข้อมูลเดิมขึ้นมาแก้ไข</a>
+              <a class="btn btn-danger" href="#" id="btn_get_data"><i class="icon-refresh"></i> เรียกข้อมูลเดิมขึ้นมาแก้ไข</a>
             </p>
           </div>
 			';
@@ -274,7 +274,7 @@
 
 <form class="form-actions">
 	<a href="javascript:void(0);" class="btn btn-success" id="btn_save">
-		<i class="icon-ok-sign icon-white"></i> บันทึกข้อมูล
+		<i class="icon-ok-sign"></i> บันทึกข้อมูล
 	</a>
 	
 	<a href="<?php echo site_url('services/entries'); ?>/<?php echo $vn; ?>" class="btn">
@@ -283,10 +283,10 @@
 
 	<div class="pull-right">
 		<a href="javascript:void(0);" class="btn btn-danger disabled">
-			<i class="icon-trash icon-white"></i> ลบข้อมูล
+			<i class="icon-trash"></i> ลบข้อมูล
 		</a>
 		<a href="javascript:void(0);" class="btn btn-info disabled">
-			<i class="icon-time icon-white"></i> ประวัติการเกิดอุบัติเหตุ
+			<i class="icon-time"></i> ประวัติการเกิดอุบัติเหตุ
 		</a>
 	</div>
 </form>

@@ -89,7 +89,7 @@
 
 <form class="form-actions">
     <a href="javascript:void(0);" class="btn btn-success" id="btn_save">
-        <i class="icon-ok-sign icon-white"></i> บันทึกข้อมูลนัด
+        <i class="icon-ok-sign"></i> บันทึกข้อมูลนัด
     </a>
 
     <a href="<?php echo site_url('appoints'); ?>" class="btn">
@@ -97,7 +97,7 @@
     </a>
     <div class="pull-right">
         <a href="javascript:void(0);" class="btn btn-info">
-        <i class="icon-time icon-white"></i> ประวัติการนัด
+        <i class="icon-time"></i> ประวัติการนัด
     </a>
     </div>
 </form>

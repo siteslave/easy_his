@@ -25,7 +25,7 @@
         <button type="button" data-name="btn_do_filter" data-id="2" class="btn"><i class="icon-minus-sign"></i> ไม่มาตามนัด</button>
     </div>
     <button class="btn btn-success pull-right" id="btn_show_visit">
-        <i class="icon-plus-sign icon-white"></i> ลงทะเบียน
+        <i class="icon-plus-sign"></i> ลงทะเบียน
     </button>
 </form>
 
@@ -65,7 +65,7 @@
             <label>HN</label>
             <input type="text" class="input-xlarge" id="txt_query_visit">
             <div class="btn-group">
-                <button class="btn btn-info" id="btn_do_search_visit"><i class="icon-search icon-white"></i> ค้นหา</button>
+                <button class="btn btn-info" id="btn_do_search_visit"><i class="icon-search"></i> ค้นหา</button>
                 <button class="btn btn-info dropdown-toggle" data-toggle="dropdown">
                 <span class="caret"></span>
                 </button>
@@ -90,7 +90,7 @@
         </table>
     </div>
         <div class="modal-footer">
-        <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</a>
+        <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off"></i> ปิดหน้าต่าง</a>
     </div>
 </div>
 
@@ -163,8 +163,8 @@
         </form>
     </div>
     <div class="modal-footer">
-        <a href="#" class="btn btn-success" id="btn_do_update"><i class="icon-plus-sign icon-white"></i> ปรับปรุงข้อมูล</a>
-        <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</a>
+        <a href="#" class="btn btn-success" id="btn_do_update"><i class="icon-save"></i> ปรับปรุงข้อมูล</a>
+        <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off"></i> ปิดหน้าต่าง</a>
     </div>
 </div>
 
@@ -391,8 +391,8 @@
 
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-success" id="btn_do_save_service_register"><i class="icon-plus-sign icon-white"></i> บันทึกข้อมูล</button>
-    <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</button>
+    <button type="button" class="btn btn-success" id="btn_do_save_service_register"><i class="icon-save"></i> บันทึกข้อมูล</button>
+    <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="icon-off"></i> ปิดหน้าต่าง</button>
 </div>
 </div>
 <!-- end register service -->

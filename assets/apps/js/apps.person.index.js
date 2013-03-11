@@ -172,7 +172,7 @@ head.ready(document).ready(function(){
                             '<td>'+ v.total +'</td>' +
                             '<td>' +
                             '<div class="btn-group"> ' +
-                            '<a href="#showPersonList" data-name="btn_get_person" class="btn btn-info" data-house="' + v.house + '" data-id="' + v.id + '" title="ดูประชากร"><i class="icon-user icon-white"></i></a>' +
+                            '<a href="#showPersonList" data-name="btn_get_person" class="btn btn-info" data-house="' + v.house + '" data-id="' + v.id + '" title="ดูประชากร"><i class="icon-user"></i></a>' +
                             '<a href="javascript:void(0);" data-name="btnHouseSurvey" data-id="' + v.id + '" class="btn" title="ข้อมูลสำรวจ" data-id="' + v.id + '">'+
                             '<i class="icon-edit"></i></a>' +
                             '</td>' +
@@ -315,7 +315,7 @@ head.ready(document).ready(function(){
                         '<td>'+ v.village_name +'</td>' +
                         //'<td><a href="javascript:void(0);" rel="tooltip" title="ดูหลังคาเรือน"><i class="icon-share"></i></a></td>' +
                         '<td><div class="btn-group">' +
-                        '<a href="javascript:void(0);" data-name="btn_edit_village" disabled class="btn btn-info" data-id="' + v.id + '" title="แก้ไขหมู่"><i class="icon-edit icon-white"></i></a>' +
+                        '<a href="javascript:void(0);" data-name="btn_edit_village" disabled class="btn btn-info" data-id="' + v.id + '" title="แก้ไขหมู่"><i class="icon-edit"></i></a>' +
                         '<a href="javascript:void(0);" data-name="btnSelectedVillage" class="btn" title="ดูหลังคาเรือน" ' +
                         'data-id="' + v.id + '" data-vmoo="' + v.moo + '" data-vname="' + v.village_name + '">'+
                         '<i class="icon-share-alt"></i></a></div></td>' +
@@ -463,9 +463,9 @@ head.ready(document).ready(function(){
                                 '<td>'+ v.sex +'</td>' +
                                 '<td>'+ v.fstatus +'</td>' +
                                 '<td> <div class="btn-group">' +
-                                '<a class="btn btn-danger" href="'+ site_url + 'person/delete/' + v.id + '" title="ลบ">' +
-                                '<i class="icon-trash icon-white"></i></a>' +
-                                '<a class="btn" href="'+ site_url + 'person/edit/' + v.id + '" title="แก้ไข">' +
+                                '<a class="btn btn-danger" href="'+ site_url + 'person/delete/' + v.hn + '" title="ลบ">' +
+                                '<i class="icon-trash"></i></a>' +
+                                '<a class="btn" href="'+ site_url + 'person/edit/' + v.hn + '" title="แก้ไข">' +
                                 '<i class="icon-edit"></i></a>' +
                                 '</div></td>' +
                             '</tr>'

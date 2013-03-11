@@ -6,7 +6,7 @@
     <input type="text" class="input-block-level" placeholder="username@mhkdc.com" id="txtUsername" name="user">
     <input type="password" class="input-block-level" placeholder="password" id="txtPassword" name="pass">
     <button class="btn btn-primary" type="button" id="btnDoLogin">
-        <i class="icon-user icon-white"></i>
+        <i class="icon-user"></i>
         ลงชื่อเข้าใช้
     </button>
     <div id="divLoading" style="display: none;">

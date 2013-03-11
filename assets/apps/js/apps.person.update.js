@@ -5,6 +5,8 @@ head.ready(function(){
     var person = {};
     person.update = {};
 
+    person.hn = $('#hn').val();
+
     person.update.clear_drug_allergy_form = function(){
         $('#txt_drug_isupdate').val('');
         $('#txt_drug_name').removeAttr('disabled');
@@ -134,11 +136,11 @@ head.ready(function(){
          * @param cid   Person's cid
          * @param cb    Callback function
          */
-        search_dbpop: function(cid, cb){
+        search_dbpop: function(query, cb){
 
             var url = 'person/search_dbpop',
                 params = {
-                    cid: cid
+                    query: query
                 };
 
             app.ajax(url, params, function(err, data){
@@ -190,11 +192,11 @@ head.ready(function(){
 
         },
 
-        get_drug_allergy_list: function(person_id, cb){
+        get_drug_allergy_list: function(hn, cb){
 
             var url = 'person/get_drug_allergy_list',
                 params = {
-                    person_id: person_id
+                    hn: hn
                 };
 
             app.ajax(url, params, function(err, data){
@@ -203,11 +205,11 @@ head.ready(function(){
 
         },
 
-        get_drug_allergy_detail: function(person_id, drug_id, cb){
+        get_drug_allergy_detail: function(hn, drug_id, cb){
             var url = 'person/get_drug_allergy_detail',
                 params = {
                     drug_id: drug_id,
-                    person_id: person_id
+                    hn: hn
                 };
 
             app.ajax(url, params, function(err, data){
@@ -215,11 +217,11 @@ head.ready(function(){
             });
         },
 
-        remove_drug_allergy: function(person_id, drug_id, cb){
+        remove_drug_allergy: function(hn, drug_id, cb){
             var url = 'person/remove_drug_allergy',
                 params = {
                     drug_id: drug_id,
-                    person_id: person_id
+                    hn: hn
                 };
 
             app.ajax(url, params, function(err, data){
@@ -249,10 +251,10 @@ head.ready(function(){
                 return err ? cb(err) : cb(null);
             });
         },
-        remove_chronic: function(person_id, code, cb){
+        remove_chronic: function(hn, code, cb){
             var url = 'person/remove_chronic',
                 params = {
-                    person_id: person_id,
+                    hn: hn,
                     code: code
                 };
 
@@ -261,10 +263,10 @@ head.ready(function(){
             });
         },
 
-        get_chronic_list: function(person_id, cb){
+        get_chronic_list: function(hn, cb){
             var url = 'person/get_chronic_list',
                 params = {
-                    person_id: person_id
+                    hn: hn
                 };
 
             app.ajax(url, params, function(err, data){
@@ -324,9 +326,9 @@ head.ready(function(){
         });
     };
 
-    person.update.get_drug_allergy_list = function(person_id){
+    person.update.get_drug_allergy_list = function(hn){
 
-        person.update.ajax.get_drug_allergy_list(person_id, function(err, data){
+        person.update.ajax.get_drug_allergy_list(hn, function(err, data){
 
             $('#tbl_drug_allergy_list > tbody').empty();
 
@@ -347,7 +349,7 @@ head.ready(function(){
                                 '<a href="javascript:void(0)" class="btn" data-name="btn_edit_drug_allergy" data-id="' + v.drug_id + '"> ' +
                                 '<i class="icon-edit"></i></a>' +
                                 '<a href="javascript:void(0)" class="btn btn-danger" data-name="btn_remove_drug_allergy" data-id="' + v.drug_id + '"> ' +
-                                '<i class="icon-trash icon-white"></i></a>' +
+                                '<i class="icon-trash"></i></a>' +
                                 '</div></td>' +
                             '</tr>'
                         );
@@ -361,9 +363,9 @@ head.ready(function(){
         });
     };
 
-    person.update.set_drug_allergy_detail = function(person_id, drug_id){
+    person.update.set_drug_allergy_detail = function(hn, drug_id){
 
-        person.update.ajax.get_drug_allergy_detail(person_id, drug_id, function(err, data){
+        person.update.ajax.get_drug_allergy_detail(hn, drug_id, function(err, data){
             if(err){
                 app.alert(err);
             }else{
@@ -409,7 +411,7 @@ head.ready(function(){
                                 '<td>' + valid + '</td>' +
                                 '<td><a href="javascript:void(0)" data-code="'+ v.code +'" data-name="btn_select_chronic_diag" data-vname="'+ v.desc_r +'" '+
                                 'data-valid="'+ v.valid +'" data-chronic="' + v.chronic + '" class="btn btn-info">' +
-                                '<i class="icon-share icon-white"></i></a></td>' +
+                                '<i class="icon-share"></i></a></td>' +
                             '</tr>'
                         );
                     });
@@ -427,14 +429,14 @@ head.ready(function(){
     }
     //search dbpop
     $('#button_do_search_dbpop').click(function(){
-        var cid = $('#text_query_search_dbpop').val();
-        if(!cid){
-            app.alert('กรุณาระบุเลขบัตรประชาชน');
+        var query = $('#text_query_search_dbpop').val();
+        if(!query){
+            app.alert('กรุณระบุคำค้นหา เลขบัตรประชาชน หรือ ชื่อ-สกุล');
         }else{
             //do search
             $('#table_search_dbpop_result_list > tbody').empty();
 
-            person.update.ajax.search_dbpop(cid, function(err, data){
+            person.update.ajax.search_dbpop(query, function(err, data){
                 if(err){
                     $('#table_search_dbpop_result_list > tbody').append(
                         '<tr>' +
@@ -665,7 +667,7 @@ head.ready(function(){
     $('#btn_save_person').click(function(){
         var items = {};
 
-        items.person_id         = $('#person_id').val();
+        items.hn                = person.hn;
         items.cid               = $('#txt_cid').val();
         items.old_cid           = $('#txt_old_cid').val();
         items.title             = $('#slTitle').val();
@@ -722,8 +724,8 @@ head.ready(function(){
         items.ins.hmain         = $('#txt_ins_hospmain_code').val();
         items.ins.hsub          = $('#txt_ins_hospsub_code').val();
 
-        if(!items.person_id){
-            app.alert('ไม่พบลรหัสบุคคลที่ต้องการปรับปรุง');
+        if(!items.hn){
+            app.alert('ไม่พบลรหัสบุคคลที่ต้องการปรับปรุง [HN]');
         }else if(!items.cid || items.cid.length != 13){
             app.alert('กรุณาระบุเลขบัตรประชาชน/รูปแบบไม่ถูกต้อง');
         }else if(!items.title){
@@ -856,7 +858,7 @@ head.ready(function(){
                                     '<td>' + v.streng + '</td>' +
                                     '<td>' + v.price + '</td>' +
                                     '<td><a href="javascript:void(0);" data-name="btn_set_drug_allergy_info" class="btn btn-info" ' +
-                                    'data-id="' + v.id + '" data-vname="' + v.name + '"><i class="icon-share icon-white"></i></a></td>' +
+                                    'data-id="' + v.id + '" data-vname="' + v.name + '"><i class="icon-share"></i></a></td>' +
                                     '</tr>'
                             );
                         });
@@ -910,9 +912,9 @@ head.ready(function(){
         items.informant_id = $('#sl_drug_allergy_informant').val();
         items.hospcode = $('#txt_drug_allergy_hosp_code').val();
 
-        items.person_id = $('#person_id').val();
+        items.hn = person.hn;
 
-        if(!items.person_id){
+        if(!items.hn){
             app.alert('ไม่พบรหัสบุคคล กรุณาตรวจสอบ');
         }else if(!items.record_date){
             app.alert('กรุณาระบุวันที่บันทึก');
@@ -932,7 +934,7 @@ head.ready(function(){
                 }else{
                     $('#modal_search_drug_allergy').modal('hide');
                     person.update.clear_drug_allergy_form();
-                    person.update.get_drug_allergy_list(items.person_id);
+                    person.update.get_drug_allergy_list(person.hn);
                 }
             });
         }
@@ -942,29 +944,26 @@ head.ready(function(){
 
     $(document).on('click', 'a[data-name="btn_edit_drug_allergy"]', function(){
         //set detail
-        var drug_id = $(this).attr('data-id'),
-            person_id = $('#person_id').val();
-
-        person.update.set_drug_allergy_detail(person_id, drug_id);
+        var drug_id = $(this).attr('data-id');
+        person.update.set_drug_allergy_detail(person.hn, drug_id);
     });
 
     //remove drug allergy
     $(document).on('click', 'a[data-name="btn_remove_drug_allergy"]', function(){
 
-        var drug_id = $(this).attr('data-id'),
-            person_id = $('#person_id').val();
+        var drug_id = $(this).attr('data-id');
 
         //if(app.confirm('ยืนยันการลยข้อมูล');
         app.confirm('คุณต้องการลบรายการนี้ใช่หรือไม่?', function(cb){
             if(cb){
-                 person.update.ajax.remove_drug_allergy(person_id, drug_id, function(err){
+                 person.update.ajax.remove_drug_allergy(person.hn, drug_id, function(err){
                      if(err){
                         app.alert(err);
                      }else{
                          app.alert('ลบรายการเรียบร้อยแล้ว');
 
                          person.update.clear_drug_allergy_form();
-                         person.update.get_drug_allergy_list(person_id);
+                         person.update.get_drug_allergy_list(person.hn);
                      }
                  });
             }
@@ -972,10 +971,7 @@ head.ready(function(){
     });
 
     $('#btn_tab_drug_allergy').click(function(){
-
-        var person_id = $('#person_id').val();
-
-        person.update.get_drug_allergy_list(person_id);
+        person.update.get_drug_allergy_list(person.hn);
     });
 
     $('#txt_drug_allergy_hosp_name').typeahead({
@@ -1217,9 +1213,9 @@ head.ready(function(){
         app.set_first_selected($('#sl_chronic_dischage_type'));
     };
 
-    person.update.get_chronic_list = function(person_id){
+    person.update.get_chronic_list = function(hn){
         $('#tbl_chronic_list > tbody').empty();
-        person.update.ajax.get_chronic_list(person_id, function(err, data){
+        person.update.ajax.get_chronic_list(hn, function(err, data){
             if(err){
                 app.alert(err);
                 $('#tbl_chronic_list > tbody').append(
@@ -1261,15 +1257,14 @@ head.ready(function(){
 
     //remove chronic
     $(document).on('click', 'a[data-name="btn_chronic_remove"]', function(){
-        var diag_code = $(this).attr('data-id'),
-            person_id = $('#person_id').val();
+        var diag_code = $(this).attr('data-id');
 
         var obj = $(this).parent().parent().parent();
 
         app.confirm('คุณต้องการลบรายการนี้ใช่หรือไม่', function(res){
             if(res){
                 //do remove
-                person.update.ajax.remove_chronic(person_id, diag_code, function(err){
+                person.update.ajax.remove_chronic(person.hn, diag_code, function(err){
                     if(err){
                         app.alert(err);
                     }else{
@@ -1283,7 +1278,7 @@ head.ready(function(){
 
     $('#btn_save_chronic').click(function(){
         var items = {};
-        items.person_id = $('#person_id').val();
+        items.hn = person.hn;
         items.isupdate = $('#txt_chronic_isupdate').val();
         items.hosp_dx = $('#txt_chronic_hosp_dx_code').val();
         items.hosp_rx = $('#txt_chronic_hosp_rx_code').val();
@@ -1311,15 +1306,14 @@ head.ready(function(){
                     //hide form
                     $('#modal_search_chronic').modal('hide');
                     //load chronic list
-                    person.update.get_chronic_list(items.person_id);
+                    person.update.get_chronic_list(items.hn);
                 }
             });
         }
     });
 
     $('#btn_tab_chronic').click(function(){
-        var person_id = $('#person_id').val();
-        person.update.get_chronic_list(person_id);
+        person.update.get_chronic_list(person.hn);
     });
 
     $(document).on('click', 'a[data-name="btn_chronic_edit"]', function(){
@@ -1341,8 +1335,7 @@ head.ready(function(){
         $('#txt_chronic_date_disch').val(discharge_date);
         $('#txt_chronic_hosp_rx_name').val(hosp_rx_name);
         $('#txt_chronic_hosp_dx_name').val(hosp_dx_name);
-        $('#txt_chronic_name').val(chronic_name);
-        $('#txt_chronic_name').attr('disabled', 'disabled');
+        $('#txt_chronic_name').val(chronic_name).attr('disabled', 'disabled').css('background-color', 'white');
 
         $('#sl_chronic_dischage_type').val(discharge);
 

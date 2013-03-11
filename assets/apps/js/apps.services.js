@@ -141,7 +141,7 @@ head.ready(function(){
                         '<td>[<strong>' + v.diag + '</strong>] ' + v.diag_name.substr(0, 20) + '...</td>' +
                         '<td>' + v.provider_name + '</td>' +
                         '<td><a href="javascript:void(0)" data-name="btn_selected_visit" class="btn btn-info" ' +
-                        'data-id="'+ v.person_id +'" data-vn="' + v.vn + '"> <i class="icon-edit icon-white"></i></a></td>' +
+                        'data-id="'+ v.person_id +'" data-vn="' + v.vn + '"> <i class="icon-edit"></i></a></td>' +
                         '</tr>'
                 );
             });

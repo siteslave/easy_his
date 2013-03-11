@@ -8,7 +8,7 @@
 <form action="#" class="form-actions form-search">
     <div class="input-append">
         <input type="text" class="input-xlarge search-query" id="txt_query_visit" placeholder="HN, ชื่อ สกุล...">
-        <button type="button" id="btn_do_search_visit" class="btn btn-info"><i class="icon-search icon-white"></i> ค้นหา</button>
+        <button type="button" id="btn_do_search_visit" class="btn btn-info"><i class="icon-search"></i> ค้นหา</button>
     </div>
     |
     <div class="input-append date" data-name="datepicker">
@@ -28,10 +28,10 @@
     </select>
 
     <button class="btn btn-info" id="btn_do_filter">
-        <i class="icon-search icon-white"></i> แสดง
+        <i class="icon-search"></i> แสดง
     </button>
     <button type="button" class="btn btn-success pull-right" id="btn_new_visit">
-        <i class="icon-plus-sign icon-white"></i> ลงทะเบียน
+        <i class="icon-plus-sign"></i> ลงทะเบียน
     </button>
 </form>
 <table class="table table-striped table-hover" id="tbl_service_list">
@@ -94,7 +94,7 @@
                                 <div class="controls">
                                     <div class="input-append">
                                         <input class="input-small uneditable-input" id="txt_service_profile_hn" disabled="disabled" type="text" placeholder="คลิกปุ่มค้นหา...">
-                                        <button class="btn btn-info" type="button" id="btn_show_search_person"><i class="icon-search icon-white"></i></button>
+                                        <button class="btn btn-info" type="button" id="btn_show_search_person"><i class="icon-search"></i></button>
                                     </div>
                                 </div>
                             </div>
@@ -334,7 +334,7 @@
                             </div>
                         </div>
                     </div>
-                    <button type="button" class="btn btn-info" disabled="disabled"><i class="icon-time icon-white"></i> ประวัติล่าสุด...</button>
+                    <button type="button" class="btn btn-info" disabled="disabled"><i class="icon-time"></i> ประวัติล่าสุด...</button>
                 </form>
             </div>
             <!--
@@ -346,8 +346,8 @@
 
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-success" id="btn_do_save_service_register"><i class="icon-plus-sign icon-white"></i> บันทึกข้อมูล</button>
-        <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</button>
+        <button type="button" class="btn btn-success" id="btn_do_save_service_register"><i class="icon-save"></i> บันทึกข้อมูล</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="icon-off"></i> ปิดหน้าต่าง</button>
     </div>
 </div>
 
@@ -366,7 +366,7 @@
                             <div class="input-append">
                                 <input type="text" class="input-xlarge" id="txt_reg_search_person">
                                 <div class="btn-group">
-                                    <button class="btn btn-info" id="btn_do_search_person" type="button"><i class="icon-search icon-white"></i> ค้นหา</button>
+                                    <button class="btn btn-info" id="btn_do_search_person" type="button"><i class="icon-search"></i> ค้นหา</button>
                                     <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" tabindex="-1">
                                         <span class="caret"></span>
                                     </button>
@@ -401,7 +401,7 @@
 
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="icon-off"></i> ปิดหน้าต่าง</button>
     </div>
 </div>
 <!-- end person -->

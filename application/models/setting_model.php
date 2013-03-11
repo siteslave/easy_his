@@ -70,7 +70,7 @@ class Setting_model extends CI_Model
 
     public function get_provider_list(){
         $result = $this->mongo_db
-            ->where('owner_id', $this->owner_id)
+            ->where(array('owner_id' => new MongoId($this->owner_id)))
             //->order_by(array('first_name' => 1))
             ->get('providers');
 

@@ -204,12 +204,12 @@ class Person extends CI_Controller
 
     public function search_dbpop(){
         $query = $this->input->post('query');
-        $by = $this->input->post('by');
+        //$by = $this->input->post('by');
 
         if(empty($query)){
             $json = '{"success": false, "msg": "No query found."}';
         }else{
-            if($by == 'cid' || empty($by)){
+            if(is_numeric($query)){
                 $result = $this->person->search_dbpop_by_cid($query);
             }else{
                 $result = $this->person->search_dbpop_by_name($query);
@@ -404,13 +404,13 @@ class Person extends CI_Controller
             //save address
             //if($data['typearea'] == '3' || $data['typearea'] == '4' || $data['typearea'] == '0'){
                 //remove address
-                $this->person->remove_person_address($data['person_id']);
+                $this->person->remove_person_address($data['hn']);
                 //update new address
-                $this->person->save_person_address($data['person_id'], $data['address']);
+                $this->person->save_person_address($data['hn'], $data['address']);
             //}
             //remove old insurance
-            $this->person->remove_person_insurance($data['person_id']);
-            $this->person->save_insurance($data['person_id'], $data['ins']);
+            $this->person->remove_person_insurance($data['hn']);
+            $this->person->save_insurance($data['hn'], $data['ins']);
 
             return TRUE;
 
@@ -461,15 +461,15 @@ class Person extends CI_Controller
         render_json($json);
     }
 
-    public function edit($person_id = ''){
-        if(empty($person_id)){
+    public function edit($hn = ''){
+        if(empty($hn)){
             show_error("No person id found, please check patient id", 404);
         }else{
             //get person detail
-            $result = $this->person->detail($person_id);
+            $result = $this->person->detail($hn);
             if($result){
                 $obj                    = new stdClass();
-                $obj->id                = $person_id;
+                $obj->hn                = $hn;
                 $obj->abogroup          = $result['abogroup'];
                 $obj->house_code        = $result['house_code'];
                 $obj->birthdate         = to_js_date($result['birthdate']);
@@ -566,37 +566,7 @@ class Person extends CI_Controller
             }
         }
     }
-/*
-    public function save_drug_allergy_old(){
-        $data = $this->input->post('data');
-        if(empty($data)){
-            $json = '{"success": false, "msg": "No data for save."}';
-        }else{
 
-            //if is update
-            if($data['isupdate']){
-                //do update
-
-            }else{
-                //check drug duplicate
-                $duplicated = $this->person->check_drug_allergy_duplicate($data['person_id'], $data['drug_id']);
-                if($duplicated){
-                    $json = '{"success": false, "msg": "Drug duplicated, please check drug"}';
-                }else{
-                    $result = $this->person->save_drug_allergy($data);
-                    if($result){
-                        $json = '{"success": true}';
-                    }else{
-                        $json = '{"success": false, "msg": "Database error, please check your data."}';
-                    }
-                }
-            }
-
-        }
-
-        render_json($json);
-    }
-*/
     public function save_drug_allergy(){
 
         $data = $this->input->post('data');
@@ -618,7 +588,7 @@ class Person extends CI_Controller
 
             }else{
                 //check drug duplicate
-                $duplicated = $this->person->check_drug_allergy_duplicate($data['person_id'], $data['drug_id']);
+                $duplicated = $this->person->check_drug_allergy_duplicate($data['hn'], $data['drug_id']);
                 if($duplicated){
                     $json = '{"success": false, "msg": "Drug duplicated, please check drug"}';
                 }else{
@@ -636,11 +606,11 @@ class Person extends CI_Controller
     }
 
     public function get_drug_allergy_list(){
-        $person_id = $this->input->post('person_id');
-        if(empty($person_id)){
+        $hn = $this->input->post('hn');
+        if(empty($hn)){
             $json = '{"success": false, "msg": "No person id found."}';
         }else{
-            $result = $this->person->get_drug_allergy_list($person_id);
+            $result = $this->person->get_drug_allergy_list($hn);
 
             if($result){
                 $arr_result = array();
@@ -716,12 +686,12 @@ class Person extends CI_Controller
     public function get_drug_allergy_detail(){
 
         $drug_id = $this->input->post('drug_id');
-        $person_id = $this->input->post('person_id');
+        $hn = $this->input->post('hn');
 
         if(empty($drug_id)){
             $json = '{"success": false, "msg": "No id found."}';
         }else{
-            $drugallergy = $this->person->get_drug_allergy_detail($person_id, $drug_id);
+            $drugallergy = $this->person->get_drug_allergy_detail($hn, $drug_id);
 
             //echo var_dump($result);
 
@@ -759,15 +729,15 @@ class Person extends CI_Controller
         render_json($json);
     }
     public function remove_drug_allergy(){
-        $person_id = $this->input->post('person_id');
+        $hn = $this->input->post('hn');
         $drug_id = $this->input->post('drug_id');
 
-        if(empty($person_id)){
+        if(empty($hn)){
             $json = '{"success": false, "msg": "No person id found."}';
         }else if(empty($drug_id)){
             $json = '{"success": false, "msg": "No drug id found."}';
         }else{
-            $result = $this->person->remove_drug_allergy($person_id, $drug_id);
+            $result = $this->person->remove_drug_allergy($hn, $drug_id);
 
             if($result){
                 $json = '{"success": true}';
@@ -780,15 +750,15 @@ class Person extends CI_Controller
     }
 
     public function remove_chronic(){
-        $person_id = $this->input->post('person_id');
+        $hn = $this->input->post('hn');
         $chronic_code = $this->input->post('code');
 
-        if(empty($person_id)){
+        if(empty($hn)){
             $json = '{"success": false, "msg": "No person id found."}';
         }else if(empty($chronic_code)){
             $json = '{"success": false, "msg": "No chronic code found."}';
         }else{
-            $result = $this->person->remove_chronic($person_id, $chronic_code);
+            $result = $this->person->remove_chronic($hn, $chronic_code);
 
             if($result){
                 $json = '{"success": true}';
@@ -805,7 +775,7 @@ class Person extends CI_Controller
 
         if(empty($data['isupdate'])){
             //check duplicate
-            $duplicate = $this->person->check_chronic_duplicate($data['person_id'], $data['chronic']);
+            $duplicate = $this->person->check_chronic_duplicate($data['hn'], $data['chronic']);
             if($duplicate){
                 $json = '{"success": false, "msg": "Chronic duplicated, please use new chronic code."}';
             }else{
@@ -832,11 +802,11 @@ class Person extends CI_Controller
     }
 
     public function get_chronic_list(){
-        $person_id = $this->input->post('person_id');
-        if(empty($person_id)){
+        $hn = $this->input->post('hn');
+        if(empty($hn)){
             $json = '{"success": false, "msg": "No person id found."}';
         }else{
-            $rs = $this->person->get_chronic_list($person_id);
+            $rs = $this->person->get_chronic_list($hn);
             if($rs){
                 $arr_result = array();
 

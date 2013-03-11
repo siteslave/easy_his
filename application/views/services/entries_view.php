@@ -13,17 +13,17 @@
     <h4 class="alert-heading">คำแนะนำเพิ่มเติม</h4>
     <p>การลงข้อมูลของคุณยังไม่ถูกต้องและไม่สมบูรณ์ กรุณาตรวจสอบการบันทึกข้อมูล เช่น การวินิจฉัยโรค การจ่ายยา หรือ การคัดกรองต่างๆ เป็นต้น</p>
     <p>
-        <a class="btn btn-primary" href="#"><i class="icon-volume-up icon-white"></i> คำแนะนำ</a>
+        <a class="btn btn-primary" href="#"><i class="icon-volume-up"></i> คำแนะนำ</a>
     </p>
 </div>
 
 <form action="#" class="form-actions">
-    <a href="<?php echo site_url('accidents/register/' . $vn . '/' . $hn); ?>" class="btn btn-danger"><i class="icon-th-list icon-white"></i> ข้อมูลอุบัติเหตุ</a>
-    <a href="<?php echo site_url('appoints/register/' . $vn . '/' . $hn); ?>" class="btn btn-warning"><i class="icon-calendar icon-white"></i> ลงทะเบียนนัด</a>
-    <a href="#" class="btn btn-info" id="btn_labs"><i class="icon-tasks icon-white"></i> สั่ง/ลงผล LAB</a>
+    <a href="<?php echo site_url('accidents/register/' . $vn . '/' . $hn); ?>" class="btn btn-danger"><i class="icon-th-list"></i> ข้อมูลอุบัติเหตุ</a>
+    <a href="<?php echo site_url('appoints/register/' . $vn . '/' . $hn); ?>" class="btn btn-warning"><i class="icon-calendar"></i> ลงทะเบียนนัด</a>
+    <a href="#" class="btn btn-info" id="btn_labs"><i class="icon-tasks"></i> สั่ง/ลงผล LAB</a>
     <!--
     <div class="btn-group">
-        <button class="btn btn-info"><i class="icon-tasks icon-white"></i> LAB</button>
+        <button class="btn btn-info"><i class="icon-tasks"></i> LAB</button>
         <button class="btn btn-info dropdown-toggle" data-toggle="dropdown">
             <span class="caret"></span>
         </button>
@@ -36,7 +36,7 @@
     </div>
 -->
     <div class="btn-group">
-        <button class="btn btn-primary" type="button"><i class="icon-th-large icon-white"></i> งานส่งเสริม</button>
+        <button class="btn btn-primary" type="button"><i class="icon-th-large"></i> งานส่งเสริม</button>
         <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
             <span class="caret"></span>
         </button>
@@ -60,7 +60,7 @@
         </ul>
     </div>
     <div class="btn-group">
-        <button class="btn btn-success" type="button"><i class="icon-th-large icon-white"></i> งานบริการอื่นๆ</button>
+        <button class="btn btn-success" type="button"><i class="icon-th-large"></i> งานบริการอื่นๆ</button>
         <button class="btn btn-success dropdown-toggle" data-toggle="dropdown">
             <span class="caret"></span>
         </button>
@@ -485,7 +485,7 @@
             </div>
             <!-- end tab cc -->
 
-            <button type="button" class="btn btn-success" id="btn_save_screening"><i class="icon-plus-sign icon-white"></i> บันทึกคัดกรอง</button>
+            <button type="button" class="btn btn-success" id="btn_save_screening"><i class="icon-save"></i> บันทึกคัดกรอง</button>
         </div>
         <div class="tab-pane" id="tab_diagnosis">
             <table class="table table-hover" id="tbl_diag_list">
@@ -506,7 +506,7 @@
                 </tr>
                 </tbody>
             </table>
-            <button class="btn btn-success pull-right" id="btn_diag_new"><i class="icon-plus icon-white"></i> เพิ่มรายการ</button>
+            <button class="btn btn-success pull-right" id="btn_diag_new"><i class="icon-plus"></i> เพิ่มรายการ</button>
         </div>
         <div class="tab-pane" id="tab_procedure">
             <table class="table table-hover tabble-striped" id="tbl_proced_list">
@@ -530,7 +530,7 @@
                 </tbody>
             </table>
 
-            <button class="btn btn-success pull-right" id="btn_proced_new"><i class="icon-plus icon-white"></i> เพิ่มรายการ</button>
+            <button class="btn btn-success pull-right" id="btn_proced_new"><i class="icon-plus"></i> เพิ่มรายการ</button>
 
         </div>
         <div class="tab-pane" id="tab_drug">
@@ -555,12 +555,12 @@
                 </tbody>
             </table>
             <div class="btn-group pull-right">
-                <button type="button" class="btn btn-success" id="btn_drug_new"><i class="icon-plus-sign icon-white"></i> เพิ่ม</button>
+                <button type="button" class="btn btn-success" id="btn_drug_new"><i class="icon-plus-sign"></i> เพิ่ม</button>
                 <!--
                 <button type="button" class="btn"><i class="icon-th-list"></i> กำหนดสูตร</button>
                 <button type="button" class="btn"><i class="icon-refresh"></i> Remed.</button>
                 -->
-                <button type="button" class="btn btn-danger" id="btn_drug_remove_bill"><i class="icon-trash icon-white"></i> ลบใบสั่งยา</button>
+                <button type="button" class="btn btn-danger" id="btn_drug_remove_bill"><i class="icon-trash"></i> ลบใบสั่งยา</button>
             </div>
         </div>
         <!-- Charge item -->
@@ -588,7 +588,7 @@
                 </tbody>
             </table>
             <div class="btn-group pull-right">
-                <button type="button" class="btn btn-success" id="btn_charge_new"><i class="icon-plus-sign icon-white"></i> เพิ่มรายการ</button>
+                <button type="button" class="btn btn-success" id="btn_charge_new"><i class="icon-plus-sign"></i> เพิ่มรายการ</button>
             </div>
         </div>
         <!-- end charge item -->
@@ -688,8 +688,8 @@
         </form>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-success" id="btn_screening_save_allergy"><i class="icon-plus-sign icon-white"></i> เพิ่มรายการ</button>
-        <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</button>
+        <button type="button" class="btn btn-success" id="btn_screening_save_allergy"><i class="icon-plus-sign"></i> เพิ่มรายการ</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="icon-off"></i> ปิดหน้าต่าง</button>
     </div>
 </div>
 <!-- end drug allergy -->
@@ -721,8 +721,8 @@
         </form>
     </div>
     <div class="modal-footer">
-        <a href="#" class="btn btn-success" id="btn_diag_do_save"><i class="icon-plus icon-white"></i> เพิ่มรายการ</a>
-        <a href="#" class="btn btn-danger" data-dismiss="modal"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</a>
+        <a href="#" class="btn btn-success" id="btn_diag_do_save"><i class="icon-plus"></i> เพิ่มรายการ</a>
+        <a href="#" class="btn btn-danger" data-dismiss="modal"><i class="icon-off"></i> ปิดหน้าต่าง</a>
 
     </div>
 </div>
@@ -760,8 +760,8 @@
         </form>
     </div>
     <div class="modal-footer">
-        <a href="#" class="btn btn-success" id="btn_proced_do_save"><i class="icon-plus icon-white"></i> เพิ่มรายการ</a>
-        <a href="#" class="btn btn-danger" data-dismiss="modal"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</a>
+        <a href="#" class="btn btn-success" id="btn_proced_do_save"><i class="icon-plus"></i> เพิ่มรายการ</a>
+        <a href="#" class="btn btn-danger" data-dismiss="modal"><i class="icon-off"></i> ปิดหน้าต่าง</a>
 
     </div>
 </div>
@@ -785,7 +785,7 @@
                         <input type="hidden" id="txt_drug_id">
                         <input id="txt_drug_name" class="input-xlarge uneditable-input" disabled="disabled" type="text" placeholder="คลิกปุ่มค้นหา">
                         <button class="btn btn-info" type="button" id="btn_drug_show_search">
-                            <i class="icon-search icon-white"></i>
+                            <i class="icon-search"></i>
                         </button>
                     </div>
                 </div>
@@ -798,7 +798,7 @@
                         <input type="hidden" id="txt_drug_usage_id">
                         <input id="txt_drug_usage_name" class="input-xlarge uneditable-input" disabled="disabled" type="text" placeholder="คลิกปุ่มค้นหา">
                         <button class="btn btn-info" type="button" id="btn_drug_usage_show_search">
-                            <i class="icon-search icon-white"></i>
+                            <i class="icon-search"></i>
                         </button>
                     </div>
                 </div>
@@ -824,8 +824,8 @@
         </form>
     </div>
     <div class="modal-footer">
-        <a href="#" class="btn btn-success" id="btn_drug_do_save"><i class="icon-plus icon-white"></i> เพิ่มรายการ/ปรับปรุง</a>
-        <a href="#" class="btn btn-danger" data-dismiss="modal"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</a>
+        <a href="#" class="btn btn-success" id="btn_drug_do_save"><i class="icon-plus"></i> เพิ่มรายการ/ปรับปรุง</a>
+        <a href="#" class="btn btn-danger" data-dismiss="modal"><i class="icon-off"></i> ปิดหน้าต่าง</a>
 
     </div>
 </div>
@@ -844,7 +844,7 @@
             <div class="input-append">
                 <input id="txt_drug_search_name" class="input-xlarge" type="text" placeholder="พิมพ์ชื่อยา...">
                 <button class="btn btn-info" type="button" id="bnt_drug_do_search">
-                    <i class="icon-search icon-white"></i>
+                    <i class="icon-search"></i>
                 </button>
             </div>
         </form>
@@ -862,7 +862,7 @@
         </table>
     </div>
     <div class="modal-footer">
-        <a href="#" class="btn btn-danger" data-dismiss="modal"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</a>
+        <a href="#" class="btn btn-danger" data-dismiss="modal"><i class="icon-off"></i> ปิดหน้าต่าง</a>
 
     </div>
 </div>
@@ -880,7 +880,7 @@
             <div class="input-append">
                 <input id="txt_drug_usage_search_query" class="input-xlarge" type="text" placeholder="พิมพ์วิธีการใช้/รหัสการใช้ยา...">
                 <button class="btn btn-info" type="button" id="bnt_drug_usage_do_search">
-                    <i class="icon-search icon-white"></i>
+                    <i class="icon-search"></i>
                 </button>
             </div>
         </form>
@@ -898,7 +898,7 @@
         </table>
     </div>
     <div class="modal-footer">
-        <a href="#" class="btn btn-danger" data-dismiss="modal"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</a>
+        <a href="#" class="btn btn-danger" data-dismiss="modal"><i class="icon-off"></i> ปิดหน้าต่าง</a>
 
     </div>
 </div>
@@ -943,8 +943,8 @@
         </form>
     </div>
     <div class="modal-footer">
-        <a href="#" class="btn btn-success" id="btn_charge_do_save"><i class="icon-plus icon-white"></i> เพิ่มรายการ/ปรับปรุง</a>
-        <a href="#" class="btn btn-danger" data-dismiss="modal"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</a>
+        <a href="#" class="btn btn-success" id="btn_charge_do_save"><i class="icon-plus"></i> เพิ่มรายการ/ปรับปรุง</a>
+        <a href="#" class="btn btn-danger" data-dismiss="modal"><i class="icon-off"></i> ปิดหน้าต่าง</a>
 
     </div>
 </div>
@@ -967,7 +967,7 @@
                         <input type="hidden" id="txt_charge_id">
                         <input id="txt_charge_name" class="input-xlarge uneditable-input" disabled="disabled" type="text" placeholder="คลิกปุ่มค้นหา">
                         <button class="btn btn-info" type="button" id="btn_charge_show_search">
-                            <i class="icon-search icon-white"></i>
+                            <i class="icon-search"></i>
                         </button>
                     </div>
                 </div>
@@ -992,8 +992,8 @@
         </form>
     </div>
     <div class="modal-footer">
-        <a href="#" class="btn btn-success" id="btn_charge_do_save"><i class="icon-plus icon-white"></i> เพิ่มรายการ/ปรับปรุง</a>
-        <a href="#" class="btn btn-danger" data-dismiss="modal"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</a>
+        <a href="#" class="btn btn-success" id="btn_charge_do_save"><i class="icon-plus"></i> เพิ่มรายการ/ปรับปรุง</a>
+        <a href="#" class="btn btn-danger" data-dismiss="modal"><i class="icon-off"></i> ปิดหน้าต่าง</a>
 
     </div>
 </div>
@@ -1029,7 +1029,7 @@
 		                    foreach($fp_types as $r) echo '<option value="'.$r->code.'">'.$r->name.'</option>';
 		                    ?>
 		                    </select>
-		                    <a href="#" class="btn btn-success" id="btn_do_save_fp"><i class="icon-plus icon-white"></i> เพิ่มรายการ</a>
+		                    <a href="#" class="btn btn-success" id="btn_do_save_fp"><i class="icon-plus"></i> เพิ่มรายการ</a>
 		                </div>
 		            </div>
 		        </form>
@@ -1068,7 +1068,7 @@
     </div>
     </div>
     <div class="modal-footer">
-        <a href="#" class="btn btn-danger" data-dismiss="modal"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</a>
+        <a href="#" class="btn btn-danger" data-dismiss="modal"><i class="icon-off"></i> ปิดหน้าต่าง</a>
     </div>
 </div>
 <!--  end FP -->
@@ -1093,7 +1093,7 @@
                             <div class="controls">
                                 <select id="sl_epi_vaccines" class="input-xlarge"></select>
                                 <a href="#" class="btn btn-success" id="btn_do_add">
-                                    <i class="icon-plus-sign icon-white"></i> เพิ่มรายการ
+                                    <i class="icon-plus-sign"></i> เพิ่มรายการ
                                 </a>
                             </div>
                         </div>
@@ -1136,7 +1136,7 @@
 
     </div>
     <div class="modal-footer">
-        <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</a>
+        <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off"></i> ปิดหน้าต่าง</a>
     </div>
 </div>
 <!-- end EPI -->
@@ -1212,7 +1212,7 @@
                         </div>
 
                         <button class="btn btn-success" type="button" id="btn_nutri_save">
-                            <i class="icon-plus-sign icon-white"></i> บันทึกโภชนาการ
+                            <i class="icon-plus-sign"></i> บันทึกโภชนาการ
                         </button>
                     </form>
                 </div>
@@ -1238,7 +1238,7 @@
 
     </div>
     <div class="modal-footer">
-        <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</a>
+        <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off"></i> ปิดหน้าต่าง</a>
     </div>
 </div>
 <!-- end Nutrition -->
@@ -1311,7 +1311,7 @@
                         </div>
 
                         <button class="btn btn-success" type="button" id="btn_anc_save">
-                            <i class="icon-plus-sign icon-white"></i> บันทึกข้อมูล
+                            <i class="icon-plus-sign"></i> บันทึกข้อมูล
                         </button>
                     </form>
                 </div>
@@ -1347,7 +1347,7 @@
 
     </div>
     <div class="modal-footer">
-        <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</a>
+        <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off"></i> ปิดหน้าต่าง</a>
     </div>
 </div>
 <!-- /ANC -->
@@ -1473,7 +1473,7 @@
                         </div>
 
                         <button class="btn btn-success" type="button" id="btn_postnatal_save">
-                            <i class="icon-plus-sign icon-white"></i> บันทึกข้อมูล
+                            <i class="icon-save"></i> บันทึกข้อมูล
                         </button>
                     </form>
                 </div>
@@ -1501,7 +1501,7 @@
 
     </div>
     <div class="modal-footer">
-        <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</a>
+        <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off"></i> ปิดหน้าต่าง</a>
     </div>
 </div>
 <!-- /Mother care -->
@@ -1549,7 +1549,7 @@
                             <label class="control-label" for="btn_babies_care_save">&nbsp;</label>
                             <div class="controls">
                                 <button class="btn btn-success" type="button" id="btn_babies_care_save">
-                                    <i class="icon-plus-sign icon-white"></i> บันทึกข้อมูล
+                                    <i class="icon-save"></i> บันทึกข้อมูล
                                 </button>
                             </div>
                         </div>
@@ -1579,7 +1579,7 @@
 
     </div>
     <div class="modal-footer">
-        <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</a>
+        <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off"></i> ปิดหน้าต่าง</a>
     </div>
 </div>
 <!-- /เยี่ยมหลังคลอด เด็ก -->
@@ -1629,7 +1629,7 @@
                             <label class="control-label" for="btn_special_pp_save">&nbsp;</label>
                             <div class="controls">
                                 <button class="btn btn-success" type="button" id="btn_special_pp_save">
-                                    <i class="icon-plus-sign icon-white"></i> บันทึกข้อมูล
+                                    <i class="icon-save"></i> บันทึกข้อมูล
                                 </button>
                             </div>
                         </div>
@@ -1659,7 +1659,7 @@
 
     </div>
     <div class="modal-footer">
-        <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</a>
+        <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off"></i> ปิดหน้าต่าง</a>
     </div>
 </div>
 <!-- /SPECIAL PP -->
@@ -1698,7 +1698,7 @@
                             <label class="control-label" for="btn_comms_save">&nbsp;</label>
                             <div class="controls">
                                 <button class="btn btn-success" type="button" id="btn_comms_save">
-                                    <i class="icon-plus-sign icon-white"></i> บันทึกข้อมูล
+                                    <i class="icon-save"></i> บันทึกข้อมูล
                                 </button>
                             </div>
                         </div>
@@ -1727,7 +1727,7 @@
 
     </div>
     <div class="modal-footer">
-        <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</a>
+        <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off"></i> ปิดหน้าต่าง</a>
     </div>
 </div>
 <!-- /Community service -->
@@ -1781,7 +1781,7 @@
                             <label class="control-label" for="btn_icf_save">&nbsp;</label>
                             <div class="controls">
                                 <button class="btn btn-success" type="button" id="btn_icf_save">
-                                    <i class="icon-plus-sign icon-white"></i> บันทึกข้อมูล
+                                    <i class="icon-save"></i> บันทึกข้อมูล
                                 </button>
                             </div>
                         </div>
@@ -1825,7 +1825,7 @@
 
     </div>
     <div class="modal-footer">
-        <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</a>
+        <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off"></i> ปิดหน้าต่าง</a>
     </div>
 </div>
 <!-- /ICF -->
@@ -2092,10 +2092,10 @@
                             <label class="control-label" for="btn_icf_save">&nbsp;</label>
                             <div class="controls">
                                 <button class="btn btn-success" type="button" id="btn_dental_save">
-                                    <i class="icon-plus-sign icon-white"></i> บันทึกข้อมูล
+                                    <i class="icon-save"></i> บันทึกข้อมูล
                                 </button>
                                 <button class="btn btn-danger" type="button" id="btn_dental_remove">
-                                    <i class="icon-trash icon-white"></i> ลบข้อมูลการให้บริการ
+                                    <i class="icon-trash"></i> ลบข้อมูลการให้บริการ
                                 </button>
                             </div>
                         </div>
@@ -2126,7 +2126,7 @@
 
     </div>
     <div class="modal-footer">
-        <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</a>
+        <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off"></i> ปิดหน้าต่าง</a>
     </div>
 </div>
 <!-- /dental -->
@@ -2153,7 +2153,7 @@
                                     <option value="">--</option>
                                     <?php foreach($lab_groups as $t) echo '<option value="'.$t->id.'">'.$t->name.'</option>'; ?>
                                 </select>
-                                <button class="btn btn-info" id="btn_lab_do_order"><i class="icon-plus-sign icon-white"></i> เพิ่ม</button>
+                                <button class="btn btn-info" id="btn_lab_do_order"><i class="icon-plus-sign"></i> เพิ่ม</button>
                             </div>
                         </div>
                     </form>
@@ -2191,6 +2191,7 @@
                             <th>รายการ</th>
                             <th>ผล</th>
                             <th>หน่วย</th>
+                            <th>ค่าปกติ</th>
                             <th>#</th>
                         </tr>
                         </thead>
@@ -2206,7 +2207,7 @@
 
     </div>
     <div class="modal-footer">
-        <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</a>
+        <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off"></i> ปิดหน้าต่าง</a>
     </div>
 </div>
 <!-- /ICF -->

@@ -14,10 +14,10 @@
     </select>
     บ้านเลขที่
     <select id="sl_house" class="input-medium"></select>
-    <button type="button" class="btn btn-info" id="btn_do_get_list"><i class="icon-search icon-white"></i> แสดงรายการ</button>
+    <button type="button" class="btn btn-info" id="btn_do_get_list"><i class="icon-search"></i> แสดงรายการ</button>
     <div class="btn-group pull-right">
         <button type="button" id="btn_search" class="btn"><i class="icon-search"></i> ค้นหา</button>
-        <button type="button" id="btn_register" class="btn btn-success"><i class="icon-plus-sign icon-white"></i> ลงทะเบียน</button>
+        <button type="button" id="btn_register" class="btn btn-success"><i class="icon-plus-sign"></i> ลงทะเบียน</button>
     </div>
 </form>
 
@@ -58,7 +58,7 @@
             <label>คำค้นหา</label>
             <input type="text" class="input-xlarge" id="txt_query_person">
             <div class="btn-group">
-                <button type="button" class="btn btn-info" id="btn_do_search_person"><i class="icon-search icon-white"></i> ค้นหา</button>
+                <button type="button" class="btn btn-info" id="btn_do_search_person"><i class="icon-search"></i> ค้นหา</button>
                 <button class="btn btn-info dropdown-toggle" data-toggle="dropdown">
                     <span class="caret"></span>
                 </button>
@@ -90,7 +90,7 @@
 
     </div>
     <div class="modal-footer">
-        <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</a>
+        <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off"></i> ปิดหน้าต่าง</a>
     </div>
 </div>
 
@@ -228,8 +228,8 @@
 
     </div>
     <div class="modal-footer">
-        <a href="#" class="btn btn-success" id="btn_labor_do_save"><i class="icon-plus-sign icon-white"></i> บันทึกข้อมูล</a>
-        <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</a>
+        <a href="#" class="btn btn-success" id="btn_labor_do_save"><i class="icon-save"></i> บันทึกข้อมูล</a>
+        <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off"></i> ปิดหน้าต่าง</a>
     </div>
 </div>
 
@@ -414,7 +414,7 @@
                             </div>
                         </div>
 
-                        <a href="#" class="btn btn-success" id="btn_anc_info_save"><i class="icon-plus-sign icon-white"></i> บันทึกข้อมูล</a>
+                        <a href="#" class="btn btn-success" id="btn_anc_info_save"><i class="icon-save"></i> บันทึกข้อมูล</a>
                     </form>
                 </div>
 
@@ -442,7 +442,7 @@
         </div>
     </div>
     <div class="modal-footer">
-        <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</a>
+        <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off"></i> ปิดหน้าต่าง</a>
     </div>
 </div>
 <!-- /anc info -->

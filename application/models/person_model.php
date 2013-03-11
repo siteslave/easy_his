@@ -170,7 +170,7 @@ class Person_model extends CI_Model
     }
 
     public function update_person($data){
-        $result = $this->mongo_db->where('_id', new MongoId($data['person_id']))
+        $result = $this->mongo_db->where(array('hn' => (string) $data['hn']))
                 ->set(array(
                     'cid'               => $data['cid'],
                     'owner_id'          => new MongoId($this->owner_id),
@@ -214,9 +214,9 @@ class Person_model extends CI_Model
      * @param $person_id
      * @return mixed
      */
-    public function remove_person_address($person_id){
+    public function remove_person_address($hn){
         $result = $this->mongo_db
-                    ->where('_id', new MongoId($person_id))
+                    ->where(array('hn' => (string) $hn))
                     ->unset_field('address')
                     ->update('person');
         return $result;
@@ -228,9 +228,9 @@ class Person_model extends CI_Model
      * @param $person_id
      * @return mixed
      */
-    public function remove_person_insurance($person_id){
+    public function remove_person_insurance($hn){
         $result = $this->mongo_db
-                    ->where('_id', new MongoId($person_id))
+                    ->where(array('hn' => (string) $hn))
                     ->unset_field('insurances')
                     ->update('person');
         return $result;
@@ -242,10 +242,10 @@ class Person_model extends CI_Model
      * @param $data
      * @return mixed
      */
-    public function save_person_address($person_id, $data){
+    public function save_person_address($hn, $data){
 
         $result = $this->mongo_db
-            ->where('_id', new MongoId($person_id))
+            ->where(array('hn' => (string) $hn))
             ->set(array(
                     //'address.person_id'     => new MongoId($person_id),
                     'address.address_type'  => $data['address_type'],
@@ -278,10 +278,10 @@ class Person_model extends CI_Model
      * @param   Array     $data         The array of insurance detail.
      * @return  boolean
      */
-    public function save_insurance($person_id, $data){
+    public function save_insurance($hn, $data){
 
         $result = $this->mongo_db
-            ->where('_id', new MongoId($person_id))
+            ->where(array('hn' => (string) $hn))
             ->set(array(
                     'insurances.id'             => $data['id'],
                     'insurances.code'           => $data['code'],
@@ -336,14 +336,14 @@ class Person_model extends CI_Model
      * @param $person_id
      * @return mixed
      */
-    public function detail($person_id){
-        $result = $this->mongo_db->where(array('_id' => new MongoId($person_id)))->limit(1)->get('person');
+    public function detail($hn){
+        $result = $this->mongo_db->where(array('hn' => (string) $hn))->limit(1)->get('person');
         return count($result) > 0 ? $result[0] : $result;
     }
 
     public function save_drug_allergy($data){
         $result = $this->mongo_db
-            ->where('_id', new MongoId($data['person_id']))
+            ->where(array('hn' => (string) $data['hn']))
             ->push('allergies',
                 array(
                     'record_date'   => to_string_date($data['record_date']),
@@ -360,27 +360,27 @@ class Person_model extends CI_Model
         return $result;
     }
 
-    public function check_drug_allergy_duplicate($person_id, $drug_id){
+    public function check_drug_allergy_duplicate($hn, $drug_id){
         $result = $this->mongo_db
-            ->where(array('_id' => new MongoId($person_id), 'allergies.drug_id' => new MongoId($drug_id)))
+            ->where(array('hn' => (string) $hn, 'allergies.drug_id' => new MongoId($drug_id)))
             ->count('person');
 
         return $result > 0 ? TRUE : FALSE;
     }
 
-    public function get_drug_allergy_list($person_id){
+    public function get_drug_allergy_list($hn){
         $result = $this->mongo_db
             ->select(array('allergies'))
-            ->where('_id', new MongoId($person_id))
+            ->where(array('hn' => (string) $hn))
             ->get('person');
 
         return $result;
     }
 
-    public function get_drug_allergy_detail($person_id, $drug_id){
+    public function get_drug_allergy_detail($hn, $drug_id){
         $result = $this->mongo_db
             ->select(array('allergies'))
-            ->where(array('_id' => new MongoId($person_id), 'allergies.drug_id' => new MongoId($drug_id)))
+            ->where(array('hn' => (string) $hn, 'allergies.drug_id' => new MongoId($drug_id)))
             ->get('person');
 
         return count($result) > 0 ? $result[0]['allergies'] : NULL;
@@ -388,7 +388,7 @@ class Person_model extends CI_Model
 
     public function update_drug_allergy($data){
         $result = $this->mongo_db
-            ->where(array('_id' => new MongoId($data['person_id']), 'allergies.drug_id' => new MongoId($data['drug_id'])))
+            ->where(array('hn' => (string) $data['hn'], 'allergies.drug_id' => new MongoId($data['drug_id'])))
             ->set(array(
                     'allergies.$.record_date'   => to_string_date($data['record_date']),
                     //'drug_id'       => new MongoId($data['drug_id']),
@@ -404,11 +404,9 @@ class Person_model extends CI_Model
         return $result;
     }
 
-    public function remove_drug_allergy($person_id, $drug_id){
-        //$this->mongo_db->pull('comments', array('comment_id'=>123))->update('blog_posts');
-
+    public function remove_drug_allergy($hn, $drug_id){
         $result = $this->mongo_db
-            ->where('_id', new MongoId($person_id))
+            ->where(array('hn' => (string) $hn))
             ->pull('allergies', array('drug_id' => new MongoId($drug_id)))
             ->update('person');
         return $result;
@@ -416,7 +414,7 @@ class Person_model extends CI_Model
 
     public function save_chronic($data){
         $result = $this->mongo_db
-            ->where('_id', new MongoId($data['person_id']))
+            ->where(array('hn' => (string) $data['hn']))
             ->push('chronics',
             array(
                 'diag_date'         => to_string_date($data['diag_date']),
@@ -433,7 +431,7 @@ class Person_model extends CI_Model
 
     public function update_chronic($data){
         $result = $this->mongo_db
-            ->where(array('_id' => new MongoId($data['person_id']), 'chronics.chronic' => $data['chronic']))
+            ->where(array('hn' => (string) $data['hn'], 'chronics.chronic' => $data['chronic']))
             ->set(array(
                 'chronics.$.diag_date'         => to_string_date($data['diag_date']),
                 'chronics.$.chronic'           => $data['chronic'],
@@ -448,27 +446,27 @@ class Person_model extends CI_Model
     }
 
 
-    public function remove_chronic($person_id, $chronic){
+    public function remove_chronic($hn, $chronic){
         //$this->mongo_db->pull('comments', array('comment_id'=>123))->update('blog_posts');
 
         $result = $this->mongo_db
-            ->where('_id', new MongoId($person_id))
+            ->where(array('hn' => (string) $hn))
             ->pull('chronics', array('chronic' =>$chronic))
             ->update('person');
         return $result;
     }
-    public function get_chronic_list($person_id){
+    public function get_chronic_list($hn){
         $result = $this->mongo_db
             ->select(array('chronics'))
-            ->where('_id', new MongoId($person_id))
+            ->where(array('hn' => (string) $hn))
             ->get('person');
 
         return $result;
     }
 
-    public function check_chronic_duplicate($person_id, $chronic){
+    public function check_chronic_duplicate($hn, $chronic){
         $result = $this->mongo_db
-            ->where(array('_id' => new MongoId($person_id), 'chronics.chronic' => $chronic))
+            ->where(array('hn' => (string) $hn, 'chronics.chronic' => $chronic))
             ->count('person');
 
         return $result > 0 ? TRUE : FALSE;

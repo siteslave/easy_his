@@ -153,7 +153,7 @@ $(document).ready(function(){
                         '    <td>' + v.file_name + '</td> ' +
                         '    <td>' + new_date + '</td> ' +
                         '    <td>' + v.email + '</td> ' +
-                        '    <td><button id="btnImport" data-file="' + v.file_name + '" rel="tooltip" title="ประมวลผล" type="button" class="btn btn-info"><i class="icon-share icon-white"></i></button></td> ' +
+                        '    <td><button id="btnImport" data-file="' + v.file_name + '" rel="tooltip" title="ประมวลผล" type="button" class="btn btn-info"><i class="icon-share"></i></button></td> ' +
                         '</tr> '
                     );
                 });

@@ -25,7 +25,7 @@
                         <div class="input-append">
                             <input class="input-medium" id="txt_cid" type="text" placeholder="xxxxxxxxxxxxx">
                             <button class="btn" type="button"><i class="icon-refresh"></i></button>
-                            <button class="btn btn-info" type="button" id="btn_search_dbpop"><i class="icon-search icon-white"></i></button>
+                            <button class="btn btn-info" type="button" id="btn_search_dbpop"><i class="icon-search"></i></button>
                         </div>
                     </div>
                     <div class="span3">
@@ -537,7 +537,7 @@
 
 <form action="#" class="form-actions">
     <button type="button" id="btn_save_person" class="btn btn-success btn-large">
-        <i class="icon-plus-sign icon-white"></i>
+        <i class="icon-plus-sign"></i>
         เพิ่มคนในบ้าน
     </button>
     <button type="button" id="btn_clear_person" class="btn btn-large">
@@ -562,7 +562,7 @@
                     <div class="input-append">
                         <input class="input-xlarge" placeholder="xxxxxxxxxxxxx" id="text_query_search_dbpop" type="text">
                         <div class="btn-group">
-                            <button class="btn btn-info" tabindex="-1" type="button" id="button_do_search_dbpop"><i class="icon-search icon-white"></i> ค้นหา</button>
+                            <button class="btn btn-info" tabindex="-1" type="button" id="button_do_search_dbpop"><i class="icon-search"></i> ค้นหา</button>
                             <button class="btn btn-info dropdown-toggle" data-toggle="dropdown" tabindex="-1">
                                 <span class="caret"></span>
                             </button>
@@ -590,7 +590,7 @@
         </table>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="icon-off"></i> ปิดหน้าต่าง</button>
     </div>
 </div>
 
@@ -607,7 +607,7 @@
                     <label for="text_query_search_dbpop">ชื่อ/รหัส สถานบริการ</label>
                     <div class="input-append">
                         <input class="input-xlarge" placeholder="..." id="text_query_search_hospital" type="text">
-                        <button class="btn btn-info" type="button" id="btn_do_search_hospital"><i class="icon-search icon-white"></i> ค้นหา</button>
+                        <button class="btn btn-info" type="button" id="btn_do_search_hospital"><i class="icon-search"></i> ค้นหา</button>
                     </div>
 
                     <label class="checkbox inline">
@@ -630,7 +630,7 @@
         </table>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="icon-off"></i> ปิดหน้าต่าง</button>
     </div>
 </div>
 <script type="text/javascript">

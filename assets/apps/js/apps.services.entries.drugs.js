@@ -250,7 +250,7 @@ head.ready(function(){
                                 '<td>' + v.name3 + '</td>' +
                                 '<td><a href="javascript:void(0);" class="btn btn-mini btn-info" title="เลือกรายการ" ' +
                                 'data-name="btn_selected_drug_usage" data-id="' + v.id + '" data-vname="' + v.name1 + '">' +
-                                '<i class="icon-ok icon-white"></i>' +
+                                '<i class="icon-ok"></i>' +
                                 '</a></td>' +
                                 '</tr>'
                         );

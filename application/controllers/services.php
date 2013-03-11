@@ -446,7 +446,7 @@ class Services extends CI_Controller
 
             }else{
                 //check drug duplicate
-                $duplicated = $this->person->check_drug_allergy_duplicate($data['person_id'], $data['drug_id']);
+                $duplicated = $this->person->check_drug_allergy_duplicate($data['hn'], $data['drug_id']);
                 if($duplicated){
                     $json = '{"success": false, "msg": "Drug duplicated, please check drug"}';
                 }else{
@@ -464,11 +464,11 @@ class Services extends CI_Controller
     }
 
     public function get_screening_allergy_list(){
-        $person_id = $this->input->post('person_id');
-        if(empty($person_id)){
+        $hn = $this->input->post('hn');
+        if(empty($hn)){
             $json = '{"success": false, "msg": "No person id found."}';
         }else{
-            $result = $this->person->get_drug_allergy_list($person_id);
+            $result = $this->person->get_drug_allergy_list($hn);
 
             if($result){
                 $arr_result = array();
@@ -505,7 +505,7 @@ class Services extends CI_Controller
                 }
 
             }else{
-                $json = '{"success": false, "msg": "No result found."';
+                $json = '{"success": false, "msg": "No result found."}';
             }
         }
 
@@ -513,13 +513,13 @@ class Services extends CI_Controller
     }
 
     public function remove_screening_allergy(){
-        $person_id = $this->input->post('person_id');
+        $hn = $this->input->post('hn');
         $drug_id = $this->input->post('drug_id');
 
-        if(empty($person_id) || empty($drug_id)){
+        if(empty($hn) || empty($drug_id)){
             $json = '{"success": false, "msg": "No person id or drug id, please check your data and try again."}';
         }else{
-            $rs = $this->person->remove_drug_allergy($person_id, $drug_id);
+            $rs = $this->person->remove_drug_allergy($hn, $drug_id);
 
             if($rs){
                 $json = '{"success": true}';
@@ -534,12 +534,12 @@ class Services extends CI_Controller
     public function get_drug_allergy_detail(){
 
         $drug_id = $this->input->post('drug_id');
-        $person_id = $this->input->post('person_id');
+        $hn = $this->input->post('hn');
 
         if(empty($drug_id)){
             $json = '{"success": false, "msg": "No id found."}';
         }else{
-            $drugallergy = $this->person->get_drug_allergy_detail($person_id, $drug_id);
+            $drugallergy = $this->person->get_drug_allergy_detail($hn, $drug_id);
 
             //echo var_dump($result);
 

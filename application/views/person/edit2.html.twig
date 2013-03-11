@@ -33,7 +33,7 @@
                     <input class="input-medium" id="txt_cid" type="text" value="{{ data.cid }}" placeholder="xxxxxxxxxxxxx">
                     <input type="hidden" id="txt_old_cid" value="{{ data.cid }}">
                     <button class="btn" type="button"><i class="icon-refresh"></i></button>
-                    <button class="btn btn-info" type="button" id="btn_search_dbpop"><i class="icon-search icon-white"></i></button>
+                    <button class="btn btn-info" type="button" id="btn_search_dbpop"><i class="icon-search"></i></button>
                 </div>
             </div>
             <div class="span3">
@@ -738,7 +738,7 @@
                 </tr>
                 </tbody>
             </table>
-            <a href="javascript:void(0);" class="btn btn-success" id="btn_new_drug_allergy"><i class="icon-plus-sign icon-white"></i> เพิ่มรายการ</a>
+            <a href="javascript:void(0);" class="btn btn-success" id="btn_new_drug_allergy"><i class="icon-plus-sign"></i> เพิ่มรายการ</a>
         </div>
         <div class="tab-pane" id="tab_chronic">
             <div class="alert alert-warning">
@@ -766,13 +766,13 @@
                 </tbody>
             </table>
 
-            <a href="javascript:void(0);" class="btn btn-success" id="btn_new_chronic"><i class="icon-plus-sign icon-white"></i> เพิ่มรายการ</a>
+            <a href="javascript:void(0);" class="btn btn-success" id="btn_new_chronic"><i class="icon-plus-sign"></i> เพิ่มรายการ</a>
         </div>
     </div>
 
     <form action="#" class="form-actions" id="frm_update_person">
         <button type="button" id="btn_save_person" class="btn btn-success btn-large">
-            <i class="icon-plus-sign icon-white"></i>
+            <i class="icon-save"></i>
             ปรับปรุงข้อมูล
         </button>
         <button type="button" id="btn_back_to_home" class="btn btn-large">
@@ -795,7 +795,7 @@
                         <label for="text_query_search_dbpop">เลขบัตรประชาชน</label>
                         <div class="input-append">
                             <input class="input-xlarge" placeholder="xxxxxxxxxxxxx" id="text_query_search_dbpop" type="text">
-                            <button class="btn btn-info" type="button" id="button_do_search_dbpop"><i class="icon-search icon-white"></i> ค้นหา</button>
+                            <button class="btn btn-info" type="button" id="button_do_search_dbpop"><i class="icon-search"></i> ค้นหา</button>
                         </div>
                     </div>
                 </div>
@@ -814,7 +814,7 @@
             </table>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="icon-off"></i> ปิดหน้าต่าง</button>
         </div>
     </div>
 
@@ -831,7 +831,7 @@
                         <label for="text_query_search_dbpop">ชื่อ/รหัส สถานบริการ</label>
                         <div class="input-append">
                             <input class="input-xlarge" placeholder="..." id="text_query_search_hospital" type="text">
-                            <button class="btn btn-info" type="button" id="btn_do_search_hospital"><i class="icon-search icon-white"></i> ค้นหา</button>
+                            <button class="btn btn-info" type="button" id="btn_do_search_hospital"><i class="icon-search"></i> ค้นหา</button>
                         </div>
 
                         <label class="checkbox inline">
@@ -854,7 +854,7 @@
             </table>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="icon-off"></i> ปิดหน้าต่าง</button>
         </div>
     </div>
 
@@ -962,8 +962,8 @@
         </form>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-success" id="btn_save_drug_allergy"><i class="icon-plus-sign icon-white"></i> บันทึกรายการ</button>
-        <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</button>
+        <button type="button" class="btn btn-success" id="btn_save_drug_allergy"><i class="icon-save"></i> บันทึกรายการ</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="icon-off"></i> ปิดหน้าต่าง</button>
     </div>
 </div>
     <!-- search chronic -->
@@ -990,7 +990,7 @@
                                     <label for="text_query_search_chronic">คำค้น</label>
                                     <div class="input-append">
                                         <input class="input-xlarge" placeholder="xxxxxxxxxxxxx" id="text_query_search_chronic" type="text">
-                                        <button class="btn btn-info" type="button" id="button_do_search_chronic"><i class="icon-search icon-white"></i> ค้นหา</button>
+                                        <button class="btn btn-info" type="button" id="button_do_search_chronic"><i class="icon-search"></i> ค้นหา</button>
                                     </div>
                                     <label class="checkbox inline">
                                         <input type="checkbox" id="chk_chronic_search_by_code" checked="checked"> ค้นจากรหัส
@@ -1055,7 +1055,7 @@
                                                 <input class="input-xlarge" id="txt_chronic_hosp_dx_name" disabled type="text">
                                                 <input type="hidden" id="txt_chronic_hosp_dx_code">
                                                 <button class="btn btn-info" type="button" id="btn_search_chronic_dx_hosp">
-                                                    <i class="icon-search icon-white"></i>
+                                                    <i class="icon-search"></i>
                                                 </button>
                                             </div>
                                         </div>
@@ -1069,7 +1069,7 @@
                                                 <input class="input-xlarge" id="txt_chronic_hosp_rx_name" disabled type="text">
                                                 <input type="hidden" id="txt_chronic_hosp_rx_code">
                                                 <button class="btn btn-info" type="button" id="btn_search_chronic_rx_hosp">
-                                                    <i class="icon-search icon-white"></i>
+                                                    <i class="icon-search"></i>
                                                 </button>
                                             </div>
                                         </div>
@@ -1105,7 +1105,7 @@
                             <div class="row-fluid">
                                 <div class="control-group">
                                     <div class="controls">
-                                        <button type="button" class="btn btn-success" id="btn_save_chronic"><i class="icon-plus-sign icon-white"></i> บันทึกรายการ</button>
+                                        <button type="button" class="btn btn-success" id="btn_save_chronic"><i class="icon-save"></i> บันทึกรายการ</button>
                                     </div>
                                 </div>
                             </div>
@@ -1118,7 +1118,7 @@
 
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="icon-off"></i> ปิดหน้าต่าง</button>
         </div>
     </div>
     <!-- /search chronic -->

@@ -62,4 +62,44 @@ class Lab_model extends CI_Model
         return $rs;
     }
 
+    public function save_result($data)
+    {
+        $rs = $this->mongo_db
+            ->where(array(
+                'vn' => (string) $data['vn'],
+                'group_id' => new MongoId($data['group_id']),
+                'lab_items.id' => new MongoId($data['lab_id'])
+            ))
+            ->set(array(
+                'lab_items.$.result' => $data['result']
+            ))
+            ->update('visit_lab_orders');
+
+        return $rs;
+    }
+
+    public function remove_item($data)
+    {
+        $rs = $this->mongo_db
+            ->where(array(
+                'vn' => (string) $data['vn'],
+                'group_id' => new MongoId($data['group_id'])
+            ))
+            ->pull('lab_items', array('id' => new MongoId($data['lab_id'])))
+            ->update('visit_lab_orders');
+
+        return $rs;
+    }
+
+    public function remove_order($data)
+    {
+        $rs = $this->mongo_db
+            ->where(array(
+                'vn' => (string) $data['vn'],
+                'group_id' => new MongoId($data['group_id'])
+            ))
+            ->delete('visit_lab_orders');
+
+        return $rs ? TRUE : FALSE;
+    }
 }

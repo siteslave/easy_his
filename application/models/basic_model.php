@@ -30,7 +30,7 @@ class Basic_model extends CI_Model
             $obj->name = $r['name'];
             //$obj->c = $r['inscl'];
 
-            array_push($arr_result, $obj);
+            $arr_result[] = $obj;
         }
 
         return $arr_result;
@@ -56,7 +56,7 @@ class Basic_model extends CI_Model
             $obj->name3 = $r['name3'];
             $obj->id = get_first_object($r['_id']);
 
-            array_push($arr_result, $obj);
+            $arr_result[] = $obj;
         }
 
         return $arr_result;
@@ -83,7 +83,7 @@ class Basic_model extends CI_Model
             $obj->name2 = $r['name3'];
             $obj->id = get_first_object($r['_id']);
 
-            array_push($arr_result, $obj);
+            $arr_result[] = $obj;
         }
 
         return $arr_result;
@@ -99,7 +99,7 @@ class Basic_model extends CI_Model
             $obj->id = get_first_object($r['_id']);
             $obj->name = $r['name'];
 
-            array_push($arr_result, $obj);
+            $arr_result[] = $obj;
         }
 
         return $arr_result;
@@ -114,7 +114,7 @@ class Basic_model extends CI_Model
             $obj->id = get_first_object($r['_id']);
             $obj->name = $r['name'];
 
-            array_push($arr_result, $obj);
+            $arr_result[] = $obj;
         }
 
         return $arr_result;
@@ -129,7 +129,7 @@ class Basic_model extends CI_Model
             $obj->id = get_first_object($r['_id']);
             $obj->name = $r['name'];
 
-            array_push($arr_result, $obj);
+            $arr_result[] = $obj;
         }
 
         return $arr_result;
@@ -145,7 +145,7 @@ class Basic_model extends CI_Model
             $obj->id = get_first_object($r['_id']);
             $obj->name = $r['name'];
 
-            array_push($arr_result, $obj);
+            $arr_result[] = $obj;
         }
 
         return $arr_result;
@@ -161,7 +161,7 @@ class Basic_model extends CI_Model
             $obj->id = get_first_object($r['_id']);
             $obj->name = $r['name'];
 
-            array_push($arr_result, $obj);
+            $arr_result[] = $obj;
         }
 
         return $arr_result;
@@ -176,7 +176,7 @@ class Basic_model extends CI_Model
             $obj->id = get_first_object($r['_id']);
             $obj->name = $r['name'];
 
-            array_push($arr_result, $obj);
+            $arr_result[] = $obj;
         }
 
         return $arr_result;
@@ -191,7 +191,7 @@ class Basic_model extends CI_Model
             $obj->id = get_first_object($r['_id']);
             $obj->name = $r['name'];
 
-            array_push($arr_result, $obj);
+            $arr_result[] = $obj;
         }
 
         return $arr_result;
@@ -207,7 +207,7 @@ class Basic_model extends CI_Model
             $obj->code = $r['code'];
             $obj->name = $r['name'];
 
-            array_push($arr_result, $obj);
+            $arr_result[] = $obj;
         }
 
         return $arr_result;
@@ -224,7 +224,7 @@ class Basic_model extends CI_Model
             $obj->id = get_first_object($r['_id']);
             $obj->name = $r['name'];
 
-            array_push($arr_result, $obj);
+            $arr_result[] = $obj;
         }
 
         return $arr_result;
@@ -242,7 +242,7 @@ class Basic_model extends CI_Model
             $obj->id = get_first_object($r['_id']);
             $obj->name = $r['name'];
 
-            array_push($arr_result, $obj);
+            $arr_result[] = $obj;
         }
 
         return $arr_result;
@@ -258,7 +258,7 @@ class Basic_model extends CI_Model
             $obj->id = get_first_object($r['_id']);
             $obj->name = $r['name'];
 
-            array_push($arr_result, $obj);
+            $arr_result[] = $obj;
         }
 
         return $arr_result;
@@ -274,7 +274,7 @@ class Basic_model extends CI_Model
             $obj->id = get_first_object($r['_id']);
             $obj->name = $r['name'];
 
-            array_push($arr_result, $obj);
+            $arr_result[] = $obj;
         }
 
         return $arr_result;
@@ -292,7 +292,7 @@ class Basic_model extends CI_Model
             $obj->id = get_first_object($r['_id']);
             $obj->name = $r['name'];
 
-            array_push($arr_result, $obj);
+            $arr_result[] = $obj;
         }
 
         return $arr_result;
@@ -316,7 +316,7 @@ class Basic_model extends CI_Model
             $obj->name = $r['hospname'];
             $obj->province = get_changwat($r['changwat']);
 
-            array_push($arr_result, $obj);
+            $arr_result[] = $obj;
         }
 
         return $arr_result;
@@ -340,7 +340,7 @@ class Basic_model extends CI_Model
             $obj->fullname = $r['hospname'] . '#' . $r['hospcode'];
             $obj->province = get_changwat($r['changwat']);
 
-            array_push($arr_result, $obj);
+            $arr_result[] = $obj;
         }
 
         return $arr_result;
@@ -361,7 +361,7 @@ class Basic_model extends CI_Model
             $obj->name = $r['hospname'];
             $obj->province = get_changwat($r['changwat']);
 
-            array_push($arr_result, $obj);
+            $arr_result[] = $obj;
         }
 
         return $arr_result;
@@ -383,7 +383,7 @@ class Basic_model extends CI_Model
             $obj->fullname = $r['hospname'] . '#' . $r['hospcode'];
             $obj->province = get_changwat($r['changwat']);
 
-            array_push($arr_result, $obj);
+            $arr_result[] = $obj;
         }
 
         return $arr_result;
@@ -402,7 +402,7 @@ class Basic_model extends CI_Model
             $obj->code = $r['code'];
             $obj->name = $r['name'];
 
-            array_push($arr_result, $obj);
+            $arr_result[] = $obj;
         }
 
         return $arr_result;
@@ -421,7 +421,7 @@ class Basic_model extends CI_Model
             $obj->code = get_first_object($r['_id']);
             $obj->name = $r['name'];
 
-            array_push($arr_result, $obj);
+            $arr_result[] = $obj;
         }
 
         return $arr_result;
@@ -442,7 +442,7 @@ class Basic_model extends CI_Model
             $obj->id = get_first_object($r['_id']);
             $obj->name = $r['name'];
 
-            array_push($arr_result, $obj);
+            $arr_result[] = $obj;
         }
 
         return $arr_result;
@@ -463,7 +463,7 @@ class Basic_model extends CI_Model
             $obj->id = get_first_object($r['_id']);
             $obj->name = $r['name'];
 
-            array_push($arr_result, $obj);
+            $arr_result[] = $obj;
         }
 
         return $arr_result;
@@ -483,7 +483,7 @@ class Basic_model extends CI_Model
             $obj->id = get_first_object($r['_id']);
             $obj->name = $r['name'];
 
-            array_push($arr_result, $obj);
+            $arr_result[] = $obj;
         }
 
         return $arr_result;
@@ -504,12 +504,11 @@ class Basic_model extends CI_Model
             $obj->id = get_first_object($r['_id']);
             $obj->name = $r['name'];
 
-            array_push($arr_result, $obj);
+            $arr_result[] = $obj;
         }
 
         return $arr_result;
     }
-
 
     public function get_doctor_room()
     {
@@ -521,11 +520,12 @@ class Basic_model extends CI_Model
             $obj->id = get_first_object($r['_id']);
             $obj->name = $r['name'];
 
-            array_push($arr_result, $obj);
+            $arr_result[] = $obj;
         }
 
         return $arr_result;
     }
+
     public function get_clinic()
     {
         $result = $this->mongo_db->order_by(array('name' => 1))->get('ref_clinics');
@@ -536,12 +536,11 @@ class Basic_model extends CI_Model
             $obj->id = get_first_object($r['_id']);
             $obj->name = $r['name'];
 
-            array_push($arr_result, $obj);
+            $arr_result[] = $obj;
         }
 
         return $arr_result;
     }
-
 
     public function get_drug_allergy_informant(){
 
@@ -558,7 +557,7 @@ class Basic_model extends CI_Model
             $obj->id = get_first_object($r['_id']);
             $obj->name = $r['name'];
 
-            array_push($arr_result, $obj);
+            $arr_result[] = $obj;
         }
 
         return $arr_result;
@@ -592,7 +591,7 @@ class Basic_model extends CI_Model
             $obj->code = $r['ampur'];
             $obj->name = $r['catm_name'];
 
-            array_push($arr_result, $obj);
+            $arr_result[] = $obj;
         }
 
         return $arr_result;
@@ -655,7 +654,7 @@ class Basic_model extends CI_Model
             $obj->code = $r['tambon'];
             $obj->name = $r['catm_name'];
 
-            array_push($arr_result, $obj);
+            $arr_result[] = $obj;
         }
 
         return $arr_result;
@@ -708,11 +707,11 @@ class Basic_model extends CI_Model
 
 
     public function get_clinic_name($id){
-    	$result = $this->mongo_db->where(array('_id' => new MongoId($id)))->get('ref_clinics');
-    
-    	return count($result) > 0 ? $result[0]['name'] : '-';
+        $result = $this->mongo_db->where(array('_id' => new MongoId($id)))->get('ref_clinics');
+
+        return count($result) > 0 ? $result[0]['name'] : '-';
     }
-    
+
     public function get_appoint_type_name($id){
         $result = $this->mongo_db->where(array('_id' => new MongoId($id)))->get('ref_appoint_types');
 
@@ -807,15 +806,15 @@ class Basic_model extends CI_Model
     }
 
     public function get_provider_name($code){
-    	$result = $this->mongo_db->where(array('provider' => (string) $code))->get('providers');
-    
-    	return $result ? $result[0]['first_name'] . ' ' . $result[0]['last_name'] : '-';
+        $result = $this->mongo_db->where(array('provider' => (string) $code))->get('providers');
+
+        return $result ? $result[0]['first_name'] . ' ' . $result[0]['last_name'] : '-';
     }
-    
+
     public function get_owner_pcucode($id){
-    	$result = $this->mongo_db->where(array('_id' => new MongoId($id)))->get('owners');
-    
-    	return $result ? $result[0]['pcucode'] : '-';
+        $result = $this->mongo_db->where(array('_id' => new MongoId($id)))->get('owners');
+
+        return $result ? $result[0]['pcucode'] : '-';
     }
     public function get_owner_name($id)
     {
@@ -861,16 +860,16 @@ class Basic_model extends CI_Model
         $result = $this->mongo_db
             ->order_by(array('code' => 'ASC'))
             ->get('ref_diag_types');
-        
+
         $arr_result = array();
         foreach($result as $r){
-        	$obj = new stdClass();
-        	$obj->code = $r['code'];
-        	$obj->name = $r['name'];
-        
-        	array_push($arr_result, $obj);
+            $obj = new stdClass();
+            $obj->code = $r['code'];
+            $obj->name = $r['name'];
+
+            array_push($arr_result, $obj);
         }
-        
+
         return $arr_result;
     }
 
@@ -998,7 +997,7 @@ class Basic_model extends CI_Model
         $rs = $this->mongo_db
             ->where('_id', new MongoId($id))
             ->get('villages');
-        
+
         return count($rs) > 0 ? $rs[0] : NULL;
     }
 
@@ -1015,7 +1014,7 @@ class Basic_model extends CI_Model
                 $obj = new stdClass();
                 $obj->name = $r['name'] . '#' . get_first_object($r['_id']);
 
-                array_push($arr_result, $obj);
+                $arr_result[] = $obj;
             }
 
             return $arr_result;
@@ -1029,39 +1028,39 @@ class Basic_model extends CI_Model
 
 
     public function get_appoint_type(){
-    	$rs = $this->mongo_db->order_by(array('name' => -1))->get('ref_appoint_types');
+        $rs = $this->mongo_db->order_by(array('name' => -1))->get('ref_appoint_types');
 
-    	$arr_result = array();
-    	foreach($rs as $r){
-    		$obj = new stdClass();
-    		$obj->id = get_first_object($r['_id']);
-    		$obj->name = $r['name'];
-    		$obj->desc = $r['desc'];
-    	
-    		array_push($arr_result, $obj);
-    	}
-    	
-    	return $arr_result;
+        $arr_result = array();
+        foreach($rs as $r){
+            $obj = new stdClass();
+            $obj->id = get_first_object($r['_id']);
+            $obj->name = $r['name'];
+            $obj->desc = $r['desc'];
+
+            $arr_result[] = $obj;
+        }
+
+        return $arr_result;
     }
-    
+
     //------------------------------------------------------------------------------------------------------------------
     /*
      * Get Accident type
      */
     public function get_aetype()
     {
-    	$result = $this->mongo_db->order_by(array('th_name' => 1))->get('ref_aetypes');
-    
-    	$arr_result = array();
-    	foreach($result as $r){
-    		$obj = new stdClass();
-    		$obj->id = get_first_object($r['_id']);
-    		$obj->name = $r['th_name'];
-    
-    		array_push($arr_result, $obj);
-    	}
-    
-    	return $arr_result;
+        $result = $this->mongo_db->order_by(array('th_name' => 1))->get('ref_aetypes');
+
+        $arr_result = array();
+        foreach($result as $r){
+            $obj = new stdClass();
+            $obj->id = get_first_object($r['_id']);
+            $obj->name = $r['th_name'];
+
+            $arr_result[] = $obj;
+        }
+
+        return $arr_result;
     }
     //------------------------------------------------------------------------------------------------------------------
     /*
@@ -1069,38 +1068,38 @@ class Basic_model extends CI_Model
     */
     public function get_aeplace()
     {
-    	$result = $this->mongo_db->order_by(array('export_code' => 1))->get('ref_aeplaces');
-    
-    	$arr_result = array();
-    	foreach($result as $r){
-    		$obj = new stdClass();
-    		$obj->id = get_first_object($r['_id']);
-    		$obj->name = $r['name'];
-    
-    		array_push($arr_result, $obj);
-    	}
-    
-    	return $arr_result;
+        $result = $this->mongo_db->order_by(array('export_code' => 1))->get('ref_aeplaces');
+
+        $arr_result = array();
+        foreach($result as $r){
+            $obj = new stdClass();
+            $obj->id = get_first_object($r['_id']);
+            $obj->name = $r['name'];
+
+            $arr_result[] = $obj;
+        }
+
+        return $arr_result;
     }
-    
+
     //------------------------------------------------------------------------------------------------------------------
     /*
      * Get Accident type in
     */
     public function get_aetypein()
     {
-    	$result = $this->mongo_db->order_by(array('export_code' => 1))->get('ref_aetypeins');
-    
-    	$arr_result = array();
-    	foreach($result as $r){
-    		$obj = new stdClass();
-    		$obj->id = get_first_object($r['_id']);
-    		$obj->name = $r['name'];
-    
-    		array_push($arr_result, $obj);
-    	}
-    
-    	return $arr_result;
+        $result = $this->mongo_db->order_by(array('export_code' => 1))->get('ref_aetypeins');
+
+        $arr_result = array();
+        foreach($result as $r){
+            $obj = new stdClass();
+            $obj->id = get_first_object($r['_id']);
+            $obj->name = $r['name'];
+
+            $arr_result[] = $obj;
+        }
+
+        return $arr_result;
     }
     //------------------------------------------------------------------------------------------------------------------
     /*
@@ -1108,18 +1107,18 @@ class Basic_model extends CI_Model
     */
     public function get_aetraffic()
     {
-    	$result = $this->mongo_db->order_by(array('export_code' => 1))->get('ref_aetraffics');
-    
-    	$arr_result = array();
-    	foreach($result as $r){
-    		$obj = new stdClass();
-    		$obj->id = get_first_object($r['_id']);
-    		$obj->name = $r['name'];
-    
-    		array_push($arr_result, $obj);
-    	}
-    
-    	return $arr_result;
+        $result = $this->mongo_db->order_by(array('export_code' => 1))->get('ref_aetraffics');
+
+        $arr_result = array();
+        foreach($result as $r){
+            $obj = new stdClass();
+            $obj->id = get_first_object($r['_id']);
+            $obj->name = $r['name'];
+
+            $arr_result[] = $obj;
+        }
+
+        return $arr_result;
     }
     //------------------------------------------------------------------------------------------------------------------
     /*
@@ -1127,60 +1126,60 @@ class Basic_model extends CI_Model
     */
     public function get_aevehicle()
     {
-    	$result = $this->mongo_db->order_by(array('export_code' => 1))->get('ref_aevehicles');
-    
-    	$arr_result = array();
-    	foreach($result as $r){
-    		$obj = new stdClass();
-    		$obj->id = get_first_object($r['_id']);
-    		$obj->name = $r['name'];
-    
-    		array_push($arr_result, $obj);
-    	}
-    
-    	return $arr_result;
+        $result = $this->mongo_db->order_by(array('export_code' => 1))->get('ref_aevehicles');
+
+        $arr_result = array();
+        foreach($result as $r){
+            $obj = new stdClass();
+            $obj->id = get_first_object($r['_id']);
+            $obj->name = $r['name'];
+
+            $arr_result[] = $obj;
+        }
+
+        return $arr_result;
     }
-    
+
     //------------------------------------------------------------------------------------------------------------------
     /*
      * Get FP type
     */
     public function get_fp_type()
     {
-    	$result = $this->mongo_db->order_by(array('code' => 1))->get('ref_fp_types');
-    
-    	$arr_result = array();
+        $result = $this->mongo_db->order_by(array('code' => 1))->get('ref_fp_types');
 
-    	foreach($result as $r)
+        $arr_result = array();
+
+        foreach($result as $r)
         {
-    		$obj = new stdClass();
-    		$obj->code = $r['code'];
-    		$obj->name = $r['name'];
-    
-    		array_push($arr_result, $obj);
-    	}
-    
-    	return $arr_result;
+            $obj = new stdClass();
+            $obj->code = $r['code'];
+            $obj->name = $r['name'];
+
+            $arr_result[] = $obj;
+        }
+
+        return $arr_result;
     }
-    
+
     public function get_fp_type_name($code)
     {
-    	$result = $this->mongo_db->where(array('code' => $code))->get('ref_fp_types');
-    
-    	return count($result) > 0 ? $result[0]['name'] : '-';
+        $result = $this->mongo_db->where(array('code' => $code))->get('ref_fp_types');
+
+        return count($result) > 0 ? $result[0]['name'] : '-';
     }
 
     public function get_vaccine_name($vaccine_id)
     {
-    	$result = $this->mongo_db->where(array('_id' => new MongoId($vaccine_id)))->get('ref_epi_vaccines');
+        $result = $this->mongo_db->where(array('_id' => new MongoId($vaccine_id)))->get('ref_epi_vaccines');
 
-    	return count($result) > 0 ? $result[0]['eng_name'] : '-';
+        return count($result) > 0 ? $result[0]['eng_name'] : '-';
     }
-    
+
     public function get_fp_type_sex($code)
     {
-    	$rs = $this->mongo_db->where('code', (string) $code)->get('ref_fp_types');
-    	return $rs ? $rs[0]['sex'] : NULL;
+        $rs = $this->mongo_db->where('code', (string) $code)->get('ref_fp_types');
+        return $rs ? $rs[0]['sex'] : NULL;
     }
     /**
      * Get person sex
@@ -1189,10 +1188,10 @@ class Basic_model extends CI_Model
      */
     public function get_person_sex($hn)
     {
-    	$rs = $this->mongo_db->select(array('sex'))
-    						->where('hn', (string) $hn)
-    						->get('person');
-    	return $rs ? $rs[0]['sex'] : NULL;
+        $rs = $this->mongo_db->select(array('sex'))
+                            ->where('hn', (string) $hn)
+                            ->get('person');
+        return $rs ? $rs[0]['sex'] : NULL;
     }
     //------------------------------------------------------------------------------------------------------------------
     public function get_epi_vaccine_list()
@@ -1323,6 +1322,18 @@ class Basic_model extends CI_Model
         $result = $this->mongo_db->where(array('_id' => new MongoId($id)))->get('ref_lab_items');
 
         return count($result) > 0 ? $result[0]['name'] : '-';
+    }
+    public function get_lab_unit($id)
+    {
+        $result = $this->mongo_db->where(array('_id' => new MongoId($id)))->get('ref_lab_items');
+
+        return count($result) > 0 ? $result[0]['unit'] : '-';
+    }
+    public function get_lab_default_value($id)
+    {
+        $result = $this->mongo_db->where(array('_id' => new MongoId($id)))->get('ref_lab_items');
+
+        return count($result) > 0 ? $result[0]['default_value'] : '-';
     }
 }
 

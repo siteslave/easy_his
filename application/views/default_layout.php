@@ -11,6 +11,8 @@
 
     <!-- Le styles -->
     <link href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/css/font-awesome.min.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/css/font-awesome-ie7.min.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/css/docs.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/css/datepicker.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/css/alertify.core.css" rel="stylesheet">
@@ -35,7 +37,6 @@
                 '<?php echo base_url(); ?>assets/js/jquery.blockUI.js',
                 '<?php echo base_url(); ?>assets/js/jquery.cookie.js',
                 '<?php echo base_url(); ?>assets/js/jquery.freeow.min.js',
-                '<?php echo base_url(); ?>assets/js/bootbox.min.js',
                 '<?php echo base_url(); ?>assets/js/jquery.maskedinput.min.js',
                 '<?php echo base_url(); ?>assets/js/typeahead.js',
                 '<?php echo base_url(); ?>assets/js/spin.min.js',
@@ -83,12 +84,12 @@
                         <ul class="dropdown-menu">
                             <li>
                                 <a href="<?php echo site_url('services'); ?>">
-                                    <i class="icon-th-list"></i> ผู้มารับบริการ
+                                    <i class="icon-th-list"></i> ผู้มารับบริการ (Service list)
                                 </a>
                             </li>
                              <li>
                                 <a href="<?php echo site_url('appoints'); ?>">
-                                    <i class="icon-tags"></i> ทะเบียนนัด
+                                    <i class="icon-calendar"></i> ทะเบียนนัด (Appointment)
                                 </a>
                             </li>
                         </ul>
@@ -112,18 +113,18 @@
                             </li>
                             <li>
                                 <a href="<?php echo site_url('babies'); ?>">
-                                    <i class="icon-book"></i> ทะเบียนเด็กแรกเกิด/ดูแลหลังคลอด
-                                </a>
-                            </li>
-                            <li>
-                                <a href="<?php echo site_url('appoints'); ?>">
-                                    <i class="icon-tags"></i> ทะเบียนนัด
+                                    <i class="icon-medkit"></i> ทะเบียนเด็กแรกเกิด/ดูแลหลังคลอด
                                 </a>
                             </li>
                             <li class="divider"></li>
                             <li>
+                                <a href="<?php echo site_url('death'); ?>">
+                                    <i class="icon-group"></i> ทะเบียนผู้เสียชีวิต (Death)
+                                </a>
+                            </li>
+                            <li>
                                 <a href="<?php echo site_url('disabilities'); ?>">
-                                    <i class="icon-tags"></i> ทะเบียนผู้พิการ
+                                    <i class="icon-tags"></i> ทะเบียนผู้พิการ (Disability)
                                 </a>
                             </li>
                         </ul>
@@ -157,7 +158,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ site_url }}/settings/startups">
+                                <a href="<?php echo site_url('settings/providers'); ?>">
                                     <i class="icon-list"></i>
                                     กำหนดค่าเริ่มต้นระบบ
                                 </a>
@@ -174,14 +175,14 @@
                     <ul class="dropdown-menu">
                         <li class="nav-header">USER PROFILES</li>
                         <li>
-                            <a href="#"><i class="icon-edit"></i> เปลี่ยนรหัสผ่าน (Change password)</a>
+                            <a href="#"><i class="icon-key"></i> เปลี่ยนรหัสผ่าน (Change password)</a>
                         </li>
                         <li>
                             <a href="#"> <i class="icon-info-sign"></i> แก้ไขข้อมูลส่วนตัว</a>
                         </li>
                         <li class="divider"></li>
                         <li>
-                            <a href="<?php echo site_url('users/logout'); ?>"><i class="icon-off"></i> ออกจากระบบ (Logout)</a>
+                            <a href="<?php echo site_url('users/logout'); ?>"><i class="icon-signout"></i> ออกจากระบบ (Logout)</a>
                         </li>
                     </ul>
                 </div>

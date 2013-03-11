@@ -5,6 +5,7 @@ head.ready(function(){
     allergy.person_id = $('#person_id').val();
 
     allergy.vn = $('#vn').val();
+    allergy.hn = $('#hn').val();
 
     allergy.modal = {
         show_allergy: function(){
@@ -34,22 +35,22 @@ head.ready(function(){
                 return err ? cb(err) : cb(null, data);
             });
         },
-        get_list: function(person_id, cb){
+        get_list: function(hn, cb){
 
             var url = 'services/get_screening_allergy_list',
                 params = {
-                    person_id: person_id
+                    hn: hn
                 };
 
             app.ajax(url, params, function(err, data){
                 return err ? cb(err) : cb(null, data);
             });
         },
-        remove_allergy: function(person_id, drug_id, cb){
+        remove_allergy: function(hn, drug_id, cb){
 
             var url = 'services/remove_screening_allergy',
                 params = {
-                    person_id: person_id,
+                    hn: hn,
                     drug_id: drug_id
                 };
 
@@ -57,11 +58,11 @@ head.ready(function(){
                 return err ? cb(err) : cb(null, data);
             });
         },
-        get_detail: function(person_id, drug_id, cb){
+        get_detail: function(hn, drug_id, cb){
 
             var url = 'services/get_drug_allergy_detail',
                 params = {
-                    person_id: person_id,
+                    hn: hn,
                     drug_id: drug_id
                 };
 
@@ -71,8 +72,8 @@ head.ready(function(){
         }
     };
 
-    allergy.set_allergy_detail = function(person_id, drug_id){
-        allergy.ajax.get_detail(person_id, drug_id, function(err, data){
+    allergy.set_allergy_detail = function(hn, drug_id){
+        allergy.ajax.get_detail(hn, drug_id, function(err, data){
             if(err){
                 app.alert(err);
             }else{
@@ -117,10 +118,10 @@ head.ready(function(){
 
     };
 
-    allergy.get_list = function(person_id){
+    allergy.get_list = function(hn){
         $('#tbl_screening_allergy_list > tbody').empty();
 
-        allergy.ajax.get_list(person_id, function(err, data){
+        allergy.ajax.get_list(hn, function(err, data){
             if(err){
                 app.alert(err);
                 $('#tbl_screening_allergy_list > tbody').append('<tr><td colspan="7">ไม่พบรายการ</td></tr>');
@@ -194,7 +195,7 @@ head.ready(function(){
             app.alert('กรุณาระบุ สถานบริการที่ให้ข้อมูลการแพ้ยา หากไม่ทราบให้ใส่รหัสสถานบริการของตัวเอง');
         }else{
             //save data
-            items.person_id = allergy.person_id;
+            items.hn = allergy.hn;
 
             allergy.ajax.save_allergy(items, function(err){
                 if(err){
@@ -202,7 +203,7 @@ head.ready(function(){
                 }else{
                     app.alert('บันทึกข้อมูลการแพ้ยา เสร็จเรียบร้อยแล้ว');
                     //get allergy list
-                    allergy.get_list(allergy.person_id);
+                    allergy.get_list(allergy.hn);
 
                     allergy.modal.hide_new_allergy();
                 }
@@ -278,7 +279,7 @@ head.ready(function(){
     });
 
     $('a[href="#tab_screening_allergy"]').click(function(){
-        allergy.get_list(allergy.person_id);
+        allergy.get_list(allergy.hn);
     });
 
     //remove drug
@@ -288,7 +289,7 @@ head.ready(function(){
 
         app.confirm('คุณต้องการลบรายการนี้ใช่หรือไม่?', function(res){
             if(res){
-                allergy.ajax.remove_allergy(allergy.person_id, drug_id, function(err){
+                allergy.ajax.remove_allergy(allergy.hn, drug_id, function(err){
                     if(err){
                         app.alert(err);
                     }else{
@@ -305,6 +306,6 @@ head.ready(function(){
         var drug_id = $(this).attr('data-id');
 
         //get detail
-        allergy.set_allergy_detail(allergy.person_id, drug_id);
+        allergy.set_allergy_detail(allergy.hn, drug_id);
     });
 });

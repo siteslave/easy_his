@@ -224,7 +224,7 @@ var app = {
             {
                 'label': 'ใช่ (Yes)',
                 'class': 'btn-success',
-                'icon': 'icon-ok icon-white',
+                'icon': 'icon-ok',
                 'callback': function(){
                     cb(true);
                 }
@@ -232,7 +232,7 @@ var app = {
             {
                 'label': 'ไม่ (No)',
                 'class': 'btn-danger',
-                'icon': 'icon-off icon-white',
+                'icon': 'icon-off',
                 'callback': function(){
                     cb(false);
                 }

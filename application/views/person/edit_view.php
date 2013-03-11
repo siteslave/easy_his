@@ -9,7 +9,7 @@
         <strong>แก้ไขข้อมูล!</strong> กรุณาตรวจสอบข้อมูลให้ถูกต้อง และสมบูรณ์ก่อนทำการบันทึกข้อมูล
     </div>
 
-    <input type="hidden" value="<?php echo $data->id; ?>" id="person_id">
+    <input type="hidden" value="<?php echo $data->hn; ?>" id="hn">
 
     <div class="tabbable"> <!-- Only required for left/right tabs -->
     <ul class="nav nav-tabs">
@@ -29,7 +29,7 @@
                     <input class="input-medium" id="txt_cid" type="text" value="<?php echo $data->cid; ?>" placeholder="xxxxxxxxxxxxx">
                     <input type="hidden" id="txt_old_cid" value="<?php echo $data->cid; ?>">
                     <button class="btn" type="button"><i class="icon-refresh"></i></button>
-                    <button class="btn btn-info" type="button" id="btn_search_dbpop"><i class="icon-search icon-white"></i></button>
+                    <button class="btn btn-info" type="button" id="btn_search_dbpop"><i class="icon-search"></i></button>
                 </div>
             </div>
             <div class="span3">
@@ -62,7 +62,7 @@
                 <div class="control-group">
                     <label class="control-label" for="txt_first_name">ชื่อ</label>
                     <div class="controls">
-                        <input type="text" id="txt_first_name" value="<?php echo $data->first_name; ?>" placeholder="ชื่อ" class="input-medium">
+                        <input type="text" id="txt_first_name" value="<?= $data->first_name; ?>" placeholder="ชื่อ" class="input-medium">
                     </div>
                 </div>
             </div>
@@ -70,7 +70,7 @@
                 <div class="control-group">
                     <label class="control-label" for="txt_last_name">สกุล</label>
                     <div class="controls">
-                        <input type="text" id="txt_last_name" value="<?php echo $data->last_name; ?>" placeholder="สกุล" class="input-medium">
+                        <input type="text" id="txt_last_name" value="<?= $data->last_name; ?>" placeholder="สกุล" class="input-medium">
                     </div>
                 </div>
             </div>
@@ -79,7 +79,7 @@
                     <label class="control-label" for="txt_birth_date">วันเกิด</label>
                     <div class="controls">
                         <div class="input-append date" data-name="datepicker">
-                            <input class="input-small" id="txt_birth_date" value="<?php echo $data->birthdate; ?>" size="16" type="text" disabled>
+                            <input class="input-small" id="txt_birth_date" value="<?= $data->birthdate; ?>" size="16" type="text" disabled>
                             <span class="add-on"><i class="icon-th"></i></span>
                         </div>
                     </div>
@@ -110,7 +110,7 @@
                         <select  id="slMStatus" class="input-medium">
                             <option value="">--</option>
                             <?php
-                                foreach($marry_statuses as $t){
+                                foreach($marry_status as $t){
                                     if($t->id == $data->mstatus) echo '<option value="'.$t->id.'" selected="selected">'.$t->name.'</option>';
                                     else echo '<option value="'.$t->id.'">'.$t->name.'</option>';
                                 }
@@ -238,7 +238,7 @@
                 <div class="control-group">
                     <label class="control-label" for="txtFatherCid">CID บิดา</label>
                     <div class="controls">
-                        <input type="text" id="txtFatherCid" value="<?php $data->father_cid; ?>" placeholder="xxxxxxxxxxxxx" class="input-medium">
+                        <input type="text" id="txtFatherCid" value="<?= $data->father_cid; ?>" placeholder="xxxxxxxxxxxxx" class="input-medium">
                     </div>
                 </div>
             </div>
@@ -246,7 +246,7 @@
                 <div class="control-group">
                     <label class="control-label" for="txtMotherCid">CID มารดา</label>
                     <div class="controls">
-                        <input type="text" id="txtMotherCid" value="<?php $data->mother_cid; ?>" placeholder="xxxxxxxxxxxxx" class="input-medium">
+                        <input type="text" id="txtMotherCid" value="<?= $data->mother_cid; ?>" placeholder="xxxxxxxxxxxxx" class="input-medium">
                     </div>
                 </div>
             </div>
@@ -255,7 +255,7 @@
                 <div class="control-group">
                     <label class="control-label" for="txtCoupleCid">CID คู่สมรส</label>
                     <div class="controls">
-                        <input type="text" id="txtCoupleCid" value="<?php $data->couple_cid; ?>" placeholder="xxxxxxxxxxxxx" class="input-medium">
+                        <input type="text" id="txtCoupleCid" value="<?= $data->couple_cid;?>" placeholder="xxxxxxxxxxxxx" class="input-medium">
                     </div>
                 </div>
             </div>
@@ -266,7 +266,7 @@
                     <label class="control-label" for="txtMoveInDate">วันย้ายเข้า</label>
                     <div class="controls">
                         <div class="input-append date" data-name="datepicker">
-                            <input class="input-small" value="<?php $data->movein_date; ?>" id="txtMoveInDate" size="16" type="text" disabled>
+                            <input class="input-small" value="<?= $data->movein_date; ?>" id="txtMoveInDate" size="16" type="text" disabled>
                             <span class="add-on"><i class="icon-th"></i></span>
                         </div>
                     </div>
@@ -277,7 +277,7 @@
                     <label class="control-label" for="txtDischargeDate">วันที่จำหน่าย</label>
                     <div class="controls">
                         <div class="input-append date" data-name="datepicker">
-                            <input class="input-small" value="<?php $data->discharge_date; ?>" id="txtDischargeDate" size="16" type="text" disabled>
+                            <input class="input-small" value="<?= $data->discharge_date; ?>" id="txtDischargeDate" size="16" type="text" disabled>
                             <span class="add-on"><i class="icon-th"></i></span>
                         </div>
                     </div>
@@ -403,7 +403,7 @@
                             <option value="">--</option>
                             <?php
                             foreach($typearea as $t){
-                                if($t->id == $data->typearea) echo '<option value="'.$t->code.'" selected="selected">'.$t->name.'</option>';
+                                if($t->code == $data->typearea) echo '<option value="'.$t->code.'" selected="selected">'.$t->name.'</option>';
                                 else echo '<option value="'.$t->code.'">'.$t->name.'</option>';
                             }
                             ?>
@@ -424,8 +424,8 @@
                             <option value="">--</option>
                             <?php
                             foreach($inscls as $t){
-                                if($t->id == $data->inscls) echo '<option value="'.$t->id.'" selected="selected">'.$t->name.'</option>';
-                                else echo '<option value="'.$t->id.'">'.$t->name.'</option>';
+                                if($t->code == $data->ins_id) echo '<option value="'.$t->code.'" selected="selected">'.$t->name.'</option>';
+                                else echo '<option value="'.$t->code.'">'.$t->name.'</option>';
                             }
                             ?>
                         </select>
@@ -435,14 +435,14 @@
                 <div class="control-group">
                     <label class="control-label" for="txt_inscl_code">รหัสสิทธิ</label>
                     <div class="controls">
-                        <input type="text" id="txt_inscl_code" value="<?php echo $data->ins_code; ?>" placeholder="รหัสสิทธิการรักษา">
+                        <input type="text" id="txt_inscl_code" value="<?= $data->ins_code; ?>" placeholder="รหัสสิทธิการรักษา">
                     </div>
                 </div>
                 <div class="control-group">
                     <label class="control-label" for="txtInsStartDate">วันออกบัตร</label>
                     <div class="controls">
                         <div class="input-append date" data-name="datepicker">
-                            <input class="input-small" id="txtInsStartDate" size="16" value="<?php echo $data->ins_start_date; ?>" type="text" disabled>
+                            <input class="input-small" id="txtInsStartDate" size="16" value="<?= $data->ins_start_date; ?>" type="text" disabled>
                             <span class="add-on"><i class="icon-th"></i></span>
                         </div>
                     </div>
@@ -451,7 +451,7 @@
                     <label class="control-label" for="txtInsExpireDate">วันหมดอายุ</label>
                     <div class="controls">
                         <div class="input-append date" data-name="datepicker">
-                            <input class="input-small" id="txtInsExpireDate" size="16" type="text" value="<?php $data->ins_expire_date; ?>" disabled>
+                            <input class="input-small" id="txtInsExpireDate" size="16" type="text" value="<?= $data->ins_expire_date; ?>" disabled>
                             <span class="add-on"><i class="icon-th"></i></span>
                         </div>
                     </div>
@@ -460,8 +460,8 @@
                     <label class="control-label" for="txt_ins_hospmain_name">สถานบริการหลัก</label>
                     <div class="controls">
                         <div class="input-append">
-                            <input class="input-xlarge" id="txt_ins_hospmain_name" value="<?php echo $data->ins_hmain_name; ?>" disabled type="text">
-                            <input type="hidden" id="txt_ins_hospmain_code" value="<?php echo $data->ins_hmain_code; ?>">
+                            <input class="input-xlarge" id="txt_ins_hospmain_name" value="<?= $data->ins_hmain_name; ?>" disabled type="text">
+                            <input type="hidden" id="txt_ins_hospmain_code" value="<?= $data->ins_hmain_code; ?>">
                             <button class="btn" type="button" id="btn_search_hospital_main">
                                 <i class="icon-search"></i>
                             </button>
@@ -472,8 +472,8 @@
                     <label class="control-label" for="txt_ins_hospsub_name">สถานบริการรอง</label>
                     <div class="controls">
                         <div class="input-append">
-                            <input class="input-xlarge" id="txt_ins_hospsub_name" value="<?php $data->ins_hsub_name; ?>" disabled type="text">
-                            <input type="hidden" id="txt_ins_hospsub_code" value="<?php $data->ins_hsub_code; ?>" />
+                            <input class="input-xlarge" id="txt_ins_hospsub_name" value="<?= $data->ins_hsub_name; ?>" disabled type="text">
+                            <input type="hidden" id="txt_ins_hospsub_code" value="<?= $data->ins_hsub_code; ?>" />
                             <button class="btn" type="button" id="btn_search_hospital_sub">
                                 <i class="icon-search"></i>
                             </button>
@@ -536,7 +536,7 @@
                         <div class="control-group">
                             <label class="control-label" for="txtOutsideRoomNumber">เลขห้อง</label>
                             <div class="controls">
-                                <input type="text" value="<?php echo $data->address_room_no; ?>" id="txtOutsideRoomNumber">
+                                <input type="text" value="<?= $data->address_room_no; ?>" id="txtOutsideRoomNumber">
                             </div>
                         </div>
                     </div>
@@ -544,7 +544,7 @@
                         <div class="control-group">
                             <label class="control-label" for="txtOutsideCondo">ชื่ออาคารชุด</label>
                             <div class="controls">
-                                <input type="text" value="<?php echo $data->address_condo; ?>" id="txtOutsideCondo">
+                                <input type="text" value="<?= $data->address_condo; ?>" id="txtOutsideCondo">
                             </div>
                         </div>
                     </div>
@@ -554,7 +554,7 @@
                         <div class="control-group">
                             <label class="control-label" for="txtOutsideAddressNumber">บ้านเลขที่</label>
                             <div class="controls">
-                                <input type="text" value="<?php echo $data->address_houseno; ?>" id="txtOutsideAddressNumber">
+                                <input type="text" value="<?= $data->address_houseno; ?>" id="txtOutsideAddressNumber">
                             </div>
                         </div>
                     </div>
@@ -562,7 +562,7 @@
                         <div class="control-group">
                             <label class="control-label" for="txtOutsideSoiSub">ซอยแยก</label>
                             <div class="controls">
-                                <input type="text" id="txtOutsideSoiSub" value="<?php $data->address_soi_sub; ?>">
+                                <input type="text" id="txtOutsideSoiSub" value="<?= $data->address_soi_sub; ?>">
                             </div>
                         </div>
                     </div>
@@ -572,7 +572,7 @@
                         <div class="control-group">
                             <label class="control-label" for="txtOutsideSoiMain">ซอยหลัก</label>
                             <div class="controls">
-                                <input type="text" id="txtOutsideSoiMain" value="<?php echo $data->address_soi_main; ?>">
+                                <input type="text" id="txtOutsideSoiMain" value="<?= $data->address_soi_main; ?>">
                             </div>
                         </div>
                     </div>
@@ -580,7 +580,7 @@
                         <div class="control-group">
                             <label class="control-label" for="txtOutsideRoad">ถนน</label>
                             <div class="controls">
-                                <input type="text" id="txtOutsideRoad" value="<?php echo $data->address_road; ?>">
+                                <input type="text" id="txtOutsideRoad" value="<?= $data->address_road; ?>">
                             </div>
                         </div>
                     </div>
@@ -590,7 +590,7 @@
                         <div class="control-group">
                             <label class="control-label" for="txtOutsideVillageName">บ้านจัดสรร</label>
                             <div class="controls">
-                                <input type="text" id="txtOutsideVillageName" value="<?php echo $data->address_village_name; ?>">
+                                <input type="text" id="txtOutsideVillageName" value="<?= $data->address_village_name; ?>">
                             </div>
                         </div>
                     </div>
@@ -664,7 +664,7 @@
                         <div class="control-group">
                             <label class="control-label" for="txtOutsidePostcode">รหัสไปรษณีย์</label>
                             <div class="controls">
-                                <input type="text" id="txtOutsidePostcode" value="<?php echo $data->address_postcode; ?>">
+                                <input type="text" id="txtOutsidePostcode" value="<?= $data->address_postcode; ?>">
                             </div>
                         </div>
                     </div>
@@ -675,7 +675,7 @@
                         <div class="control-group">
                             <label class="control-label" for="txtOutsideTelephone">โทรศัพท์</label>
                             <div class="controls">
-                                <input type="text" id="txtOutsideTelephone" value="<?php echo $data->address_telephone; ?>">
+                                <input type="text" id="txtOutsideTelephone" value="<?= $data->address_telephone; ?>">
                             </div>
                         </div>
                     </div>
@@ -683,7 +683,7 @@
                         <div class="control-group">
                             <label class="control-label" for="txtOutsideMobile">โทรศัพท์มือถือ</label>
                             <div class="controls">
-                                <input type="text" id="txtOutsideMobile" value="<?php echo $data->address_mobile; ?>">
+                                <input type="text" id="txtOutsideMobile" value="<?= $data->address_mobile; ?>">
                             </div>
                         </div>
                     </div>
@@ -719,7 +719,7 @@
                 </tr>
                 </tbody>
             </table>
-            <a href="javascript:void(0);" class="btn btn-success" id="btn_new_drug_allergy"><i class="icon-plus-sign icon-white"></i> เพิ่มรายการ</a>
+            <a href="javascript:void(0);" class="btn btn-success" id="btn_new_drug_allergy"><i class="icon-plus-sign"></i> เพิ่มรายการ</a>
         </div>
         <div class="tab-pane" id="tab_chronic">
 
@@ -744,14 +744,14 @@
                 </tbody>
             </table>
 
-            <a href="javascript:void(0);" class="btn btn-success" id="btn_new_chronic"><i class="icon-plus-sign icon-white"></i> เพิ่มรายการ</a>
+            <a href="javascript:void(0);" class="btn btn-success" id="btn_new_chronic"><i class="icon-plus-sign"></i> เพิ่มรายการ</a>
         </div>
     </div>
 
     <form action="#" id="frm_update_person">
         <div class="alert alert-info">
             <button type="button" id="btn_save_person" class="btn btn-success btn-large">
-                <i class="icon-plus-sign icon-white"></i>
+                <i class="icon-save"></i>
                 ปรับปรุงข้อมูล
             </button>
             <button type="button" id="btn_back_to_home" class="btn btn-large">
@@ -775,7 +775,7 @@
                         <label for="text_query_search_dbpop">เลขบัตรประชาชน</label>
                         <div class="input-append">
                             <input class="input-xlarge" placeholder="xxxxxxxxxxxxx" id="text_query_search_dbpop" type="text">
-                            <button class="btn btn-info" type="button" id="button_do_search_dbpop"><i class="icon-search icon-white"></i> ค้นหา</button>
+                            <button class="btn btn-info" type="button" id="button_do_search_dbpop"><i class="icon-search"></i> ค้นหา</button>
                         </div>
                     </div>
                 </div>
@@ -794,7 +794,7 @@
             </table>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="icon-off"></i> ปิดหน้าต่าง</button>
         </div>
     </div>
 
@@ -811,7 +811,7 @@
                         <label for="text_query_search_dbpop">ชื่อ/รหัส สถานบริการ</label>
                         <div class="input-append">
                             <input class="input-xlarge" placeholder="..." id="text_query_search_hospital" type="text">
-                            <button class="btn btn-info" type="button" id="btn_do_search_hospital"><i class="icon-search icon-white"></i> ค้นหา</button>
+                            <button class="btn btn-info" type="button" id="btn_do_search_hospital"><i class="icon-search"></i> ค้นหา</button>
                         </div>
 
                         <label class="checkbox inline">
@@ -834,7 +834,7 @@
             </table>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="icon-off"></i> ปิดหน้าต่าง</button>
         </div>
     </div>
 
@@ -936,8 +936,8 @@
         </form>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-success" id="btn_save_drug_allergy"><i class="icon-plus-sign icon-white"></i> บันทึกรายการ</button>
-        <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</button>
+        <button type="button" class="btn btn-success" id="btn_save_drug_allergy"><i class="icon-save"></i> บันทึกรายการ</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="icon-off"></i> ปิดหน้าต่าง</button>
     </div>
 </div>
     <!-- search chronic -->
@@ -1031,8 +1031,8 @@
             </form>
         </div>
         <div class="modal-footer">
-            <button type="button" class="btn btn-success" id="btn_save_chronic"><i class="icon-plus-sign icon-white"></i> บันทึกรายการ</button>
-            <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</button>
+            <button type="button" class="btn btn-success" id="btn_save_chronic"><i class="icon-save"></i> บันทึกรายการ</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="icon-off"></i> ปิดหน้าต่าง</button>
         </div>
     </div>
     <!-- /search chronic -->
