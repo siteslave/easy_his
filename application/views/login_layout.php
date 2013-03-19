@@ -44,6 +44,7 @@
     </style>
     <link href="<?php echo base_url(); ?>assets/css/bootstrap-responsive.min.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/css/bootstrap-timepicker.min.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/css/datepicker.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/css/alertify.default.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/css/freeow/freeow.css" rel="stylesheet">
@@ -69,6 +70,7 @@
                 '<?php echo base_url(); ?>assets/js/taffy.js',
                 '<?php echo base_url(); ?>assets/js/bootstrap-datepicker.js',
                 '<?php echo base_url(); ?>assets/js/bootstrap-datepicker.th.js',
+                '<?php echo base_url(); ?>assets/js/bootstrap-datetimepicker.min.js',
                 '<?php echo base_url(); ?>assets/js/bootstrap-timepicker.min.js',
                 '<?php echo base_url(); ?>assets/js/jquery.blockUI.js',
                 '<?php echo base_url(); ?>assets/js/jquery.cookie.js',

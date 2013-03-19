@@ -3,7 +3,7 @@
     <li class="active">ทะเบียนผู้ป่วยเบาหวาน (DM)</li>
 </ul>
 <form action="#" class="well form-inline">
-    <label for="sl_village_id">หมู่บ้าน</label>
+    <label for="sl_village">หมู่บ้าน</label>
     <select class="input-xlarge" id="sl_village">
         <option value="00000000">---</option>
         <?php

@@ -329,6 +329,12 @@ head.ready(function(){
         language: 'th'
     });
 
+    $('div[data-type="datetimepicker"]').datetimepicker({
+        format: 'dd/MM/yyyy hh:mm:ss',
+        pick12HourFormat: false,
+        language: 'th'
+    });
+
     $('.timepicker').timepicker({
         minuteStep: 1,
         secondStep: 5,
