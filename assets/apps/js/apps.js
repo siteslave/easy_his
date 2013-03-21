@@ -253,7 +253,7 @@ var app = {
         });
     },
     set_first_selected: function(obj){
-        $(obj).removeAttr('selected').find('option:first').attr('selected', 'selected');
+        $(obj).find('option').first().attr('selected', 'selected');
     },
 
     trim: function(string){

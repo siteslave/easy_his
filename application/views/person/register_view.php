@@ -537,7 +537,7 @@
 
 <form action="#" class="form-actions">
     <button type="button" id="btn_save_person" class="btn btn-success btn-large">
-        <i class="icon-plus-sign"></i>
+        <i class="icon-save"></i>
         เพิ่มคนในบ้าน
     </button>
     <button type="button" id="btn_clear_person" class="btn btn-large">

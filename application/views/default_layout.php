@@ -43,6 +43,7 @@
                 '<?php echo base_url(); ?>assets/js/jquery.paging.min.js',
                 '<?php echo base_url(); ?>assets/js/jquery.numeric.js',
                 '<?php echo base_url(); ?>assets/js/numeral.min.js',
+                '<?php echo base_url(); ?>assets/js/bootbox.min.js',
                 '<?php echo base_url(); ?>assets/apps/js/apps.js'
         );
 

@@ -43,6 +43,7 @@
                     <div class="page-header">
                         <p class="lead">หลังคาเรือนในหมู่บ้าน <span id="vMooName"> เลือกหมู่บ้าน </span></p>
                         <input type="hidden" id="village_id">
+                        <input type="hidden" id="txtHouseId">
                     </div>
                 </div>
             </div>
@@ -191,7 +192,6 @@
         <div class="modal-body">
             <div class="row-fluid">
                 <div class="span12">
-                    <input type="hidden" id="txtHouseId">
                     <p class="lead">ประชากรในบ้านเลขที่ :  <span class="badge badge-success" id="txt_show_house_address"></span></p>
                     <table class="table table-striped table-hover" id="tbl_person_in_house">
                         <thead>
@@ -223,8 +223,6 @@
                         </tbody>
                     </table>
                     <div class="btn-group">
-                        <button class="btn btn-info"><i class="icon-search"></i> ค้นหา</button>
-                        <button class="btn btn-success" id="btnNewPerson"><i class="icon-plus-sign"></i> เพิ่มคนในบ้าน</button>
                         <button class="btn btn-inverse"><i class="icon-print"></i> พิมพ์รายชื่อ</button>
                     </div>
                 </div>
@@ -775,4 +773,317 @@
     </div>
     </div>
     <!-- end person -->
+
+
+<!--  village survey  -->
+    <div class="modal hide fade" id="mdl_village_survey">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3><i class="icon-desktop"></i> สำรวจข้อมูลหมู่บ้าน</h3>
+        </div>
+        <div class="modal-body">
+            <div class="alert alert-info">
+                <strong>คำแนะนำ!</strong> <span>กรุณากรอกข้อมูลให้ครบ</span>
+            </div>
+            <form action="#">
+
+            <input type="hidden" id="txt_village_id" />
+
+                <div class="row-fluid">
+                    <div class="span2">
+                        <div class="control-group">
+                            <label class="control-label" for="txt_ntraditional">แพทย์แผนไทย</label>
+                            <div class="controls">
+                                <input type="text" class="input-mini" data-type="number" id="txt_ntraditional">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span2">
+                        <div class="control-group">
+                            <label class="control-label" for="txt_nmonk">พระ</label>
+                            <div class="controls">
+                                <input type="text" class="input-mini" data-type="number" id="txt_nmonk">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span2">
+                        <div class="control-group">
+                            <label class="control-label" for="txt_nreligionleader">ผู้นำศาสนา</label>
+                            <div class="controls">
+                                <input type="text" class="input-mini" data-type="number" id="txt_nreligionleader">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span2">
+                        <div class="control-group">
+                            <label class="control-label" for="txt_nbroadcast">หอกระจายข่าว</label>
+                            <div class="controls">
+                                <input type="text" class="input-mini" data-type="number" id="txt_nbroadcast">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span2">
+                        <div class="control-group">
+                            <label class="control-label" for="txt_nradio">สถานีวิทยุชุมชน</label>
+                            <div class="controls">
+                                <input type="text" class="input-mini" data-type="number" id="txt_nradio">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span2">
+                        <div class="control-group">
+                            <label class="control-label" for="txt_npchc">ศูนย์ ศสม.</label>
+                            <div class="controls">
+                                <input type="text" class="input-mini" data-type="number" id="txt_npchc">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span2">
+                        <div class="control-group">
+                            <label class="control-label" for="txt_nclinic">คลินิก</label>
+                            <div class="controls">
+                                <input type="text" class="input-mini" data-type="number" id="txt_nclinic">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span2">
+                        <div class="control-group">
+                            <label class="control-label" for="txt_ndrugstore">ร้านขายยา</label>
+                            <div class="controls">
+                                <input type="text" class="input-mini" data-type="number" id="txt_ndrugstore">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span2">
+                        <div class="control-group">
+                            <label class="control-label" for="txt_nchildcenter">ศูนย์พัฒนาเด็ก</label>
+                            <div class="controls">
+                                <input type="text" class="input-mini" data-type="number" id="txt_nchildcenter">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span2">
+                        <div class="control-group">
+                            <label class="control-label" for="txt_npschool">โรงเรียนประถมฯ</label>
+                            <div class="controls">
+                                <input type="text" class="input-mini" data-type="number" id="txt_npschool">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span2">
+                        <div class="control-group">
+                            <label class="control-label" for="txt_nsschool">โรงเรียนมัธยมฯ</label>
+                            <div class="controls">
+                                <input type="text" class="input-mini" data-type="number" id="txt_nsschool">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span2">
+                        <div class="control-group">
+                            <label class="control-label" for="txt_ntemple">วัด</label>
+                            <div class="controls">
+                                <input type="text" class="input-mini" data-type="number" id="txt_ntemple">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span2">
+                        <div class="control-group">
+                            <label class="control-label" for="txt_nreligiousplace">ศาสนสถาน</label>
+                            <div class="controls">
+                                <input type="text" class="input-mini" data-type="number" id="txt_nreligiousplace">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span2">
+                        <div class="control-group">
+                            <label class="control-label" for="txt_nmarket">ตลาดสด</label>
+                            <div class="controls">
+                                <input type="text" class="input-mini" data-type="number" id="txt_nmarket">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span2">
+                        <div class="control-group">
+                            <label class="control-label" for="txt_nshop">ร้านขายของชำ</label>
+                            <div class="controls">
+                                <input type="text" class="input-mini" data-type="number" id="txt_nshop">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span2">
+                        <div class="control-group">
+                            <label class="control-label" for="txt_nfoodshop">ร้านอาหาร</label>
+                            <div class="controls">
+                                <input type="text" class="input-mini" data-type="number" id="txt_nfoodshop">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span2">
+                        <div class="control-group">
+                            <label class="control-label" for="txt_nstall">หาบเร่ แผงลอย</label>
+                            <div class="controls">
+                                <input type="text" class="input-mini" data-type="number" id="txt_nstall">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span2">
+                        <div class="control-group">
+                            <label class="control-label" for="txt_nraintank">ถังเก็บน้ำฝน</label>
+                            <div class="controls">
+                                <input type="text" class="input-mini" data-type="number" id="txt_nraintank">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span2">
+                        <div class="control-group">
+                            <label class="control-label" for="txt_chickenfarm">ฟาร์มสัตว์ปีก</label>
+                            <div class="controls">
+                                <input type="text" class="input-mini" data-type="number" id="txt_chickenfarm">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span2">
+                        <div class="control-group">
+                            <label class="control-label" for="txt_npigfarm">ฟาร์มสุกร</label>
+                            <div class="controls">
+                                <input type="text" class="input-mini" data-type="number" id="txt_npigfarm">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span3">
+                        <div class="control-group">
+                            <label class="control-label" for="sl_wastewater">บ่อกำจัดน้ำเสีย</label>
+                            <div class="controls">
+                                <select id="sl_wastewater">
+                                    <option value="1">มีบ่อกำจัดน้ำเสีย</option>
+                                    <option value="2">ไม่มีบ่อกำจัดน้ำเสีย</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span3">
+                        <div class="control-group">
+                            <label class="control-label" for="sl_grabage">สถานที่กำจัดขยะ</label>
+                            <div class="controls">
+                                <select id="sl_grabage">
+                                    <option value="1">ไม่มีสถานที่กำจัดขยะ</option>
+                                    <option value="2">มีสถานที่ฝังกลบ</option>
+                                    <option value="2">มีสถานที่เผาขยะ</option>
+                                    <option value="2">มีสถานที่ย่อยทำลายขยะ</option>
+                                    <option value="2">ขนส่งไปทิ้งที่อื่น</option>
+                                    <option value="2">กำจัดขยะด้วยวิธี</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span2">
+                        <div class="control-group">
+                            <label class="control-label" for="txt_nfactory">โรงงานอุตสาหกรรม</label>
+                            <div class="controls">
+                                <input type="text" class="input-mini" data-type="number" id="txt_nfactory">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span2">
+                        <div class="control-group">
+                            <label class="control-label" for="txt_latitude">พิกัด (ลติจูด)</label>
+                            <div class="controls">
+                                <input type="text" class="input-mini" data-type="number" id="txt_latitude">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span2">
+                        <div class="control-group">
+                            <label class="control-label" for="txt_longitude">พิกัด (ลองจิจูด)</label>
+                            <div class="controls">
+                                <input type="text" class="input-mini" data-type="number" id="txt_longitude">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span2">
+                        <div class="control-group">
+                            <label class="control-label" for="txt_outdate">วันที่แยกชุมชน</label>
+                            <div class="controls">
+                                <div class="input-append date" data-name="datepicker">
+                                    <input class="input-small" id="txt_outdate" type="text" value="<?php echo date('d/m/Y'); ?>" disabled>
+                                    <span class="add-on"><i class="icon-th"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span2">
+                        <div class="control-group">
+                            <label class="control-label" for="txt_numactually">แหล่งอบายมุข</label>
+                            <div class="controls">
+                                <input type="text" class="input-mini" data-type="number" id="txt_numactually">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span2">
+                        <div class="control-group">
+                            <label class="control-label" for="txt_risktype">ประเภทเสี่ยงภัยพิบัติ</label>
+                            <div class="controls">
+                                <input type="text" class="input-mini" data-type="number" id="txt_risktype">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span2">
+                        <div class="control-group">
+                            <label class="control-label" for="txt_numstateless">ชุมชนต่างด้าว</label>
+                            <div class="controls">
+                                <input type="text" class="input-mini" data-type="number" id="txt_numstateless">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row-fluid">
+                    <div class="span2">
+                        <div class="control-group">
+                            <label class="control-label" for="txt_nexerciseclub">ชมรมออกกำลังกาย</label>
+                            <div class="controls">
+                                <input type="text" class="input-mini" data-type="number" id="txt_nexerciseclub">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span2">
+                        <div class="control-group">
+                            <label class="control-label" for="txt_nolderlyclub">ชมรมผู้สูงอายุ</label>
+                            <div class="controls">
+                                <input type="text" class="input-mini" data-type="number" id="txt_nolderlyclub">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span2">
+                        <div class="control-group">
+                            <label class="control-label" for="txt_ndisableclub">ชมรมผู้พิการ</label>
+                            <div class="controls">
+                                <input type="text" class="input-mini" data-type="number" id="txt_ndisableclub">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span2">
+                        <div class="control-group">
+                            <label class="control-label" for="txt_nnumberoneclub">To Be Number 1</label>
+                            <div class="controls">
+                                <input type="text" class="input-mini" data-type="number" id="txt_nnumberoneclub">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-success" id="btn_save_village_survey"><i class="icon-save"></i> บันทึกข้อมูลสำรวจ</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="icon-off"></i> ปิดหน้าต่าง</button>
+        </div>
+    </div>
+
     <script type="text/javascript" src="<?php echo base_url(); ?>assets/apps/js/apps.person.index.js"></script>

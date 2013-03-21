@@ -41,6 +41,16 @@ head.ready(document).ready(function(){
                         return -($(this).width() / 2);
                     }
                 });
+        },
+        show_village_survey: function(){
+            $('#mdl_village_survey').modal({
+                backdrop: 'static'
+            }).css({
+                    width: 960,
+                    'margin-left': function() {
+                        return -($(this).width() / 2);
+                    }
+                });
         }
     };
 
@@ -152,6 +162,17 @@ head.ready(document).ready(function(){
             app.ajax(url, params, function(err, data){
                 return err ? cb(err) : cb(null, data);
             });
+        },
+        save_village_survey: function(data, cb){
+
+            var url = 'person/save_village_survey',
+                params = {
+                    data: data
+                };
+
+            app.ajax(url, params, function(err, data){
+                return err ? cb(err) : cb(null, data);
+            });
         }
     };
 
@@ -172,8 +193,14 @@ head.ready(document).ready(function(){
                             '<td>'+ v.total +'</td>' +
                             '<td>' +
                             '<div class="btn-group"> ' +
-                            '<a href="#showPersonList" data-name="btn_get_person" class="btn btn-info" data-house="' + v.house + '" data-id="' + v.id + '" title="ดูประชากร"><i class="icon-user"></i></a>' +
-                            '<a href="javascript:void(0);" data-name="btnHouseSurvey" data-id="' + v.id + '" class="btn" title="ข้อมูลสำรวจ" data-id="' + v.id + '">'+
+                            '<a href="#showPersonList" data-name="btn_get_person" class="btn" ' +
+                            'data-house="' + v.house + '" data-id="' + v.id + '" title="ดูประชากร">' +
+                            '<i class="icon-group"></i></a>' +
+                            '<a href="javascript:void(0);" class="btn" data-name="btn_new_person" ' +
+                            'data-house_id="' + v.id + '" title="เพิ่มคนในบ้าน">' +
+                            '<i class="icon-user"></i></a>' +
+                            '<a href="javascript:void(0);" data-name="btnHouseSurvey" data-id="' + v.id + '" ' +
+                            'class="btn" title="ข้อมูลสำรวจ" data-id="' + v.id + '">'+
                             '<i class="icon-edit"></i></a>' +
                             '</td>' +
                             '</tr>'
@@ -267,8 +294,9 @@ head.ready(document).ready(function(){
         }
 
     });
-    $('#btnNewPerson').click(function(){
-        var house_id = $('#txtHouseId').val();
+
+    $(document).on('click', 'a[data-name="btn_new_person"]', function(){
+        var house_id = $(this).attr('data-house_id');
 
         if(!house_id){
             app.alert('กรุณาเลือกหลังคาเรือนที่ต้องการ');
@@ -313,12 +341,12 @@ head.ready(document).ready(function(){
                         '<td>'+ v.village_code +'</td>' +
                         '<td>'+ v.moo +'</td>' +
                         '<td>'+ v.village_name +'</td>' +
-                        //'<td><a href="javascript:void(0);" rel="tooltip" title="ดูหลังคาเรือน"><i class="icon-share"></i></a></td>' +
                         '<td><div class="btn-group">' +
-                        '<a href="javascript:void(0);" data-name="btn_edit_village" disabled class="btn btn-info" data-id="' + v.id + '" title="แก้ไขหมู่"><i class="icon-edit"></i></a>' +
+                        '<a href="javascript:void(0);" data-name="btn_edit_village" class="btn" ' +
+                        'data-id="' + v.id + '" title="สำรวจข้อมูล"><i class="icon-desktop"></i></a>' +
                         '<a href="javascript:void(0);" data-name="btnSelectedVillage" class="btn" title="ดูหลังคาเรือน" ' +
                         'data-id="' + v.id + '" data-vmoo="' + v.moo + '" data-vname="' + v.village_name + '">'+
-                        '<i class="icon-share-alt"></i></a></div></td>' +
+                        '<i class="icon-th-list"></i></a></div></td>' +
                         '</tr>'
                 );
             });
@@ -478,5 +506,68 @@ head.ready(document).ready(function(){
 
             Person.modal.show_person_list();
         }
+    });
+
+    //survey villages
+    $(document).on('click', 'a[data-name="btn_edit_village"]', function(e){
+        var id = $(this).attr('data-id');
+
+        $('#txt_village_id').val(id);
+
+        Person.modal.show_village_survey();
+        e.preventDefault();
+
+    });
+
+    $('#btn_save_village_survey').on('click', function(){
+        var data = {};
+
+        data.village_id = $('#txt_village_id').val();
+
+        data.ntraditional = $('#txt_ntraditional').val();
+        data.nmonk = $('#txt_nmonk').val();
+        data.nreligionleader = $('#txt_nreligionleader').val();
+        data.nbroadcast = $('#txt_nbroadcast').val();
+        data.nradio = $('#txt_nradio').val();
+        data.npchc = $('#txt_npchc').val();
+        data.nclinic = $('#txt_nclinic').val();
+        data.ndrugstore = $('#txt_ndrugstore').val();
+        data.nchildcenter = $('#txt_nchildcenter').val();
+        data.npschool = $('#txt_npschool').val();
+        data.nsschool = $('#txt_nsschool').val();
+        data.ntemple = $('#txt_ntemple').val();
+        data.nreligiousplace = $('#txt_nreligiousplace').val();
+        data.nmarket = $('#txt_nmarket').val();
+        data.nshop = $('#txt_nshop').val();
+        data.nfoodshop = $('#txt_nfoodshop').val();
+        data.nstall = $('#txt_nstall').val();
+        data.nraintank = $('#txt_nraintank').val();
+        data.nchickenfarm = $('#txt_nchickenfarm').val();
+        data.npigfarm = $('#txt_npigfarm').val();
+        data.wastewater = $('#sl_wastewater').val();
+        data.garbage = $('#sl_garbage').val();
+        data.nfactory = $('#txt_nfactory').val();
+        data.latitude = $('#txt_latitude').val();
+        data.longitude = $('#txt_longitude').val();
+        data.outdate = $('#txt_outdate').val();
+        data.numactually = $('#txt_numactually').val();
+        data.risktype = $('#txt_risktype').val();
+        data.numstateless = $('#txt_numstateless').val();
+        data.nexerciseclub = $('#txt_nexerciseclub').val();
+        data.nolderlyclub = $('#txt_nolderlyclub').val();
+        data.ndisableclub = $('#txt_ndisableclub').val();
+        data.nnumberoneclub = $('#txt_nnumberoneclub').val();
+
+        Person.ajax.save_village_survey(data, function(err){
+            if(err)
+            {
+                app.alert(err);
+            }
+            else
+            {
+                app.alert('บันทึกข้อมูลเสร็จเรียบร้อยแล้ว');
+            }
+        });
+
     });
 });

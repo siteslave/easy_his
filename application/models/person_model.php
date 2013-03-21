@@ -16,6 +16,7 @@ class Person_model extends CI_Model
 
     public $owner_id;
     public $user_id;
+    public $provider_id;
 
     public function __construct()
     {
@@ -306,6 +307,12 @@ class Person_model extends CI_Model
     public function check_person_exist($cid){
 
         $result = $this->mongo_db->where(array('cid' => (string) $cid))->count('person');
+
+        return $result > 0 ? TRUE : FALSE;
+    }
+    public function check_person_exist_by_hn($hn){
+
+        $result = $this->mongo_db->where(array('hn' => (string) $hn))->count('person');
 
         return $result > 0 ? TRUE : FALSE;
     }
@@ -639,7 +646,7 @@ class Person_model extends CI_Model
     public function search_person_ajax_by_hn($query)
     {
         $rs = $this->mongo_db
-            ->select(array('hn', 'first_name', 'last_name'))
+            ->select(array('hn', 'first_name', 'last_name', 'birthdate'))
             ->like('hn', (string) $query)
             ->order_by(array('hn' => 1))
             ->limit(20)
@@ -650,7 +657,7 @@ class Person_model extends CI_Model
     public function search_person_ajax_by_name($first_name, $last_name)
     {
         $rs = $this->mongo_db
-            ->select(array('hn', 'first_name', 'last_name'))
+            ->select(array('hn', 'first_name', 'last_name', 'birthdate'))
             ->where(array('first_name' => (string) $first_name, 'last_name' => (string) $last_name))
             ->order_by(array('hn' => 1))
             ->limit(20)
@@ -693,5 +700,59 @@ class Person_model extends CI_Model
             ->get('person');
 
         return $rs;
+    }
+
+    public function save_village_survey($data)
+    {
+        $rs = $this->mongo_db
+            ->where(array('_id' => new MongoId($data['village_id'])))
+            ->set(array(
+                'survey.ntraditional'       => isset($data['ntraditional']) ? (int) $data['ntraditional'] : 0,
+                'survey.nmonk'              => isset($data['nmonk']) ? (int) $data['nmonk'] : 0,
+                'survey.nreligionleader'    => isset($data['nreligionleader']) ? (int) $data['nreligionleader'] : 0,
+                'survey.nbroadcast'         => isset($data['nbroadcast']) ? (int) $data['nbroadcast'] : 0,
+                'survey.nradio'             => isset($data['nradio']) ? (int) $data['nradio'] : 0,
+                'survey.npchc'              => isset($data['npchc']) ? (int) $data['npchc'] : 0,
+                'survey.nclinic'            => isset($data['nclinic']) ? (int) $data['nclinic'] : 0,
+                'survey.ndrugstore'         => isset($data['ndrugstore']) ? (int) $data['ndrugstore'] : 0,
+                'survey.nchildcenter'       => isset($data['nchildcenter']) ? (int) $data['nchildcenter'] : 0,
+                'survey.npschool'           => isset($data['npschool']) ? (int) $data['npschool'] : 0,
+                'survey.nsschool'           => isset($data['nsschool']) ? (int) $data['nsschool'] : 0,
+                'survey.ntemple'            => isset($data['ntemple']) ? (int) $data['ntemple'] : 0,
+                'survey.nreligiousplace'    => isset($data['nreligiousplace']) ? (int) $data['nreligiousplace'] : 0,
+                'survey.nmarket'            => isset($data['nmarket']) ? (int) $data['nmarket'] : 0,
+                'survey.nshop'              => isset($data['nshop']) ? (int) $data['nshop'] : 0,
+                'survey.nfoodshop'          => isset($data['nfoodshop']) ? (int) $data['nfoodshop'] : 0,
+                'survey.nstall'             => isset($data['nstall']) ? (int) $data['nstall'] : 0,
+                'survey.nraintank'          => isset($data['nraintank']) ? (int) $data['nraintank'] : 0,
+                'survey.nchickenfarm'       => isset($data['nchickenfarm']) ? (int) $data['nchickenfarm'] : 0,
+                'survey.npigfarm'           => isset($data['npigfarm']) ? (int) $data['npigfarm'] : 0,
+                'survey.wastewater'         => isset($data['wastewater']) ? $data['wastewater'] : 0,
+                'survey.garbage'            => isset($data['garbage']) ? $data['garbage'] : 0,
+                'survey.nfactory'           => isset($data['nfactory']) ? (int) $data['nfactory'] : 0,
+                'survey.latitude'           => isset($data['latitude']) ? (float) $data['latitude'] : 0,
+                'survey.longitude'          => isset($data['longitude']) ? (float) $data['longitude'] : 0,
+                'survey.outdate'            => isset($data['outdate']) ? to_string_date($data['outdate']) : NULL,
+                'survey.numactually'        => isset($data['numactually']) ? (int) $data['numactually'] : 0,
+                'survey.risktype'           => isset($data['risktype']) ? (int) $data['risktype'] : 0,
+                'survey.numstateless'       => isset($data['numstateless']) ? (int) $data['numstateless'] : 0,
+                'survey.nexerciseclub'      => isset($data['nexerciseclub']) ? (int) $data['nexerciseclub'] : 0,
+                'survey.nolderlyclub'       => isset($data['nolderlyclub']) ? (int) $data['nolderlyclub'] : 0,
+                'survey.ndisableclub'       => isset($data['ndisableclub']) ? (int) $data['ndisableclub'] : 0,
+                'survey.nnumberoneclub'     => isset($data['nnumberoneclub']) ? (int) $data['nnumberoneclub'] : 0,
+            ))
+            ->update('villages');
+
+        return $rs;
+    }
+
+    public function get_village_survey($id)
+    {
+        $rs = $this->mongo_db
+            ->select(array('survey'))
+            ->where(array('_id' => new MongoId($id)))
+            ->get('villages');
+
+        return $rs ? $rs[0]['survey'] : NULL;
     }
 }

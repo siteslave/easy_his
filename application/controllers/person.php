@@ -16,7 +16,9 @@ class Person extends CI_Controller
     /*
      * Owner id for assign owner.
      */
-    var $owner_id;
+    public $owner_id;
+    public $user_id;
+    public $provider_id;
 
     public function __construct()
     {
@@ -27,6 +29,10 @@ class Person extends CI_Controller
         if(empty($this->owner_id)){
             redirect(site_url('users/login'));
         }
+
+        $this->owner_id = $this->session->userdata('owner_id');
+        $this->user_id = $this->session->userdata('user_id');
+        $this->provider_id = $this->session->userdata('provider_id');
 
         //models
         $this->load->model('Person_model', 'person');
@@ -94,7 +100,7 @@ class Person extends CI_Controller
             $obj->moo           = substr($r['village_code'], 6, 2);
             $obj->id            = get_first_object($r['_id']);
 
-            array_push($arr_result, $obj);
+            $arr_result[] = $obj;
         }
 
         $rows = json_encode($arr_result);
@@ -122,7 +128,7 @@ class Person extends CI_Controller
                 $obj->house_id  = $r['house_id'];
                 $obj->total     = count_person($obj->id);
 
-                array_push($arr_result, $obj);
+                $arr_result[] = $obj;
             }
 
             $rows = json_encode($arr_result);
@@ -154,7 +160,7 @@ class Person extends CI_Controller
                 $obj->id        = get_first_object($r['_id']);
                 $obj->house_id  = $r['house_id'];
 
-                array_push($arr_result, $obj);
+                $arr_result[] = $obj;
             }
 
             $rows = json_encode($arr_result);
@@ -238,7 +244,7 @@ class Person extends CI_Controller
                     $obj->startdate         = $r['startdate'];
                     $obj->expdate           = $r['expdate'];
 
-                    array_push($arr_result, $obj);
+                    $arr_result[] = $obj;
                 }
 
                 $rows = json_encode($arr_result);
@@ -447,7 +453,7 @@ class Person extends CI_Controller
                     $obj->fstatus       = get_fstatus_name($r['fstatus']);
                     $obj->title         = $this->basic->get_title_name($r['title']);
 
-                    array_push($arr_result, $obj);
+                    $arr_result[] = $obj;
                 }
 
                 $rows = json_encode($arr_result);
@@ -633,7 +639,7 @@ class Person extends CI_Controller
                         $obj->hospcode = $r['hospcode'];
                         $obj->hospname = get_hospital_name($obj->hospcode);
 
-                        array_push($arr_result, $obj);
+                        $arr_result[] = $obj;
                     }
 
                     $rows = json_encode($arr_result);
@@ -825,7 +831,7 @@ class Person extends CI_Controller
                         $obj->hosp_dx_name = get_hospital_name($obj->hosp_dx_code);
                         $obj->hosp_rx_name = get_hospital_name($obj->hosp_rx_code);
 
-                        array_push($arr_result, $obj);
+                        $arr_result[] = $obj;
                     }
 
                     $rows = json_encode($arr_result);
@@ -870,7 +876,7 @@ class Person extends CI_Controller
                 //search by name
                 $fullname = explode(' ', $query);
                 $first_name = $fullname[0];
-                $last_name = $fullname[1] ? $fullname[1] : ' ';
+                $last_name = isset($fullname[1]) ? $fullname[1] : ' ';
 
                 $rs = $this->person->search_person_ajax_by_name($first_name, $last_name);
             }
@@ -881,7 +887,7 @@ class Person extends CI_Controller
                 foreach ($rs as $r)
                 {
                     $obj = new stdClass();
-                    $obj->name = $r['hn'] . '#' . $r['first_name'] . ' ' . $r['last_name'];
+                    $obj->name = $r['hn'] . '#' . $r['first_name'] . ' ' . $r['last_name'] . '#' . to_js_date($r['birthdate']);
 
                     $arr_result[] = $obj;
                 }
@@ -976,4 +982,31 @@ class Person extends CI_Controller
 
         render_json($json);
     }
+
+    public function save_village_survey()
+    {
+        $data = $this->input->post('data');
+        if(!empty($data))
+        {
+            $this->person->user_id = $this->user_id;
+            $rs = $this->person->save_village_survey($data);
+
+            if($rs)
+            {
+                $json = '{"success": true}';
+            }
+            else
+            {
+                $json = '{"success": false, "msg": "ไม่สามารถบันทึกข้อมูลได้"}';
+            }
+        }
+        else
+        {
+            $json = '{"success": false, "msg": "ไม่พบข้อมุลที่ต้องการบันทึก"}';
+        }
+
+        render_json($json);
+    }
 }
+
+//End of file
