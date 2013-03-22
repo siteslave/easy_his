@@ -37,8 +37,8 @@
                     <div class="control-group">
                         <label class="control-label">ส่งไปที่</label>
                         <div class="controls">
-                            <input type="text" id="tboPcuId" class="input-mini" placeholder="รหัส">
-                            <input type="text" id="tboPcuName" placeholder="ชื่อสถานบริการ" class="input-medium" disabled>
+                            <input type="text" id="tboTab1PcuId" class="input-mini" placeholder="รหัส">
+                            <input type="text" id="tboTab1PcuName" placeholder="ชื่อสถานบริการ" class="input-medium" disabled>
                         </div>
                     </div>
                 </div>
@@ -46,7 +46,7 @@
                     <div class="control-group">
                         <label class="control-label">เลขที่ส่งต่อ</label>
                         <div class="controls">
-                            <input type="text" class="input-mini" id="tboReferNumber" placeholder="เลขที่ส่งต่อ" disabled>
+                            <input type="text" class="input-mini" id="tboTab1ReferNumber" placeholder="เลขที่ส่งต่อ" disabled>
                         </div>
                     </div>
                 </div>
@@ -54,7 +54,7 @@
                     <div class="control-group">
                         <label class="control-label">จุดส่งต่อ</label>
                         <div class="controls">
-                            <select class="input-small" id="cboReferPoint">
+                            <select class="input-small" id="cboTab1ReferPoint">
                                 <option value="">---</option>
                                 <option value="ER">ER</option>
                                 <option value="OPD">OPD</option>
@@ -67,7 +67,7 @@
                     <div class="control-group">
                         <label class="control-label">ห้องตรวจ</label>
                         <div class="controls">
-                            <select class="input-small" id="cboReferRoom">
+                            <select class="input-small" id="cboTab1ReferRoom">
                                 <option value="">---</option>
                             </select>
                         </div>
@@ -77,7 +77,7 @@
                     <div class="control-group">
                         <label class="control-label">แผนก</label>
                         <div class="controls">
-                            <select class="input-small" id="cboReferRoom">
+                            <select class="input-small" id="cboTab1Department">
                                 <option value="">---</option>
                             </select>
                         </div>
@@ -89,7 +89,7 @@
                     <div class="control-group">
                         <label class="control-label">แพทย์</label>
                         <div class="controls">
-                            <select class="input-medium" id="cboReferRoom">
+                            <select class="input-medium" id="cboTab1Doctor">
                                 <option value="">---</option>
                             </select>
                         </div>
@@ -99,10 +99,10 @@
                     <label class="control-label">ประเภทการส่งต่อ</label>
                     <div class="controls">
                         <label class="radio">
-                            <input type="radio" name="rdoTypeRefer" value="ในจังหวัด" checked> ในจังหวัด
+                            <input type="radio" name="rdoTab1TypeRefer" value="ในจังหวัด"> ในจังหวัด
                         </label>
                         <label class="radio">
-                            <input type="radio" name="rdoTypeRefer" value="นอกจังหวัด"> นอกจังหวัด
+                            <input type="radio" name="rdoTab1TypeRefer" value="นอกจังหวัด"> นอกจังหวัด
                         </label>
                     </div>
                 </div>
@@ -110,10 +110,10 @@
                     <label class="control-label">ประเภทการส่งต่อในเขต</label>
                     <div class="controls">
                         <label class="radio">
-                            <input type="radio" name="rdoTypeAreaRefer" value="ในเขต" checked> ในเขต
+                            <input type="radio" name="rdoTab1TypeAreaRefer" value="ในเขต"> ในเขต
                         </label>
                         <label class="radio">
-                            <input type="radio" name="rdoTypeAreaRefer" value="นอกเขต"> นอกเขต
+                            <input type="radio" name="rdoTab1TypeAreaRefer" value="นอกเขต"> นอกเขต
                         </label>
                     </div>
                 </div>
@@ -122,7 +122,7 @@
                         <label class="control-label">สถานะการตอบรับ</label>
                         <div class="controls">
                             <label class="checkbox">
-                                <input type="checkbox"> ปลายทางอนุญาตให้ส่งตัวได้
+                                <input type="checkbox" id="chkTab1AcceptStatus"> ปลายทางอนุญาตให้ส่งตัวได้
                             </label>
                         </div>
                     </div>
@@ -131,7 +131,7 @@
                     <div class="control-group">
                         <label class="control-label">ประเภทความเจ็บป่วย</label>
                         <div class="controls">
-                            <select class="input-small" id="cboType">
+                            <select class="input-small" id="cboTab1TypeOfIllness">
                                 <option value="">----</option>
                             </select>
                         </div>
@@ -143,8 +143,8 @@
                     <div class="control-group">
                         <label class="control-label">ส่งต่อจาก</label>
                         <div class="controls">
-                            <input type="text" id="tboPcuId" class="input-mini" placeholder="รหัส">
-                            <input type="text" id="tboPcuName" placeholder="ชื่อสถานบริการ" class="input-medium" disabled>
+                            <input type="text" id="tboTab1FromPcuId" class="input-mini" placeholder="รหัส">
+                            <input type="text" id="tboTab1FromPcuName" placeholder="ชื่อสถานบริการ" class="input-medium" disabled>
                         </div>
                     </div>
                 </div>
@@ -152,7 +152,7 @@
                     <div class="control-group">
                         <label class="control-label">สิทธิการรักษา</label>
                         <div class="controls">
-                            <input type="text" class="input-medium">
+                            <input type="text" class="input-medium" id="tboTab1Claim">
                         </div>
                     </div>
                 </div>
@@ -160,7 +160,7 @@
                     <div class="control-group">
                         <label class="control-label">เลขที่สิทธิ</label>
                         <div class="controls">
-                            <input type="text" class="input-medium">
+                            <input type="text" class="input-medium" id="tboTab1ClaimNumber">
                         </div>
                     </div>
                 </div>
@@ -169,19 +169,19 @@
             <div class="alert alert-info"><h4>ประเภท / สถานะ</h4></div>
             <div class="form-inline">
                 <label class="controls">ประเภทการส่งตัว</label>
-                <select class="input-small">
+                <select class="input-small" id="cboTab1TransportedType">
                     <option value="">----</option>
                 </select>
-                <label class="controls">ความฉุกเฉน</label>
-                <select class="input-medium">
+                <label class="controls">ความฉุกเฉิน</label>
+                <select class="input-medium" id="cboTab1Emergency">
                     <option value="">----</option>
                 </select>
                 <label class="controls">สาเหตุ</label>
-                <select class="input-large">
+                <select class="input-large" id="cboTab1Cause">
                     <option value="">----</option>
                 </select>
-                <label class="controls">ประเภทการส่งตัว</label>
-                <select class="input-small">
+                <label class="controls">ประเภท</label>
+                <select class="input-small" id="cboTab1Type">
                     <option value="">----</option>
                 </select>
             </div>
@@ -200,32 +200,32 @@
                             <div class="span3">
                                 <label class="control-label">BP</label>
                                 <div class="form-inline">
-                                    <input type="text" class="input-mini"> /
-                                    <input type="text" class="input-mini">
+                                    <input type="text" class="input-mini" id="tboTab1Bp1"> /
+                                    <input type="text" class="input-mini" id="tboTab1Bp2">
                                 </div>
                             </div>
                             <div class="span2">
                                 <label class="control-label">HR</label>
                                 <div class="controls">
-                                    <input type="text" class="input-mini">
+                                    <input type="text" class="input-mini" id="tboTab1Hr">
                                 </div>
                             </div>
                             <div class="span2">
                                 <label class="control-label">PR</label>
                                 <div class="controls">
-                                    <input type="text" class="input-mini">
+                                    <input type="text" class="input-mini" id="tboTab1Pr">
                                 </div>
                             </div>
                             <div class="span2">
                                 <label class="control-label">RR</label>
                                 <div class="controls">
-                                    <input type="text" class="input-mini">
+                                    <input type="text" class="input-mini" id="tboTab1Rr">
                                 </div>
                             </div>
                             <div class="span2">
                                 <label class="control-label">BW</label>
                                 <div class="controls">
-                                    <input type="text" class="input-mini">
+                                    <input type="text" class="input-mini" id="tboTab1Bw">
                                 </div>
                             </div>
                         </div>
@@ -233,19 +233,19 @@
                             <div class="span2">
                                 <label class="control-label">Height</label>
                                 <div class="controls">
-                                    <input type="text" class="input-mini">
+                                    <input type="text" class="input-mini" id="tboTab1Height">
                                 </div>
                             </div>
                             <div class="span2">
                                 <label class="control-label">Temp</label>
                                 <div class="controls">
-                                    <input type="text" class="input-mini">
+                                    <input type="text" class="input-mini" id="tboTab1Temp">
                                 </div>
                             </div>
                             <div class="span4">
                                 <label class="control-label">การวินิจฉัยขั้นต้น</label>
                                 <div class="controls">
-                                    <input type="text" class="input-xlarge">
+                                    <input type="text" class="input-xlarge" id="tboTab1FirstDiag">
                                 </div>
                             </div>
                         </div>
@@ -256,10 +256,10 @@
                             <div class="span2">
                                 <label class="control-label">E</label>
                                 <div class="controls">
-                                    <select class="input-mini">
+                                    <select class="input-mini" id="cboTab1E1">
                                         <option value="">----</option>
                                     </select>
-                                    <select class="input-mini">
+                                    <select class="input-mini" id="cboTab1E2">
                                         <option value="">----</option>
                                     </select>
                                 </div>
@@ -267,10 +267,10 @@
                             <div class="span2">
                                 <label class="control-label">V</label>
                                 <div class="controls">
-                                    <select class="input-mini">
+                                    <select class="input-mini" id="cboTab1V1">
                                         <option value="">----</option>
                                     </select>
-                                    <select class="input-mini">
+                                    <select class="input-mini" id="cboTab1V2">
                                         <option value="">----</option>
                                     </select>
                                 </div>
@@ -278,10 +278,10 @@
                             <div class="span2">
                                 <label class="control-label">M</label>
                                 <div class="controls">
-                                    <select class="input-mini">
+                                    <select class="input-mini" id="cboTab1M1">
                                         <option value="">----</option>
                                     </select>
-                                    <select class="input-mini">
+                                    <select class="input-mini" id="cboTab1M2">
                                         <option value="">----</option>
                                     </select>
                                 </div>
@@ -292,19 +292,19 @@
                                 <label class="control-label">Pupil sizes</label>
                             </div>
                             <div class="span2">
-                                <label class="control-label">E</label>
+                                <label class="control-label">L</label>
                                 <div class="controls">
-                                    <input type="text" class="input-mini">
-                                    <select class="input-mini">
+                                    <input type="text" class="input-mini" id="tboTab1L">
+                                    <select class="input-mini" id="cboTab1L">
                                         <option value="">----</option>
                                     </select>
                                 </div>
                             </div>
                             <div class="span2">
-                                <label class="control-label">V</label>
+                                <label class="control-label">R</label>
                                 <div class="controls">
-                                    <input type="text" class="input-mini">
-                                    <select class="input-mini">
+                                    <input type="text" class="input-mini" id="tboTab1R">
+                                    <select class="input-mini" id="cboTab1R">
                                         <option value="">----</option>
                                     </select>
                                 </div>
@@ -313,17 +313,17 @@
                         <div class="row-fluid">
                             <div class="span2">
                                 <label class="checkbox">
-                                    <input type="checkbox"> Consciousness
+                                    <input type="checkbox" id="chkTab1Consciousness"> Consciousness
                                 </label>
                             </div>
                             <div class="span3">
                                 <div class="control-group">
-                                    <input type="text" class="input-medium">
+                                    <input type="text" class="input-medium" id="tboTab1Consciousness">
                                 </div>
                             </div>
-                            <div class="span2">
+                            <div class="span3">
                                 <label class="checkbox">
-                                    <input type="checkbox"> เสียชีวิตขณะนำส่ง
+                                    <input type="checkbox" id="chkTab1Death"> เสียชีวิตขณะนำส่ง
                                 </label>
                             </div>
                         </div>
@@ -333,43 +333,47 @@
                             <div class="span4">
                                 <label class="control-label">CC</label>
                                 <div class="controls">
-                                    <textarea style="width: 180pt;" rows="3"></textarea>
+                                    <textarea style="width: 180pt;" rows="3" id="tboTab1Cc"></textarea>
                                 </div>
                             </div>
                             <div class="span4">
                                 <label class="control-label">PE</label>
                                 <div class="controls">
-                                    <textarea style="width: 180pt;" rows="3"></textarea>
+                                    <textarea style="width: 180pt;" rows="3" id="tboTab1Pe"></textarea>
                                 </div>
                             </div>
                         </div>
 
                         <div class="row-fluid">
-                            <div class="form-inline">
+                            <div class="control-group form-inline">
                                 <label class="checkbox">
-                                    <input type="checkbox"> GA
+                                    <input type="checkbox" id="chkTab1Ga"> GA
                                 </label>
-                                <input type="text" class="input-small">
+                                <input type="text" class="input-small" id="tboTab1Ga">
                                 &nbsp;
                                 <label class="checkbox">
-                                    <input type="checkbox"> HEENT
+                                    <input type="checkbox" id="chkTab1Heent"> HEENT
                                 </label>
-                                <input type="text" class="input-small">
+                                <input type="text" class="input-small" id="cboTab1Heent">
                                 &nbsp;
                                 <label class="checkbox">
-                                    <input type="checkbox"> HEART
+                                    <input type="checkbox" id="chkTab1Heart"> HEART
                                 </label>
-                                <input type="text" class="input-small">
+                                <input type="text" class="input-small" id="tboTab1Heart">
+                                &nbsp;
+                            </div>
+                        </div>
+                        <div class="row-fluid">
+                            <div class="control-group form-inline">
+                                <label class="checkbox">
+                                    <input type="checkbox" id="chkTab1Lung"> LUNG
+                                </label>
+                                <input type="text" class="input-small" id="tboTab1Lung">
                                 &nbsp;
                                 <label class="checkbox">
-                                    <input type="checkbox"> LUNG
+                                    <input type="checkbox" id="chkTab1Neuro"> Neuro
                                 </label>
-                                <input type="text" class="input-small">
-                                &nbsp;
-                                <label class="checkbox">
-                                    <input type="checkbox"> Neuro
-                                </label>
-                                <input type="text" class="input-small">
+                                <input type="text" class="input-small" id="tboTab1Neuro">
                             </div>
                         </div>
                     </div>
@@ -377,22 +381,22 @@
                         <div class="row-fluid">
                             <div class="form-inline">
                                 <label class="checkbox">
-                                    <input type="checkbox"> มีพยาบาลไปด้วย
+                                    <input type="checkbox" id="chkTab1Nurse"> มีพยาบาลไปด้วย
                                 </label>
                                 &nbsp;&nbsp;
                                 <label class="checkbox">
-                                    <input type="checkbox"> ส่งตัวด้วยรถ Ambulance
+                                    <input type="checkbox" id="chkTab1Ambulance"> ส่งตัวด้วยรถ Ambulance
                                 </label>
                                 &nbsp;&nbsp;
                                 เวลารถออก
                                 <div class="input-append" data-type="datetimepicker">
-                                    <input type="text" class="input-medium">
+                                    <input type="text" class="input-medium" id="dtpTab1TimeRefer">
                                     <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
                                 </div>
                             </div>
                         </div><br>
                         <div class="row-fluid">
-                            <table class="table table-striped table-hover table-bordered">
+                            <table class="table table-striped table-hover table-bordered" id="tblTab1Nurse">
                                 <thead>
                                     <tr>
                                         <th>ลำดับที่</th>
@@ -404,13 +408,13 @@
                                     <tr>
                                         <td>1</td>
                                         <td>ทดสอบ</td>
-                                        <td><a data-name="btnRemove" data-id="" class="btn btn-danger btn-mini"><i class="icon-trash icon-white"></i></a></td>
+                                        <td><a data-name="btnTab1RemoveNurse" data-id="" class="btn btn-danger btn-mini"><i class="icon-trash icon-white"></i></a></td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                         <div class="row-fluid">
-                                <button class="btn btn-primary" title="เพิ่มพยาบาล"><i class="icon-plus-sign icon-white"></i></button>
+                                <button id="btnTab1AddNurse" class="btn btn-primary" title="เพิ่มพยาบาล"><i class="icon-plus-sign icon-white"></i></button>
                         </div>
                     </div>
                 </div>
@@ -422,7 +426,7 @@
                     <div class="control-group">
                         <label class="control-label">บันทึกการส่งต่อ</label>
                         <div class="controls">
-                            <textarea style="width: 350pt;" rows="3"></textarea>
+                            <textarea style="width: 400px;" rows="3" id="tboTab1SaveReferResult"></textarea>
                         </div>
                     </div>
                 </div>
@@ -430,12 +434,13 @@
                     <div class="control-group">
                         <label class="control-label">Response</label>
                         <div class="controls">
-                            <textarea style="width: 350pt;" rows="3"></textarea>
+                            <textarea style="width: 400px;" rows="3" id="tboTab1Response"></textarea>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
         <div class="tab-pane" id="tab2">
             <div class="alert alert-info"><h4>การรักษาเบื้องต้น ก่อนการส่งต่อ</h4></div>
             <div class="row-fluid">
@@ -443,27 +448,27 @@
                     <label class="control-label"><strong>Airway & Breathing care</strong></label>
                     <div class="form-inline">
                         <label class="checkbox">
-                            <input type="checkbox"> จัด Position
+                            <input type="checkbox" id="chkTab2Position"> จัด Position
                         </label>&nbsp;&nbsp;
                         <label class="checkbox">
-                            <input type="checkbox"> ใส่ Airway
+                            <input type="checkbox" id="chkTab2Airway"> ใส่ Airway
                         </label>&nbsp;&nbsp;
                         <label class="checkbox">
-                            <input type="checkbox"> Suction
+                            <input type="checkbox" id="chkTab2Suction"> Suction
                         </label>&nbsp;&nbsp;
                         <label class="checkbox">
-                            <input type="checkbox"> ET. Tube
+                            <input type="checkbox" id="chkTab2EtTube"> ET. Tube
                         </label>&nbsp;&nbsp;
                         <label class="checkbox">
-                            <input type="checkbox"> O2
+                            <input type="checkbox" id="chkTab2O2"> O2
                         </label>
-                        <input type="text" class="input-mini"> &nbsp;&nbsp;
+                        <input type="text" class="input-mini" id="tboTab2O2"> &nbsp;&nbsp;
                         <label class="control-label">LPM</label>&nbsp;&nbsp;
                         <label class="checkbox">
-                            <input type="checkbox"> Mask
+                            <input type="checkbox" id="chkTab2Mask"> Mask
                         </label>&nbsp;&nbsp;
                         <label class="checkbox">
-                            <input type="checkbox"> Canular
+                            <input type="checkbox" id="chkTab2Canular"> Canular
                         </label>
                     </div>
                 </div>
@@ -474,13 +479,13 @@
                     <label class="control-label"><strong>Stop bleed</strong></label>
                     <div class="form-inline">
                         <label class="checkbox">
-                            <input type="checkbox"> Suture
+                            <input type="checkbox" id="chkTab2Suture"> Suture
                         </label>
-                        <input type="text" class="input-mini"> เข็ม&nbsp;&nbsp;
+                        <input type="text" class="input-mini" id="tboTab2Suture"> เข็ม&nbsp;&nbsp;
                         <label class="checkbox">
-                            <input type="checkbox"> Pressure dressing
+                            <input type="checkbox" id="chkTab2PressureDressing"> Pressure dressing
                         </label>
-                        &nbsp;&nbsp;อื่นๆ <input type="text" class="input-large">
+                        &nbsp;&nbsp;อื่นๆ <input type="text" class="input-large" id="cboTab2OtherStopBleed">
                     </div>
                 </div>
             </div>
@@ -490,18 +495,18 @@
                     <label class="control-label"><strong>IV Fluid</strong></label>
                     <div class="form-inline">
                         <label class="checkbox">
-                            <input type="checkbox"> 0.9 NSS
+                            <input type="checkbox" id="chkTab2Nss"> 0.9 NSS
                         </label>
-                        <input type="text" class="input-mini"> cc/hr.&nbsp;&nbsp;
+                        <input type="text" class="input-mini" id="tboTab2Nss"> cc/hr.&nbsp;&nbsp;
                         <label class="checkbox">
-                            <input type="checkbox"> RLS
+                            <input type="checkbox" id="chkTab2Rls"> RLS
                         </label>
-                        <input type="text" class="input-mini"> cc/hr.&nbsp;&nbsp;
+                        <input type="text" class="input-mini" id="tboTab2Rls"> cc/hr.&nbsp;&nbsp;
                         <label class="checkbox">
-                            <input type="checkbox"> Acetar
+                            <input type="checkbox" id="chkTab2Acetar"> Acetar
                         </label>
-                        <input type="text" class="input-mini"> cc/hr.&nbsp;&nbsp;
-                        อื่นๆ <input type="text" class="input-large">
+                        <input type="text" class="input-mini" id="tboTab2Acetar"> cc/hr.&nbsp;&nbsp;
+                        อื่นๆ <input type="text" class="input-large" id="tboTab2OtherIvFluid">
                     </div>
                 </div>
             </div>
@@ -511,16 +516,16 @@
                     <label class="control-label"><strong>Immoblized</strong></label>
                     <div class="form-inline">
                         <label class="checkbox">
-                            <input type="checkbox"> Splint
+                            <input type="checkbox" id="chkTab2Splint"> Splint
                         </label>&nbsp;&nbsp;
                         <label class="checkbox">
-                            <input type="checkbox"> Sling
+                            <input type="checkbox" id="chkTab2Sling"> Sling
                         </label>&nbsp;&nbsp;
                         <label class="checkbox">
-                            <input type="checkbox"> Long spinal board
+                            <input type="checkbox" id="chkTab2LongSpinalBoard"> Long spinal board
                         </label>&nbsp;&nbsp;
                         <label class="checkbox">
-                            <input type="checkbox"> Collars
+                            <input type="checkbox" id="chkTab2Collars"> Collars
                         </label>
                     </div>
                 </div>
@@ -530,14 +535,14 @@
                     <label class="control-label"><strong>CPR</strong></label>
                     <div class="form-inline">
                         <label class="checkbox">
-                            <input type="checkbox"> ทำ CPR
+                            <input type="checkbox" id="chkTab2Cpr"> ทำ CPR
                         </label>
                     </div>
                 </div>
             </div>
 
             <div class="alert alert-success"><h4>อาการเปลี่ยนแปลงระหว่างนำส่ง</h4></div>
-            <table class="table table-striped table-hover table-bordered">
+            <table class="table table-striped table-hover table-bordered" id="tblTab2Changes">
                 <thead>
                     <tr>
                         <th>ลำดับ</th>
@@ -555,15 +560,16 @@
                         <td>1234</td>
                         <td>***</td>
                         <td>***</td>
-                        <td><a class="btn btn-danger btn-mini" title="ลบรายการ"><i class="icon-trash icon-white"></i></a></td>
+                        <td><a id="btnTab2RemoveChanges" class="btn btn-danger btn-mini" title="ลบรายการ"><i class="icon-trash icon-white"></i></a></td>
                     </tr>
                 </tbody>
             </table>
-            <button class="btn btn-primary" title="เพิ่มอาการ"><i class="icon-plus-sign icon-white"></i></button>
+            <button id="btnTab2AddChanges" class="btn btn-primary" title="เพิ่มอาการ"><i class="icon-plus-sign icon-white"></i></button><br><br>
         </div>
+
         <div class="tab-pane" id="tab3">
             <div class="alert alert-info"><h4>การวินิจฉัย</h4></div>
-            <table class="table table-striped table-hover table-bordered">
+            <table class="table table-striped table-hover table-bordered" id="tblTab3Diag">
                 <thead>
                 <tr>
                     <th>ลำดับ</th>
@@ -582,7 +588,7 @@
                 </tbody>
             </table>
             <div class="alert alert-success"><h4>หัตถการ</h4></div>
-            <table class="table table-striped table-hover table-bordered">
+            <table class="table table-striped table-hover table-bordered" id="tblTab3Proced">
                 <thead>
                 <tr>
                     <th>ลำดับ</th>
@@ -617,9 +623,10 @@
             </div>
             -->
         </div>
-        <div class="tab-pane active" id="tab4">
+
+        <div class="tab-pane" id="tab4">
             <div class="alert alert-success"><h4>ผลตรวจทางห้องปฏิบัติการ</h4></div>
-            <table class="table table-striped table-hover table-bordered">
+            <table class="table table-striped table-hover table-bordered" id="tblTab4Laboratory">
                 <thead>
                 <tr>
                     <th>ลำดับ</th>
@@ -640,9 +647,10 @@
                 </tbody>
             </table>
         </div>
-        <div class="tab-pane active" id="tab5">
+
+        <div class="tab-pane" id="tab5">
             <div class="alert alert-success"><h4>รายการสั่ง X-Ray</h4></div>
-            <table class="table table-striped table-hover table-bordered">
+            <table class="table table-striped table-hover table-bordered" id="tblTab5Xray">
                 <thead>
                 <tr>
                     <th>ลำดับ</th>
@@ -662,11 +670,12 @@
             </table>
 
             <div class="alert alert-danger"><h4>การอ่านผล</h4></div>
-            <textarea rows="10" style="width: 600px;" placeholder="..."></textarea>
+            <textarea rows="10" style="width: 600px;" placeholder="..." id="tboTab5Xray"></textarea>
         </div>
+
         <div class="tab-pane" id="tab6">
             <div class="alert alert-info"><h4>รายการยา / ค่าใช้จ่าย</h4></div>
-            <table class="table table-striped table-hover table-bordered">
+            <table class="table table-striped table-hover table-bordered" id="tboTab6Drug">
                 <thead>
                 <tr>
                     <th>ลำดับ</th>
@@ -687,9 +696,10 @@
                 </tbody>
             </table>
         </div>
+
         <div class="tab-pane" id="tab7">
             <div class="alert alert-info"><h4>สรุปค่าใช้จ่าย</h4></div>
-            <table class="table table-striped table-hover table-bordered">
+            <table class="table table-striped table-hover table-bordered" id="tblTab7Payment">
                 <thead>
                 <tr>
                     <th>ลำดับ</th>
@@ -706,12 +716,14 @@
                 </tbody>
             </table>
         </div>
+
         <div class="tab-pane" id="tab8">
             <div class="alert alert-success"><h4>รูป</h4></div>
         </div>
-        <div class="tab-pane active" id="tab9">
+
+        <div class="tab-pane" id="tab9">
             <div class="alert alert-danger"><h4>การประสานงาน</h4></div>
-            <table class="table table-striped table-hover table-bordered">
+            <table class="table table-striped table-hover table-bordered" id="tblTab9Liaison">
                 <thead>
                 <tr>
                     <th>ลำดับ</th>
@@ -744,13 +756,14 @@
         <div class="tab-pane" id="tab10">
             <div class="alert alert-success"><h4>เอกสาร Scan</h4></div>
         </div>
+
         <div class="tab-pane" id="tab11">
             <div class="alert alert-info"><h4>ข้อมูลการส่งต่อ</h4></div>
             <div class="row-fluid">
                 <div class="span3">
                     <label class="control-label">ส่งต่อมาจาก</label>
                     <div class="control-group">
-                        <select class="input-medium">
+                        <select class="input-medium" id="cboTab11FromPcu">
                             <option value="">-- ส่งต่อมาจาก --</option>
                         </select>
                     </div>
@@ -759,7 +772,7 @@
                     <label class="control-label">วันที่ส่ง</label>
                     <div class="control-group">
                         <div class="input-append" data-type="datetimepicker">
-                            <input type="text" class="input-medium" value="<?php echo date('d/m/Y H:i:s'); ?>" disabled>
+                            <input id="dtpTab11DateRefer" type="text" class="input-medium" value="<?php echo date('d/m/Y H:i:s'); ?>" disabled>
                             <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
                         </div>
                     </div>
@@ -768,7 +781,7 @@
                     <div class="control-group">
                         <label class="control-label">ความเร่งด่วน</label>
                         <div class="controls">
-                            <select class="input-medium">
+                            <select class="input-medium" id="cboTab11Haste">
                                 <option value="">-- ความเร่งด่วน --</option>
                             </select>
                         </div>
@@ -778,7 +791,7 @@
                     <div class="control-group">
                         <label class="control-label">สาเหตุ</label>
                         <div class="controls">
-                            <select class="input-medium">
+                            <select class="input-medium" id="cboTab11Cause">
                                 <option value="">-- สาเหตุ --</option>
                             </select>
                         </div>
@@ -803,7 +816,7 @@
                                 <div class="control-group">
                                     <div class="form-inline">
                                         <label class="control-label">CC</label>
-                                        <textarea rows="2" style="width: 300px;"></textarea>
+                                        <textarea rows="2" style="width: 300px;" id="tboTab11Cc"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -811,7 +824,7 @@
                                 <div class="control-group">
                                     <div class="form-inline">
                                         <label class="control-label">PE</label>
-                                        <textarea rows="2" style="width: 300px;"></textarea>
+                                        <textarea rows="2" style="width: 300px;" id="tboTab11Pe"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -821,19 +834,19 @@
                                 <div class="span5">
                                     <div class="control-group form-inline">
                                         <label class="control-label">BP</label>
-                                        <input type="text" class="input-mini"> / <input type="text" class="input-mini">
+                                        <input type="text" class="input-mini" id="tboTab11Bp1"> / <input type="text" class="input-mini" id="tboTab11Bp2">
                                     </div>
                                 </div>
                                 <div class="span3">
                                     <div class="control-group form-inline">
                                         <label class="control-label">HR</label>
-                                        <input type="text" class="input-mini">
+                                        <input type="text" class="input-mini" id="tboTab11Hr">
                                     </div>
                                 </div>
                                 <div class="span3">
                                     <div class="control-group form-inline">
                                         <label class="control-label">RR</label>
-                                        <input type="text" class="input-mini">
+                                        <input type="text" class="input-mini" id="tboTab11Rr">
                                     </div>
                                 </div>
                             </div>
@@ -841,19 +854,19 @@
                                 <div class="span4">
                                     <div class="control-group form-inline">
                                         <label class="control-label">BW</label>
-                                        <input type="text" class="input-mini">
+                                        <input type="text" class="input-mini" id="tboTab11Bw">
                                     </div>
                                 </div>
                                 <div class="span4">
                                     <div class="control-group form-inline">
                                         <label class="control-label">Height</label>
-                                        <input type="text" class="input-mini">
+                                        <input type="text" class="input-mini" id="tboTab11Height">
                                     </div>
                                 </div>
                                 <div class="span4">
                                     <div class="control-group form-inline">
                                         <label class="control-label">Temp</label>
-                                        <input type="text" class="input-mini">
+                                        <input type="text" class="input-mini" id="tboTab11Temp">
                                     </div>
                                 </div>
                             </div>
@@ -861,7 +874,7 @@
                                 <div class="span12">
                                     <div class="control-group form-inline">
                                         <label class="control-label">การวินิจฉัยขั้นต้น</label>
-                                        <input type="text" class="input-xlarge">
+                                        <input type="text" class="input-xlarge" id="tbpTab11Diag">
                                     </div>
                                 </div>
                             </div>
@@ -872,16 +885,16 @@
                         <div class="control-group">
                             <label class="control-label">ให้ดำเนินการต่อดังนี้</label>
                             <div class="controls">
-                                <textarea rows="3" style="width: 600px;"></textarea>
+                                <textarea rows="3" style="width: 600px;" id="tboTab11Step"></textarea>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="tab-pane" id="tab11_2">
                     <div class="alert alert-info">
-                        <h4>การวินิจฉัย<button class="btn btn-primary pull-right btn-mini" title="เพิ่มการวินิจฉัย"><i class="icon-plus-sign icon-white"></i></button></h4>
+                        <h4>การวินิจฉัย<button id="btnTab11AddDiag" class="btn btn-primary pull-right btn-mini" title="เพิ่มการวินิจฉัย"><i class="icon-plus-sign icon-white"></i></button></h4>
                     </div>
-                    <table class="table table-striped table-hover table-bordered">
+                    <table class="table table-striped table-hover table-bordered" id="tblTab11Diag">
                         <thead>
                         <tr>
                             <th>ลำดับ</th>
@@ -899,8 +912,8 @@
                             <td>ทดสอบ</td>
                             <td>
                                 <div class="btn-group">
-                                    <a class="btn btn-info" title="แก้ไขรายการ"><i class="icon-edit icon-white"></i></a>
-                                    <a class="btn btn-danger" title="ลบรายการ"><i class="icon-trash icon-white"></i></a>
+                                    <a id="btnTab11EditDiag" class="btn btn-info" title="แก้ไขรายการ"><i class="icon-edit icon-white"></i></a>
+                                    <a id="btnTab11RemoveDiag" class="btn btn-danger" title="ลบรายการ"><i class="icon-trash icon-white"></i></a>
                                 </div>
                             </td>
                         </tr>
@@ -909,9 +922,9 @@
                 </div>
                 <div class="tab-pane" id="tab11_3">
                     <div class="alert alert-danger">
-                        <h4>การทำหัตถการ<button class="btn btn-primary pull-right btn-mini" title="เพิ่มการทำหัตถการ"><i class="icon-plus-sign icon-white"></i></button></h4>
+                        <h4>การทำหัตถการ<button id="btnTab11AddProced" class="btn btn-primary pull-right btn-mini" title="เพิ่มการทำหัตถการ"><i class="icon-plus-sign icon-white"></i></button></h4>
                     </div>
-                    <table class="table table-striped table-hover table-bordered">
+                    <table class="table table-striped table-hover table-bordered" id="tblTab11Proced">
                         <thead>
                         <tr>
                             <th>ลำดับ</th>
@@ -927,8 +940,8 @@
                             <td>123</td>
                             <td>
                                 <div class="btn-group">
-                                    <a class="btn btn-info" title="แก้ไขรายการ"><i class="icon-edit icon-white"></i></a>
-                                    <a class="btn btn-danger" title="ลบรายการ"><i class="icon-trash icon-white"></i></a>
+                                    <a id="btnTab11EditProced" class="btn btn-info" title="แก้ไขรายการ"><i class="icon-edit icon-white"></i></a>
+                                    <a id="btnTab11RemoveProced" class="btn btn-danger" title="ลบรายการ"><i class="icon-trash icon-white"></i></a>
                                 </div>
                             </td>
                         </tr>
@@ -937,9 +950,9 @@
                 </div>
                 <div class="tab-pane" id="tab11_4">
                     <div class="alert">
-                        <h4>ผลตรวจทางห้องปฏิบัติการ<button class="btn btn-primary pull-right btn-mini" title="เพิ่มผลตรวจทางห้องปฏิบัติการ"><i class="icon-plus-sign icon-white"></i></button></h4>
+                        <h4>ผลตรวจทางห้องปฏิบัติการ<button id="btnTab11AddLab" class="btn btn-primary pull-right btn-mini" title="เพิ่มผลตรวจทางห้องปฏิบัติการ"><i class="icon-plus-sign icon-white"></i></button></h4>
                     </div>
-                    <table class="table table-striped table-hover table-bordered">
+                    <table class="table table-striped table-hover table-bordered" id="tblTab11Lab">
                         <thead>
                         <tr>
                             <th>ลำดับ</th>
@@ -959,8 +972,8 @@
                             <td>123</td>
                             <td>
                                 <div class="btn-group">
-                                    <a class="btn btn-info" title="แก้ไขรายการ"><i class="icon-edit icon-white"></i></a>
-                                    <a class="btn btn-danger" title="ลบรายการ"><i class="icon-trash icon-white"></i></a>
+                                    <a id="btnTab11EditLab" class="btn btn-info" title="แก้ไขรายการ"><i class="icon-edit icon-white"></i></a>
+                                    <a id="btnTab11RemoveLab" class="btn btn-danger" title="ลบรายการ"><i class="icon-trash icon-white"></i></a>
                                 </div>
                             </td>
                         </tr>
@@ -969,9 +982,9 @@
                 </div>
                 <div class="tab-pane" id="tab11_5">
                     <div class="alert alert-success">
-                        <h4>รายการยา / ค่าใช้จ่าย<button class="btn btn-primary pull-right btn-mini" title="เพิ่มรายการยา / ค่าใช้จ่าย"><i class="icon-plus-sign icon-white"></i></button></h4>
+                        <h4>รายการยา / ค่าใช้จ่าย<button id="btnTab11AddDrug" class="btn btn-primary pull-right btn-mini" title="เพิ่มรายการยา / ค่าใช้จ่าย"><i class="icon-plus-sign icon-white"></i></button></h4>
                     </div>
-                    <table class="table table-striped table-hover table-bordered">
+                    <table class="table table-striped table-hover table-bordered" id="tblTab11Drug">
                         <thead>
                         <tr>
                             <th>ลำดับ</th>
@@ -991,8 +1004,8 @@
                             <td>123</td>
                             <td>
                                 <div class="btn-group">
-                                    <a class="btn btn-info" title="แก้ไขรายการ"><i class="icon-edit icon-white"></i></a>
-                                    <a class="btn btn-danger" title="ลบรายการ"><i class="icon-trash icon-white"></i></a>
+                                    <a id="btnTab11EditDrug" class="btn btn-info" title="แก้ไขรายการ"><i class="icon-edit icon-white"></i></a>
+                                    <a id="btnTab11RemoveDrug" class="btn btn-danger" title="ลบรายการ"><i class="icon-trash icon-white"></i></a>
                                 </div>
                             </td>
                         </tr>
@@ -1006,12 +1019,12 @@
                 <div class="span12">
                     <div class="controls form-inline">
                         <label class="control-label">ประเภทการจำหน่าย</label>
-                        <select class="input-medium">
+                        <select class="input-medium" id="cboTab11DistributionType">
                             <option value="">-- ประเภทการจำหน่าย --</option>
                         </select>
                         <label class="control-label">ส่งต่อไปที่</label>
-                        <input type="text" class="input-mini" placeholder="...">
-                        <input type="text" class="input-medium" placeholder="..." disabled>
+                        <input type="text" class="input-mini" placeholder="..." id="tboTab11ReferToPcuId">
+                        <input type="text" class="input-medium" placeholder="..." disabled id="tboTab11ReferToPcuName">
                     </div>
                 </div>
             </div>
