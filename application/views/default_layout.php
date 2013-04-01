@@ -128,6 +128,11 @@
                                     <i class="icon-tags"></i> ทะเบียนผู้พิการ (Disability)
                                 </a>
                             </li>
+                            <li>
+                                <a href="<?php echo site_url('women'); ?>">
+                                    <i class="icon-tags"></i> ทะเบียนหญิงวัยเจริญพันธุ์ (Women)
+                                </a>
+                            </li>
                         </ul>
                     </li>
                     <li class="dropdown">
