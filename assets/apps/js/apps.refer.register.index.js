@@ -7,6 +7,77 @@ $(function() {
     var refer = {};
 
     refer.ajax = {
+        get_local_pcu: function() {
+            var url = 'refer/get_local_pcu',
+                params = {};
+            app.ajax(url, params, function(err, data) {
+                if(data != null) {
+                    if(_.size(data.rows)) {
+                        var v = data.rows[0];
+                        $('#tboTab1FromPcuId').val(v.code);
+                        $('#tboTab1FromPcuName').val(v.name);
+                    }
+                }
+            });
+        },
+        get_refer_to_pcu: function() {
+            var url = 'refer/get_refer_to_pcu',
+                params = {};
+            app.ajax(url, params, function(err, data) {
+                if(data != null) {
+                    if(_.size(data.rows)) {
+                        var v = data.rows[0];
+                        $('#tboTab1PcuId').val(v.code);
+                        $('#tboTab1PcuName').val(v.name);
+                    }
+                }
+            });
+        },
+        get_doctor_rooms: function() {
+            var url = 'basic/get_doctor_room',
+                params = {};
+            app.ajax(url, params, function(err, data) {
+                $('#cboTab1ReferRoom').empty();
+                $('#cboTab1ReferRoom').append('<option value="">---</option>');
+                if(data != null) {
+                    if(_.size(data.rows)) {
+                        _.each(data.rows, function(v) {
+                            $('#cboTab1ReferRoom').append('<option value="'+ v.id +'">'+ v.name +'</option>');
+                        });
+                    }
+                }
+            });
+        },
+        get_clinic: function() {
+            var url = 'basic/get_clinic',
+                params = {};
+            app.ajax(url, params, function(err, data) {
+                $('#cboTab1Department').empty();
+                $('#cboTab1Department').append('<option value="">---</option>');
+                if(data != null) {
+                    if(_.size(data.rows)) {
+                        _.each(data.rows, function(v) {
+                            $('#cboTab1Department').append('<option value="'+ v.id +'">'+ v.name +'</option>');
+                        });
+                    }
+                }
+            });
+        },
+        get_provider: function() {
+            var url = 'basic/get_provider',
+                params = {};
+            app.ajax(url, params, function(err, data) {
+                $('#cboTab1Doctor').empty();
+                $('#cboTab1Doctor').append('<option value="">---</option>');
+                if(data != null) {
+                    if(_.size(data.rows)) {
+                        _.each(data.rows, function(v) {
+                            $('#cboTab1Doctor').append('<option value="'+ v.id +'">'+ v.name +'</option>');
+                        });
+                    }
+                }
+            });
+        },
         clear_form: function() {
             //Tab1
             $('#tboTab1PcuId').val('');
@@ -135,6 +206,14 @@ $(function() {
         }
     };
 
+    refer.get_list = function() {
+        refer.ajax.get_local_pcu();
+        refer.ajax.get_refer_to_pcu();
+        refer.ajax.get_doctor_rooms();
+        refer.ajax.get_clinic();
+        refer.ajax.get_provider();
+    };
+
     $('#mainTab a').click(function(e) {
         e.preventDefault();
         $(this).tab('show');
@@ -174,4 +253,5 @@ $(function() {
     });
 
     refer.ajax.clear_form();
+    refer.get_list();
 });

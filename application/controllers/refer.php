@@ -25,6 +25,7 @@ class Refer extends CI_Controller {
 
         $this->load->model('Refer_model', 'refer');
         $this->load->model('Person_model', 'person');
+        $this->load->model('Basic_model', 'basic');
 
         $this->load->helper(array('person', 'his'));
     }
@@ -132,5 +133,27 @@ class Refer extends CI_Controller {
         } else {
             $this->layout->view('refer/refer_register');
         }
+    }
+
+    public function get_local_pcu() {
+        $pcucode = $this->refer->get_pcucode_by_owner($this->owner_id);
+        $rs = $this->basic->search_hospital_by_code($pcucode['pcucode']);
+
+        if($rs)
+            $json = '{ "success": true, "rows": '.json_encode($rs).' }';
+        else
+            $json = '{ "success": false, "msg": "ไม่พบข้อมูล" }';
+        render_json($json);
+    }
+
+    public function get_refer_to_pcu() {
+        $pcucode = $this->refer->get_pcucode_by_owner($this->owner_id);
+        $rs = $this->basic->search_hospital_by_code($pcucode['main_hospital']);
+
+        if($rs)
+            $json = '{ "success": true, "rows": '.json_encode($rs).' }';
+        else
+            $json = '{ "success": false, "msg": "ไม่พบข้อมูล" }';
+        render_json($json);
     }
 }

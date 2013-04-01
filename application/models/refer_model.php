@@ -13,4 +13,12 @@ class Refer_model extends CI_Model {
 
         return $rs;
     }
+
+    public function get_pcucode_by_owner($owner) {
+        $rs = $this->mongo_db
+            ->where(array('_id' => new MongoId($owner)))
+            ->get('owners');
+
+        return $rs[0];
+    }
 }

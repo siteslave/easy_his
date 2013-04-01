@@ -925,6 +925,24 @@ class Basic_model extends CI_Model
     }
 
 
+    public function get_provider_by_owner_id($query){
+        $rs = $this->mongo_db
+            ->where(array('owner_id' => new MongoId($query)))
+            ->get('providers');
+
+        $arr_result = array();
+        foreach($rs as $r){
+            $obj = new stdClass();
+            $obj->id = get_first_object($r['_id']);
+            $obj->name = $r['first_name'] . '  ' . $r['last_name'];
+            $obj->cid = $r['cid'];
+
+            array_push($arr_result, $obj);
+        }
+
+        return $arr_result;
+    }
+
     public function search_provider_by_code($query){
         $result = $this->mongo_db
             ->like('provider', $query)

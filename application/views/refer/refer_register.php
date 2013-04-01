@@ -35,7 +35,7 @@
             <div class="row-fluid">
                 <div class="span4">
                     <div class="control-group">
-                        <label class="control-label">ส่งไปที่</label>
+                        <label class="control-label" for="tboTab1PcuId">ส่งไปที่</label>
                         <div class="controls">
                             <input type="text" id="tboTab1PcuId" class="input-mini" placeholder="รหัส">
                             <input type="text" id="tboTab1PcuName" placeholder="ชื่อสถานบริการ" class="input-medium" disabled>
@@ -44,17 +44,17 @@
                 </div>
                 <div class="span2">
                     <div class="control-group">
-                        <label class="control-label">เลขที่ส่งต่อ</label>
+                        <label class="control-label" for="tboTab1ReferNumber">เลขที่ส่งต่อ</label>
                         <div class="controls">
-                            <input type="text" class="input-mini" id="tboTab1ReferNumber" placeholder="เลขที่ส่งต่อ" disabled>
+                            <input type="text" class="input-small" id="tboTab1ReferNumber" placeholder="เลขที่ส่งต่อ" disabled>
                         </div>
                     </div>
                 </div>
-                <div class="span2">
+                <div class="span3">
                     <div class="control-group">
-                        <label class="control-label">จุดส่งต่อ</label>
+                        <label class="control-label" for="cboTab1ReferPoint">จุดส่งต่อ</label>
                         <div class="controls">
-                            <select class="input-small" id="cboTab1ReferPoint">
+                            <select class="input-medium" id="cboTab1ReferPoint">
                                 <option value="">---</option>
                                 <option value="ER">ER</option>
                                 <option value="OPD">OPD</option>
@@ -63,21 +63,11 @@
                         </div>
                     </div>
                 </div>
-                <div class="span2">
+                <div class="span3">
                     <div class="control-group">
-                        <label class="control-label">ห้องตรวจ</label>
+                        <label class="control-label" for="cboTab1ReferRoom">ห้องตรวจ</label>
                         <div class="controls">
-                            <select class="input-small" id="cboTab1ReferRoom">
-                                <option value="">---</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="span2">
-                    <div class="control-group">
-                        <label class="control-label">แผนก</label>
-                        <div class="controls">
-                            <select class="input-small" id="cboTab1Department">
+                            <select class="input-medium" id="cboTab1ReferRoom">
                                 <option value="">---</option>
                             </select>
                         </div>
@@ -85,16 +75,6 @@
                 </div>
             </div>
             <div class="row-fluid">
-                <div class="span2">
-                    <div class="control-group">
-                        <label class="control-label">แพทย์</label>
-                        <div class="controls">
-                            <select class="input-medium" id="cboTab1Doctor">
-                                <option value="">---</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
                 <div class="span2">
                     <label class="control-label">ประเภทการส่งต่อ</label>
                     <div class="controls">
@@ -127,12 +107,22 @@
                         </div>
                     </div>
                 </div>
-                <div class="span2">
+                <div class="span3">
                     <div class="control-group">
-                        <label class="control-label">ประเภทความเจ็บป่วย</label>
+                        <label class="control-label" for="cboTab1Department">แผนก</label>
                         <div class="controls">
-                            <select class="input-small" id="cboTab1TypeOfIllness">
-                                <option value="">----</option>
+                            <select class="input-medium" id="cboTab1Department">
+                                <option value="">---</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="span3">
+                    <div class="control-group">
+                        <label class="control-label" for="cboTab1Doctor">แพทย์</label>
+                        <div class="controls">
+                            <select class="input-medium" id="cboTab1Doctor">
+                                <option value="">---</option>
                             </select>
                         </div>
                     </div>
@@ -141,16 +131,26 @@
             <div class="row-fluid">
                 <div class="span4">
                     <div class="control-group">
-                        <label class="control-label">ส่งต่อจาก</label>
+                        <label class="control-label" for="tboTab1FromPcuId">ส่งต่อจาก</label>
                         <div class="controls">
-                            <input type="text" id="tboTab1FromPcuId" class="input-mini" placeholder="รหัส">
+                            <input type="text" id="tboTab1FromPcuId" class="input-mini" placeholder="รหัส" disabled>
                             <input type="text" id="tboTab1FromPcuName" placeholder="ชื่อสถานบริการ" class="input-medium" disabled>
+                        </div>
+                    </div>
+                </div>
+                <div class="span2">
+                    <div class="control-group">
+                        <label class="control-label" for="cboTab1TypeOfIllness">ประเภทความเจ็บป่วย</label>
+                        <div class="controls">
+                            <select class="input-small" id="cboTab1TypeOfIllness">
+                                <option value="">----</option>
+                            </select>
                         </div>
                     </div>
                 </div>
                 <div class="span3">
                     <div class="control-group">
-                        <label class="control-label">สิทธิการรักษา</label>
+                        <label class="control-label" for="tboTab1Claim">สิทธิการรักษา</label>
                         <div class="controls">
                             <input type="text" class="input-medium" id="tboTab1Claim">
                         </div>
@@ -158,7 +158,7 @@
                 </div>
                 <div class="span3">
                     <div class="control-group">
-                        <label class="control-label">เลขที่สิทธิ</label>
+                        <label class="control-label" for="tboTab1ClaimNumber">เลขที่สิทธิ</label>
                         <div class="controls">
                             <input type="text" class="input-medium" id="tboTab1ClaimNumber">
                         </div>
@@ -168,19 +168,19 @@
 
             <div class="alert alert-info"><h4>ประเภท / สถานะ</h4></div>
             <div class="form-inline">
-                <label class="controls">ประเภทการส่งตัว</label>
+                <label class="controls" for="cboTab1TransportedType">ประเภทการส่งตัว</label>
                 <select class="input-small" id="cboTab1TransportedType">
                     <option value="">----</option>
                 </select>
-                <label class="controls">ความฉุกเฉิน</label>
+                <label class="controls" for="cboTab1Emergency">ความฉุกเฉิน</label>
                 <select class="input-medium" id="cboTab1Emergency">
                     <option value="">----</option>
                 </select>
-                <label class="controls">สาเหตุ</label>
+                <label class="controls" for="cboTab1Cause">สาเหตุ</label>
                 <select class="input-large" id="cboTab1Cause">
                     <option value="">----</option>
                 </select>
-                <label class="controls">ประเภท</label>
+                <label class="controls" for="cboTab1Type">ประเภท</label>
                 <select class="input-small" id="cboTab1Type">
                     <option value="">----</option>
                 </select>
@@ -198,32 +198,32 @@
                     <div class="tab-pane active" id="stab1">
                         <div class="row-fluid">
                             <div class="span3">
-                                <label class="control-label">BP</label>
+                                <label class="control-label" for="tboTab1Bp1">BP</label>
                                 <div class="form-inline">
                                     <input type="text" class="input-mini" id="tboTab1Bp1"> /
                                     <input type="text" class="input-mini" id="tboTab1Bp2">
                                 </div>
                             </div>
                             <div class="span2">
-                                <label class="control-label">HR</label>
+                                <label class="control-label" for="tboTab1Hr">HR</label>
                                 <div class="controls">
                                     <input type="text" class="input-mini" id="tboTab1Hr">
                                 </div>
                             </div>
                             <div class="span2">
-                                <label class="control-label">PR</label>
+                                <label class="control-label" for="tboTab1Pr">PR</label>
                                 <div class="controls">
                                     <input type="text" class="input-mini" id="tboTab1Pr">
                                 </div>
                             </div>
                             <div class="span2">
-                                <label class="control-label">RR</label>
+                                <label class="control-label" for="tboTab1Rr">RR</label>
                                 <div class="controls">
                                     <input type="text" class="input-mini" id="tboTab1Rr">
                                 </div>
                             </div>
                             <div class="span2">
-                                <label class="control-label">BW</label>
+                                <label class="control-label" for="tboTab1Bw">BW</label>
                                 <div class="controls">
                                     <input type="text" class="input-mini" id="tboTab1Bw">
                                 </div>
@@ -231,19 +231,19 @@
                         </div>
                         <div class="row-fluid">
                             <div class="span2">
-                                <label class="control-label">Height</label>
+                                <label class="control-label" for="tboTab1Height">Height</label>
                                 <div class="controls">
                                     <input type="text" class="input-mini" id="tboTab1Height">
                                 </div>
                             </div>
                             <div class="span2">
-                                <label class="control-label">Temp</label>
+                                <label class="control-label" for="tboTab1Temp">Temp</label>
                                 <div class="controls">
                                     <input type="text" class="input-mini" id="tboTab1Temp">
                                 </div>
                             </div>
                             <div class="span4">
-                                <label class="control-label">การวินิจฉัยขั้นต้น</label>
+                                <label class="control-label" for="tboTab1FirstDiag">การวินิจฉัยขั้นต้น</label>
                                 <div class="controls">
                                     <input type="text" class="input-xlarge" id="tboTab1FirstDiag">
                                 </div>
@@ -254,7 +254,7 @@
                                 <label class="control-label">Coma score</label>
                             </div>
                             <div class="span2">
-                                <label class="control-label">E</label>
+                                <label class="control-label" for="cboTab1E1">E</label>
                                 <div class="controls">
                                     <select class="input-mini" id="cboTab1E1">
                                         <option value="">----</option>
@@ -265,7 +265,7 @@
                                 </div>
                             </div>
                             <div class="span2">
-                                <label class="control-label">V</label>
+                                <label class="control-label" for="cboTab1V1">V</label>
                                 <div class="controls">
                                     <select class="input-mini" id="cboTab1V1">
                                         <option value="">----</option>
@@ -276,7 +276,7 @@
                                 </div>
                             </div>
                             <div class="span2">
-                                <label class="control-label">M</label>
+                                <label class="control-label" for="cboTab1M1">M</label>
                                 <div class="controls">
                                     <select class="input-mini" id="cboTab1M1">
                                         <option value="">----</option>
@@ -292,7 +292,7 @@
                                 <label class="control-label">Pupil sizes</label>
                             </div>
                             <div class="span2">
-                                <label class="control-label">L</label>
+                                <label class="control-label" for="tboTab1L">L</label>
                                 <div class="controls">
                                     <input type="text" class="input-mini" id="tboTab1L">
                                     <select class="input-mini" id="cboTab1L">
@@ -301,7 +301,7 @@
                                 </div>
                             </div>
                             <div class="span2">
-                                <label class="control-label">R</label>
+                                <label class="control-label" for="tboTab1R">R</label>
                                 <div class="controls">
                                     <input type="text" class="input-mini" id="tboTab1R">
                                     <select class="input-mini" id="cboTab1R">
@@ -331,13 +331,13 @@
                     <div class="tab-pane" id="stab2">
                         <div class="row-fluid">
                             <div class="span4">
-                                <label class="control-label">CC</label>
+                                <label class="control-label" for="tboTab1Cc">CC</label>
                                 <div class="controls">
                                     <textarea style="width: 180pt;" rows="3" id="tboTab1Cc"></textarea>
                                 </div>
                             </div>
                             <div class="span4">
-                                <label class="control-label">PE</label>
+                                <label class="control-label" for="tboTab1Pe">PE</label>
                                 <div class="controls">
                                     <textarea style="width: 180pt;" rows="3" id="tboTab1Pe"></textarea>
                                 </div>
@@ -424,7 +424,7 @@
             <div class="row-fluid">
                 <div class="span6">
                     <div class="control-group">
-                        <label class="control-label">บันทึกการส่งต่อ</label>
+                        <label class="control-label" for="tboTab1SaveReferResult">บันทึกการส่งต่อ</label>
                         <div class="controls">
                             <textarea style="width: 400px;" rows="3" id="tboTab1SaveReferResult"></textarea>
                         </div>
@@ -432,7 +432,7 @@
                 </div>
                 <div class="span6">
                     <div class="control-group">
-                        <label class="control-label">Response</label>
+                        <label class="control-label" for="tboTab1Response">Response</label>
                         <div class="controls">
                             <textarea style="width: 400px;" rows="3" id="tboTab1Response"></textarea>
                         </div>
@@ -761,7 +761,7 @@
             <div class="alert alert-info"><h4>ข้อมูลการส่งต่อ</h4></div>
             <div class="row-fluid">
                 <div class="span3">
-                    <label class="control-label">ส่งต่อมาจาก</label>
+                    <label class="control-label" for="cboTab11FromPcu">ส่งต่อมาจาก</label>
                     <div class="control-group">
                         <select class="input-medium" id="cboTab11FromPcu">
                             <option value="">-- ส่งต่อมาจาก --</option>
@@ -769,7 +769,7 @@
                     </div>
                 </div>
                 <div class="span3">
-                    <label class="control-label">วันที่ส่ง</label>
+                    <label class="control-label" for="dtpTab11DateRefer">วันที่ส่ง</label>
                     <div class="control-group">
                         <div class="input-append" data-type="datetimepicker">
                             <input id="dtpTab11DateRefer" type="text" class="input-medium" value="<?php echo date('d/m/Y H:i:s'); ?>" disabled>
@@ -779,7 +779,7 @@
                 </div>
                 <div class="span3">
                     <div class="control-group">
-                        <label class="control-label">ความเร่งด่วน</label>
+                        <label class="control-label" for="cboTab11Haste">ความเร่งด่วน</label>
                         <div class="controls">
                             <select class="input-medium" id="cboTab11Haste">
                                 <option value="">-- ความเร่งด่วน --</option>
@@ -789,7 +789,7 @@
                 </div>
                 <div class="span3">
                     <div class="control-group">
-                        <label class="control-label">สาเหตุ</label>
+                        <label class="control-label" for="cboTab11Cause">สาเหตุ</label>
                         <div class="controls">
                             <select class="input-medium" id="cboTab11Cause">
                                 <option value="">-- สาเหตุ --</option>
@@ -815,7 +815,7 @@
                             <div class="row-fluid">
                                 <div class="control-group">
                                     <div class="form-inline">
-                                        <label class="control-label">CC</label>
+                                        <label class="control-label" for="tboTab11Cc">CC</label>
                                         <textarea rows="2" style="width: 300px;" id="tboTab11Cc"></textarea>
                                     </div>
                                 </div>
@@ -823,7 +823,7 @@
                             <div class="row-fluid">
                                 <div class="control-group">
                                     <div class="form-inline">
-                                        <label class="control-label">PE</label>
+                                        <label class="control-label" for="tboTab11Pe">PE</label>
                                         <textarea rows="2" style="width: 300px;" id="tboTab11Pe"></textarea>
                                     </div>
                                 </div>
@@ -833,19 +833,19 @@
                             <div class="row-fluid">
                                 <div class="span5">
                                     <div class="control-group form-inline">
-                                        <label class="control-label">BP</label>
+                                        <label class="control-label" for="tboTab11Bp1">BP</label>
                                         <input type="text" class="input-mini" id="tboTab11Bp1"> / <input type="text" class="input-mini" id="tboTab11Bp2">
                                     </div>
                                 </div>
                                 <div class="span3">
                                     <div class="control-group form-inline">
-                                        <label class="control-label">HR</label>
+                                        <label class="control-label" for="tboTab11Hr">HR</label>
                                         <input type="text" class="input-mini" id="tboTab11Hr">
                                     </div>
                                 </div>
                                 <div class="span3">
                                     <div class="control-group form-inline">
-                                        <label class="control-label">RR</label>
+                                        <label class="control-label" for="tboTab11Rr">RR</label>
                                         <input type="text" class="input-mini" id="tboTab11Rr">
                                     </div>
                                 </div>
@@ -853,19 +853,19 @@
                             <div class="row-fluid">
                                 <div class="span4">
                                     <div class="control-group form-inline">
-                                        <label class="control-label">BW</label>
+                                        <label class="control-label" for="tboTab11Bw">BW</label>
                                         <input type="text" class="input-mini" id="tboTab11Bw">
                                     </div>
                                 </div>
                                 <div class="span4">
                                     <div class="control-group form-inline">
-                                        <label class="control-label">Height</label>
+                                        <label class="control-label" for="tboTab11Height">Height</label>
                                         <input type="text" class="input-mini" id="tboTab11Height">
                                     </div>
                                 </div>
                                 <div class="span4">
                                     <div class="control-group form-inline">
-                                        <label class="control-label">Temp</label>
+                                        <label class="control-label" for="tboTab11Temp">Temp</label>
                                         <input type="text" class="input-mini" id="tboTab11Temp">
                                     </div>
                                 </div>
@@ -873,7 +873,7 @@
                             <div class="row-fluid">
                                 <div class="span12">
                                     <div class="control-group form-inline">
-                                        <label class="control-label">การวินิจฉัยขั้นต้น</label>
+                                        <label class="control-label" for="tbpTab11Diag">การวินิจฉัยขั้นต้น</label>
                                         <input type="text" class="input-xlarge" id="tbpTab11Diag">
                                     </div>
                                 </div>
@@ -883,7 +883,7 @@
                     <div class="alert alert-danger" style="font-size: 14pt;">การตอบกลับ</div>
                     <div class="row-fluid">
                         <div class="control-group">
-                            <label class="control-label">ให้ดำเนินการต่อดังนี้</label>
+                            <label class="control-label" for="tboTab11Step">ให้ดำเนินการต่อดังนี้</label>
                             <div class="controls">
                                 <textarea rows="3" style="width: 600px;" id="tboTab11Step"></textarea>
                             </div>
@@ -1018,11 +1018,11 @@
             <div class="row-fluid">
                 <div class="span12">
                     <div class="controls form-inline">
-                        <label class="control-label">ประเภทการจำหน่าย</label>
+                        <label class="control-label" for="cboTab11DistributionType">ประเภทการจำหน่าย</label>
                         <select class="input-medium" id="cboTab11DistributionType">
                             <option value="">-- ประเภทการจำหน่าย --</option>
                         </select>
-                        <label class="control-label">ส่งต่อไปที่</label>
+                        <label class="control-label" for="tboTab11ReferToPcuId">ส่งต่อไปที่</label>
                         <input type="text" class="input-mini" placeholder="..." id="tboTab11ReferToPcuId">
                         <input type="text" class="input-medium" placeholder="..." disabled id="tboTab11ReferToPcuName">
                     </div>
