@@ -68,11 +68,24 @@ head.ready(function(){
             app.ajax(url, params, function(err, data){
                 err ? cb(err) : cb(null, data);
             });
+        },
+        search: function(query, cb){
+            var url = 'death/search',
+                params = {
+                    query: query
+                };
+
+            app.ajax(url, params, function(err, data){
+                err ? cb(err) : cb(null, data);
+            });
         }
+
     };
 
     death.get_list = function()
     {
+        $('#tbl_list > tbody').empty();
+
         $('#main_paging').fadeIn('slow');
         death.ajax.get_list_total(function(err, data){
             if(err){
@@ -85,7 +98,6 @@ head.ready(function(){
                     page: 1,
                     onSelect: function(page){
                         death.ajax.get_list(this.slice[0], this.slice[1], function(err, data){
-                            $('#tbl_list > tbody').empty();
                             if(err){
                                 app.alert(err);
                             }else{
@@ -161,7 +173,7 @@ head.ready(function(){
 
         if(!data)
         {
-            $('#tbl_list > tbody').append('<tr><td colspan="8">ไม่พบข้อมูล</td></td></tr>');
+            $('#tbl_list > tbody').append('<tr><td colspan="9">ไม่พบข้อมูล</td></td></tr>');
         }
         else
         {
@@ -617,5 +629,63 @@ head.ready(function(){
         death.clear_form();
     });
 
+    //search
+    $('#btn_search').on('click', function(){
+        var query = $('#txt_query').val();
+
+        $('#main_paging').fadeOut('slow');
+
+        if(!query)
+        {
+            app.alert('กรุณาระบุคำค้นหา โดยระบุชื่อ-สกุล หรือ เลขบัตรประชาชน หรือ HN');
+        }
+        else
+        {
+            $('#tbl_list > tbody').empty();
+
+            death.ajax.search(query, function(err, data){
+                if(err)
+                {
+                    app.alert(err);
+                    $('#tbl_list > tbody').append('<tr><td colspan="9">ไม่พบข้อมูล</td></td></tr>');
+                }
+                else
+                {
+                    death.set_list(data);
+                }
+            });
+        }
+
+    });
+
+    //search diagnosis
+    $('#txt_query').typeahead({
+        ajax: {
+            url: site_url + 'person/search_person_ajax',
+            timeout: 500,
+            displayField: 'name',
+            triggerLength: 3,
+            preDispatch: function(query){
+                return {
+                    query: query,
+                    csrf_token: csrf_token
+                }
+            },
+
+            preProcess: function(data){
+                if(data.success){
+                    return data.rows;
+                }else{
+                    return false;
+                }
+            }
+        },
+        updater: function(data){
+            var d = data.split('#');
+            var code = d[0];
+
+            return code;
+        }
+    });
     death.get_list();
 });

@@ -72,6 +72,15 @@ class Death_model extends CI_Model
         return $rs > 0 ? TRUE : FALSE;
     }
 
+    public function search_by_hn($query)
+    {
+        $rs = $this->mongo_db
+            ->where(array('owner_id' => new MongoId($this->owner_id)))
+            ->where(array('hn' => (string) $query))
+            ->get('death');
+        return $rs;
+    }
+
     public function get_list($start, $limit)
     {
         $rs = $this->mongo_db

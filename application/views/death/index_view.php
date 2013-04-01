@@ -4,7 +4,7 @@
 </ul>
 <form action="#" class="form-actions form-inline">
     <label for="txt_query">ค้นหา</label>
-    <input class="input-xlarge" id="txt_query" type="text" placeholder="พิมพ์เลขบัตรประชาชน, HN หรือ ชื่อ - สกุล" />
+    <input class="input-xlarge" id="txt_query" type="text" placeholder="พิมพ์เลขบัตรประชาชน หรือ HN หรือ ชื่อ - สกุล" autocomplete="off" />
     <button class="btn btn-info" id="btn_search">
         <i class="icon-search"></i>
     </button>
@@ -184,7 +184,7 @@
 <!-- end register service -->
 
 <script type="text/javascript">
-    head.js('<?php echo base_url(); ?>assets/apps/js/death.js');
+    head.js('<?php echo base_url(); ?>assets/apps/js/app.death.js');
 </script>
 
 

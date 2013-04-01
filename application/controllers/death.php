@@ -154,6 +154,44 @@ class Death extends CI_Controller {
 
         render_json($json);
     }
+    public function search()
+    {
+        $query = $this->input->post('query');
+
+        $this->death->owner_id = $this->owner_id;
+        $rs = $this->death->search_by_hn($query);
+
+        if($rs)
+        {
+            $arr_result = array();
+            foreach($rs as $r)
+            {
+                $person = $this->person->get_person_detail_with_hn($r['hn']);
+                $obj                = new stdClass();
+                $obj->hn            = $r['hn'];
+                $obj->cid           = $person['cid'];
+                $obj->id            = get_first_object($r['_id']);
+                $obj->first_name    = $person['first_name'];
+                $obj->last_name     = $person['last_name'];
+                $obj->sex           = $person['sex'] == '1' ? 'ชาย' : 'หญิง';
+                $obj->birthdate     = $person['birthdate'];
+                $obj->age           = count_age($person['birthdate']);
+                $obj->ddeath        = from_mongo_to_thai_date($r['ddeath']);
+                $obj->icd_code      = $this->basic->get_diag_name($r['cdeath']);
+
+                $arr_result[]       = $obj;
+            }
+
+            $rows = json_encode($arr_result);
+            $json = '{"success": true, "rows": '.$rows.'}';
+        }
+        else
+        {
+            $json = '{"success": false, "msg": "No result."}';
+        }
+
+        render_json($json);
+    }
 
     public function get_detail()
     {

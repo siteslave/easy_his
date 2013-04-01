@@ -625,19 +625,19 @@ class Person extends CI_Controller
                 if(isset($result[0]['allergies'])){
                     foreach($result[0]['allergies'] as $r){
                         $obj = new stdClass();
-                        $obj->drug_id = get_first_object($r['drug_id']);
-                        $obj->drug_detail = $this->basic->get_drug_detail($obj->drug_id);
-                        $obj->record_date = to_js_date($r['record_date']);
-                        $obj->diag_type_id = get_first_object($r['diag_type_id']);
-                        $obj->diag_type_name = get_drug_allergy_diag_type_name($obj->diag_type_id);
-                        $obj->alevel_id = get_first_object($r['alevel_id']);
-                        $obj->alevel_name = get_drug_allergy_level_name($obj->alevel_id);
-                        $obj->symptom_id = get_first_object($r['symptom_id']);
-                        $obj->symptom_name = get_symptom_name($obj->symptom_id);
-                        $obj->informant_id = get_first_object($r['informant_id']);
-                        $obj->informant_name = get_informant_name($r['informant_id']);
-                        $obj->hospcode = $r['hospcode'];
-                        $obj->hospname = get_hospital_name($obj->hospcode);
+                        $obj->drug_id           = get_first_object($r['drug_id']);
+                        $obj->drug_detail       = $this->basic->get_drug_detail($obj->drug_id);
+                        $obj->record_date       = to_js_date($r['record_date']);
+                        $obj->diag_type_id      = get_first_object($r['diag_type_id']);
+                        $obj->diag_type_name    = get_drug_allergy_diag_type_name($obj->diag_type_id);
+                        $obj->alevel_id         = get_first_object($r['alevel_id']);
+                        $obj->alevel_name       = get_drug_allergy_level_name($obj->alevel_id);
+                        $obj->symptom_id        = get_first_object($r['symptom_id']);
+                        $obj->symptom_name      = get_symptom_name($obj->symptom_id);
+                        $obj->informant_id      = get_first_object($r['informant_id']);
+                        $obj->informant_name    = get_informant_name($r['informant_id']);
+                        $obj->hospcode          = $r['hospcode'];
+                        $obj->hospname          = get_hospital_name($obj->hospcode);
 
                         $arr_result[] = $obj;
                     }
@@ -821,11 +821,11 @@ class Person extends CI_Controller
                     foreach($rs[0]['chronics'] as $r){
                         $obj = new stdClass();
                         $obj->diag_date = to_js_date($r['diag_date']);
-                        $obj->chronic = $r['chronic'];
-                        $obj->chronic_name = get_diag_name($obj->chronic);
-                        $obj->discharge_date = to_js_date($r['discharge_date']);
-                        $obj->discharge_type = get_first_object($r['discharge_type']);
-                        $obj->discharge_type_name = get_chronic_discharge_type_name($obj->discharge_type);
+                        $obj->chronic               = $r['chronic'];
+                        $obj->chronic_name          = get_diag_name($obj->chronic);
+                        $obj->discharge_date        = to_js_date($r['discharge_date']);
+                        $obj->discharge_type        = get_first_object($r['discharge_type']);
+                        $obj->discharge_type_name   = get_chronic_discharge_type_name($obj->discharge_type);
                         $obj->hosp_dx_code = $r['hosp_dx'];
                         $obj->hosp_rx_code = $r['hosp_rx'];
                         $obj->hosp_dx_name = get_hospital_name($obj->hosp_dx_code);
@@ -869,7 +869,15 @@ class Person extends CI_Controller
             if(is_numeric($query))
             {
                 //search by code
-                $rs = $this->person->search_person_ajax_by_hn($query);
+
+                if(strlen($query) == 13)
+                {
+                    $rs = $this->person->search_person_ajax_by_cid($query);
+                }
+                else
+                {
+                    $rs = $this->person->search_person_ajax_by_hn($query);
+                }
             }
             else
             {
@@ -958,14 +966,14 @@ class Person extends CI_Controller
                 foreach($rs as $r)
                 {
                     $obj = new stdClass();
-                    $obj->id = get_first_object($r['_id']);
-                    $obj->hn = $r['hn'];
-                    $obj->cid = $r['cid'];
-                    $obj->first_name = $r['first_name'];
-                    $obj->last_name = $r['last_name'];
-                    $obj->birthdate = $r['birthdate'];
-                    $obj->sex = $r['sex'] == '1' ? 'ชาย' : 'หญิง';
-                    $obj->age = count_age($r['birthdate']);
+                    $obj->id            = get_first_object($r['_id']);
+                    $obj->hn            = $r['hn'];
+                    $obj->cid           = $r['cid'];
+                    $obj->first_name    = $r['first_name'];
+                    $obj->last_name     = $r['last_name'];
+                    $obj->birthdate     = $r['birthdate'];
+                    $obj->sex           = $r['sex'] == '1' ? 'ชาย' : 'หญิง';
+                    $obj->age           = count_age($r['birthdate']);
 
                     $arr_result[] = $obj;
                 }

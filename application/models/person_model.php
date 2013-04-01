@@ -654,6 +654,19 @@ class Person_model extends CI_Model
 
         return $rs;
     }
+
+    public function search_person_ajax_by_cid($query)
+    {
+        $rs = $this->mongo_db
+            ->select(array('hn', 'first_name', 'last_name', 'birthdate'))
+            ->where(array('cid' =>(string) $query))
+            ->order_by(array('hn' => 1))
+            ->limit(20)
+            ->get('person');
+
+        return $rs;
+    }
+
     public function search_person_ajax_by_name($first_name, $last_name)
     {
         $rs = $this->mongo_db
