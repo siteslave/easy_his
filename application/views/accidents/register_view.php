@@ -274,7 +274,7 @@
 
 <form class="form-actions">
 	<a href="javascript:void(0);" class="btn btn-success" id="btn_save">
-		<i class="icon-ok-sign"></i> บันทึกข้อมูล
+		<i class="icon-save"></i> บันทึกข้อมูล
 	</a>
 	
 	<a href="<?php echo site_url('services/entries'); ?>/<?php echo $vn; ?>" class="btn">

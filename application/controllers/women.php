@@ -48,7 +48,7 @@ class Women extends CI_Controller {
         $limit = (int) $stop - (int) $start;
 
         $this->women->owner_id = $this->owner_id;
-        $rs = $this->women->get_list($year, $start, $limit);
+        $rs = $this->women->get_list($start, $limit);
 
         if($rs)
         {
@@ -70,7 +70,7 @@ class Women extends CI_Controller {
                 $obj->fptype        = $fp['fptype'];
                 $obj->year          = $fp['year'];
                 $obj->fptype_name   = get_fp_type_name($obj->fptype);
-
+                $obj->mstatus       = get_mstatus_name(get_first_object($person['mstatus']));
                 $obj->numberson     = (int) $fp['numberson'];
 
                 $arr_result[]       = $obj;
@@ -87,13 +87,10 @@ class Women extends CI_Controller {
         render_json($json);
     }
 
-
     public function get_list_total()
     {
         $this->women->owner_id = $this->owner_id;
-
-        $year = $this->input->post('year');
-        $total = $this->women->get_list_total($year);
+        $total = $this->women->get_list_total();
 
         $json = '{"success": true, "total": '.$total.'}';
 
@@ -171,6 +168,153 @@ class Women extends CI_Controller {
 
         render_json($json);
     }
+
+    public function search_filter()
+    {
+        $village_id = $this->input->post('village_id');
+        $year = $this->input->post('year');
+
+        $start = $this->input->post('start');
+        $stop = $this->input->post('stop');
+
+        $start = empty($start) ? 0 : $start;
+        $stop = empty($stop) ? 25 : $stop;
+
+        $limit = (int) $stop - (int) $start;
+
+        if(empty($village_id))
+        {
+            $json = '{"success": false, "msg": "ไม่พบเงื่อนไข - หมู่บ้าน"}';
+        }
+        else if(empty($year))
+        {
+            $json = '{"success": false, "msg": "ไม่พบเงื่อนไข - ปีงบประมาณ"}';
+        }
+        else
+        {
+            $this->women->owner_id = $this->owner_id;
+            //get house list
+            $houses = $this->women->get_house_list($village_id);
+
+            $arr_house = array();
+            foreach($houses as $r)
+            {
+                $arr_house[] = $r['_id'];
+            }
+            //echo var_dump($arr_house);
+
+            $rs = $this->women->search_filter($arr_house, $start, $limit);
+
+            $arr_result = array();
+            foreach($rs as $r)
+            {
+                $person = $this->person->get_person_detail_with_hn($r['hn']);
+                $fp = $this->women->get_fp_detail($year, $r['hn']);
+
+                $obj                = new stdClass();
+                $obj->hn            = $r['hn'];
+                $obj->cid           = $person['cid'];
+                $obj->id            = get_first_object($r['_id']);
+                $obj->first_name    = $person['first_name'];
+                $obj->last_name     = $person['last_name'];
+                $obj->sex           = $person['sex'] == '1' ? 'ชาย' : 'หญิง';
+                $obj->birthdate     = $person['birthdate'];
+                $obj->age           = count_age($person['birthdate']);
+                $obj->fptype        = $fp['fptype'];
+                $obj->year          = $fp['year'];
+                $obj->fptype_name   = get_fp_type_name($obj->fptype);
+                $obj->mstatus       = get_mstatus_name(get_first_object($person['mstatus']));
+
+                $obj->numberson     = (int) $fp['numberson'];
+
+                $arr_result[]       = $obj;
+            }
+
+            $rows = json_encode($arr_result);
+            $json = '{"success": true, "rows": '.$rows.'}';
+
+        }
+
+        render_json($json);
+    }
+
+
+
+    public function search_filter_total()
+    {
+        $this->women->owner_id = $this->owner_id;
+        $village_id = $this->input->post('village_id');
+
+        //get house list
+        $houses = $this->women->get_house_list($village_id);
+
+        $arr_house = array();
+        foreach($houses as $r)
+        {
+            $arr_house[] = $r['_id'];
+        }
+
+        $total = $this->women->search_filter_total($arr_house);
+
+        $json = '{"success": true, "total": '.$total.'}';
+
+        render_json($json);
+    }
+
+
+    public function search()
+    {
+        $query = $this->input->post('query');
+        $year = $this->input->post('year');
+
+        if(empty($query))
+        {
+            $json = '{"success": false, "msg": "No query found.}';
+        }
+        else
+        {
+            $this->women->owner_id = $this->owner_id;
+
+            $rs = $this->women->search($query);
+
+            if($rs)
+            {
+                $arr_result = array();
+                foreach($rs as $r)
+                {
+                    $person = $this->person->get_person_detail_with_hn($r['hn']);
+                    $fp = $this->women->get_fp_detail($year, $r['hn']);
+
+                    $obj                = new stdClass();
+                    $obj->hn            = $r['hn'];
+                    $obj->cid           = $person['cid'];
+                    $obj->id            = get_first_object($r['_id']);
+                    $obj->first_name    = $person['first_name'];
+                    $obj->last_name     = $person['last_name'];
+                    $obj->sex           = $person['sex'] == '1' ? 'ชาย' : 'หญิง';
+                    $obj->birthdate     = $person['birthdate'];
+                    $obj->age           = count_age($person['birthdate']);
+                    $obj->fptype        = $fp['fptype'];
+                    $obj->year          = $fp['year'];
+                    $obj->fptype_name   = get_fp_type_name($obj->fptype);
+                    $obj->mstatus       = get_mstatus_name(get_first_object($person['mstatus']));
+                    $obj->numberson     = (int) $fp['numberson'];
+
+                    $arr_result[]       = $obj;
+                }
+
+                $rows = json_encode($arr_result);
+                $json = '{"success": true, "rows": '.$rows.'}';
+            }
+            else
+            {
+                $json = '{"success": false, "msg": "No result."}';
+            }
+        }
+
+        render_json($json);
+    }
+
 }
 
 /* End of file women.php */

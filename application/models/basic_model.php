@@ -1168,6 +1168,12 @@ class Basic_model extends CI_Model
 
         return count($result) > 0 ? $result[0]['name'] : '-';
     }
+    public function get_mstatus_name($code)
+    {
+        $result = $this->mongo_db->where(array('_id' => new MongoId($code)))->get('ref_marry_status');
+
+        return count($result) > 0 ? $result[0]['name'] : '-';
+    }
 
     public function get_vaccine_name($vaccine_id)
     {

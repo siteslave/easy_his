@@ -10,18 +10,17 @@
     </select>
     <label for="sl_village">หมู่บ้าน</label>
     <select class="input-xlarge" id="sl_village">
-        <option value="00000000">---</option>
+        <option value="">---</option>
         <?php
         foreach ($villages as $r){
             echo '<option value="'.get_first_object($r['_id']).'">' . $r['village_code'] . ' ' . $r['village_name'] . '</option>';
         }
         ?>
     </select>
-    <button type="button" class="btn btn-info" id="btn_do_get_list"><i class="icon-search"></i> แสดงรายการ</button>
-    <div class="btn-group pull-right">
-        <button type="button" id="btn_refresh" class="btn btn-success"><i class="icon-refresh"></i> แสดงทั้งหมด</button>
-        <button type="button" id="btn_search" class="btn"><i class="icon-search"></i> ค้นหา</button>
-    </div>
+    <button type="button" class="btn btn-info" id="btn_do_get_list"><i class="icon-search"></i> แสดงรายการ</button> |
+    ค้นหา <input type="text" class="input-xlarge" id="txt_query" placeholder="พิมพ์ HN หรือ เลขบัตรประชาชน หรือ ชื่อ-สกุล" />
+    <button type="button" id="btn_do_search" class="btn btn-info"><i class="icon-search"></i></button>
+    <button type="button" id="btn_refresh" class="btn btn-success pull-right"><i class="icon-refresh"></i> แสดงทั้งหมด</button>
 </form>
 
 <table class="table table-striped table-hover" id="tbl_list">
@@ -32,6 +31,7 @@
         <th>ชื่อ - สกุล</th>
         <th>วันเกิด</th>
         <th>อายุ (ปี)</th>
+        <th>สถานะภาพ</th>
         <th>จำนวนบุตร</th>
         <th>วิธีคุมกำเนิด</th>
         <th>#</th>
@@ -39,7 +39,7 @@
     </thead>
     <tbody>
     <tr>
-        <td colspan="8">...</td>
+        <td colspan="9">...</td>
     </tr>
     </tbody>
 </table>
@@ -134,6 +134,7 @@
         <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off"></i> ปิดหน้าต่าง</a>
     </div>
 </div>
+
 
 <script type="text/javascript">
     head.js('<?php echo base_url(); ?>assets/apps/js/apps.women.js');

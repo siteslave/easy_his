@@ -515,7 +515,7 @@ class Person_model extends CI_Model
 
     public function get_person_detail($id){
         $rs = $this->mongo_db
-            ->select(array('hn', 'first_name', 'last_name', 'cid', 'birthdate', 'sex'))
+            ->select(array('hn', 'first_name', 'last_name', 'cid', 'birthdate', 'sex', 'mstatus'))
             ->where('_id', new MongoId($id))
             ->limit(1)
             ->get('person');
@@ -525,7 +525,7 @@ class Person_model extends CI_Model
     
     public function get_person_detail_with_hn($hn){
         $rs = $this->mongo_db
-            ->select(array('hn', 'first_name', 'last_name', 'cid', 'birthdate', 'sex'))
+            ->select(array('hn', 'first_name', 'last_name', 'cid', 'birthdate', 'sex', 'mstatus'))
             ->where('hn', $hn)
             ->limit(1)
             ->get('person');
@@ -535,7 +535,7 @@ class Person_model extends CI_Model
 
     public function get_person_detail_with_cid($cid){
         $rs = $this->mongo_db
-            ->select(array('hn', 'first_name', 'last_name', 'cid', 'birthdate', 'sex'))
+            ->select(array('hn', 'first_name', 'last_name', 'cid', 'birthdate', 'sex', 'mstatus'))
             ->where('cid', $cid)
             ->limit(1)
             ->get('person');

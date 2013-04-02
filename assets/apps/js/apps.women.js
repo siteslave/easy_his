@@ -64,6 +64,46 @@ head.ready(function(){
             app.ajax(url, params, function(err, data){
                 return err ? cb(err) : cb(null, data);
             });
+        },
+
+        search_filter: function(items, start, stop, cb){
+
+            var url = 'women/search_filter',
+                params = {
+                    year: items.year,
+                    village_id: items.village_id,
+                    start: start,
+                    stop: stop
+                };
+
+            app.ajax(url, params, function(err, data){
+                return err ? cb(err) : cb(null, data);
+            });
+        },
+        search: function(query, year, cb){
+
+            var url = 'women/search',
+                params = {
+                    query: query,
+                    year: year
+                };
+
+            app.ajax(url, params, function(err, data){
+                return err ? cb(err) : cb(null, data);
+            });
+        },
+
+        search_filter_total: function(items, cb){
+
+            var url = 'women/search_filter_total',
+                params = {
+                    year: items.year,
+                    village_id: items.village_id
+                };
+
+            app.ajax(url, params, function(err, data){
+                return err ? cb(err) : cb(null, data);
+            });
         }
     };
 
@@ -90,6 +130,7 @@ head.ready(function(){
         $('#tbl_list > tbody').empty();
 
         $('#main_paging').fadeIn('slow');
+
         women.ajax.get_list_total(year, function(err, data){
             if(err){
                 app.alert(err);
@@ -168,6 +209,90 @@ head.ready(function(){
             }
         });
     };
+    women.search_filter = function(items)
+    {
+
+        $('#tbl_list > tbody').empty();
+
+        $('#main_paging').fadeIn('slow');
+        women.ajax.search_filter_total(items, function(err, data){
+            if(err){
+                app.alert(err);
+            }else{
+                $('#main_paging > ul').paging(data.total, {
+                    format: " < . (qq -) nnncnnn (- pp) . >",
+                    perpage: app.record_per_page,
+                    lapping: 1,
+                    page: 1,
+                    onSelect: function(page){
+                        women.ajax.search_filter(items, this.slice[0], this.slice[1], function(err, data){
+                            if(err){
+                                app.alert(err);
+                            }else{
+                                women.set_list(data);
+                            }
+
+                        });
+
+                    },
+                    onFormat: function(type){
+                        switch (type) {
+
+                            case 'block':
+
+                                if (!this.active)
+                                    return '<li class="disabled"><a href="">' + this.value + '</a></li>';
+                                else if (this.value != this.page)
+                                    return '<li><a href="#' + this.value + '">' + this.value + '</a></li>';
+                                return '<li class="active"><a href="#">' + this.value + '</a></li>';
+
+                            case 'right':
+                            case 'left':
+
+                                if (!this.active) {
+                                    return "";
+                                }
+                                return '<li><a href="#' + this.value + '">' + this.value + '</a></li>';
+
+                            case 'next':
+
+                                if (this.active) {
+                                    return '<li><a href="#' + this.value + '">&raquo;</a></li>';
+                                }
+                                return '<li class="disabled"><a href="">&raquo;</a></li>';
+
+                            case 'prev':
+
+                                if (this.active) {
+                                    return '<li><a href="#' + this.value + '">&laquo;</a></li>';
+                                }
+                                return '<li class="disabled"><a href="">&laquo;</a></li>';
+
+                            case 'first':
+
+                                if (this.active) {
+                                    return '<li><a href="#' + this.value + '">&lt;</a></li>';
+                                }
+                                return '<li class="disabled"><a href="">&lt;</a></li>';
+
+                            case 'last':
+
+                                if (this.active) {
+                                    return '<li><a href="#' + this.value + '">&gt;</a></li>';
+                                }
+                                return '<li class="disabled"><a href="">&gt;</a></li>';
+
+                            case 'fill':
+                                if (this.active) {
+                                    return '<li class="disabled"><a href="#">...</a></li>';
+                                }
+                        }
+                        return ""; // return nothing for missing branches
+                    }
+                });
+            }
+        });
+    };
 
     women.set_list = function(data)
     {
@@ -178,7 +303,7 @@ head.ready(function(){
 
         if(!data)
         {
-            $('#tbl_list > tbody').append('<tr><td colspan="8">ไม่พบข้อมูล</td></td></tr>');
+            $('#tbl_list > tbody').append('<tr><td colspan="9">ไม่พบข้อมูล</td></td></tr>');
         }
         else
         {
@@ -191,6 +316,7 @@ head.ready(function(){
                         '<td>'+ v.first_name + ' ' + v.last_name +'</td>' +
                         '<td>'+ app.mongo_to_thai_date(v.birthdate) +'</td>' +
                         '<td>'+ v.age +'</td>' +
+                        '<td>'+ v.mstatus +'</td>' +
                         '<td>'+ v.numberson +'</td>' +
                         '<td>'+ v.fptype_name +'</td>' +
                         '<td><div class="btn-group">' +
@@ -325,6 +451,85 @@ head.ready(function(){
                 });
             }
         });
+    });
+
+    $('#btn_do_get_list').on('click', function(){
+        var items = {};
+        items.year = $('#sl_year').val(),
+        items.village_id = $('#sl_village').val();
+
+        if(!items.village_id)
+        {
+            app.alert('กรุณาเลือกหมู่บ้านที่ต้องการ');
+        }
+        else
+        {
+            women.search_filter(items);
+        }
+
+    });
+
+    //search person
+    $('#txt_query').typeahead({
+        ajax: {
+            url: site_url + 'person/search_person_ajax',
+            timeout: 500,
+            displayField: 'name',
+            triggerLength: 3,
+            preDispatch: function(query){
+                return {
+                    query: query,
+                    csrf_token: csrf_token
+                }
+            },
+
+            preProcess: function(data){
+                if(data.success){
+                    return data.rows;
+                }else{
+                    return false;
+                }
+            }
+        },
+        updater: function(data){
+            var d = data.split('#');
+            var code = d[0],
+                name = d[1];
+
+            //$('#txt_icdcode').val(code);
+            //$('#txt_icdname').val(name);
+
+            return code;
+        }
+    });
+
+    $('#btn_refresh').on('click', function(){
+        women.get_list();
+    });
+
+    $('#btn_do_search').on('click', function(){
+        var query = $('#txt_query').val();
+        var year = $('#sl_year').val();
+
+        $('#main_paging').fadeOut('slow');
+
+        if(!query)
+        {
+            app.alert('กรุณาระบุคำค้นหา');
+        }
+        else
+        {
+            women.ajax.search(query, year, function(err, data){
+                if(err)
+                {
+                    app.alert(err);
+                }
+                else
+                {
+                    women.set_list(data);
+                }
+            });
+        }
     });
 
     women.get_list();

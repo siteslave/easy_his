@@ -21,26 +21,27 @@ class Women_model extends CI_Model
         parent::__construct();
     }
 
-    public function get_list($year, $start, $limit)
+    public function get_list($start, $limit)
     {
         $rs = $this->mongo_db
             ->where(array('owner_id' => new MongoId($this->owner_id)))
             ->where(array('sex' => '2'))
-            ->where_lte('birthdate', (string) ((int) $year - 15).'1231')
-            ->where_gte('birthdate', (string) ((int) $year - 49).'0101')
+            ->where_lte('birthdate', (string) ((int) date('Y') - 15).'1231')
+            ->where_gte('birthdate', (string) ((int) date('Y') - 49).'0101')
             ->offset($start)
             ->limit($limit)
+            ->order_by(array('first_name' => 'ASC'))
             ->get('person');
         return $rs;
     }
 
-    public function get_list_total($year)
+    public function get_list_total()
     {
         $rs = $this->mongo_db
             ->where(array('owner_id' => new MongoId($this->owner_id)))
             ->where(array('sex' => '2'))
-            ->where_lte('birthdate', (string) ((int) $year - 15).'1231')
-            ->where_gte('birthdate', (string) ((int) $year - 49).'0101')
+            ->where_lte('birthdate', (string) ((int) date('Y') - 15).'1231')
+            ->where_gte('birthdate', (string) ((int) date('Y') - 49).'0101')
             ->count('person');
         return $rs;
     }
@@ -107,6 +108,61 @@ class Women_model extends CI_Model
         $rs = $this->mongo_db
             ->where(array('hn' => (string) $hn, 'year' => (string) $year))
             ->delete('women');
+
+        return $rs;
+    }
+
+    /**
+     * @param   array   $house_id
+     * @param   string  $year
+     * @return  mixed
+     */
+    public function search_filter($house_id, $start, $limit)
+    {
+        $rs = $this->mongo_db
+            ->where(array('owner_id' => new MongoId($this->owner_id)))
+            ->where(array('sex' => '2'))
+            ->where_lte('birthdate', (string) ((int) date('Y') - 15).'1231')
+            ->where_gte('birthdate', (string) ((int) date('Y') - 49).'0101')
+            ->where_in('house_code', $house_id)
+            ->offset($start)
+            ->limit($limit)
+            ->order_by(array('first_name' => 'ASC'))
+            ->get('person');
+        return $rs;
+    }
+
+    public function search($hn)
+    {
+        $rs = $this->mongo_db
+            ->where(array('owner_id' => new MongoId($this->owner_id)))
+            ->where(array('sex' => '2'))
+            ->where_lte('birthdate', (string) ((int) date('Y') - 15).'1231')
+            ->where_gte('birthdate', (string) ((int) date('Y') - 49).'0101')
+            ->where('hn', (string) $hn)
+            ->order_by(array('first_name' => 'ASC'))
+            ->get('person');
+        return $rs;
+    }
+
+    public function search_filter_total($house_id)
+    {
+        $rs = $this->mongo_db
+            ->where(array('owner_id' => new MongoId($this->owner_id)))
+            ->where(array('sex' => '2'))
+            ->where_lte('birthdate', (string) ((int) date('Y') - 15).'1231')
+            ->where_gte('birthdate', (string) ((int) date('Y') - 49).'0101')
+            ->where_in('house_code', $house_id)
+            ->count('person');
+        return $rs;
+    }
+
+    public function get_house_list($village_id)
+    {
+        $rs = $this->mongo_db
+            ->select(array('_id'))
+            ->where(array('village_id' => new MongoId($village_id)))
+            ->get('houses');
 
         return $rs;
     }

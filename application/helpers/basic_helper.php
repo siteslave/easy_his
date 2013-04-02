@@ -361,6 +361,20 @@ if(!function_exists('get_fp_type_name'))
         return $result;
     }
 }
+
+if(!function_exists('get_mstatus_name'))
+{
+    function get_mstatus_name($code){
+        $ci =& get_instance();
+
+        $ci->load->model('Basic_model', 'basic');
+
+        $result = $ci->basic->get_mstatus_name($code);
+
+        return $result;
+    }
+}
+
 if(!function_exists('get_vaccine_name'))
 {
     function get_vaccine_name($vaccine_id)
