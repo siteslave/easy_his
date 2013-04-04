@@ -291,7 +291,7 @@ head.ready(function(){
         $('input[data-name="txt_search_person_filter"]').val(filter);
     });
 
-    $('a[data-name="btn_selected_person"]').on('click', function(){
+    $(document).on('click', 'a[data-name="btn_selected_person"]', function(){
         var hn = $(this).attr('data-hn');
 
         if(confirm('คุณต้องการลงทะเบียนข้อมูลนี้ใช่หรือไม่?'))
@@ -312,7 +312,7 @@ head.ready(function(){
         }
     });
 
-    $('#sl_village').on('change', function(){
+    $(document).on('change', '#sl_village', function(){
         var village_id = $(this).val();
 
         epi.ajax.get_house_list(village_id, function(err, data){

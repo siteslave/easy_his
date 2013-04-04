@@ -478,7 +478,7 @@ class Person_model extends CI_Model
      * Register person clinic
      *
      * @param   $hn
-     * @param   $clinic     string  The clinic number, 01=DM, 02=HT, 03=STOKE, 04=ANC/MCH, 05=EPI, 06=NCD
+     * @param   $clinic     string  The clinic number, 01=DM, 02=HT, 03=STOKE, 04=ANC/MCH, 05=EPI, 06=NCD, 07=ANC
      * @return  mixed
      */
     public function do_register_clinic($hn, $clinic)
@@ -583,7 +583,9 @@ class Person_model extends CI_Model
 	
 	public function get_all_person()
 	{
-		$rs = $this->mongo_db->get('person');
+		$rs = $this->mongo_db
+                    ->where('hn', '')
+                    ->get('person');
 		return $rs;
 	}
 	
@@ -626,6 +628,17 @@ class Person_model extends CI_Model
 
         return $rs;
     }
+    
+    public function search_person_by_cid_with_owner($cid) {
+        $rs = $this->mongo_db
+            ->where(array(
+                    'cid' => (string)$cid,
+                    'typearea.owner_id' => new MongoId($this->owner_id)
+                ))
+            ->get('person');
+        
+        return $rs;
+    }
 
     //------------------------------------------------------------------------------------------------------------------
     /**
@@ -637,6 +650,17 @@ class Person_model extends CI_Model
             ->where('hn', $hn)
             ->get('person');
 
+        return $rs;
+    }
+    
+    public function search_person_by_hn_with_owner($hn) {
+        $rs = $this->mongo_db
+            ->where(array(
+                    'hn' => (string)$hn,
+                    'typearea.owner_id' => new MongoId($this->owner_id)
+                ))
+            ->get('person');
+        
         return $rs;
     }
 
@@ -676,26 +700,5 @@ class Person_model extends CI_Model
             ->where(array('owner_id' => new MongoId($owner_id), 'hn' => (string) $hn))
             ->count('person');
         return $rs > 0 ? TRUE : FALSE;
-    }
-
-    public function search_person_by_hn_with_owner($hn) {
-        $rs = $this->mongo_db
-            ->where(array(
-            'hn' => (string)$hn,
-            'typearea.owner_id' => new MongoId($this->owner_id)
-        ))
-            ->get('person');
-
-        return $rs;
-    }
-    public function search_person_by_cid_with_owner($cid) {
-        $rs = $this->mongo_db
-            ->where(array(
-            'cid' => (string)$cid,
-            'typearea.owner_id' => new MongoId($this->owner_id)
-        ))
-            ->get('person');
-
-        return $rs;
     }
 }

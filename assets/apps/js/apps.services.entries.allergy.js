@@ -282,7 +282,7 @@ head.ready(function(){
     });
 
     //remove drug
-    $('button[data-name="btn_screening_allergy_remove"]').on('click', function(){
+    $(document).on('click', 'button[data-name="btn_screening_allergy_remove"]', function(){
         var drug_id = $(this).attr('data-id');
         var obj = $(this).parent().parent().parent();
 
@@ -301,7 +301,7 @@ head.ready(function(){
 
     });
 
-    $('button[data-name="btn_screening_allergy_edit"]').on('click', function(){
+    $(document).on('click', 'button[data-name="btn_screening_allergy_edit"]', function(){
         var drug_id = $(this).attr('data-id');
 
         //get detail

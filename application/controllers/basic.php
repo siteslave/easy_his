@@ -457,4 +457,38 @@ class Basic extends CI_Controller
         echo $count; //echos number of integers in $subject
 
     }
+
+    public function get_doctor_room() {
+        $rs = $this->basic->get_doctor_room();
+
+        if($rs)
+            $json = '{ "success": true, "rows": '.json_encode($rs).' }';
+        else
+            $json = '{ "success": false, "msg": "ไม่พบข้อมูล" }';
+        render_json($json);
+    }
+
+    public function get_clinic() {
+        $rs = $this->basic->get_clinic();
+
+        if($rs)
+            $json = '{ "success": true, "rows": '.json_encode($rs).' }';
+        else
+            $json = '{ "success": false, "msg": "ไม่พบข้อมูล" }';
+        render_json($json);
+    }
+
+    public function get_provider() {
+        $rs = $this->basic->get_provider_by_owner_id($this->owner_id);
+
+        if($rs)
+            $json = '{ "success": true, "rows": '.json_encode($rs).' }';
+        else
+            $json = '{ "success": false, "msg": "ไม่พบข้อมูล" }';
+        render_json($json);
+    }
+
+    public function test1() {
+
+    }
 }

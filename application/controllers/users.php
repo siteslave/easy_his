@@ -107,9 +107,10 @@ class Users extends CI_Controller
         $this->login();
     }
     public function access_denied(){
-        $json = '{"success": false, "msg": "Access denied, please login."}';
+        //$json = '{"success": false, "msg": "Access denied, please login."}';
 
-        render_json($json);
+        //render_json($json);
+        redirect(site_url('users'));
     }
 
 
