@@ -265,40 +265,7 @@ head.ready(function(){
             return code;
         }
     });
-/*
-    $('#txt_fullname').typeahead({
-        ajax: {
-            url: site_url + 'person/search_person_ajax',
-            timeout: 500,
-            displayField: 'name',
-            triggerLength: 3,
-            preDispatch: function(query){
-                return {
-                    query: query,
-                    csrf_token: csrf_token
-                }
-            },
 
-            preProcess: function(data){
-                if(data.success){
-                    return data.rows;
-                }else{
-                    return false;
-                }
-            }
-        },
-        updater: function(data){
-            var d = data.split('#');
-            var hn = d[0],
-                name = d[1];
-
-            $('#txt_labor_mother_hn').val(hn);
-            $('#txt_labor_mother_name').val(name);
-
-            return name;
-        }
-    });
-*/
     $('#btn_register').click(function(){
         disb.clear_form();
         disb.modal.show_register();
