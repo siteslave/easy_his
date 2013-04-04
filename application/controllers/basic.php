@@ -487,4 +487,8 @@ class Basic extends CI_Controller
             $json = '{ "success": false, "msg": "ไม่พบข้อมูล" }';
         render_json($json);
     }
+
+    public function test1() {
+
+    }
 }
