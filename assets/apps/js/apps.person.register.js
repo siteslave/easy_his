@@ -213,7 +213,7 @@ head.ready(function(){
         }
     });
 
-    $('a[data-name="button_set_data_from_dbopo"]').on('click', function(){
+    $(document).on('click', 'a[data-name="button_set_data_from_dbopo"]', function(){
         var cid         = $(this).attr('data-cid'),
             fname       = $(this).attr('data-fname'),
             lname       = $(this).attr('data-lname'),
@@ -276,12 +276,12 @@ head.ready(function(){
                     );
                 }else{
                     if( _.size(data) ){
-                        _.each(data, function(v){
+                        _.each(data.rows, function(v){
                             $('#table_search_hospital_result_list tbody').append(
                                 '<tr>' +
-                                    '<td>' + v.code + '</td>' +
-                                    '<td>' + v.name + '</td>' +
-                                    '<td>' + v.province + '</td>' +
+                                    '<td>' + app.clear_null(v.code) + '</td>' +
+                                    '<td>' + app.clear_null(v.name) + '</td>' +
+                                    '<td>' + app.clear_null(v.province) + '</td>' +
                                     '<td><a href="#" class="btn" data-name="btn_set_hospital" ' +
                                     'data-code="' + v.code + '" data-vname="'+ v.name +'"><i class="icon-share"></i></a></td>' +
                                     '</tr>'
@@ -308,7 +308,7 @@ head.ready(function(){
         person.register.modal.show_search_hospital();
     });
 
-    $('a[data-name="btn_set_hospital"]').on('click', function(){
+    $(document).on('click', 'a[data-name="btn_set_hospital"]', function(){
         var act = $('#txt_search_by').val(),
             hospcode = $(this).attr('data-code'),
             hospname = $(this).attr('data-vname');

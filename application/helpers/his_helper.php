@@ -78,18 +78,11 @@ if(!function_exists('get_first_object')){
 
 if(!function_exists('get_hospital_name')){
     function get_hospital_name($hospital_code){
-        if(empty($hospital_code)){
-            return '-';
-        }else{
-            $ci =& get_instance();
+        $ci =& get_instance();
+        $ci->load->model('Basic_model', 'basic');
+        $hospital_name = $ci->basic->get_hospital_name($hospital_code);
 
-            $result = $ci->mongo_db
-                ->where(array('hospcode' => $hospital_code))
-                ->get('ref_hospitals');
-
-            return count($result) > 0 ? $result[0]['hospname'] : '-';
-        }
-
+        return $hospital_name;
     }
 }
 

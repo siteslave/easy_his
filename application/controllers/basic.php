@@ -364,6 +364,28 @@ class Basic extends CI_Controller
 
         render_json($json);
     }
+
+    public function get_icf()
+    {
+        $disb_id = $this->input->post('disb_id');
+        $rs = $this->basic->get_icf_list($disb_id);
+
+        $arr_result = array();
+        foreach($rs as $r)
+        {
+            $obj = new stdClass();
+            $obj->id = get_first_object($r['_id']);
+            $obj->export_code = $r['export_code'];
+            $obj->name = $r['name'];
+            $arr_result[] = $obj;
+        }
+
+        $rows = json_encode($arr_result);
+        $json = '{"success": true, "rows": '.$rows.'}';
+
+        render_json($json);
+    }
+
 /*
     public function get_inscl(){
 
@@ -455,6 +477,5 @@ class Basic extends CI_Controller
         preg_match_all('/[0-9]/', $subject, $matches);
         $count = count($matches[0]);
         echo $count; //echos number of integers in $subject
-
     }
 }

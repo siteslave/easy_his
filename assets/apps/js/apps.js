@@ -307,7 +307,8 @@ var app = {
 //Record pre page
 app.record_per_page = 25;
 
-head.ready(function(){
+app.set_runtime = function()
+{
     $('div[data-name="datepicker"]').datepicker({
         format: 'dd/mm/yyyy',
         language: 'th'
@@ -318,4 +319,8 @@ head.ready(function(){
     $('input[data-type="number"]').numeric();
     $('input[disabled]').css('background-color', 'white');
     $('textarea[disabled]').css('background-color', 'white');
+};
+
+head.ready(function(){
+    app.set_runtime();
 });

@@ -74,44 +74,6 @@
         </div>
     </div>
     <div id="showPersonList"></div>
-    <div class="row-fluid" id="divPersonList" style="display: none;">
-        <div class="span12">
-            <input type="hidden" id="txtHouseId">
-            <p class="lead">ประชากรในบ้านเลขที่ :  <span class="badge badge-success" id="txt_show_house_address"></span></p>
-            <table class="table table-striped table-hover" id="tbl_person_in_house">
-                <thead>
-                <tr>
-                    <th>HN</th>
-                    <th>เลขบัตรประชาชน</th>
-                    <th>คำนำ</th>
-                    <th>ชื่อ - สกุล</th>
-                    <th>วันเกิด</th>
-                    <th>อายุ</th>
-                    <th>เพศ</th>
-                    <th>สถานะในครอบครัว</th>
-                    <th>#</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>...</td>
-                    <td>...</td>
-                    <td>...</td>
-                    <td>...</td>
-                    <td>...</td>
-                    <td>...</td>
-                    <td>...</td>
-                    <td>...</td>
-                </tr>
-                </tbody>
-            </table>
-            <div class="btn-group">
-                <button class="btn btn-info"><i class="icon-search icon-white"></i> ค้นหา</button>
-                <button class="btn btn-success" id="btnNewPerson"><i class="icon-plus-sign icon-white"></i> เพิ่มคนในบ้าน</button>
-                <button class="btn btn-inverse"><i class="icon-print icon-white"></i> พิมพ์รายชื่อ</button>
-            </div>
-        </div>
-    </div>
 
     <!-- modal new house -->
     <div class="modal hide fade" id="mdlNewHouse">
@@ -220,6 +182,59 @@
         </div>
     </div>
     <!-- end modal new house -->
+    <!-- show person list -->
+    <div class="modal hide fade" id="mdl_show_person_list">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3>ข้อมูลคนในบ้าน</h3>
+        </div>
+        <div class="modal-body">
+            <div class="row-fluid">
+                <div class="span12">
+                    <input type="hidden" id="txtHouseId">
+                    <p class="lead">ประชากรในบ้านเลขที่ :  <span class="badge badge-success" id="txt_show_house_address"></span></p>
+                    <table class="table table-striped table-hover" id="tbl_person_in_house">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>HN</th>
+                            <th>เลขบัตรประชาชน</th>
+                            <th>คำนำ</th>
+                            <th>ชื่อ - สกุล</th>
+                            <th>วันเกิด</th>
+                            <th>อายุ</th>
+                            <th>เพศ</th>
+                            <th>สถานะในครอบครัว</th>
+                            <th>#</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>...</td>
+                            <td>...</td>
+                            <td>...</td>
+                            <td>...</td>
+                            <td>...</td>
+                            <td>...</td>
+                            <td>...</td>
+                            <td>...</td>
+                            <td>...</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="btn-group">
+                        <button class="btn btn-info"><i class="icon-search icon-white"></i> ค้นหา</button>
+                        <button class="btn btn-success" id="btnNewPerson"><i class="icon-plus-sign icon-white"></i> เพิ่มคนในบ้าน</button>
+                        <button class="btn btn-inverse"><i class="icon-print icon-white"></i> พิมพ์รายชื่อ</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</button>
+        </div>
+    </div>
+    <!-- /show person list -->
 
     <!-- modal house survey -->
     <div class="modal hide fade" id="mdlHouseSurvey">

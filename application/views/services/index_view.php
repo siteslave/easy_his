@@ -7,27 +7,30 @@
 </blockquote>
 <form action="#" class="form-actions form-search">
     <div class="input-append">
-        <input type="text" class="input-medium search-query" placeholder="HN, VN, CID...">
-        <button type="button" class="btn btn-info"><i class="icon-search icon-white"></i> ค้นหา</button>
+        <input type="text" class="input-xlarge search-query" id="txt_query_visit" placeholder="HN, ชื่อ สกุล...">
+        <button type="button" id="btn_do_search_visit" class="btn btn-info"><i class="icon-search icon-white"></i> ค้นหา</button>
     </div>
     |
     <div class="input-append date" data-name="datepicker">
-        <input class="input-small" id="txt_query_service_date" type="text" disabled>
+        <input class="input-small" id="txt_service_date" type="text" value="<?php echo date('d/m/Y'); ?>" disabled>
         <span class="add-on"><i class="icon-th"></i></span>
     </div>
+    <!--
     <select id="sl_query_filter_by_diag" class="input-medium">
         <option value="1">ทั้งหมด</option>
         <option value="1">ยังไม่ลงรหัสวินิจฉัย</option>
         <option value="1">ลงวินิจฉัยแล้ว</option>
     </select>
-    <select class="input-medium" id="sl_filter_service_by_clinic">
-        <option value="">--- แผนก ---</option>
-        <?php foreach($clinics as $t) echo '<option value="'.$t->id.'">'.$t->name.'</option>'; ?>
+    -->
+    <select class="input-medium" id="sl_service_doctor_room">
+        <option value="">--- ห้องตรวจ ---</option>
+        <?php foreach($doctor_rooms as $t) echo '<option value="'.$t->id.'">'.$t->name.'</option>'; ?>
     </select>
-    <button class="btn btn-info">
+
+    <button class="btn btn-info" id="btn_do_filter">
         <i class="icon-search icon-white"></i> แสดง
     </button>
-    <button type="button" class="btn btn-success" id="btn_new_visit">
+    <button type="button" class="btn btn-success pull-right" id="btn_new_visit">
         <i class="icon-plus-sign icon-white"></i> ลงทะเบียน
     </button>
 </form>
@@ -41,6 +44,7 @@
         <th>อาการสำคัญ</th>
         <th>คลินิค</th>
         <th>การวินิจฉัย</th>
+        <th>ผู้ให้บริการ</th>
         <th>#</th>
     </tr>
     </thead>
@@ -54,18 +58,12 @@
         <td>...</td>
         <td>...</td>
         <td>...</td>
+        <td>...</td>
     </tr>
     </tbody>
 </table>
-<div class="pagination pagination-centered">
-    <ul>
-        <li><a href="#">«</a></li>
-        <li><a href="#">1</a></li>
-        <li><a href="#">2</a></li>
-        <li><a href="#">3</a></li>
-        <li><a href="#">4</a></li>
-        <li><a href="#">»</a></li>
-    </ul>
+<div class="pagination pagination-centered" id="main_paging">
+    <ul></ul>
 </div>
 <!-- modal new -->
 <div class="modal hide fade" id="mdl_register_new_service">
@@ -77,15 +75,6 @@
         <blockquote>
             บันทึกข้อมูลการส่งตรวจ
         </blockquote>
-        <!--
-        <form action="#" class="form-actions form-search">
-            <div class="input-append">
-                <input type="text" id="txt_service_search" class="input-xlarge search-query" placeholder="ชื่อผู้ป่วย....">
-                <input type="hidden" id="txt_service_hn">
-                <button type="button" class="btn btn-info" id="btn_reg_search_person"><i class="icon-search icon-white"></i> ค้นหา</button>
-            </div>
-        </form>
-        -->
         <ul class="nav nav-tabs" id="myTab">
             <li class="active"><a href="#tab_user_profile" data-toggle="tab"><i class="icon-user"></i> ข้อมูลทั่วไป</a></li>
             <li><a href="#tab_service_detail" data-toggle="tab"><i class="icon-th-list"></i> ข้อมูลการรับบริการ</a></li>
@@ -358,46 +347,6 @@
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-success" id="btn_do_save_service_register"><i class="icon-plus-sign icon-white"></i> บันทึกข้อมูล</button>
-        <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</button>
-    </div>
-</div>
-
-<div class="modal hide fade" id="modal_search_hospital">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>ค้นหาสถานบริการ</h3>
-    </div>
-    <div class="modal-body">
-        <form action="#" class="form-inline form-actions">
-            <input type="hidden" id="txt_search_by" />
-            <div class="control-group">
-                <div class="controls">
-                    <label for="text_query_search_hospital">ชื่อ/รหัส สถานบริการ</label>
-                    <div class="input-append">
-                        <input class="input-xlarge" placeholder="..." id="text_query_search_hospital" type="text">
-                        <button class="btn btn-info" type="button" id="btn_do_search_hospital"><i class="icon-search icon-white"></i> ค้นหา</button>
-                    </div>
-
-                    <label class="checkbox inline">
-                        <input type="checkbox" id="chk_search_by_name" checked="checked"> ค้นจากชื่อ
-                    </label>
-
-                </div>
-            </div>
-        </form>
-        <table class="table table-striped" id="table_search_hospital_result_list">
-            <thead>
-            <tr>
-                <th>รหัส</th>
-                <th>ชื่อสถานบริการ</th>
-                <th>จังหวัด</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-    </div>
-    <div class="modal-footer">
         <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</button>
     </div>
 </div>

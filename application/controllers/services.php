@@ -21,6 +21,7 @@ class Services extends CI_Controller
 
         $this->owner_id = $this->session->userdata('owner_id');
         $this->user_id = $this->session->userdata('user_id');
+        $this->provider_id = $this->session->userdata('provider_id');
 
         if(empty($this->owner_id)){
             redirect(site_url('users/login'));
@@ -34,14 +35,6 @@ class Services extends CI_Controller
 
         $this->load->helper('person');
 
-        //$this->csrf_token = $this->security->get_csrf_hash();
-
-        //$this->twiggy->set('site_url', site_url());
-        //$this->twiggy->set('base_url', base_url());
-        //$this->twiggy->set('csrf_token', $this->csrf_token);
-
-        //$this->twiggy->set('fullname', $this->session->userdata('fullname'));
-
     }
 
     public function index()
@@ -50,14 +43,10 @@ class Services extends CI_Controller
         $clinics = $this->basic->get_clinic();
         $inscls = $this->basic->get_insurance();
 
-        //$this->twiggy->set('doctor_rooms', $doctor_rooms);
-        //$this->twiggy->set('clinics', $clinics);
-        //$this->twiggy->set('inscls', $inscls);
         $data['doctor_rooms'] = $doctor_rooms;
         $data['clinics'] = $clinics;
         $data['inscls'] = $inscls;
         $this->layout->view('services/index_view', $data);
-        //$this->twiggy->template('services/index')->display();
     }
     public function entries($vn = '')
     {
@@ -71,14 +60,17 @@ class Services extends CI_Controller
         {
             show_error('VN don\'t exist, please check visit number and try again.', 404);
         }
+        else if(!$this->service->check_owner($vn ,$this->owner_id))
+        {
+            show_error('Invalid owner.');
+        }
         else
         {
-            $person_id = $this->service->get_person_id($vn);
-            $person = $this->person->get_person_detail($person_id);
+            $hn         = $this->service->get_person_hn($vn);
+            $person     = $this->person->get_person_detail_with_hn($hn);
 
-            $hn = $person['hn'];
-            $cid = $person['cid'];
-            $sex = $person['sex'];
+            $cid    = $person['cid'];
+            $sex    = $person['sex'];
 
             $patient_name = $person['first_name'] . ' ' . $person['last_name'];
 
@@ -87,30 +79,34 @@ class Services extends CI_Controller
             $drug_allergy_symptoms      = $this->basic->get_drug_allergy_symptom();
             $drug_allergy_informants    = $this->basic->get_drug_allergy_informant();
             $drinkings                  = $this->basic->get_drinking();
-            $smokings                  = $this->basic->get_smoking();
+            $smokings                   = $this->basic->get_smoking();
 
             $diag_types                 = $this->basic->get_diag_type();
-            $fp_types					= $this->basic->get_fp_type();
+            $fp_types                   = $this->basic->get_fp_type();
+            $lab_groups                 = $this->basic->get_lab_groups_list();
 
-            $data['drug_allergy_informants'] = $drug_allergy_informants;
-            $data['drug_allergy_symptoms'] = $drug_allergy_symptoms;
-            $data['drug_allergy_alevels'] = $drug_allergy_alevels;
-            $data['drug_allergy_diag_types'] = $drug_allergy_diag_types;
-            $data['drinkings'] = $drinkings;
-            $data['smokings'] = $smokings;
+            $data['drug_allergy_informants']    = $drug_allergy_informants;
+            $data['drug_allergy_symptoms']      = $drug_allergy_symptoms;
+            $data['drug_allergy_alevels']       = $drug_allergy_alevels;
+            $data['drug_allergy_diag_types']    = $drug_allergy_diag_types;
+
+            $data['drinkings']  = $drinkings;
+            $data['smokings']   = $smokings;
             $data['diag_types'] = $diag_types;
-			$data['fp_types'] = $fp_types;
-            
-            $data['hn'] = $hn;
-            $data['person_id'] = $person_id;
-            $data['cid'] =$cid;
-            $data['vn'] = $vn;
-            $data['sex'] = $sex;
-            
+            $data['fp_types']   = $fp_types;
 
-            $data['patient_name'] = $patient_name;
+            $data['hn']         = $hn;
+            //$data['person_id']  = $person_id;
+            $data['cid']        =$cid;
+            $data['vn']         = $vn;
+            $data['sex']        = $sex;
+            $data['lab_groups'] = $lab_groups;
+
+            $data['disabilities_types'] = $this->basic->get_disabilities_list();
+            $data['icf_qualifiers']     = $this->basic->get_icf_qualifiers();
+            $data['patient_name']       = $patient_name;
+
             $this->layout->view('services/entries_view', $data);
-            //$this->twiggy->template('services/entries')->display();
         }
 
     }
@@ -203,6 +199,7 @@ class Services extends CI_Controller
 
             $this->service->owner_id = $this->owner_id;
             $this->service->user_id = $this->user_id;
+            $this->service->provider_id = $this->provider_id;
 
             if(empty($data['vn'])){
                 //insert
@@ -224,40 +221,20 @@ class Services extends CI_Controller
     }
 
     public function get_list(){
-        $offset = $this->input->post('offset');
-        $limit = $this->input->post('limit');
+        $start = $this->input->post('start');
+        $stop = $this->input->post('stop');
+        $date = $this->input->post('date');
+        $doctor_room = $this->input->post('doctor_room');
 
-        $offset = empty($offset) ? 0 : $offset;
-        $limit = empty($limit) ? 25 : $limit;
+        $date = empty($date) ? date('Ymd') : to_string_date($date);
 
-        $by = $this->input->post('by');
-        /*
-         * Query by
-         * 1 = by diagnosis
-         * 2 = by clinic
-         * defaul by date
-         */
-        if($by == '1'){
-            /*
-             * 1 = no diagnosis
-             * 2 = diagnosised
-             */
-            $diag_status = $this->input->post('diag_status');
-            $rs = $this->service->get_list_by_diag_status($diag_status, $offset, $limit);
+        $start = empty($start) ? 0 : $start;
+        $stop = empty($stop) ? 25 : $stop;
 
-        }else if($by == '2'){
-            $clinic = $this->input->post('clinic');
-            $rs = $this->service->get_list_by_clinic($clinic, $offset, $limit);
+        $limit = (int) $stop - (int) $start;
 
-        }else{
-            $date = $this->input->post('date');
-
-            if(empty($date)){
-                $date = to_string_date(date('d/m/Y'));
-            }
-
-            $rs = $this->service->get_list_by_date($date, $offset, $limit);
-        }
+        $this->service->owner_id = $this->owner_id;
+        $rs = $this->service->get_list($date, $doctor_room, $start, $limit);
 
         if($rs){
             $arr_result = array();
@@ -269,7 +246,11 @@ class Services extends CI_Controller
                 $obj->vn = isset($r['vn']) ? $r['vn'] : '-';
                 $obj->person_id = isset($r['person_id']) ? get_first_object($r['person_id']) : null;
 
-                $person_detail = get_person_detail(get_first_object($r['person_id']));
+                $person_detail = get_person_detail_with_hn($r['hn']);
+
+                $obj->diag = $this->service->get_visit_pdx($obj->vn);
+                $obj->diag_name = get_diag_name($obj->diag);
+                $obj->provider_name = get_provider_name_by_id(get_first_object($r['provider_id']));
 
                 if($person_detail){
                     $obj->hn = $person_detail['hn'];
@@ -311,6 +292,101 @@ class Services extends CI_Controller
 
         render_json($json);
 
+    }
+
+    public function get_list_search(){
+        $start = $this->input->post('start');
+        $stop = $this->input->post('stop');
+        $hn = $this->input->post('hn');
+
+        $start = empty($start) ? 0 : $start;
+        $stop = empty($stop) ? 25 : $stop;
+
+        $limit = (int) $stop - (int) $start;
+
+        $this->service->owner_id = $this->owner_id;
+        $rs = $this->service->get_list_search($hn, $start, $limit);
+
+        if($rs){
+            $arr_result = array();
+
+            foreach($rs as $r){
+
+                $obj = new stdClass();
+
+                $obj->vn = isset($r['vn']) ? $r['vn'] : '-';
+                $obj->person_id = isset($r['person_id']) ? get_first_object($r['person_id']) : null;
+
+                $person_detail = get_person_detail_with_hn($r['hn']);
+
+                $obj->diag = $this->service->get_visit_pdx($obj->vn);
+                $obj->diag_name = get_diag_name($obj->diag);
+                $obj->provider_name = get_provider_name_by_id(get_first_object($r['provider_id']));
+
+                if($person_detail){
+                    $obj->hn = $person_detail['hn'];
+                    $obj->cid = $person_detail['cid'];
+                    $obj->fullname = $person_detail['first_name'] . ' ' . $person_detail['last_name'];
+                    $obj->birthdate = to_js_date($person_detail['birthdate']);
+                }else{
+                    $obj->cid = '-';
+                    $obj->fullname = '-';
+                    $obj->birthdate = '-';
+                }
+
+                $obj->clinic_name = get_clinic_name(get_first_object($r['clinic']));
+
+                if(isset($r['insurances'])){
+                    $obj->insurance_name = get_insurance_name($r['insurances']['id']);
+                    $obj->insurance_id = $r['insurances']['id'];
+                    $obj->insurance_code = $r['insurances']['code'];
+                }else{
+                    $obj->insurance_name = '-';
+                    $obj->insurance_id = '-';
+                    $obj->insurance_code = '-';
+                }
+
+                $screenings = $this->service->get_service_screening($r['vn']);
+                //echo var_dump($screenings);
+                $obj->cc = isset($screenings) ? $screenings['cc'] : '-';
+
+                array_push($arr_result, $obj);
+            }
+
+            //echo var_dump($rs);
+
+            $rows = json_encode($arr_result);
+            $json = '{"success": true, "rows": '.$rows.'}';
+        }else{
+            $json = '{"success": false, "msg": "No result."}';
+        }
+
+        render_json($json);
+
+    }
+
+    public function get_list_total()
+    {
+        $date = $this->input->post('date');
+        $doctor_room = $this->input->post('doctor_room');
+        $date = to_string_date($date);
+
+        $this->service->owner_id = $this->owner_id;
+        $total = $this->service->get_list_total($date, $doctor_room);
+        $json = '{"success": true, "total": '.$total.'}';
+
+        render_json($json);
+    }
+
+    public function get_list_search_total()
+    {
+        $hn = $this->input->post('hn');
+
+        $this->service->owner_id = $this->owner_id;
+        $total = $this->service->get_list_search_total($hn);
+        $json = '{"success": true, "total": '.$total.'}';
+
+        render_json($json);
     }
 
     public function save_screening(){
@@ -944,9 +1020,9 @@ class Services extends CI_Controller
     /**
      * Save FP data
      * 
-     * @param	string	$vn
-     * @param	string	$hn
-     * @param	string 	$fp_type
+     * @internal param	string	$vn
+     * @internal param	string	$hn
+     * @internal param	string 	$fp_type
      * 
      * @return 	json
      */
@@ -1167,6 +1243,333 @@ class Services extends CI_Controller
         }
 
         render_json($json);
+    }
+
+    public function icf_save()
+    {
+        $data = $this->input->post('data');
+        if(!empty($data))
+        {
+            //check duplicate
+            $is_duplicated = $this->service->icf_check_duplicated($data);
+            if($is_duplicated)
+            {
+                $json = '{"success": false, "msg": "รายการซ้ำ"}';
+            }
+            else
+            {
+                $this->service->user_id = $this->user_id;
+                $this->service->owner_id = $this->owner_id;
+                $this->service->provider_id = $this->provider_id;
+
+                $rs = $this->service->icf_save($data);
+                if($rs)
+                {
+                    $json = '{"success": true}';
+                }
+                else
+                {
+                    $json = '{"success": false, "msg": "ไม่สามารถบันทึกรายการได้"}';
+                }
+            }
+        }
+        else
+        {
+            $json = '{"success": false, "msg": "ไม่พบข้อมูลที่ต้องการบันทึก"}';
+        }
+
+        render_json($json);
+    }
+
+    public function icf_get_list()
+    {
+
+        $vn = $this->input->post('vn');
+        if(!empty($vn))
+        {
+            $rs = $this->service->icf_get_list($vn);
+            $arr_result = array();
+            foreach($rs as $r)
+            {
+                $obj = new stdClass();
+                $obj->id = get_first_object($r['_id']);
+                $obj->icf = get_first_object($r['icf']);
+                $obj->icf_name = $this->basic->get_icf_name($obj->icf);
+                $obj->qualifier = get_first_object($r['qualifier']);
+                $obj->qualifier_name = $this->basic->get_icf_qualifier_name($obj->qualifier);
+                $obj->provider_name = $this->basic->get_provider_name_by_id(get_first_object($r['provider_id']));
+
+                $arr_result[] = $obj;
+            }
+
+            $rows = json_encode($arr_result);
+
+            $json = '{"success": true, "rows": '.$rows.'}';
+        }
+        else
+        {
+            $json = '{"success": false, "msg": "ไม่พบ VN"}';
+        }
+
+        render_json($json);
+    }
+    public function icf_get_history()
+    {
+        $hn = $this->input->post('hn');
+        if(!empty($hn))
+        {
+            $rs = $this->service->icf_get_history($hn);
+            $arr_result = array();
+            foreach($rs as $r)
+            {
+                $obj = new stdClass();
+
+                $visit = $this->service->get_visit_info($r['vn']);
+                $obj->clinic_name = get_clinic_name(get_first_object($visit['clinic']));
+                $obj->date_serv = from_mongo_to_thai_date($visit['date_serv']);
+                $obj->time_serv = $visit['time_serv'];
+
+                $obj->id = get_first_object($r['_id']);
+                $obj->disabid = $r['disabid'];
+                $obj->icf = get_first_object($r['icf']);
+                $obj->icf_name = $this->basic->get_icf_name($obj->icf);
+                $obj->qualifier = get_first_object($r['qualifier']);
+                $obj->qualifier_name = $this->basic->get_icf_qualifier_name($obj->qualifier);
+                $obj->provider_name = $this->basic->get_provider_name_by_id(get_first_object($r['provider_id']));
+                $obj->owner_name = $this->basic->get_owner_name(get_first_object($r['owner_id']));
+
+                $arr_result[] = $obj;
+            }
+
+            $rows = json_encode($arr_result);
+
+            $json = '{"success": true, "rows": '.$rows.'}';
+        }
+        else
+        {
+            $json = '{"success": false, "msg": "ไม่พบ HN"}';
+        }
+
+        render_json($json);
+    }
+
+    public function icf_remove()
+    {
+        if($this->input->is_ajax_request())
+        {
+            $id = $this->input->post('id');
+            $rs = $this->service->icf_remove($id);
+
+            if($rs)
+            {
+                $json = '{"success": true}';
+            }
+            else
+            {
+                $json = '{"success": false, "msg": "ไม่สามารถลบรายการได้"}';
+            }
+
+            render_json($json);
+        }
+        else
+        {
+            show_error('Not ajax.', 404);
+        }
+
+    }
+
+    /*******************************************************************************************************************
+     * Dental module
+     *******************************************************************************************************************/
+    public function dental_save()
+    {
+        $is_ajax = $this->input->is_ajax_request();
+
+        if($is_ajax)
+        {
+            $data = $this->input->post('data');
+            if(!empty($data))
+            {
+                $is_duplicated = $this->service->dental_check_duplicated($data['vn']);
+
+                $this->service->user_id = $this->user_id;
+                $this->service->owner_id = $this->owner_id;
+                $this->service->provider_id = $this->provider_id;
+
+                $rs = $is_duplicated ? $this->service->dental_update($data) : $this->service->dental_save($data);
+
+                if($rs)
+                {
+                    $json = '{"success": true}';
+                }
+                else
+                {
+                    $json = '{"success": false, "msg": "ไม่สามารถบันทึกข้อมูลได้"}';
+                }
+            }
+            else
+            {
+                $json = '{"success": false, "msg": "ไม่พบข้อมูลที่ต้องการบันทึก"}';
+            }
+
+            render_json($json);
+        }
+        else
+        {
+            show_error('Don\'t ajax.', 404);
+        }
+
+    }
+
+    public function dental_detail()
+    {
+        if($this->input->is_ajax_request())
+        {
+            $vn = $this->input->post('vn');
+            $rs = $this->service->dental_detail($vn);
+
+            if($rs)
+            {
+                $obj = new stdClass();
+                $obj->vn                = $rs['vn'];
+                $obj->hn                = $rs['hn'];
+                $obj->denttype          = $rs['denttype'];
+                $obj->pteeth            = $rs['pteeth'];
+                $obj->pcaries           = $rs['pcaries'];
+                $obj->pfilling          = $rs['pfilling'];
+                $obj->pextract          = $rs['pextract'];
+                $obj->dteeth            = $rs['dteeth'];
+                $obj->dcaries           = $rs['dcaries'];
+                $obj->dfilling          = $rs['dfilling'];
+                $obj->dextract          = $rs['dextract'];
+                $obj->need_fluoride     = $rs['need_fluoride'];
+                $obj->need_scaling      = $rs['need_scaling'];
+                $obj->need_sealant      = $rs['need_sealant'];
+                $obj->need_pfilling     = $rs['need_pfilling'];
+                $obj->need_dfilling     = $rs['need_dfilling'];
+                $obj->need_pextract     = $rs['need_pextract'];
+                $obj->need_dextract     = $rs['need_dextract'];
+                $obj->nprosthesis       = $rs['nprosthesis'];
+                $obj->permanent_perma   = $rs['permanent_perma'];
+                $obj->permanent_prost   = $rs['permanent_prost'];
+                $obj->prosthesis_prost  = $rs['prosthesis_prost'];
+                $obj->gum               = $rs['gum'];
+                $obj->schooltype        = $rs['schooltype'];
+                $obj->school_class      = $rs['school_class'];
+
+                $rows = json_encode($obj);
+
+                $json = '{"success": true, "rows": '.$rows.'}';
+            }
+            else
+            {
+                $json = '{"success": false, "msg": "ไม่พบข้อมูลการรับบริการ"}';
+            }
+
+            render_json($json);
+        }
+        else
+        {
+            show_error('No ajax.', 404);
+        }
+
+    }
+
+    public function dental_remove()
+    {
+        if($this->input->is_ajax_request())
+        {
+            $vn = $this->input->post('vn');
+            if(!empty($vn))
+            {
+                $rs = $this->service->dental_remove($vn);
+                if($rs)
+                {
+                    $json = '{"success": true}';
+                }
+                else
+                {
+                    $json = '{"success": false, "msg": "ไม่สามารถลบรายการได้"}';
+                }
+
+            }
+            else
+            {
+                $json = '{"success": false, "msg": "ไม่พบรหัสการรับบริการ (VN)"}';
+            }
+
+            render_json($json);
+        }
+        else
+        {
+            show_error('Not ajax.', 404);
+        }
+
+    }
+
+    public function dental_history()
+    {
+        $is_ajax = $this->input->is_ajax_request();
+
+        if($is_ajax)
+        {
+            $hn = $this->input->post('hn');
+            $rs = $this->service->dental_history($hn);
+
+            if($rs)
+            {
+                $arr_result = array();
+                foreach($rs as $r)
+                {
+                    $obj = new stdClass();
+                    $visit = $this->service->get_visit_info($r['vn']);
+                    $obj->clinic_name = get_clinic_name(get_first_object($visit['clinic']));
+                    $obj->date_serv = from_mongo_to_thai_date($visit['date_serv']);
+                    $obj->time_serv = $visit['time_serv'];
+                    $obj->servplace_name = $visit['service_place'] == '1' ? 'ในสถานบริการ' : 'นอกสถานบริการ';
+
+                    $obj->gum = get_gum_name($r['gum']);
+                    $obj->denttype = get_denttype_name($r['denttype']);
+
+                    $obj->provider_name = get_provider_name_by_id(get_first_object($r['provider_id']));
+                    $obj->owner_name = get_owner_name(get_first_object($r['owner_id']));
+
+                    $arr_result[] = $obj;
+                }
+
+                $rows = json_encode($arr_result);
+                $json = '{"success": true, "rows": '.$rows.'}';
+            }
+            else
+            {
+                $json = '{"success": false, "msg": "ไม่พบรายการ"}';
+            }
+
+            render_json($json);
+        }
+        else
+        {
+            show_error('Not ajax.', 404);
+        }
+    }
+
+    public function search()
+    {
+        $is_ajax = $this->input->is_ajax_request();
+
+        if($is_ajax)
+        {
+            $hn = $this->input->post('hn');
+
+            $rs = $this->service->search_by_hn($hn);
+
+
+        }
+        else
+        {
+            show_error('Not ajax.', 404);
+        }
+
     }
 }
 
