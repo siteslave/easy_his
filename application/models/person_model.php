@@ -504,9 +504,9 @@ class Person_model extends CI_Model
     public function check_clinic_exist($hn, $clinic){
         $result = $this->mongo_db
             ->where(array(
-                            'hn' => (string) $hn,
-                            'registers.clinic_code' => $clinic,
-                            'registers.owner_id' => new MongoId($this->owner_id)
+                'hn' => (string) $hn,
+                'registers.clinic_code' => $clinic,
+                'registers.owner_id' => new MongoId($this->owner_id)
             ))
             ->count('person');
 
@@ -571,9 +571,9 @@ class Person_model extends CI_Model
 		$rs = $this->mongo_db
 		->select(array('hn'))
 		->where(array(
-				'first_name' => $first_name,
-				'last_name' => $last_name
-				))
+            'first_name' => $first_name,
+            'last_name' => $last_name
+        ))
 		->limit(1)
 		->get('person');
 	

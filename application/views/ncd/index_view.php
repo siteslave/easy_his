@@ -5,7 +5,7 @@
 <form action="#" class="well form-inline">
     <label class="control-label" for="sl_village">หมู่บ้าน</label>
     <select class="input-xlarge" id="sl_village">
-        <option value="00000000">---</option>
+        <option value="">---</option>
         <?php
         foreach ($villages as $r){
             echo '<option value="'.get_first_object($r['_id']).'">' . $r['village_code'] . ' ' . $r['village_name'] . '</option>';
