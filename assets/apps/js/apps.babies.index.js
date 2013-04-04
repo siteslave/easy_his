@@ -376,7 +376,7 @@ head.ready(function(){
         $('input[data-name="txt_search_person_filter"]').val(filter);
     });
 
-    $('a[data-name="btn_selected_person"]').on('click', function(){
+    $(document).on('click', 'a[data-name="btn_selected_person"]', function(){
 
         var hn = $(this).attr('data-hn');
         if(confirm('คุณต้องการลงทะเบียนข้อมูลนี้ใช่หรือไม่?'))
@@ -478,7 +478,7 @@ head.ready(function(){
         }
     };
     //labor detail
-    $('a[data-name="labor"]').on('click', function(){
+    $(document).on('click', 'a[data-name="labor"]', function(e){
         var hn = $(this).attr('data-hn'),
             anc_code = $(this).attr('data-anc_code'),
             fullname = $(this).attr('data-fullname'),
@@ -503,6 +503,8 @@ head.ready(function(){
         $('a[href="#tab_labor_1"]').tab('show');
 
         babies.modal.show_labor();
+
+        e.preventDefault();
     });
 
     babies.get_mother_detail = function(hn)

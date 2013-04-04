@@ -135,6 +135,22 @@ var app = {
         }
     },
 
+    count_age_mongo: function(d){
+        if(!d){
+            return 0;
+        }else{
+            var old_date = d.toString();
+
+            var year_birth = old_date.substr(0, 4);
+            var year_current = new Date();
+            var year_current2 = year_current.getFullYear();
+
+            var age = year_current2 - parseInt(year_birth);
+
+            return age;
+        }
+    },
+
     count_age: function(d){
         if(!d){
             return 0;
@@ -283,7 +299,7 @@ var app = {
             m = date.getMonth() + 1,
             d = date.getDate();
 
-        return d + '/' + m + '/' + y;
+        return (d<10?'0'+d:d) + '/' + (m<10?'0'+m:m) + '/' + y;
     },
 
     get_current_time: function(){
@@ -291,7 +307,7 @@ var app = {
             h = date.getHours(),
             m = date.getMinutes();
 
-        return h + ':' + m;
+        return (h<10?'0'+h:h) + ':' + (m<10?'0'+m:m);
     },
     add_commars: function(str){
         var my_number = numeral(str).format('0,0.00');
@@ -311,6 +327,22 @@ head.ready(function(){
     $('div[data-name="datepicker"]').datepicker({
         format: 'dd/mm/yyyy',
         language: 'th'
+    });
+
+    $('div[data-type="datetimepicker"]').datetimepicker({
+        format: 'dd/MM/yyyy hh:mm:ss',
+        pick12HourFormat: false,
+        language: 'th'
+    });
+
+    $('.timepicker').timepicker({
+        minuteStep: 1,
+        secondStep: 5,
+        showInputs: false,
+        //template: 'modal',
+        //modalBackdrop: true,
+        //showSeconds: true,
+        showMeridian: false
     });
 
     $('input[data-type="time"]').mask("99:99");

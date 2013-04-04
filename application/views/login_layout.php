@@ -43,7 +43,8 @@
 
     </style>
     <link href="<?php echo base_url(); ?>assets/css/bootstrap-responsive.min.css" rel="stylesheet">
-
+    <link href="<?php echo base_url(); ?>assets/css/bootstrap-timepicker.min.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/css/datepicker.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/css/alertify.default.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/css/freeow/freeow.css" rel="stylesheet">
@@ -60,6 +61,8 @@
         var csrf_token = '<?php echo $this->security->get_csrf_hash(); ?>';
     </script>
 
+	<script src="<?php echo base_url(); ?>assets/js/jquery.js"></script>
+
     <script>
         head.js(
                 '<?php echo base_url(); ?>assets/js/bootstrap.min.js',
@@ -67,6 +70,8 @@
                 '<?php echo base_url(); ?>assets/js/taffy.js',
                 '<?php echo base_url(); ?>assets/js/bootstrap-datepicker.js',
                 '<?php echo base_url(); ?>assets/js/bootstrap-datepicker.th.js',
+                '<?php echo base_url(); ?>assets/js/bootstrap-datetimepicker.min.js',
+                '<?php echo base_url(); ?>assets/js/bootstrap-timepicker.min.js',
                 '<?php echo base_url(); ?>assets/js/jquery.blockUI.js',
                 '<?php echo base_url(); ?>assets/js/jquery.cookie.js',
                 '<?php echo base_url(); ?>assets/js/jquery.freeow.min.js',
@@ -76,13 +81,12 @@
                 '<?php echo base_url(); ?>assets/js/spin.min.js',
                 '<?php echo base_url(); ?>assets/js/jquery.paging.min.js',
                 '<?php echo base_url(); ?>assets/js/jquery.numeric.js',
-                '<?php echo base_url(); ?>assets/js/numeral.min.js',
-                '<?php echo base_url(); ?>assets/apps/js/apps.js',
-                '<?php echo base_url(); ?>assets/apps/js/apps.users.js'
+                '<?php echo base_url(); ?>assets/js/numeral.min.js'
         );
-
     </script>
 
+    <script src="<?php echo base_url(); ?>assets/apps/js/apps.js"></script>
+    <script src="<?php echo base_url(); ?>assets/apps/js/apps.users.js"></script>
 </head>
 
 <body>

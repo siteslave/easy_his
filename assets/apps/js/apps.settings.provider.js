@@ -235,7 +235,7 @@ head.ready(function(){
         }
     });
 
-    $('a[data-name="btn_set_hospital"]').on('click', function(){
+    $(document).on('click', 'a[data-name="btn_set_hospital"]', function(){
         var act = $('#txt_search_for').val(),
             hospcode = $(this).attr('data-code'),
             hospname = $(this).attr('data-vname');
@@ -340,7 +340,7 @@ head.ready(function(){
         }
     });
 
-    $('a[data-name="btn_edit_provider"]').on('click', function(){
+    $(document).on('click', 'a[data-name="btn_edit_provider"]', function(){
         var id = $(this).attr('data-id');
 
         if(!id){

@@ -6,7 +6,7 @@
     <meta http-equiv="cache-control" content="no-cache" />
     <meta http-equiv="pragma" content="no-cache" />
 
-    <title>Health Information System</title>
+    <title>Health Information System Report</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Le styles -->
@@ -80,103 +80,22 @@
                             หน้าหลัก
                         </a>
                     </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <i class="icon-th-list"></i>
+                    <li>
+                        <a href="<?php echo site_url('reports/menu/1'); ?>">
+                            <i class="icon-signal"></i>
                             การให้บริการ
-                            <b class="caret"></b>
                         </a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a href="<?php echo site_url('services'); ?>">
-                                    <i class="icon-th-list"></i> ผู้มารับบริการ
-                                </a>
-                            </li>
-                             <li>
-                                <a href="<?php echo site_url('appoints'); ?>">
-                                    <i class="icon-tags"></i> ทะเบียนนัด
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <i class="icon-th-list"></i>
-                            ทะเบียนต่างๆ
-                            <b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a href="<?php echo site_url('epis'); ?>">
-                                    <i class="icon-book"></i> ทะเบียนส่งเสริมป้องกันโรค (EPI)
-                                </a>
-                            </li>
-                            <li>
-                                <a href="<?php echo site_url('ncd'); ?>">
-                                    <i class="icon-book"></i> ทะเบียนคัดกรองเบาหวาน/ความดัน 15 ปีขึ้นไป</a>
-                                <a href="<?php echo site_url('pregnancies'); ?>">
-                                    <i class="icon-book"></i> ทะเบียนฝากครรภ์/คลอด/การดูแลหลังคลอด</a>
-                            </li>
-                            <li>
-                                <a href="<?php echo site_url('appoints'); ?>">
-                                    <i class="icon-tags"></i> ทะเบียนนัด
-                                </a>
-                            </li>
-                            <li>
-                                <a href="<?php echo site_url('dm'); ?>">
-                                    <i class="icon-tags"></i> ทะเบียนผู้ป่วยเบาหวาน (DM)
-                                </a>
-                                <a href="<?php echo site_url('ht'); ?>">
-                                    <i class="icon-tags"></i> ทะเบียนผู้ป่วยความดัน (HT)
-                                </a>
-                            </li>
-                            <li>
-                                <a href="<?php echo site_url('refer'); ?>">
-                                    <i class="icon-tags"></i> ทะเบียน Refer
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <i class="icon-briefcase"></i>
-                            ข้อมูลพื้นฐาน
-                            <b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a href="<?php echo site_url('person'); ?>">
-                                    <i class="icon-folder-close"></i>
-                                    ข้อมูลประชากรในเขตรับผิดชอบ
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            <i class="icon-briefcase"></i>
-                            กำหนดค่า
-                            <b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a href="<?php echo site_url('settings/providers'); ?>">
-                                    <i class="icon-user"></i>
-                                    ข้อมูลผู้ให้บริการ
-                                </a>
-                            </li>
-                            <li>
-                                <a href="{{ site_url }}/settings/startups">
-                                    <i class="icon-list"></i>
-                                    กำหนดค่าเริ่มต้นระบบ
-                                </a>
-                            </li>
-                        </ul>
                     </li>
                     <li>
-                        <a href="<?php echo site_url('reports'); ?>">
+                        <a href="<?php echo site_url('reports/menu/2'); ?>">
                             <i class="icon-signal"></i>
-                            รายงาน
+                            งานส่งเสริม
+                        </a>
+                    </li>
+                    <li>
+                        <a href="<?php echo site_url('reports/menu/3'); ?>">
+                            <i class="icon-signal"></i>
+                            ข้อมูลพื้นฐาน
                         </a>
                     </li>
                 </ul>
