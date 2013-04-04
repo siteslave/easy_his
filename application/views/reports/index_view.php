@@ -1,3 +1,7 @@
+<ul class="breadcrumb">
+    <li><a href="<?php echo site_url(); ?>">หน้าหลัก</a> <span class="divider">/</span></li>
+    <li class="active">รายงาน</li>
+</ul>
 <div class="alert alert-info">
     <h4>
         <?php
