@@ -44,6 +44,7 @@
                 '<?php echo base_url(); ?>assets/js/jquery.numeric.js',
                 '<?php echo base_url(); ?>assets/js/numeral.min.js',
                 '<?php echo base_url(); ?>assets/js/bootbox.min.js',
+                '<?php echo base_url(); ?>assets/js/bootstrap-timepicker.min.js',
                 '<?php echo base_url(); ?>assets/apps/js/apps.js'
         );
 
@@ -93,6 +94,13 @@
                                     <i class="icon-calendar"></i> ทะเบียนนัด (Appointment)
                                 </a>
                             </li>
+                             <li>
+                                 <a href="<?php echo site_url('ncd'); ?>">
+                                     <i class="icon-book"></i> คัดกรองเบาหวาน/ความดัน 15 ปีขึ้นไป
+                                 </a>
+                            </li>
+
+
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -117,6 +125,18 @@
                                     <i class="icon-medkit"></i> ทะเบียนเด็กแรกเกิด/ดูแลหลังคลอด
                                 </a>
                             </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="<?php echo site_url('dm'); ?>">
+                                    <i class="icon-tags"></i> ทะเบียนผู้ป่วยเบาหวาน (DM)
+                                </a>
+                            </li>
+                            <li>
+                                <a href="<?php echo site_url('ht'); ?>">
+                                    <i class="icon-tags"></i> ทะเบียนผู้ป่วยความดัน (HT)
+                                </a>
+                            </li>
+
                             <li class="divider"></li>
                             <li>
                                 <a href="<?php echo site_url('death'); ?>">

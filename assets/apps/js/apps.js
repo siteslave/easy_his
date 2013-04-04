@@ -150,6 +150,22 @@ var app = {
         }
     },
 
+    count_age_mongo: function(d){
+        if(!d){
+            return 0;
+        }else{
+            var old_date = d.toString();
+
+            var year_birth = old_date.substr(0, 4);
+            var year_current = new Date();
+            var year_current2 = year_current.getFullYear();
+
+            var age = year_current2 - parseInt(year_birth);
+
+            return age;
+        }
+    },
+
     getFileExtension: function(filename)
     {
         var ext = /^.+\.([^.]+)$/.exec(filename);
@@ -312,6 +328,16 @@ app.set_runtime = function()
     $('div[data-name="datepicker"]').datepicker({
         format: 'dd/mm/yyyy',
         language: 'th'
+    });
+
+    $('.timepicker').timepicker({
+        minuteStep: 1,
+        secondStep: 5,
+        showInputs: false,
+        //template: 'modal',
+        //modalBackdrop: true,
+        //showSeconds: true,
+        showMeridian: false
     });
 
     $('input[data-type="time"]').mask("99:99");

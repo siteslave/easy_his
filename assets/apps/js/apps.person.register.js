@@ -183,7 +183,7 @@ head.ready(function(){
                     );
                 }else{
                     if( _.size(data) ){
-                        _.each(data, function(v){
+                        _.each(data.rows, function(v){
                             $('#table_search_dbpop_result_list tbody').append(
                                 '<tr>' +
                                     '<td>' + v.cid + '</td>' +
@@ -192,8 +192,8 @@ head.ready(function(){
                                     '<td>' + app.count_age_dbpop(v.birthdate) + '</td>' +
                                     '<td>[' + v.subinscl + '] ' + v.maininscl_name + '</td>' +
                                     '<td><a href="#" class="btn" data-name="button_set_data_from_dbopo" ' +
-                                    'data-cid="' + v.cid + '" data-fname="'+ v.fname +'" data-lname="'+ v.lname+'" ' +
-                                    'data-birth="'+ v.birthdate +'" data-maininscl="'+ v.maininscl +'" ' +
+                                    ' data-cid="' + v.cid + '" data-fname="'+ v.fname +'" data-lname="'+ v.lname+'" ' +
+                                    ' data-birth="'+ v.birthdate +'" data-maininscl="'+ v.maininscl +'" ' +
                                     ' data-inscl="'+ v.subinscl +'" data-sex="'+ v.sex +'" data-cardid="'+ v.cardid +'"' +
                                     ' data-startdate="'+ v.startdate+'" data-expdate="'+ v.expdate +'"' +
                                     ' data-hmain_code="'+ v.hmain_code +'" data-hmain_name="'+ v.hmain_name +'" ' +
@@ -205,7 +205,7 @@ head.ready(function(){
                         $('#table_search_dbpop_result_list tbody').append(
                             '<tr>' +
                                 '<td colspan="6">ไม่พบรายการ</td>' +
-                                '</tr>'
+                            '</tr>'
                         );
                     }
                 }
@@ -335,7 +335,7 @@ head.ready(function(){
             $('#slOutsideTambon').empty();
 
             $('#slOutsideAmpur').append('<option value="00">--</option>');
-            _.each(data, function(v){
+            _.each(data.rows, function(v){
                 if(!v.name.match(/\*/))
                     $('#slOutsideAmpur').append('<option value="'+ v.code +'">'+ v.name +'</option>');
             });
@@ -353,7 +353,7 @@ head.ready(function(){
         person.register.ajax.get_tambon(chw, amp, function(err, data){
             $('#slOutsideTambon').empty();
             $('#slOutsideTambon').append('<option value="00">--</option>');
-            _.each(data, function(v){
+            _.each(data.rows, function(v){
                 if(!v.name.match(/\*/))
                     $('#slOutsideTambon').append('<option value="'+ v.code +'">'+ v.name +'</option>');
             });
