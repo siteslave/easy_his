@@ -86,16 +86,16 @@ class Ncd extends CI_Controller
             foreach($rs as $r)
             {
                 $obj = new stdClass();
-                $obj->hn = $r['hn'];
-                $obj->cid = $r['cid'];
-                $obj->id = get_first_object($r['_id']);
-                $obj->first_name = $r['first_name'];
-                $obj->last_name = $r['last_name'];
-                $obj->sex = $r['sex'] == '1' ? 'ชาย' : 'หญิง';
-                $obj->screen = $this->ncd->get_last_screen(get_first_object($r['_id']));
-                $obj->birthdate = $r['birthdate'];
-                $obj->age = count_age($r['birthdate']);
-                $obj->reg_date = isset($r['registers'][0]['reg_date']) ? $r['registers'][0]['reg_date'] : '';
+                $obj->hn            = $r['hn'];
+                $obj->cid           = $r['cid'];
+                $obj->id            = get_first_object($r['_id']);
+                $obj->first_name    = $r['first_name'];
+                $obj->last_name     = $r['last_name'];
+                $obj->sex           = $r['sex'] == '1' ? 'ชาย' : 'หญิง';
+                $obj->screen        = $this->ncd->get_last_screen(get_first_object($r['_id']));
+                $obj->birthdate     = $r['birthdate'];
+                $obj->age           = count_age($r['birthdate']);
+                $obj->reg_date      = isset($r['registers'][0]['reg_date']) ? $r['registers'][0]['reg_date'] : '';
 
                 $arr_result[] = $obj;
             }
@@ -111,9 +111,6 @@ class Ncd extends CI_Controller
         render_json($json);
     }
 
-    public function test() {
-        echo $this->ncd->get_last_screen('5111cc6d0ca4061b3c17ed52');
-    }
     //------------------------------------------------------------------------------------------------------------------
     public function get_list_by_house()
     {
@@ -228,15 +225,15 @@ class Ncd extends CI_Controller
                 foreach($rs as $r)
                 {
                     $obj = new stdClass();
-                    $obj->id = get_first_object($r['_id']);
-                    $obj->hn = $r['hn'];
-                    $obj->cid = $r['cid'];
-                    $obj->first_name = $r['first_name'];
-                    $obj->last_name = $r['last_name'];
-                    $obj->birthdate = $r['birthdate'];
-                    $obj->sex = $r['sex'] == '1' ? 'ชาย' : 'หญิง';
-                    $obj->age = count_age($r['birthdate']);
-                    $owner_id_check = $r['owner_id'];
+                    $obj->id            = get_first_object($r['_id']);
+                    $obj->hn            = $r['hn'];
+                    $obj->cid           = $r['cid'];
+                    $obj->first_name    = $r['first_name'];
+                    $obj->last_name     = $r['last_name'];
+                    $obj->birthdate     = $r['birthdate'];
+                    $obj->sex           = $r['sex'] == '1' ? 'ชาย' : 'หญิง';
+                    $obj->age           = count_age($r['birthdate']);
+                    $owner_id_check     = $r['owner_id'];
 
                     $arr_result[] = $obj;
                 }
@@ -349,7 +346,7 @@ class Ncd extends CI_Controller
                 $obj->id = get_first_object($r['_id']);
                 $obj->name = $r['first_name'].' '.$r['last_name'];
 
-                array_push($arr_result, $obj);
+                $arr_result[] = $obj;
             }
 
             return $arr_result;
@@ -363,13 +360,13 @@ class Ncd extends CI_Controller
             $arr_result = array();
             foreach($rs as $r) {
                 $obj = new stdClass();
-                $obj->id = get_first_object($r['_id']);
-                $obj->date = $r['date'];
-                $obj->time = $r['time'];
-                $obj->weight = $r['weight'];
-                $obj->height = $r['height'];
-                $obj->waist_line = $r['waist_line'];
-                $obj->bmi = $r['bmi'];
+                $obj->id            = get_first_object($r['_id']);
+                $obj->date          = $r['date'];
+                $obj->time          = $r['time'];
+                $obj->weight        = $r['weight'];
+                $obj->height        = $r['height'];
+                $obj->waist_line    = $r['waist_line'];
+                $obj->bmi           = $r['bmi'];
 
                 $arr_result[] = $obj;
             }
@@ -415,70 +412,70 @@ class Ncd extends CI_Controller
             $arr_result = array();
             foreach($rs as $r) {
                 $obj = new stdClass();
-                $obj->date = $r['date'];
-                $obj->time = $r['time'];
-                $obj->weight = $r['weight'];
-                $obj->height = $r['height'];
-                $obj->waist_line = $r['waist_line'];
-                $obj->bmi = $r['bmi'];
+                $obj->date          = $r['date'];
+                $obj->time          = $r['time'];
+                $obj->weight        = $r['weight'];
+                $obj->height        = $r['height'];
+                $obj->waist_line    = $r['waist_line'];
+                $obj->bmi           = $r['bmi'];
                 $obj->service_local = $r['service_local'];
-                $obj->doctor = get_first_object($r['doctor']);
+                $obj->doctor        = get_first_object($r['doctor']);
                 $obj->service_place = $r['service_place'];
 
-                $obj->pcu_name = get_hospital_name($r['service_place']);
+                $obj->pcu_name      = get_hospital_name($r['service_place']);
 
-                $obj->parental_illness_history_dm = $r['parental_illness_history_dm'];
-                $obj->parental_illness_history_ht = $r['parental_illness_history_ht'];
-                $obj->parental_illness_history_gout = $r['parental_illness_history_gout'];
-                $obj->parental_illness_history_crf = $r['parental_illness_history_crf'];
-                $obj->parental_illness_history_mi = $r['parental_illness_history_mi'];
-                $obj->parental_illness_history_stroke = $r['parental_illness_history_stroke'];
-                $obj->parental_illness_history_copd = $r['parental_illness_history_copd'];
-                $obj->parental_illness_history_unknown = $r['parental_illness_history_unknown'];
-                $obj->sibling_illness_history_dm = $r['sibling_illness_history_dm'];
-                $obj->sibling_illness_history_ht = $r['sibling_illness_history_ht'];
-                $obj->sibling_illness_history_gout = $r['sibling_illness_history_gout'];
-                $obj->sibling_illness_history_crf = $r['sibling_illness_history_crf'];
-                $obj->sibling_illness_history_mi = $r['sibling_illness_history_mi'];
-                $obj->sibling_illness_history_stroke = $r['sibling_illness_history_stroke'];
-                $obj->sibling_illness_history_copd = $r['sibling_illness_history_copd'];
-                $obj->sibling_illness_history_unknown = $r['sibling_illness_history_unknown'];
-                $obj->history_illness_dm = $r['history_illness_dm'];
-                $obj->history_illness_ht = $r['history_illness_ht'];
-                $obj->history_illness_liver = $r['history_illness_liver'];
-                $obj->history_illness_paralysis = $r['history_illness_paralysis'];
-                $obj->history_illness_heart = $r['history_illness_heart'];
-                $obj->history_illness_lipid = $r['history_illness_lipid'];
-                $obj->history_illness_footUlcers = $r['history_illness_footUlcers'];
-                $obj->history_illness_confined = $r['history_illness_confined'];
+                $obj->parental_illness_history_dm       = $r['parental_illness_history_dm'];
+                $obj->parental_illness_history_ht       = $r['parental_illness_history_ht'];
+                $obj->parental_illness_history_gout     = $r['parental_illness_history_gout'];
+                $obj->parental_illness_history_crf      = $r['parental_illness_history_crf'];
+                $obj->parental_illness_history_mi       = $r['parental_illness_history_mi'];
+                $obj->parental_illness_history_stroke   = $r['parental_illness_history_stroke'];
+                $obj->parental_illness_history_copd     = $r['parental_illness_history_copd'];
+                $obj->parental_illness_history_unknown  = $r['parental_illness_history_unknown'];
+                $obj->sibling_illness_history_dm        = $r['sibling_illness_history_dm'];
+                $obj->sibling_illness_history_ht        = $r['sibling_illness_history_ht'];
+                $obj->sibling_illness_history_gout      = $r['sibling_illness_history_gout'];
+                $obj->sibling_illness_history_crf       = $r['sibling_illness_history_crf'];
+                $obj->sibling_illness_history_mi        = $r['sibling_illness_history_mi'];
+                $obj->sibling_illness_history_stroke    = $r['sibling_illness_history_stroke'];
+                $obj->sibling_illness_history_copd      = $r['sibling_illness_history_copd'];
+                $obj->sibling_illness_history_unknown   = $r['sibling_illness_history_unknown'];
+                $obj->history_illness_dm                = $r['history_illness_dm'];
+                $obj->history_illness_ht                = $r['history_illness_ht'];
+                $obj->history_illness_liver             = $r['history_illness_liver'];
+                $obj->history_illness_paralysis         = $r['history_illness_paralysis'];
+                $obj->history_illness_heart             = $r['history_illness_heart'];
+                $obj->history_illness_lipid             = $r['history_illness_lipid'];
+                $obj->history_illness_footUlcers        = $r['history_illness_footUlcers'];
+                $obj->history_illness_confined          = $r['history_illness_confined'];
                 $obj->history_illness_drink_water_frequently = $r['history_illness_drink_water_frequently'];
-                $obj->history_illness_night_urination = $r['history_illness_night_urination'];
-                $obj->history_illness_batten = $r['history_illness_batten'];
-                $obj->history_illness_weight_down = $r['history_illness_weight_down'];
-                $obj->history_illness_ulcerated_lips = $r['history_illness_ulcerated_lips'];
-                $obj->history_illness_itchy_skin = $r['history_illness_itchy_skin'];
-                $obj->history_illness_bleary_eyed = $r['history_illness_bleary_eyed'];
-                $obj->history_illness_tea_by_hand = $r['history_illness_tea_by_hand'];
-                $obj->history_illness_how_to_behave = $r['history_illness_how_to_behave'];
-                $obj->history_illness_creased_neck = $r['history_illness_creased_neck'];
-                $obj->history_illness_history_fpg = $r['history_illness_history_fpg'];
-                $obj->smoking = $r['smoking'];
-                $obj->of_smoked = $r['of_smoked'];
-                $obj->time_smoke = $r['time_smoke'];
-                $obj->smoking_number_per_day = $r['smoking_number_per_day'];
-                $obj->smoking_number_per_year = $r['smoking_number_per_year'];
-                $obj->of_smoking = $r['of_smoking'];
-                $obj->smoking_year = $r['smoking_year'];
-                $obj->alcohol = $r['alcohol'];
-                $obj->alcohol_per_week = $r['alcohol_per_week'];
-                $obj->exercise = $r['exercise'];
-                $obj->food = $r['food'];
-                $obj->fcg = $r['fcg'];
-                $obj->fpg = $r['fpg'];
-                $obj->ppg = $r['ppg'];
-                $obj->ppg_hours = $r['ppg_hours'];
-                $obj->pressure_measurements = $r['pressure_measurements'];
-                $obj->body_screen = $r['body_screen'];
+                $obj->history_illness_night_urination   = $r['history_illness_night_urination'];
+                $obj->history_illness_batten            = $r['history_illness_batten'];
+                $obj->history_illness_weight_down       = $r['history_illness_weight_down'];
+                $obj->history_illness_ulcerated_lips    = $r['history_illness_ulcerated_lips'];
+                $obj->history_illness_itchy_skin        = $r['history_illness_itchy_skin'];
+                $obj->history_illness_bleary_eyed       = $r['history_illness_bleary_eyed'];
+                $obj->history_illness_tea_by_hand       = $r['history_illness_tea_by_hand'];
+                $obj->history_illness_how_to_behave     = $r['history_illness_how_to_behave'];
+                $obj->history_illness_creased_neck      = $r['history_illness_creased_neck'];
+                $obj->history_illness_history_fpg       = $r['history_illness_history_fpg'];
+                $obj->smoking                           = $r['smoking'];
+                $obj->of_smoked                         = $r['of_smoked'];
+                $obj->time_smoke                        = $r['time_smoke'];
+                $obj->smoking_number_per_day            = $r['smoking_number_per_day'];
+                $obj->smoking_number_per_year           = $r['smoking_number_per_year'];
+                $obj->of_smoking                        = $r['of_smoking'];
+                $obj->smoking_year                      = $r['smoking_year'];
+                $obj->alcohol                           = $r['alcohol'];
+                $obj->alcohol_per_week                  = $r['alcohol_per_week'];
+                $obj->exercise                          = $r['exercise'];
+                $obj->food                              = $r['food'];
+                $obj->fcg                               = $r['fcg'];
+                $obj->fpg                               = $r['fpg'];
+                $obj->ppg                               = $r['ppg'];
+                $obj->ppg_hours                         = $r['ppg_hours'];
+                $obj->pressure_measurements             = $r['pressure_measurements'];
+                $obj->body_screen                       = $r['body_screen'];
 
                 $arr_result[] = $obj;
             }
@@ -491,4 +488,4 @@ class Ncd extends CI_Controller
         render_json($json);
     }
 }
-//End file
+//End of file

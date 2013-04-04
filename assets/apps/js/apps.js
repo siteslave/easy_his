@@ -276,23 +276,6 @@ var app = {
         return $.trim(string);
     },
 
-    /*
-     $("#el").spin(); // Produces default Spinner using the text color of #el.
-     $("#el").spin("small"); // Produces a 'small' Spinner using the text color of #el.
-     $("#el").spin("large", "white"); // Produces a 'large' Spinner in white (or any valid CSS color).
-     $("#el").spin({ ... }); // Produces a Spinner using your custom settings.
-
-     $("#el").spin(false); // Kills the spinner.
-     */
-    //show spinner
-    show_spin: function(obj){
-        $(obj).spin();
-    },
-    //hide spinner
-    hide_spin: function(obj){
-        $(obj).spin(false);
-    },
-
     get_current_date: function(){
         var date = new Date();
         var y = date.getFullYear(),

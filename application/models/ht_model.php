@@ -1,4 +1,5 @@
-<?php
+<?php if (!defined('BASEPATH')) exit('No direct script access allowed');
+
 class Ht_model extends CI_Model
 {
     public $owner_id;
@@ -43,8 +44,8 @@ class Ht_model extends CI_Model
         $rs = $this->mongo_db
             ->where(array(
                 'registers.clinic_code' => $this->clinic_code,
-                'registers.owner_id' => new MongoId($this->owner_id),
-                'house_code' => new MongoId($house_id)
+                'registers.owner_id'    => new MongoId($this->owner_id),
+                'house_code'            => new MongoId($house_id)
             ))
             //->offset($start)
             //->limit($limit)
@@ -56,8 +57,8 @@ class Ht_model extends CI_Model
     {
         $rs = $this->mongo_db
             ->where(array(
-                        'registers.clinic_code' => $this->clinic_code,
-                        'registers.owner_id' => new MongoId($this->owner_id)
+                'registers.clinic_code' => $this->clinic_code,
+                'registers.owner_id'    => new MongoId($this->owner_id)
             ))
             ->count('person');
 
@@ -67,8 +68,8 @@ class Ht_model extends CI_Model
     {
         $rs = $this->mongo_db
             ->where(array(
-                        'registers.clinic_code' => $this->clinic_code,
-                        'registers.owner_id' => new MongoId($this->owner_id)
+                'registers.clinic_code' => $this->clinic_code,
+                'registers.owner_id'    => new MongoId($this->owner_id)
             ))
             ->count('person');
 
@@ -78,62 +79,58 @@ class Ht_model extends CI_Model
     public function get_providers_by_active() {
         $rs = $this->mongo_db
             ->where(array(
-                        'owner_id' => new MongoId($this->owner_id),
-                        'active' => 'Y'
-                    ))
+                'owner_id'  => new MongoId($this->owner_id),
+                'active'    => 'Y'
+            ))
             ->get('providers');
         
         return $rs;
     }
     
-    public function do_regis_ht_clinic($hn, $hid_regis, $year_regis, $date_regis, $diag_type, $doctor, $pre_register, $pregnancy, $hypertension, $insulin, $newcase, $hosp_serial, $reg_serial) {
-        $date = $date_regis;
-        $date = substr($date, 6).substr($date, 3, 2).substr($date, 0, 2);
-        
+    public function do_regis_ht_clinic($data) {
+
         $rs = $this->mongo_db
-            ->where('hn', (string)$hn)
+            ->where('hn', (string)$data['hn'])
             ->push('registers', array(
-                    'clinic_code' => $this->clinic_code,
-                    'owner_id' => new MongoId($this->owner_id),
-                    'user_id' => new MongoId($this->user_id),
-                    'reg_date' => $date,
-                    'reg_year' => $year_regis,
-                    'reg_serial' => $reg_serial,
-                    'hosp_serial' => $hosp_serial,
-                    'diag_type' => $diag_type,
-                    'doctor' => new MongoId($doctor),
-                    'pre_regis' => $pre_register=='true'?true:false,
-                    'pregnancy' => $pregnancy=='true'?true:false,
-                    'hypertension' => $hypertension=='true'?true:false,
-                    'insulin' => $insulin=='true'?true:false,
-                    'newcase' => $newcase=='true'?true:false,
-                    'last_update' => date('Y-m-d H:i:s')
-                ))
+                'clinic_code'   => $this->clinic_code,
+                'owner_id'      => new MongoId($this->owner_id),
+                'user_id'       => new MongoId($this->user_id),
+                'reg_date'      => to_string_date($data['date_regis']),
+                'reg_year'      => $data['year_regis'],
+                'reg_serial'    => $data['reg_serial'],
+                'hosp_serial'   => $data['hosp_serial'],
+                'diag_type'     => $data['diag_type'],
+                'doctor'        => new MongoId($data['doctor']),
+                'pre_regis'     => $data['pre_register'] == 'true' ? TRUE : FALSE,
+                'pregnancy'     => $data['pregnancy'] =='true' ? TRUE : FALSE,
+                'hypertension'  => $data['hypertension'] =='true' ? TRUE : FALSE,
+                'insulin'       => $data['insulin'] =='true' ? TRUE : FALSE,
+                'newcase'       => $data['newcase'] =='true' ? TRUE : FALSE,
+                'last_update'   => date('Y-m-d H:i:s')
+            ))
             ->update('person');
         
         return $rs;
     }
     
-    public function do_update_ht_clinic($hn, $hid_regis, $year_regis, $date_regis, $diag_type, $doctor, $pre_register, $pregnancy, $hypertension, $insulin, $newcase, $hosp_serial) {
-        $date = $date_regis;
-        $date = substr($date, 6).substr($date, 3, 2).substr($date, 0, 2);
-        
+    public function do_update_ht_clinic($data) {
+
         $rs = $this->mongo_db
-            ->where(array('hn' => (string)$hn, 'registers.clinic_code' => $this->clinic_code))
+            ->where(array('hn' => (string)$data['hn'], 'registers.clinic_code' => $this->clinic_code))
             ->set(array(
-                    'registers.$.user_id' => new MongoId($this->user_id),
-                    'registers.$.reg_date' => $date,
-                    'registers.$.reg_year' => $year_regis,
-                    'registers.$.hosp_serial' => $hosp_serial,
-                    'registers.$.diag_type' => $diag_type,
-                    'registers.$.doctor' => new MongoId($doctor),
-                    'registers.$.pre_regis' => $pre_register=='true'?true:false,
-                    'registers.$.pregnancy' => $pregnancy=='true'?true:false,
-                    'registers.$.hypertension' => $hypertension=='true'?true:false,
-                    'registers.$.insulin' => $insulin=='true'?true:false,
-                    'registers.$.newcase' => $newcase=='true'?true:false,
-                    'registers.$.last_update' => date('Y-m-d H:i:s')
-                )
+                'registers.$.user_id'       => new MongoId($this->user_id),
+                'registers.$.reg_date'      => to_string_date($data['date_regis']),
+                'registers.$.reg_year'      => $data['year_regis'],
+                'registers.$.hosp_serial'   => $data['hosp_serial'],
+                'registers.$.diag_type'     => $data['diag_type'],
+                'registers.$.doctor'        => new MongoId($data['doctor']),
+                'registers.$.pre_regis'     => $data['pre_register'] =='true' ? TRUE : FALSE,
+                'registers.$.pregnancy'     => $data['pregnancy'] =='true' ? TRUE : FALSE,
+                'registers.$.hypertension'  => $data['hypertension'] =='true' ? TRUE : FALSE,
+                'registers.$.insulin'       => $data['insulin'] =='true' ? TRUE : FALSE,
+                'registers.$.newcase'       => $data['newcase'] =='true' ? TRUE : FALSE,
+                'registers.$.last_update'   => date('Y-m-d H:i:s')
+            )
             )
             ->update('person');
         

@@ -290,20 +290,20 @@ class Ht extends CI_Controller
 
     public function do_register()
     {
-        $hn = $this->input->post('hn');
-        $hid_regis = $this->input->post('hid_regis');
-        $year_regis = $this->input->post('year_regis');
-        $date_regis = $this->input->post('date_regis');
-        $diag_type = $this->input->post('diag_type');
-        $doctor = $this->input->post('doctor');
-        $pre_register = $this->input->post('pre_register');
-        $pregnancy = $this->input->post('pregnancy');
-        $hypertension = $this->input->post('hypertension');
-        $insulin = $this->input->post('insulin');
-        $newcase = $this->input->post('newcase');
-        $hosp_serial = $this->input->post('hosp_serial');
+        $data['hn'] = $this->input->post('hn');
+        $data['hid_regis'] = $this->input->post('hid_regis');
+        $data['year_regis'] = $this->input->post('year_regis');
+        $data['date_regis'] = $this->input->post('date_regis');
+        $data['diag_type'] = $this->input->post('diag_type');
+        $data['doctor'] = $this->input->post('doctor');
+        $data['pre_register'] = $this->input->post('pre_register');
+        $data['pregnancy'] = $this->input->post('pregnancy');
+        $data['hypertension'] = $this->input->post('hypertension');
+        $data['insulin'] = $this->input->post('insulin');
+        $data['newcase'] = $this->input->post('newcase');
+        $data['hosp_serial'] = $this->input->post('hosp_serial');
 
-        if(empty($hn))
+        if(empty($data['hn']))
         {
             $json = '{"success": false, "msg": "HN not found."}';
         }
@@ -312,9 +312,10 @@ class Ht extends CI_Controller
 
             $this->ht->owner_id = $this->owner_id;
             $this->ht->user_id = $this->user_id;
-            $reg_serial = generate_serial('HT');
 
-            $rs = $this->ht->do_regis_ht_clinic($hn, $hid_regis, $year_regis, $date_regis, $diag_type, $doctor, $pre_register, $pregnancy, $hypertension, $insulin, $newcase, $hosp_serial, $reg_serial);
+            $data['reg_serial'] = generate_serial('HT');
+
+            $rs = $this->ht->do_regis_ht_clinic($data);
 
             if($rs)
             {
@@ -331,20 +332,20 @@ class Ht extends CI_Controller
 
     public function do_update()
     {
-        $hn = $this->input->post('hn');
-        $hid_regis = $this->input->post('hid_regis');
-        $year_regis = $this->input->post('year_regis');
-        $date_regis = $this->input->post('date_regis');
-        $diag_type = $this->input->post('diag_type');
-        $doctor = $this->input->post('doctor');
-        $pre_register = $this->input->post('pre_register');
-        $pregnancy = $this->input->post('pregnancy');
-        $hypertension = $this->input->post('hypertension');
-        $insulin = $this->input->post('insulin');
-        $newcase = $this->input->post('newcase');
-        $hosp_serial = $this->input->post('hosp_serial');
+        $data['hn'] = $this->input->post('hn');
+        $data['hid_regis'] = $this->input->post('hid_regis');
+        $data['year_regis'] = $this->input->post('year_regis');
+        $data['date_regis'] = $this->input->post('date_regis');
+        $data['diag_type'] = $this->input->post('diag_type');
+        $data['doctor'] = $this->input->post('doctor');
+        $data['pre_register']= $this->input->post('pre_register');
+        $data['pregnancy'] = $this->input->post('pregnancy');
+        $data['hypertension'] = $this->input->post('hypertension');
+        $data['insulin'] = $this->input->post('insulin');
+        $data['newcase'] = $this->input->post('newcase');
+        $data['hosp_serial'] = $this->input->post('hosp_serial');
 
-        if(empty($hn))
+        if(empty($data['hn']))
         {
             $json = '{"success": false, "msg": "HN not found."}';
         }
@@ -355,7 +356,7 @@ class Ht extends CI_Controller
             $this->ht->user_id = $this->user_id;
             //$reg_serial = //generate_serial('DM');
 
-            $rs = $this->ht->do_update_ht_clinic($hn, $hid_regis, $year_regis, $date_regis, $diag_type, $doctor, $pre_register, $pregnancy, $hypertension, $insulin, $newcase, $hosp_serial);
+            $rs = $this->ht->do_update_ht_clinic($data);
 
             if($rs)
             {
@@ -438,4 +439,4 @@ class Ht extends CI_Controller
 }
 
 
-//End file
+//End of file
