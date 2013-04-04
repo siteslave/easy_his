@@ -488,7 +488,7 @@ class Basic extends CI_Controller
         render_json($json);
     }
 
-    public function test1() {
+    public function demo() {
 
     }
 }
