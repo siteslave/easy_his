@@ -414,6 +414,24 @@ if(!function_exists('get_community_service_list'))
     }
 }
 
+if(!function_exists('get_owner_typearea'))
+{
+    function get_owner_typearea($hn, $owner_id)
+    {
+        $ci =& get_instance();
+        $ci->load->model('Basic_model', 'basic');
+
+        $rs = $ci->basic->get_owner_typearea($hn, $owner_id);
+
+        foreach($rs as $r){
+            if(get_first_object($r['owner_id']) == $owner_id){
+                return $r['typearea'];
+            }
+        }
+        return NULL;
+    }
+}
+
 if(!function_exists('get_bresult_name'))
 {
     function get_bresult_name($code)

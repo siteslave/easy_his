@@ -262,6 +262,7 @@
                             <label class="control-label" for="slRHGroup">หมู่เลือด RH</label>
                             <div class="controls">
                                 <select  id="slRHGroup" class="input-small">
+                                    <option value="">--</option>
                                     <option value="1">Positive</option>
                                     <option value="2">Negative</option>
                                 </select>
@@ -287,7 +288,7 @@
                             <div class="controls">
                                 <select  id="slTypeArea" class="input-xxlarge">
                                     <option value="">--</option>
-                                    <?php foreach($typearea as $t) echo '<option value="'.$t->code.'">'.$t->name.'</option>'; ?>
+                                    <?php foreach($typearea as $t) echo '<option value="'.$t->code.'">['.$t->code.'] '.$t->name.'</option>'; ?>
                                 </select>
                             </div>
                         </div>
@@ -463,7 +464,11 @@
                             <label class="control-label" for="slOutsideVillage">หมู่ที่</label>
                             <div class="controls">
                                 <select id="slOutsideVillage">
-                                    <?php for($i=0; $i>=30; $i++){ echo '<option value="'.$i.'">'.$i.'</option>'; } ?>
+                                    <?php
+                                    for($i=0; $i<=50; $i++){
+                                        echo '<option value="'.$i.'">'.$i.'</option>';
+                                    }
+                                    ?>
                                 </select>
                             </div>
                         </div>

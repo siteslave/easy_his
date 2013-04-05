@@ -381,7 +381,7 @@
         <div class="row-fluid">
             <div class="span4">
                 <div class="control-group">
-                    <label class="control-label" for="slTypeArea">คนต่างด้าว</label>
+                    <label class="control-label" for="slLabor">คนต่างด้าว</label>
                     <div class="controls">
                         <select  id="slLabor" class="input-xlarge">
                             <option value="">--</option>
@@ -403,8 +403,8 @@
                             <option value="">--</option>
                             <?php
                             foreach($typearea as $t){
-                                if($t->code == $data->typearea) echo '<option value="'.$t->code.'" selected="selected">'.$t->name.'</option>';
-                                else echo '<option value="'.$t->code.'">'.$t->name.'</option>';
+                                if($t->code == $data->typearea) echo '<option value="'.$t->code.'" selected="selected">['.$t->code.'] '.$t->name.'</option>';
+                                else echo '<option value="'.$t->code.'">['.$t->code.'] '.$t->name.'</option>';
                             }
                             ?>
                         </select>
@@ -600,9 +600,9 @@
                             <div class="controls">
                                 <select id="slOutsideVillage">
                                     <?php
-                                        for($i=0; $i<=30; $i++){
+                                        for($i=0; $i<=50; $i++){
                                             if($data->village == $i) echo '<option value="'.$i.'" selected="selected">'.$i.'</option>';
-                                            else echo '<option value="{{ i }}">'.$i.'</option>';
+                                            else echo '<option value="'.$i.'">'.$i.'</option>';
                                         }
                                     ?>
                                 </select>
@@ -634,7 +634,7 @@
                                 <select id="slOutsideAmpur">
                                     <option value="">--</option>
                                     <?php
-                                    foreach($amphurs as $t){
+                                    foreach($ampurs as $t){
                                         if($t->code == $data->address_ampur) echo '<option value="'.$t->code.'" selected="selected">'.$t->name.'</option>';
                                         else echo '<option value="'.$t->code.'">'.$t->name.'</option>';
                                     }
