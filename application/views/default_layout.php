@@ -184,9 +184,9 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="<?php echo site_url('settings/providers'); ?>">
-                                    <i class="icon-list"></i>
-                                    กำหนดค่าเริ่มต้นระบบ
+                                <a href="<?php echo site_url('stocks'); ?>">
+                                    <i class="icon-shopping-cart"></i>
+                                    ข้อมูลเวชภัณฑ์
                                 </a>
                             </li>
                         </ul>
