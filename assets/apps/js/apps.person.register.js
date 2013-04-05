@@ -453,8 +453,6 @@ head.ready(function(){
             app.alert('กรุณาระบุสถานะในครอบครัว');
         }else if(!items.vstatus){
             app.alert('กรุณาระบุสถานะในชุมชน');
-        }else if(!items.labor_type){
-            app.alert('กรุณาระบุความเป็นต่างด้าว');
         }else if(!items.typearea){
             app.alert('กรุณาระบุประเภทบุคคล');
         }else if(!items.ins.id){

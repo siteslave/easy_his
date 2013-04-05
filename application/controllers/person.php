@@ -321,24 +321,25 @@ class Person extends CI_Controller
             $json = '{"success": false, "msg": "No data found"}';
         }else{
             //check cid
+            $this->person->owner_id = $this->owner_id;
+
             $person_exist = $this->person->check_person_exist($data['cid']);
             if($person_exist){
                 $json = '{"success": false, "msg": "CID duplicate."}';
             }else{
                 $data['hn'] = generate_serial('HN');
-                $this->person->owner_id = $this->owner_id;
 
                 $result = $this->person->save_person($data);
 
                 if($result){
-                    //person id
-                    $person_id = $result;
-
                     //save address
-                    //if($data['typearea'] == '3' || $data['typearea'] == '4' || $data['typearea'] == '0'){
-                    $this->person->save_person_address($person_id, $data['address']);
-                    //}
-                    $this->person->save_insurance($person_id, $data['ins']);
+                    if($data['typearea'] == '3' || $data['typearea'] == '4' || $data['typearea'] == '0'){
+                        $this->person->save_person_address($data['hn'], $data['address']);
+                    }
+
+                    $this->person->save_person_typearea($data['hn'], $data['typearea']);
+                    $this->person->save_insurance($data['hn'], $data['ins']);
+
                     $json = '{"success": true}';
 
                 }else{
@@ -353,8 +354,7 @@ class Person extends CI_Controller
     public function do_update(){
         $data = $this->input->post('data');
 
-        $success = FALSE;
-        $msg = '';
+        $this->person->owner_id = $this->owner_id;
 
         if(empty($data)){
 
@@ -384,6 +384,7 @@ class Person extends CI_Controller
                 }else{
                     $result = $this->do_update_person($data);
                     if($result){
+                        $this->person->update_person_typearea($data['hn'], $data['typearea'], $this->owner_id);
                         $success = TRUE;
                     }else{
                         $success = FALSE;
@@ -503,48 +504,45 @@ class Person extends CI_Controller
                 $obj->rhgroup           = $result['rhgroup'];
                 $obj->sex               = $result['sex'];
                 $obj->title             = get_first_object($result['title']);
-                $obj->typearea          = $result['typearea'];
+
+                if(isset($rs['typearea']))
+                    $obj->typearea      = get_owner_typearea($hn, $this->owner_id);
+
                 $obj->vstatus           = get_first_object($result['vstatus']);
 
-                //insurance
-                if(!empty($result['insurances'])){
-                    $obj->ins_code          = isset($result['insurances']['code']) ? $result['insurances']['code'] : NULL;
-                    $obj->ins_id            = isset($result['insurances']['id']) ? $result['insurances']['id'] : NULL;
-                    $obj->ins_expire_date   = to_js_date(isset($result['insurances']['expire_date']) ? $result['insurances']['expire_date'] : NULL);
-                    $obj->ins_start_date    = to_js_date(isset($result['insurances']['start_date']) ? $result['insurances']['start_date'] : NULL);
-                    $obj->ins_hmain_code    = isset($result['insurances']['hmain']) ? $result['insurances']['hmain'] : NULL;
-                    $obj->ins_hmain_name    = get_hospital_name($obj->ins_hmain_code);
-                    $obj->ins_hsub_code     = isset($result['insurances']['hsub']) ? $result['insurances']['hsub'] : NULL;
-                    $obj->ins_hsub_name     = get_hospital_name($obj->ins_hsub_code);
-                }
-                //address
-                if(!empty($result['address'])){
-                    $obj->address_address_type  = isset($result['address']['address_type']) ? $result['address']['address_type'] : NULL;
-                    $obj->address_ampur         = isset($result['address']['ampur']) ? $result['address']['ampur'] : NULL;
-                    $obj->address_changwat      = isset($result['address']['changwat']) ? $result['address']['changwat'] : NULL;
-                    $obj->address_condo         = isset($result['address']['condo']) ? $result['address']['condo'] : NULL;
-                    $obj->address_house_id      = isset($result['address']['house_id']) ? $result['address']['house_id'] : NULL;
-                    $obj->address_house_type    = isset($result['address']['house_type']) ? $result['address']['house_type'] : NULL;
-                    $obj->address_houseno       = isset($result['address']['houseno']) ? $result['address']['houseno'] : NULL;
-                    $obj->address_mobile        = isset($result['address']['mobile']) ? $result['address']['mobile'] : NULL;
-                    $obj->address_postcode      = isset($result['address']['postcode']) ? $result['address']['postcode'] : NULL;
-                    $obj->address_road          = isset($result['address']['road']) ? $result['address']['road'] : NULL;
-                    $obj->address_room_no       = isset($result['address']['room_no']) ? $result['address']['room_no'] : NULL;
-                    $obj->address_soi_main      = isset($result['address']['soi_main']) ? $result['address']['soi_main'] : NULL;
-                    $obj->address_soi_sub       = isset($result['address']['soi_sub']) ? $result['address']['soi_sub'] : NULL;
-                    $obj->address_tambon        = isset($result['address']['tambon']) ? $result['address']['tambon'] : NULL;
-                    $obj->address_telephone     = isset($result['address']['telephone']) ? $result['address']['telephone'] : NULL;
-                    $obj->address_village       = isset($result['address']['village']) ? $result['address']['village'] : NULL;
-                    $obj->address_village_name  = isset($result['address']['village_name']) ? $result['address']['village_name'] : NULL;
+                $obj->ins_code          = isset($result['insurances']['code']) ? $result['insurances']['code'] : NULL;
+                $obj->ins_id            = isset($result['insurances']['id']) ? $result['insurances']['id'] : NULL;
+                $obj->ins_expire_date   = to_js_date(isset($result['insurances']['expire_date']) ? $result['insurances']['expire_date'] : NULL);
+                $obj->ins_start_date    = to_js_date(isset($result['insurances']['start_date']) ? $result['insurances']['start_date'] : NULL);
+                $obj->ins_hmain_code    = isset($result['insurances']['hmain']) ? $result['insurances']['hmain'] : NULL;
+                $obj->ins_hmain_name    = get_hospital_name($obj->ins_hmain_code);
+                $obj->ins_hsub_code     = isset($result['insurances']['hsub']) ? $result['insurances']['hsub'] : NULL;
+                $obj->ins_hsub_name     = get_hospital_name($obj->ins_hsub_code);
 
-                    $ampurs     = !empty($obj->address_ampur) ? $this->basic->get_ampur($obj->address_changwat) : NULL;
-                    $tambons    = !empty($obj->address_tambon) ? $this->basic->get_tambon($obj->address_changwat, $obj->address_ampur) : NULL;
+                $obj->address_address_type  = isset($result['address']['address_type']) ? $result['address']['address_type'] : NULL;
+                $obj->address_ampur         = isset($result['address']['ampur']) ? $result['address']['ampur'] : NULL;
+                $obj->address_changwat      = isset($result['address']['changwat']) ? $result['address']['changwat'] : NULL;
+                $obj->address_condo         = isset($result['address']['condo']) ? $result['address']['condo'] : NULL;
+                $obj->address_house_id      = isset($result['address']['house_id']) ? $result['address']['house_id'] : NULL;
+                $obj->address_house_type    = isset($result['address']['house_type']) ? $result['address']['house_type'] : NULL;
+                $obj->address_houseno       = isset($result['address']['houseno']) ? $result['address']['houseno'] : NULL;
+                $obj->address_mobile        = isset($result['address']['mobile']) ? $result['address']['mobile'] : NULL;
+                $obj->address_postcode      = isset($result['address']['postcode']) ? $result['address']['postcode'] : NULL;
+                $obj->address_road          = isset($result['address']['road']) ? $result['address']['road'] : NULL;
+                $obj->address_room_no       = isset($result['address']['room_no']) ? $result['address']['room_no'] : NULL;
+                $obj->address_soi_main      = isset($result['address']['soi_main']) ? $result['address']['soi_main'] : NULL;
+                $obj->address_soi_sub       = isset($result['address']['soi_sub']) ? $result['address']['soi_sub'] : NULL;
+                $obj->address_tambon        = isset($result['address']['tambon']) ? $result['address']['tambon'] : NULL;
+                $obj->address_telephone     = isset($result['address']['telephone']) ? $result['address']['telephone'] : NULL;
+                $obj->address_village       = isset($result['address']['village']) ? $result['address']['village'] : NULL;
+                $obj->address_village_name  = isset($result['address']['village_name']) ? $result['address']['village_name'] : NULL;
 
-                    //$this->twiggy->set('amphurs', $ampurs);
-                    //$this->twiggy->set('tambons', $tambons);
-                    $data['ampurs'] = $ampurs;
-                    $data['tambons'] = $tambons;
-                }
+                $ampurs     = !empty($obj->address_ampur) ? $this->basic->get_ampur($obj->address_changwat) : NULL;
+                $tambons    = !empty($obj->address_tambon) ? $this->basic->get_tambon($obj->address_changwat, $obj->address_ampur) : NULL;
+
+                $data['ampurs'] = $ampurs;
+                $data['tambons'] = $tambons;
+
                 $data['chronic_discharge_types'] = $this->basic->get_chronic_discharge_type();
                 $data['educations']     = $this->basic->get_education();
                 $data['titles']         = $this->basic->get_title();
@@ -566,7 +564,6 @@ class Person extends CI_Controller
 
                 $data['data'] = $obj;
                 $this->layout->view('person/edit_view', $data);
-                //$this->twiggy->template('person/edit')->display();
             }else{
                 show_error('Database error, please check your data/parameters and try again.');
             }
