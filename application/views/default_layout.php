@@ -191,6 +191,12 @@
                             </li>
                         </ul>
                     </li>
+                    <li>
+                        <a href="<?php echo site_url('reports'); ?>">
+                            <i class="icon-print"></i>
+                            รายงาน
+                        </a>
+                    </li>
                 </ul>
                 <div class="btn-group pull-right">
                     <a href="#" class="btn dropdown-toggle" data-toggle="dropdown">
