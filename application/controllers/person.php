@@ -505,8 +505,7 @@ class Person extends CI_Controller
                 $obj->sex               = $result['sex'];
                 $obj->title             = get_first_object($result['title']);
 
-                if(isset($rs['typearea']))
-                    $obj->typearea      = get_owner_typearea($hn, $this->owner_id);
+                $obj->typearea      = get_owner_typearea($hn, $this->owner_id);
 
                 $obj->vstatus           = get_first_object($result['vstatus']);
 

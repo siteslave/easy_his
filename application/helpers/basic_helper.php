@@ -422,13 +422,18 @@ if(!function_exists('get_owner_typearea'))
         $ci->load->model('Basic_model', 'basic');
 
         $rs = $ci->basic->get_owner_typearea($hn, $owner_id);
-
-        foreach($rs as $r){
-            if(get_first_object($r['owner_id']) == $owner_id){
-                return $r['typearea'];
+        if($rs)
+        {
+            foreach($rs as $r){
+                if(get_first_object($r['owner_id']) == $owner_id){
+                    return $r['typearea'];
+                }
             }
         }
-        return NULL;
+        else
+        {
+            return NULL;
+        }
     }
 }
 

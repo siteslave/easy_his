@@ -64,7 +64,7 @@ if(!function_exists('check_cid_format')){
 
 if(!function_exists('get_first_object')){
 
-    function get_first_object($obj=''){
+    function get_first_object($obj){
         if(empty($obj)){
             return NULL;
         }else{
