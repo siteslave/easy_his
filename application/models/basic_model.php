@@ -1341,6 +1341,16 @@ class Basic_model extends CI_Model
 
         return count($result) > 0 ? $result[0]['default_value'] : '-';
     }
+
+    public function get_owner_typearea($hn, $owner_id)
+    {
+        $rs = $this->mongo_db
+            ->select('typearea')
+            ->where(array('hn' => (string) $hn, 'typearea.owner_id' => new MongoId($owner_id)))
+            ->get('person');
+
+        return count($rs) > 0 ? $rs[0]['typearea'] : NULL;
+    }
 }
 
 //End file

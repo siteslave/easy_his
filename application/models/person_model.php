@@ -163,10 +163,6 @@ class Person_model extends CI_Model
             'rhgroup'           => $data['rhgroup'],
             'labor_type'        => new MongoId($data['labor_type']),
             'passport'          => $data['passport'],
-            'typearea'          => array(
-                                    'typearea' => $data['typearea'],
-                                    'owner_id' => new MongoId($this->owner_id)
-                                    ),
             'last_update' => date('Ymd H:i:s')
         ));
 
@@ -201,10 +197,6 @@ class Person_model extends CI_Model
                     'rhgroup'           => $data['rhgroup'],
                     'labor_type'        => new MongoId($data['labor_type']),
                     'passport'          => $data['passport'],
-                    'typearea'          => array(
-                                                'typearea' => $data['typearea'],
-                                                'owner_id' => new MongoId($this->owner_id)
-                                            ),
                     'last_update'       => date('Ymd H:i:s')
 
                 ))->update('person');
@@ -251,7 +243,6 @@ class Person_model extends CI_Model
         $result = $this->mongo_db
             ->where(array('hn' => (string) $hn))
             ->set(array(
-                    //'address.person_id'     => new MongoId($person_id),
                     'address.address_type'  => $data['address_type'],
                     'address.house_id'      => $data['house_id'],
                     'address.house_type'    => new MongoId($data['house_type']),
@@ -293,12 +284,36 @@ class Person_model extends CI_Model
                     'insurances.expire_date'    => to_string_date($data['expire_date']),
                     'insurances.hmain'          => $data['hmain'],
                     'insurances.hsub'           => $data['hsub'],
-                    'last_update'               => date('Ymd H:i:s')
+                    'last_update'               => date('Y-m-d H:i:s')
                 ))->update('person');
 
         return $result;
     }
 
+
+    public function save_person_typearea($hn, $typearea){
+        $result = $this->mongo_db
+            ->where(array('hn' => (string) $hn))
+            ->push('typearea',
+                array(
+                    'typearea'      => $typearea,
+                    'owner_id'      => new MongoId($this->owner_id),
+                    'last_update'   => date('Y-m-d H:i:s')
+                )
+            )
+            ->update('person');
+        return $result;
+    }
+    public function update_person_typearea($hn, $typearea, $owner_id){
+        $result = $this->mongo_db
+            ->where(array('hn' => (string) $hn, 'typearea.owner_id' => new MongoId($owner_id)))
+            ->set(array(
+                    'typearea.$.typearea'   => $typearea
+                )
+            )
+            ->update('person');
+        return $result;
+    }
     public function check_house_exist($house_id){
 
         $result = $this->mongo_db->where(array('_id' => new MongoId($house_id)))->count('houses');
