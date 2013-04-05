@@ -163,11 +163,14 @@ class Person_model extends CI_Model
             'rhgroup'           => $data['rhgroup'],
             'labor_type'        => new MongoId($data['labor_type']),
             'passport'          => $data['passport'],
-            'typearea'          => array('typearea' => $data['typearea'], 'owner_id' => new MongoId($this->owner_id)),
+            'typearea'          => array(
+                                    'typearea' => $data['typearea'],
+                                    'owner_id' => new MongoId($this->owner_id)
+                                    ),
             'last_update' => date('Ymd H:i:s')
         ));
 
-        return $result; //return _id
+        return $result;
     }
 
     public function update_person($data){
