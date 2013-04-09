@@ -13,9 +13,22 @@
 
 class Stock_model extends CI_Model
 {
+    public $owner_id;
+    public $user_id;
 
     public function __construct(){
         parent::__construct();
     }
 
+    public function get_list($start, $limit)
+    {
+        $rs = $this->mongo_db
+            ->where(array('owner_id' => new MongoId($this->owner_id)))
+            ->order_by(array('name' => 1))
+            ->offset($start)
+            ->limit($limit)
+            ->get('ref_drugs');
+
+        return $rs;
+    }
 }

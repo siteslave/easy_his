@@ -36,6 +36,46 @@ class Stocks extends CI_Controller
 
         $this->load->model('Stock_model', 'stock');
     }
+    public function get_list()
+    {
+        $start = $this->input->post('start');
+        $stop = $this->input->post('stop');
+
+        $start = empty($start) ? 0 : $start;
+        $stop = empty($stop) ? 25 : $stop;
+
+        $limit = (int) $stop - (int) $start;
+
+        $this->stock->owner_id = $this->owner_id;
+        $rs = $this->stock->get_list($start, $limit);
+
+        if($rs)
+        {
+            $arr_result = array();
+            foreach($rs as $r)
+            {
+                $obj                = new stdClass();
+                $obj->name          = $r['hn'];
+                $obj->std_code      = $r['stdcode'];
+                $obj->streng_name   = get_streng_name($r['streng_code']);
+                $obj->unit          = $r['unit'];
+                $obj->price         = $r['price'];
+                $obj->qty           = $r['qty'];
+
+                $arr_result[]       = $obj;
+            }
+
+            $rows = json_encode($arr_result);
+            $json = '{"success": true, "rows": '.$rows.'}';
+        }
+        else
+        {
+            $json = '{"success": false, "msg": "No result."}';
+        }
+
+        render_json($json);
+    }
+
 
     public function index()
     {
