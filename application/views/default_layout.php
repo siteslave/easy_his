@@ -184,7 +184,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="<?php echo site_url('stocks'); ?>">
+                                <a href="<?php echo site_url('drugs'); ?>">
                                     <i class="icon-shopping-cart"></i>
                                     ข้อมูลเวชภัณฑ์
                                 </a>

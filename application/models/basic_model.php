@@ -681,11 +681,22 @@ class Basic_model extends CI_Model
         return count($result) > 0 ? $result[0]['name'] : '-';
     }
 
-    public function get_streng_name($code){
-        $result = $this->mongo_db->where(array('code' => (string) $code))->get('ref_drug_strengs');
+    public function get_strength_name($id, $owner_id){
+        $result = $this->mongo_db->where(array(
+                    '_id' => new MongoId($id),
+                    'owner_id' => new MongoId($owner_id)))
+                ->get('ref_drug_strengths');
 
         return count($result) > 0 ? $result[0]['name'] : '-';
-    }
+}
+    public function get_unit_name($id, $owner_id){
+        $result = $this->mongo_db->where(array(
+                        '_id' => new MongoId($id),
+                        'owner_id' => new MongoId($owner_id)))
+                ->get('ref_drug_units');
+
+        return count($result) > 0 ? $result[0]['name'] : '-';
+}
 
     public function get_drug_name($id){
         $result = $this->mongo_db->where(array('_id' => new MongoId($id)))->get('ref_drugs');
@@ -1350,6 +1361,43 @@ class Basic_model extends CI_Model
             ->get('person');
 
         return $rs[0]['typearea'];
+    }
+
+    public function get_strength_list($owner_id)
+    {
+        $rs = $this->mongo_db
+            ->where(array('owner_id' => new MongoId($owner_id)))
+            ->get('ref_drug_strengths');
+
+        $arr_result = array();
+        foreach ($rs as $r)
+        {
+            $obj = new stdClass();
+            $obj->id = get_first_object($r['_id']);
+            $obj->name = $r['name'];
+
+            $arr_result[] = $obj;
+        }
+
+        return $arr_result;
+    }
+    public function get_units_list($owner_id)
+    {
+        $rs = $this->mongo_db
+            ->where(array('owner_id' => new MongoId($owner_id)))
+            ->get('ref_drug_units');
+
+        $arr_result = array();
+        foreach ($rs as $r)
+        {
+            $obj = new stdClass();
+            $obj->id = get_first_object($r['_id']);
+            $obj->name = $r['name'];
+
+            $arr_result[] = $obj;
+        }
+
+        return $arr_result;
     }
 }
 

@@ -14,6 +14,8 @@
 class Basic extends CI_Controller
 {
 
+    public $owner_id;
+
     public function __construct()
     {
         parent::__construct();
@@ -386,96 +388,14 @@ class Basic extends CI_Controller
         render_json($json);
     }
 
-/*
-    public function get_inscl(){
+    public function get_strength_list()
+    {
+        $rs = $this->basic->get_strength_list($this->owner_id);
 
-        $result = $this->basic->get_inscl();
-        $rows = json_encode($result);
-
-        $json = '{"success": true, "rows": '.$rows.'}';
-
-        render_json($json);
-    }
-    public function get_occupation(){
-
-        $result = $this->basic->get_occupation();
-
-        $arr_result = array();
-        foreach($result as $r){
-            $obj = new stdClass();
-            $obj->id = get_first_object($r['_id']);
-            $obj->name = $r['name'];
-
-            array_push($arr_result, $obj);
-        }
-        $rows = json_encode($arr_result);
-
-        $json = '{"success": true, "rows": '.$rows.'}';
-
-        render_json($json);
-    }
-    public function get_title(){
-
-        $result = $this->basic->get_title();
-
-        $arr_result = array();
-        foreach($result as $r){
-            $obj = new stdClass();
-            $obj->id = get_first_object($r['_id']);
-            $obj->name = $r['name'];
-
-            array_push($arr_result, $obj);
-        }
-        $rows = json_encode($arr_result);
-
-        $json = '{"success": true, "rows": '.$rows.'}';
-
-        render_json($json);
-    }
-    public function get_marry_status(){
-
-        $result = $this->basic->get_marry_status();
-
-        $arr_result = array();
-        foreach($result as $r){
-            $obj = new stdClass();
-            $obj->id = get_first_object($r['_id']);
-            $obj->name = $r['name'];
-
-            array_push($arr_result, $obj);
-        }
-        $rows = json_encode($arr_result);
-
+        $rows = json_encode($rs);
         $json = '{"success": true, "rows": '.$rows.'}';
 
         render_json($json);
     }
 
-    public function get_education(){
-
-        $result = $this->basic->get_education();
-
-        $arr_result = array();
-        foreach($result as $r){
-            $obj = new stdClass();
-            $obj->id = get_first_object($r['_id']);
-            $obj->name = $r['name'];
-
-            array_push($arr_result, $obj);
-        }
-
-        $rows = json_encode($arr_result);
-
-        $json = '{"success": true, "rows": '.$rows.'}';
-
-        render_json($json);
-    }
-*/
-
-    public function test(){
-        $subject = "GreenWithEnvy15";
-        preg_match_all('/[0-9]/', $subject, $matches);
-        $count = count($matches[0]);
-        echo $count; //echos number of integers in $subject
-    }
 }
