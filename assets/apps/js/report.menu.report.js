@@ -1,18 +1,18 @@
 /**
  * Created By Mr.Utit Sairat.
  * E-mail: soodteeruk@gmail.com
- * Date: 4/4/2556 9:12 น.
+ * Date: 10/4/2556 15:50 น.
  */
 $(function() {
     var rpt = {};
 
     rpt.ajax = {
         get_list: function(start, stop, cb) {
-            var url = 'reports/get_main_list',
+            var url = 'reports/get_sub_list',
                 params = {
                     start: start,
                     stop: stop,
-                    group: $('#tboGroup').val()
+                    group: $('#tboId').val()
                 };
 
             app.ajax(url, params, function(err, data){
@@ -20,120 +20,28 @@ $(function() {
             });
         },
         get_list_total: function(cb){
-            var url = 'reports/get_main_list_total',
-                params = {};
+            var url = 'reports/get_sub_list_total',
+                params = { group: $('#tboId').val() };
 
             app.ajax(url, params, function(err, data){
                 err ? cb(err) : cb(null, data);
             });
-        },
-        show_report: function() {
-            $('#mdlMainReport').modal('show').css({
-                width: 700,
-                'margin-left': function() {
-                    return -($(this).width() / 2);
-                }
-            });
-        },
-        hide_report: function() {
-            $('#mdlMainReport').modal('hide');
-        },
-        clear_main_form: function() {
-            $('#tboId').val('0');
-            $('#tboName').val('');
-            $('#tboIcon').val('icon-print');
-        },
-        load_item: function(id) {
-            app.ajax('reports/load_main_item', { id: id }, function(err, data) {
-                if(data != null) {
-                    if(_.size(data.rows)) {
-                        var v = data.rows[0];
-                        $('#tboId').val(id);
-                        $('#tboName').val(v.name);
-                        $('#tboIcon').val(v.icon);
-                    }
-                } else {
-                    app.alert(err);
-                }
-            });
-
         }
     };
-
-    $('#btnAddMainReport').click(function() {
-        rpt.ajax.clear_main_form();
-        var id = $(this).attr('data-id');
-        rpt.ajax.show_report();
-    });
-
-    $('#btnSave').click(function() {
-        var url = 'reports/save_main_report',
-            params = {
-                id: $('#tboId').val(),
-                name: $('#tboName').val(),
-                icon: $('#tboIcon').val()
-            };
-
-        if(params.name == '' || params.icon == '') {
-            app.alert('กรุณากรอกข้อมูลให้ครบด้วย');
-        } else {
-            app.ajax(url, { data: params }, function(err, data) {
-                if(data != null) {
-                    app.alert(data.msg);
-                    rpt.ajax.hide_report();
-                    rpt.get_list();
-                } else {
-                    app.alert(err);
-                }
-            });
-        }
-    });
-
-    $(document).on('click', '#btnEdit', function() {
-        var id = $(this).attr('data-id');
-
-        rpt.ajax.clear_main_form();
-        rpt.ajax.load_item(id);
-        rpt.ajax.show_report();
-    });
-
-    $(document).on('click', '#btnShowList', function() {
-        var id = $(this).attr('data-id');
-
-        location.href = site_url + 'reports/add_report/'+ id;
-    });
-
-    $(document).on('click', '#btnRemove', function() {
-        var id = $(this).attr('data-id');
-
-        app.confirm('ยืนยันการลบเมนู ?', function(e) {
-            if(e) {
-                app.ajax('reports/remove_mainmenu_report', { id: id }, function(err, data) {
-                    if(data != null) {
-                        app.alert(data.msg);
-                        rpt.get_list();
-                    } else {
-                        app.alert(err);
-                    }
-                });
-            }
-        });
-    });
 
     rpt.set_list = function(data){
         if(_.size(data.rows) > 0){
             _.each(data.rows, function(v){
                 $('#tblList > tbody').append(
                     '<tr>'+
-                        '<td><i class="'+ v.icon +'"></i> '+ v.name +'</td>'+
+                        '<td>'+ v.name +'</td>'+
                         '<td>'+
-                            '<div class="btn-group">'+
-                                '<a class="btn btn-info" data-id="'+ v.id +'" id="btnShowList" title="แสดงรายการเมนูย่อย"><i class="icon-list"></i></a>'+
-                                '<a class="btn btn-success" data-id="'+ v.id +'" id="btnEdit" title="แก้ไขเมนู"><i class="icon-edit"></i></a>'+
-                                '<a class="btn btn-danger" data-id="'+ v.id +'" id="btnRemove" title="ลบเมนู"><i class="icon-trash"></i></a>'+
-                            '</div>'+
+                        '<div class="btn-group">'+
+                            '<a class="btn btn-success" data-url="'+ v.url +'" id="btnView" title="แสดงรายงาน"><i class="icon-list"></i></a>'+
+                            '<a class="btn btn-info" data-url="'+ v.url +'" id="btnPrint" title="พิมพ์รายงาน"><i class="icon-print"></i></a>'+
+                        '</div>'+
                         '</td>'+
-                    '</tr>'
+                        '</tr>'
                 );
             });
         }else{
@@ -223,6 +131,16 @@ $(function() {
             }
         });
     };
+
+    $(document).on('click', '#btnView', function() {
+        var url = $(this).attr('data-url');
+        location.href=site_url + url;
+    });
+
+    $(document).on('click', '#btnPrint', function() {
+        var url = $(this).attr('data-url');
+        location.href=site_url + url + '/print';
+    });
 
     rpt.get_list();
 });
