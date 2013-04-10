@@ -5,10 +5,12 @@
 </ul>
 <form action="#" class="form-actions form-inline">
     <label for="txt_query">ค้นหา</label>
-    <input class="input-xlarge" id="txt_query" type="text" placeholder="พิมพ์ชื่อยา..." autocomplete="off" />
-    <button class="btn btn-info" id="btn_search">
-        <i class="icon-search"></i>
-    </button>
+    <div class="input-append">
+        <input class="input-xlarge" id="txt_query" type="text" placeholder="พิมพ์ชื่อยา..." autocomplete="off" />
+        <button class="btn btn-info" id="btn_search">
+            <i class="icon-search"></i> ค้นหา
+        </button>
+    </div>
 
     <button class="btn btn-success pull-right" id="btn_register">
         <i class="icon-plus-sign"></i> เพิ่มรายการยา
