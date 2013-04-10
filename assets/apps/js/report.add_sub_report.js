@@ -8,11 +8,11 @@ $(function() {
 
     rpt.ajax = {
         get_list: function(start, stop, cb) {
-            var url = 'reports/get_main_list',
+            var url = 'reports/get_sub_list',
                 params = {
                     start: start,
                     stop: stop,
-                    group: $('#tboGroup').val()
+                    group: $('#tboMainId').val()
                 };
 
             app.ajax(url, params, function(err, data){
@@ -20,15 +20,15 @@ $(function() {
             });
         },
         get_list_total: function(cb){
-            var url = 'reports/get_main_list_total',
-                params = {};
+            var url = 'reports/get_sub_list_total',
+                params = { group: $('#tboMainId').val() };
 
             app.ajax(url, params, function(err, data){
                 err ? cb(err) : cb(null, data);
             });
         },
         show_report: function() {
-            $('#mdlMainReport').modal('show').css({
+            $('#mdlReport').modal('show').css({
                 width: 700,
                 'margin-left': function() {
                     return -($(this).width() / 2);
@@ -36,21 +36,22 @@ $(function() {
             });
         },
         hide_report: function() {
-            $('#mdlMainReport').modal('hide');
+            $('#mdlReport').modal('hide');
         },
         clear_main_form: function() {
             $('#tboId').val('0');
             $('#tboName').val('');
-            $('#tboIcon').val('icon-print');
+            $('#tboUrl').val('');
         },
         load_item: function(id) {
-            app.ajax('reports/load_main_item', { id: id }, function(err, data) {
+            app.ajax('reports/load_sub_item', { id: id }, function(err, data) {
                 if(data != null) {
                     if(_.size(data.rows)) {
                         var v = data.rows[0];
                         $('#tboId').val(id);
                         $('#tboName').val(v.name);
-                        $('#tboIcon').val(v.icon);
+                        $('#tboUrl').val(v.url);
+                        $('#cboGroup').val(v.group);
                     }
                 } else {
                     app.alert(err);
@@ -60,21 +61,24 @@ $(function() {
         }
     };
 
-    $('#btnAddMainReport').click(function() {
+    $('#btnAddSubReport').click(function() {
         rpt.ajax.clear_main_form();
-        var id = $(this).attr('data-id');
+        var mid = $('#tboMainId').val();
+        $('#cboGroup').val(mid);
+
         rpt.ajax.show_report();
     });
 
     $('#btnSave').click(function() {
-        var url = 'reports/save_main_report',
+        var url = 'reports/save_sub_report',
             params = {
                 id: $('#tboId').val(),
                 name: $('#tboName').val(),
-                icon: $('#tboIcon').val()
+                url: $('#tboUrl').val(),
+                group: $('#cboGroup').val()
             };
 
-        if(params.name == '' || params.icon == '') {
+        if(params.name == '' || params.url == '') {
             app.alert('กรุณากรอกข้อมูลให้ครบด้วย');
         } else {
             app.ajax(url, { data: params }, function(err, data) {
@@ -97,18 +101,12 @@ $(function() {
         rpt.ajax.show_report();
     });
 
-    $(document).on('click', '#btnShowList', function() {
-        var id = $(this).attr('data-id');
-
-        location.href = site_url + 'reports/add_report/'+ id;
-    });
-
     $(document).on('click', '#btnRemove', function() {
         var id = $(this).attr('data-id');
 
         app.confirm('ยืนยันการลบเมนู ?', function(e) {
             if(e) {
-                app.ajax('reports/remove_mainmenu_report', { id: id }, function(err, data) {
+                app.ajax('reports/remove_submenu_report', { id: id }, function(err, data) {
                     if(data != null) {
                         app.alert(data.msg);
                         rpt.get_list();
@@ -125,10 +123,10 @@ $(function() {
             _.each(data.rows, function(v){
                 $('#tblList > tbody').append(
                     '<tr>'+
-                        '<td><i class="'+ v.icon +'"></i> '+ v.name +'</td>'+
+                        '<td>'+ v.name +'</td>'+
+                        '<td>'+ v.url +'</td>'+
                         '<td>'+
                             '<div class="btn-group">'+
-                                '<a class="btn btn-info" data-id="'+ v.id +'" id="btnShowList" title="แสดงรายการเมนูย่อย"><i class="icon-list"></i></a>'+
                                 '<a class="btn btn-success" data-id="'+ v.id +'" id="btnEdit" title="แก้ไขเมนู"><i class="icon-edit"></i></a>'+
                                 '<a class="btn btn-danger" data-id="'+ v.id +'" id="btnRemove" title="ลบเมนู"><i class="icon-trash"></i></a>'+
                             '</div>'+
