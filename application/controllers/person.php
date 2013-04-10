@@ -612,6 +612,9 @@ class Person extends CI_Controller
         if(empty($hn)){
             $json = '{"success": false, "msg": "No person id found."}';
         }else{
+
+            $this->basic->owner_id = $this->owner_id;
+
             $result = $this->person->get_drug_allergy_list($hn);
 
             if($result){

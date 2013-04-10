@@ -14,12 +14,14 @@
 class Settings extends CI_Controller
 {
     public $owner_id;
+    public $user_id;
 
     public function __construct()
     {
         parent::__construct();
 
         $this->owner_id = $this->session->userdata('owner_id');
+        $this->user_id = $this->session->userdata('user_id');
 
         if(empty($this->owner_id)){
             redirect(site_url('users/login'));
@@ -62,10 +64,9 @@ class Settings extends CI_Controller
                     $json = '{"success": false, "msg": "Save provider failed."}';
                 }
             }
-
-            render_json($json);
-
         }
+
+        render_json($json);
     }
 
     public function do_update_providers(){
@@ -181,6 +182,70 @@ class Settings extends CI_Controller
 
        render_json($json);
     }
+
+    public function clinics()
+    {
+        $this->layout->view('settings/clinic_view');
+    }
+    public function get_clinic_list()
+    {
+        $this->setting->owner_id = $this->owner_id;
+        $rs = $this->setting->get_clinic_list();
+        $arr_result = array();
+        foreach($rs as $r)
+        {
+            $obj = new stdClass();
+            $obj->id = get_first_object($r['_id']);
+            $obj->name = $r['name'];
+            $obj->export_code = $r['export_code'];
+
+            $arr_result[] = $obj;
+        }
+
+        $rows = json_encode($arr_result);
+
+        $json = '{"success": true, "rows": '.$rows.'}';
+        render_json($json);
+    }
+
+    public function do_save_clinics()
+    {
+        $data = $this->input->post('data');
+
+        if(empty($data))
+        {
+            $json = '{"success": false, "msg": "กรุณาระบุข้อมูลที่ต้องการบันทึก"}';
+        }
+        else
+        {
+            $this->setting->owner_id = $this->owner_id;
+
+            if($data['is_update'] == '1')
+            {
+                $rs = $this->setting->update_clinics($data);
+                $json = $rs ? '{"success": true}' : '{"success": false, "msg": "ไม่สามารถปรับปรุงรายการได้"}';
+            }
+            else
+            {
+                //check exist
+                $exist = $this->setting->check_clinic_duplicated($data['name']);
+                if($exist)
+                {
+                    $json = '{"success": false, "msg": "รายการซ้ำ"}';
+                }
+                else
+                {
+                    $rs = $this->setting->save_clinics($data);
+                    $json = $rs ? '{"success": true}' : '{"success": false, "msg": "ไม่สามารถเพิ่มรายการได้"}';
+                }
+
+            }
+        }
+
+        render_json($json);
+    }
+
+
 
 }
 /* End of file settings.php */

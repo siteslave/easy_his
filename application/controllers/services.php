@@ -39,13 +39,16 @@ class Services extends CI_Controller
 
     public function index()
     {
-        $doctor_rooms = $this->basic->get_doctor_room();
-        $clinics = $this->basic->get_clinic();
-        $inscls = $this->basic->get_insurance();
+        $this->basic->owner_id  = $this->owner_id;
 
-        $data['doctor_rooms'] = $doctor_rooms;
-        $data['clinics'] = $clinics;
-        $data['inscls'] = $inscls;
+        $doctor_rooms           = $this->basic->get_doctor_room();
+        $clinics                = $this->basic->get_clinic();
+        $inscls                 = $this->basic->get_insurance();
+
+        $data['doctor_rooms']   = $doctor_rooms;
+        $data['clinics']        = $clinics;
+        $data['inscls']         = $inscls;
+
         $this->layout->view('services/index_view', $data);
     }
     public function entries($vn = '')

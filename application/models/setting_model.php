@@ -84,6 +84,47 @@ class Setting_model extends CI_Model
 
         return count($result) > 0 ? $result[0] : FALSE;
     }
+
+    public function get_clinic_list()
+    {
+        $rs = $this->mongo_db
+            ->where(array('owner_id' => new MongoId($this->owner_id)))
+            ->get('ref_clinics');
+
+        return $rs;
+    }
+
+    public function save_clinics($data)
+    {
+        $rs = $this->mongo_db
+            ->insert('ref_clinics', array(
+                'name' => $data['name'],
+                'export_code' => $data['export_code'],
+                'owner_id' => new MongoId($this->owner_id)
+            ));
+
+        return $rs;
+    }
+    public function update_clinics($data)
+    {
+        $rs = $this->mongo_db
+            ->where(array('_id' => new MongoId($data['id'])))
+            ->set(array(
+                'name' => $data['name'],
+                'export_code' => $data['export_code'],
+                'owner_id' => new MongoId($this->owner_id)
+            ))->update('ref_clinics');
+
+        return $rs;
+    }
+
+    public function check_clinic_duplicated($name)
+    {
+        $rs = $this->mongo_db->where(array('name' => $name))->count('ref_clinics');
+
+        return $rs > 0 ? TRUE : FALSE;
+    }
+
 }
 
 /* End of file setting_model.php */

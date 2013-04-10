@@ -57,6 +57,7 @@ class Appoints extends CI_Controller
     {
         if(empty($vn) || !isset($vn))
         {
+            $this->basic->owner_id  = $this->owner_id;
             $data['clinics']        = $this->basic->get_clinic();
             $data['aptypes']        = $this->basic->get_appoint_type();
             $data['doctor_rooms']   = $this->basic->get_doctor_room();
@@ -91,7 +92,8 @@ class Appoints extends CI_Controller
         }
         else
         {
-            //show new register
+            $this->basic->owner_id  = $this->owner_id;
+
             $data = get_patient_info($hn);
             $data['vn']         = $vn;
             $data['hn']         = $hn;

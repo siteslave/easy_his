@@ -106,6 +106,7 @@ class Basic extends CI_Controller
         if(empty($query)){
             $json = '{"success": false, "msg": "No query found."}';
         }else{
+            $this->basic->owner_id = $this->owner_id;
             $result = $this->basic->search_drug($query);
             if($result){
                 $arr_result = array();
@@ -114,10 +115,10 @@ class Basic extends CI_Controller
                     $obj->id = get_first_object($r['_id']);
                     $obj->name = $r['name'];
                     $obj->unit = $r['unit'];
-                    $obj->cost = $r['cost'];
-                    $obj->price = $r['price'];
-                    $obj->stdcode = $r['stdcode'];
-                    $obj->streng = get_streng_name($r['streng_code']);
+                    $obj->cost = $r['unit_cost'];
+                    $obj->price = $r['unit_price'];
+                    $obj->stdcode = $r['did'];
+                    $obj->streng = $r['strength'] .' '.get_strength_name($r['strength_unit'], $this->owner_id);
 
                     array_push($arr_result, $obj);
                 }

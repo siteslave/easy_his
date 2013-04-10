@@ -180,13 +180,20 @@
                             <li>
                                 <a href="<?php echo site_url('settings/providers'); ?>">
                                     <i class="icon-user"></i>
-                                    ข้อมูลผู้ให้บริการ
+                                    ข้อมูลผู้ให้บริการ (Providers)
                                 </a>
                             </li>
                             <li>
                                 <a href="<?php echo site_url('drugs'); ?>">
                                     <i class="icon-shopping-cart"></i>
-                                    ข้อมูลเวชภัณฑ์
+                                    ข้อมูลเวชภัณฑ์ (Drugs)
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="<?php echo site_url('settings/clinics'); ?>">
+                                    <i class="icon-th-list"></i>
+                                    ข้อมูลแผนกให้บริการ (Clinics)
                                 </a>
                             </li>
                         </ul>

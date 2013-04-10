@@ -8,7 +8,7 @@
     <h1>ข้อมูลการให้บริการ <small>บันทึกข้อมูลการให้บริการกับผู้ป่วย</small></h1>
 </div>
 -->
-<div class="alert alert-block alert-info fade in">
+<!--<div class="alert alert-block alert-info fade in">
     <a class="close" data-dismiss="alert" href="#">&times;</a>
     <h4 class="alert-heading">คำแนะนำเพิ่มเติม</h4>
     <p>การลงข้อมูลของคุณยังไม่ถูกต้องและไม่สมบูรณ์ กรุณาตรวจสอบการบันทึกข้อมูล เช่น การวินิจฉัยโรค การจ่ายยา หรือ การคัดกรองต่างๆ เป็นต้น</p>
@@ -16,7 +16,7 @@
         <a class="btn btn-primary" href="#"><i class="icon-volume-up"></i> คำแนะนำ</a>
     </p>
 </div>
-
+-->
 <form action="#" class="form-actions">
     <a href="<?php echo site_url('accidents/register/' . $vn . '/' . $hn); ?>" class="btn btn-danger"><i class="icon-th-list"></i> ข้อมูลอุบัติเหตุ</a>
     <a href="<?php echo site_url('appoints/register/' . $vn . '/' . $hn); ?>" class="btn btn-warning"><i class="icon-calendar"></i> ลงทะเบียนนัด</a>

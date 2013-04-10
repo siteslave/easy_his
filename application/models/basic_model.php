@@ -14,6 +14,8 @@
 class Basic_model extends CI_Model
 {
 
+    public $owner_id;
+
     public function __construct(){
         parent::__construct();
     }
@@ -528,7 +530,9 @@ class Basic_model extends CI_Model
 
     public function get_clinic()
     {
-        $result = $this->mongo_db->order_by(array('name' => 1))->get('ref_clinics');
+        $result = $this->mongo_db
+            ->where(array('owner_id' => new MongoId($this->owner_id)))
+            ->order_by(array('name' => 1))->get('ref_clinics');
 
         $arr_result = array();
         foreach($result as $r){
@@ -851,12 +855,12 @@ class Basic_model extends CI_Model
 
         if(count($result) > 0){
             $obj = new stdClass();
-            $obj->stdcode = $result[0]['stdcode'];
+            $obj->stdcode = $result[0]['did'];
             $obj->name = $result[0]['name'];
-            $obj->unit = $result[0]['unit'];
-            $obj->streng = get_streng_name($result[0]['streng_code']);
-            $obj->price = $result[0]['price'];
-            $obj->cost = $result[0]['cost'];
+            $obj->unit = get_unit_name($result[0]['unit'], $this->owner_id);
+            $obj->streng = $result[0]['strength'] . ' ' . get_strength_name($result[0]['strength_unit'], $this->owner_id);
+            $obj->price = $result[0]['unit_price'];
+            $obj->cost = $result[0]['unit_cost'];
 
             return $obj;
         }else{
@@ -886,6 +890,7 @@ class Basic_model extends CI_Model
 
     public function search_drug($query){
         $result = $this->mongo_db
+            ->where(array('owner_id' => new MongoId($this->owner_id)))
             ->like('name', $query)
             ->limit(10)
             ->get('ref_drugs');
