@@ -340,6 +340,7 @@ class Person_model extends CI_Model
      * @return  int
      */
     public function count_person($house_code){
+        $this->mongo_db->add_index('person', array('house_code' => -1));
         $result = $this->mongo_db->where(array('house_code' => new MongoId($house_code)))->count('person');
         return (int) $result;
     }
@@ -351,6 +352,7 @@ class Person_model extends CI_Model
      * @return mixed
      */
     public function get_person_list($house_code){
+        $this->mongo_db->add_index('person', array('house_code' => -1));
         $result = $this->mongo_db->where(array('house_code' => new MongoId($house_code)))->get('person');
         return $result;
     }
@@ -362,6 +364,7 @@ class Person_model extends CI_Model
      * @return mixed
      */
     public function detail($hn){
+        $this->mongo_db->add_index('person', array('hn' => -1));
         $result = $this->mongo_db->where(array('hn' => (string) $hn))->limit(1)->get('person');
         return count($result) > 0 ? $result[0] : $result;
     }
@@ -562,6 +565,7 @@ class Person_model extends CI_Model
     }
 
     public function get_cid($hn){
+        $this->mongo_db->add_index('person', array('cid' => -1));
         $rs = $this->mongo_db
             ->select(array('cid'))
             ->where('hn', $hn)
@@ -572,6 +576,7 @@ class Person_model extends CI_Model
     }
 
 	public function get_hn_from_cid($cid){
+        $this->mongo_db->add_index('person', array('cid' => -1));
 		$rs = $this->mongo_db
 				->select(array('hn'))
 				->where('cid', $cid)
@@ -586,6 +591,8 @@ class Person_model extends CI_Model
 	}
 	
 	public function get_hn_from_first_last_name($first_name, $last_name){
+        $this->mongo_db->add_index('person', array('first_name' => -1));
+        $this->mongo_db->add_index('person', array('last_name' => -1));
 		$rs = $this->mongo_db
 		->select(array('hn'))
 		->where(array(
@@ -706,6 +713,7 @@ class Person_model extends CI_Model
      */
     public function check_owner($hn, $owner_id)
     {
+        $this->mongo_db->add_index('person', array('owner_id' => -1));
         $rs = $this->mongo_db
             ->where(array('owner_id' => new MongoId($owner_id), 'hn' => (string) $hn))
             ->count('person');

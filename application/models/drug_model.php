@@ -20,6 +20,7 @@ class Drug_model extends CI_Model
 
     public function get_list($start, $limit)
     {
+        $this->mongo_db->add_index('ref_drugs', array('owner_id' => -1));
         $rs = $this->mongo_db
             ->where(array('owner_id' => new MongoId($this->owner_id)))
             ->order_by(array('name' => 1))
@@ -32,6 +33,7 @@ class Drug_model extends CI_Model
 
     public function get_list_total()
     {
+        $this->mongo_db->add_index('ref_drugs', array('owner_id' => -1));
         $rs = $this->mongo_db
             ->where(array('owner_id' => new MongoId($this->owner_id)))
             ->count('ref_drugs');
@@ -40,6 +42,8 @@ class Drug_model extends CI_Model
 
     public function check_duplicated($data)
     {
+        $this->mongo_db->add_index('ref_drugs', array('name' => -1));
+        $this->mongo_db->add_index('ref_drugs', array('owner_id' => -1));
         $rs = $this->mongo_db
             ->where(array('name' => $data['name'], 'owner_id' => new MongoId($this->owner_id)))
             ->count('ref_drugs');
@@ -68,6 +72,7 @@ class Drug_model extends CI_Model
     }
     public function update($data)
     {
+
         $rs = $this->mongo_db
             ->where(array('_id' => new MongoId($data['id'])))
             ->set(array(
@@ -89,6 +94,7 @@ class Drug_model extends CI_Model
 
     public function detail($id)
     {
+        $this->mongo_db->add_index('ref_drugs', array('owner_id' => -1));
         $rs = $this->mongo_db
             ->where(array('owner_id' => new MongoId($this->owner_id), '_id' => new MongoId($id)))
             ->limit(1)
@@ -98,6 +104,7 @@ class Drug_model extends CI_Model
     }
     public function search($query, $start, $limit)
     {
+        $this->mongo_db->add_index('ref_drugs', array('owner_id' => -1));
         $rs = $this->mongo_db
             ->where(array('owner_id' => new MongoId($this->owner_id)))
             ->like('name', $query)
@@ -109,6 +116,7 @@ class Drug_model extends CI_Model
     }
     public function search_total($query)
     {
+        $this->mongo_db->add_index('ref_drugs', array('owner_id' => -1));
         $rs = $this->mongo_db
             ->where(array('owner_id' => new MongoId($this->owner_id)))
             ->like('name', $query)
