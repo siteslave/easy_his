@@ -226,7 +226,7 @@ class Incomes extends CI_Controller {
         render_json($json);
     }
 
-
+/*
     public function auto_gen()
     {
         $r = $this->income->get_all();
@@ -236,5 +236,5 @@ class Incomes extends CI_Controller {
             $code = generate_serial('ITEM', FALSE);
             $this->income->set_code(get_first_object($r['_id']), $code);
         }
-    }
+    }*/
 }
