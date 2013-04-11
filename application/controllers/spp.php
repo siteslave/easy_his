@@ -106,6 +106,10 @@ class Spp extends CI_Controller
 
                 $json = '{"success": true, "rows": '. $rows .'}';
             }
+            else
+            {
+                $json = '{"success": false, "msg": "ไม่พบข้อมูลที่ต้องการค้นหา"}';
+            }
         }
         else
         {
