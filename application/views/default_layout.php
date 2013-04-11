@@ -190,15 +190,9 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="<?php echo site_url('incomes/groups'); ?>">
+                                <a href="<?php echo site_url('incomes'); ?>">
                                     <i class="icon-shopping-cart"></i>
-                                    ข้อมูลหมวดหมู่ค่าใช้จ่าย (Income Group)
-                                </a>
-                            </li>
-                            <li>
-                                <a href="<?php echo site_url('incomes/items'); ?>">
-                                    <i class="icon-shopping-cart"></i>
-                                    ข้อมูลค่าใช้จ่าย (Income)
+                                    ข้อมูลค่าใช้จ่าย (Incomes)
                                 </a>
                             </li>
                             <li class="divider"></li>
