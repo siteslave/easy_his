@@ -288,4 +288,10 @@ class Reports extends CI_Controller {
         }
         render_json($json);
     }
+
+    #Show view report
+    public function view($page) {
+        $this->layout->layout('report_layout');
+        $this->layout->view('reports/view/'.$page);
+    }
 }
