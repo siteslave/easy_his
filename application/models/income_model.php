@@ -86,6 +86,7 @@ class Income_model extends CI_Model
     {
         $rs = $this->mongo_db
             ->insert('ref_charge_items', array(
+                'code' => (string) $data['code'],
                 'name' => $data['name'],
                 'price' => (float) $data['price'],
                 'cost' => (float) $data['cost'],
@@ -133,4 +134,20 @@ class Income_model extends CI_Model
 
         return $rs;
     }
+
+    public function get_all()
+    {
+        $rs = $this->mongo_db->get('ref_charge_items');
+        return $rs;
+    }
+
+    public function set_code($id, $code)
+    {
+        $rs = $this->mongo_db
+            ->where('_id', new MongoId($id))
+            ->set(array('code' => (string) $code))
+            ->update('ref_charge_items');
+        return $rs;
+    }
+
 }

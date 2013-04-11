@@ -847,17 +847,7 @@ class Person extends CI_Controller
         render_json($json);
 
     }
-    
-    public function auto_gen_hn()
-    {
-    	$person = $this->person->get_all_person();
 
-    	foreach($person as $r)
-    	{
-    		$hn = generate_serial('HN');
-    		$this->person->set_hn(get_first_object($r['_id']), $hn);
-    	}
-    }
 
     public function search_person_ajax(){
         $query = $this->input->post('query');

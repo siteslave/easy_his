@@ -51,6 +51,7 @@ class Incomes extends CI_Controller {
                 }
                 else
                 {
+                    $data['code'] = generate_serial('ITEM', FALSE);
                     $rs = $this->income->save_item($data);
                     $json = $rs ? '{"success": true}' : '{"success": false, "msg": "ไม่สามารถบันทึกรายการได้"}';
                 }
@@ -87,6 +88,7 @@ class Incomes extends CI_Controller {
                 $obj->cost          = $r['cost'];
                 $obj->unit          = $r['unit'];
                 $obj->active        = $r['active'];
+                $obj->code          = $r['code'];
 
                 $arr_result[]   = $obj;
             }
@@ -129,6 +131,7 @@ class Incomes extends CI_Controller {
                 $obj->cost          = $r['cost'];
                 $obj->unit          = $r['unit'];
                 $obj->active        = $r['active'];
+                $obj->code          = $r['code'];
 
                 $arr_result[]       = $obj;
             }
@@ -171,6 +174,7 @@ class Incomes extends CI_Controller {
                     $obj->cost          = $r['cost'];
                     $obj->unit          = $r['unit'];
                     $obj->active        = $r['active'];
+                    $obj->code          = $r['code'];
 
                     $arr_result[]       = $obj;
                 }
@@ -222,4 +226,15 @@ class Incomes extends CI_Controller {
         render_json($json);
     }
 
+
+    public function auto_gen()
+    {
+        $r = $this->income->get_all();
+
+        foreach($r as $r)
+        {
+            $code = generate_serial('ITEM', FALSE);
+            $this->income->set_code(get_first_object($r['_id']), $code);
+        }
+    }
 }

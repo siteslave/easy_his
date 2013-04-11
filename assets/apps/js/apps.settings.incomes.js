@@ -341,7 +341,7 @@ head.ready(function(){
 
         if(!data.rows)
         {
-            $('#tbl_list > tbody').append('<tr><td colspan="6">ไม่พบข้อมูล</td></td></tr>');
+            $('#tbl_list > tbody').append('<tr><td colspan="7">ไม่พบข้อมูล</td></td></tr>');
         }
         else
         {
@@ -354,6 +354,7 @@ head.ready(function(){
 
                 $('#tbl_list > tbody').append(
                     '<tr>' +
+                        '<td>'+ v.code +'</td>' +
                         '<td>'+ name +'</td>' +
                         '<td>'+ income_name +'</td>' +
                         '<td>'+ app.add_commars(v.cost) +'</td>' +
@@ -456,7 +457,7 @@ head.ready(function(){
                 if(err)
                 {
                     $('#tbl_list > tbody').empty();
-                    $('#tbl_list > tbody').append('<tr><td colspan="6">ไม่พบข้อมูล</td></td></tr>');
+                    $('#tbl_list > tbody').append('<tr><td colspan="7">ไม่พบข้อมูล</td></td></tr>');
                 }
                 else
                 {

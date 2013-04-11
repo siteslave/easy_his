@@ -27,6 +27,8 @@ class Basic extends CI_Controller
         }
 
         $this->load->model('Basic_model', 'basic');
+
+        $this->basic->owner_id = $this->owner_id;
     }
 
     public function index()

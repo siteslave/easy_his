@@ -32,6 +32,7 @@
     <table class="table table-striped table-hover" id="tbl_list">
         <thead>
         <tr>
+            <th>รหัส</th>
             <th>รายการ</th>
             <th>หมวดหมู่</th>
             <th>ราคาซื้อ</th>
@@ -43,6 +44,7 @@
         </thead>
         <tbody>
         <tr>
+            <td>...</td>
             <td>...</td>
             <td>...</td>
             <td>...</td>
