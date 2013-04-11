@@ -189,6 +189,18 @@
                                     ข้อมูลเวชภัณฑ์ (Drugs)
                                 </a>
                             </li>
+                            <li>
+                                <a href="<?php echo site_url('incomes/groups'); ?>">
+                                    <i class="icon-shopping-cart"></i>
+                                    ข้อมูลหมวดหมู่ค่าใช้จ่าย (Income Group)
+                                </a>
+                            </li>
+                            <li>
+                                <a href="<?php echo site_url('incomes/items'); ?>">
+                                    <i class="icon-shopping-cart"></i>
+                                    ข้อมูลค่าใช้จ่าย (Income)
+                                </a>
+                            </li>
                             <li class="divider"></li>
                             <li>
                                 <a href="<?php echo site_url('settings/clinics'); ?>">
