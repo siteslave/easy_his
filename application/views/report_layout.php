@@ -82,24 +82,19 @@
                             หน้าหลัก
                         </a>
                     </li>
-                    <li>
-                        <a href="<?php echo site_url('reports/menu/1'); ?>">
-                            <i class="icon-signal"></i>
-                            การให้บริการ
-                        </a>
-                    </li>
-                    <li>
-                        <a href="<?php echo site_url('reports/menu/2'); ?>">
-                            <i class="icon-signal"></i>
-                            งานส่งเสริม
-                        </a>
-                    </li>
-                    <li>
-                        <a href="<?php echo site_url('reports/menu/3'); ?>">
-                            <i class="icon-signal"></i>
-                            ข้อมูลพื้นฐาน
-                        </a>
-                    </li>
+                    <?php
+                        $rs = get_main_report_menu();
+                        foreach($rs as $r) {
+                            echo '
+                                <li>
+                                    <a href="'.site_url('reports/menu/'.$r['_id']).'">
+                                        <i class="'.$r['icon'].'"></i>
+                                        '.$r['name'].'
+                                    </a>
+                                </li>
+                            ';
+                        }
+                    ?>
                 </ul>
                 <div class="btn-group pull-right">
                     <a href="#" class="btn dropdown-toggle" data-toggle="dropdown">

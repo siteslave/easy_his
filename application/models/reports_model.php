@@ -6,32 +6,49 @@
  */
 class Reports_model extends CI_Model {
 
-    public function get_list($start, $limit, $group)
+    public function get_sub_list($start, $limit, $group)
     {
         $rs = $this->mongo_db
             ->where('group', $group)
             ->offset($start)
             ->limit($limit)
-            ->get('rpt_report_menu');
+            ->get('rpt_report_submenu');
         return $rs;
     }
 
-    public function get_list_total($group)
+    public function get_sub_list_total($group)
     {
         $rs = $this->mongo_db
             ->where('group', $group)
-            ->count('rpt_report_menu');
+            ->count('rpt_report_submenu');
 
         return $rs;
     }
 
-    public function save_report($d) {
+    public function get_main_list($start, $limit) {
+        $rs = $this->mongo_db
+            ->offset($start)
+            ->limit($limit)
+            ->get('rpt_report_mainmenu');
+        return $rs;
+    }
+
+    public function get_main_list_total()
+    {
+        $rs = $this->mongo_db
+            ->count('rpt_report_mainmenu');
+
+        return $rs;
+    }
+
+    public function save_sub_report($d) {
         if($d['id'] == 0) {
             $rs = $this->mongo_db
-                ->insert('rpt_report_menu', array(
+                ->insert('rpt_report_submenu', array(
                     'name'  => $d['name'],
                     'url'   => $d['url'],
-                    'group' => $d['group']
+                    'group' => $d['group'],
+                    'icon'  => 'icon-print'
                 ));
         } else {
             $rs = $this->mongo_db
@@ -39,26 +56,69 @@ class Reports_model extends CI_Model {
                 ->set(array(
                     'name'  => $d['name'],
                     'url'   => $d['url'],
-                    'group' => $d['group']
+                    'group' => $d['group'],
+                    'icon'  => 'icon-print'
                 ))
-                ->update('rpt_report_menu');
+                ->update('rpt_report_submenu');
+        }
+        return $rs;
+    }
+
+    public function save_main_report($d) {
+        if($d['id'] == 0) {
+            $rs = $this->mongo_db
+                ->insert('rpt_report_mainmenu', array(
+                    'name'  => $d['name'],
+                    'icon'  => $d['icon']
+                ));
+        } else {
+            $rs = $this->mongo_db
+                ->where('_id', new MongoId($d['id']))
+                ->set(array(
+                    'name'  => $d['name'],
+                    'icon'  => $d['icon']
+                ))
+                ->update('rpt_report_mainmenu');
         }
 
         return $rs;
     }
 
-    public function remove_report($id) {
+    public function remove_mainmenu_report($id) {
         $rs = $this->mongo_db
             ->where('_id', new MongoId($id))
-            ->delete('rpt_report_menu');
+            ->delete('rpt_report_mainmenu');
 
         return $rs;
     }
 
-    public function load_item($id) {
+    public function remove_submenu_report($id) {
         $rs = $this->mongo_db
             ->where('_id', new MongoId($id))
-            ->get('rpt_report_menu');
+            ->delete('rpt_report_submenu');
+
+        return $rs;
+    }
+
+    public function load_sub_item($id) {
+        $rs = $this->mongo_db
+            ->where('_id', new MongoId($id))
+            ->get('rpt_report_submenu');
+
+        return $rs;
+    }
+
+    public function load_main_item($id) {
+        $rs = $this->mongo_db
+            ->where('_id', new MongoId($id))
+            ->get('rpt_report_mainmenu');
+
+        return $rs;
+    }
+
+    public function get_mainmenu() {
+        $rs = $this->mongo_db
+            ->get('rpt_report_mainmenu');
 
         return $rs;
     }
