@@ -20,12 +20,12 @@ class Income_model extends CI_Model
         parent::__construct();
     }
 
-    public function get_group_list()
+    public function get_incomes_list()
     {
         $rs = $this->mongo_db
             ->where(array('active' => 'Y', 'owner_id' => new MongoId($this->owner_id)))
             ->order_by(array('name' => 'DESC'))
-            ->get('ref_income_groups');
+            ->get('ref_incomes');
         return $rs;
     }
 
@@ -36,17 +36,17 @@ class Income_model extends CI_Model
             ->offset($start)
             ->limit($limit)
             ->order_by(array('name' => 'DESC'))
-            ->get('ref_incomes');
+            ->get('ref_charge_items');
         return $rs;
     }
-    public function get_filter_list($group, $start, $limit)
+    public function get_filter_list($income, $start, $limit)
     {
         $rs = $this->mongo_db
-            ->where(array('owner_id' => new MongoId($this->owner_id), 'group' => new MongoId($group)))
+            ->where(array('owner_id' => new MongoId($this->owner_id), 'income' => new MongoId($income)))
             ->offset($start)
             ->limit($limit)
             ->order_by(array('name' => 'DESC'))
-            ->get('ref_incomes');
+            ->get('ref_charge_items');
         return $rs;
     }
     public function search_item($query)
@@ -54,7 +54,7 @@ class Income_model extends CI_Model
         $rs = $this->mongo_db
             ->where(array('owner_id' => new MongoId($this->owner_id)))
             ->like('name', $query)
-            ->get('ref_incomes');
+            ->get('ref_charge_items');
         return $rs;
     }
 
@@ -62,14 +62,14 @@ class Income_model extends CI_Model
     {
         $rs = $this->mongo_db
             ->where(array('owner_id' => new MongoId($this->owner_id)))
-            ->count('ref_incomes');
+            ->count('ref_charge_items');
         return $rs;
     }
-    public function get_filter_total($group)
+    public function get_filter_total($income)
     {
         $rs = $this->mongo_db
-            ->where(array('owner_id' => new MongoId($this->owner_id), 'group' => new MongoId($group)))
-            ->count('ref_incomes');
+            ->where(array('owner_id' => new MongoId($this->owner_id), 'income' => new MongoId($income)))
+            ->count('ref_charge_items');
         return $rs;
     }
 
@@ -77,7 +77,7 @@ class Income_model extends CI_Model
     {
         $rs = $this->mongo_db
             ->where(array('name' => $name, 'owner_id' => new MongoId($this->owner_id)))
-            ->count('ref_incomes');
+            ->count('ref_charge_items');
 
         return $rs > 0 ? TRUE : FALSE;
     }
@@ -85,10 +85,12 @@ class Income_model extends CI_Model
     public function save_item($data)
     {
         $rs = $this->mongo_db
-            ->insert('ref_incomes', array(
+            ->insert('ref_charge_items', array(
                 'name' => $data['name'],
                 'price' => (float) $data['price'],
-                'group' => new MongoId($data['group']),
+                'cost' => (float) $data['cost'],
+                'unit' => $data['unit'],
+                'income' => new MongoId($data['income']),
                 'owner_id' => new MongoId($this->owner_id),
                 'active' => $data['active']
             ));
@@ -102,21 +104,23 @@ class Income_model extends CI_Model
             ->set(array(
                 'name' => $data['name'],
                 'price' => (float) $data['price'],
-                'group' => new MongoId($data['group']),
+                'cost' => (float) $data['cost'],
+                'unit' => $data['unit'],
+                'income' => new MongoId($data['income']),
                 'owner_id' => new MongoId($this->owner_id),
                 'active' => $data['active']
             ))
-            ->update('ref_incomes');
+            ->update('ref_charge_items');
 
         return $rs;
     }
 
-    public function get_group_name($id)
+    public function get_income_name($id)
     {
         $rs = $this->mongo_db
             ->where(array('_id' => new MongoId($id)))
             ->limit(1)
-            ->get('ref_income_groups');
+            ->get('ref_incomes');
 
         return count($rs) ? $rs[0]['name'] : '-';
     }
@@ -125,7 +129,7 @@ class Income_model extends CI_Model
     {
         $rs = $this->mongo_db
             ->where(array('_id' => new MongoId($id)))
-            ->delete('ref_incomes');
+            ->delete('ref_charge_items');
 
         return $rs;
     }

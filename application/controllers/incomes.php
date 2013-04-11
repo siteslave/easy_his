@@ -23,7 +23,7 @@ class Incomes extends CI_Controller {
 
     public function index()
     {
-        $data['groups'] = $this->income->get_group_list();
+        $data['incomes'] = $this->income->get_incomes_list();
         $this->layout->view('incomes/index_view', $data);
     }
 
@@ -78,13 +78,15 @@ class Incomes extends CI_Controller {
             foreach($rs as $r)
             {
 
-                $obj            = new stdClass();
-                $obj->id        = get_first_object($r['_id']);
-                $obj->group     = get_first_object($r['group']);
-                $obj->group_name= $this->income->get_group_name($obj->group);
-                $obj->name      = $r['name'];
-                $obj->price     = $r['price'];
-                $obj->active    = $r['active'];
+                $obj                = new stdClass();
+                $obj->id            = get_first_object($r['_id']);
+                $obj->income        = get_first_object($r['income']);
+                $obj->income_name   = $this->income->get_income_name($obj->income);
+                $obj->name          = $r['name'];
+                $obj->price         = $r['price'];
+                $obj->cost          = $r['cost'];
+                $obj->unit          = $r['unit'];
+                $obj->active        = $r['active'];
 
                 $arr_result[]   = $obj;
             }
@@ -101,7 +103,7 @@ class Incomes extends CI_Controller {
     }
     public function get_filter_list()
     {
-        $group = $this->input->post('group');
+        $income = $this->input->post('income');
         $start = $this->input->post('start');
         $stop = $this->input->post('stop');
 
@@ -110,7 +112,7 @@ class Incomes extends CI_Controller {
 
         $limit = (int) $stop - (int) $start;
 
-        $rs = $this->income->get_filter_list($group, $start, $limit);
+        $rs = $this->income->get_filter_list($income, $start, $limit);
 
         if($rs)
         {
@@ -118,15 +120,17 @@ class Incomes extends CI_Controller {
             foreach($rs as $r)
             {
 
-                $obj            = new stdClass();
-                $obj->id        = get_first_object($r['_id']);
-                $obj->group     = get_first_object($r['group']);
-                $obj->group_name= $this->income->get_group_name($obj->group);
-                $obj->name      = $r['name'];
-                $obj->price     = $r['price'];
-                $obj->active    = $r['active'];
+                $obj                = new stdClass();
+                $obj->id            = get_first_object($r['_id']);
+                $obj->income        = get_first_object($r['income']);
+                $obj->income_name   = $this->income->get_income_name($obj->income);
+                $obj->name          = $r['name'];
+                $obj->price         = $r['price'];
+                $obj->cost          = $r['cost'];
+                $obj->unit          = $r['unit'];
+                $obj->active        = $r['active'];
 
-                $arr_result[]   = $obj;
+                $arr_result[]       = $obj;
             }
 
             $rows = json_encode($arr_result);
@@ -158,15 +162,17 @@ class Incomes extends CI_Controller {
                 foreach($rs as $r)
                 {
 
-                    $obj            = new stdClass();
-                    $obj->id        = get_first_object($r['_id']);
-                    $obj->group     = get_first_object($r['group']);
-                    $obj->group_name= $this->income->get_group_name($obj->group);
-                    $obj->name      = $r['name'];
-                    $obj->price     = $r['price'];
-                    $obj->active    = $r['active'];
+                    $obj                = new stdClass();
+                    $obj->id            = get_first_object($r['_id']);
+                    $obj->income        = get_first_object($r['income']);
+                    $obj->income_name   = $this->income->get_income_name($obj->income);
+                    $obj->name          = $r['name'];
+                    $obj->price         = $r['price'];
+                    $obj->cost          = $r['cost'];
+                    $obj->unit          = $r['unit'];
+                    $obj->active        = $r['active'];
 
-                    $arr_result[]   = $obj;
+                    $arr_result[]       = $obj;
                 }
 
                 $rows = json_encode($arr_result);
@@ -192,8 +198,8 @@ class Incomes extends CI_Controller {
 
     public function get_filter_total()
     {
-        $group = $this->input->post('group');
-        $total = $this->income->get_filter_total($group);
+        $income = $this->input->post('income');
+        $total = $this->income->get_filter_total($income);
 
         $json = '{"success": true, "total": '.$total.'}';
 

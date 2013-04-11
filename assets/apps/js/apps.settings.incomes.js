@@ -16,11 +16,11 @@ head.ready(function(){
             });
         },
 
-        get_filter_list: function(group, start, stop, cb){
+        get_filter_list: function(income, start, stop, cb){
 
             var url = 'incomes/get_filter_list',
                 params = {
-                    group: group,
+                    income: income,
                     start: start,
                     stop: stop
                 };
@@ -39,10 +39,10 @@ head.ready(function(){
                 return err ? cb(err) : cb(null, data);
             });
         },
-        get_filter_total: function(group, cb){
+        get_filter_total: function(inc, cb){
 
             var url = 'incomes/get_filter_total',
-                params = { group: group };
+                params = { income: inc };
 
             app.ajax(url, params, function(err, data){
                 return err ? cb(err) : cb(null, data);
@@ -111,8 +111,10 @@ head.ready(function(){
     {
         $('#is_update').val('0');
         $('#txt_reg_name').val('');
-        app.set_first_selected($('#sl_reg_groups'));
+        app.set_first_selected($('#sl_reg_income'));
         $('#txt_reg_price').val('');
+        $('#txt_reg_cost').val('');
+        $('#txt_reg_unit').val('');
         $('#txt_id').val('');
         $('#chk_active').attr('checked', 'checked');
     };
@@ -122,8 +124,10 @@ head.ready(function(){
 
         items.is_update = $('#is_update').val();
         items.name = $('#txt_reg_name').val();
-        items.group = $('#sl_reg_groups').val();
+        items.income = $('#sl_reg_income').val();
         items.price = $('#txt_reg_price').val();
+        items.cost = $('#txt_reg_cost').val();
+        items.unit = $('#txt_reg_unit').val();
         items.id = $('#txt_id').val();
         items.active = $('#chk_active').is(':checked') ? 'Y' : 'N';
 
@@ -131,7 +135,7 @@ head.ready(function(){
         {
             app.alert('กรุณาระบุรายการ');
         }
-        else if(!items.group)
+        else if(!items.income)
         {
             app.alert('กรุณาระบุกลุ่มค่าใช้จ่าย');
         }
@@ -245,14 +249,14 @@ head.ready(function(){
         });
     };
 
-    income.do_filter = function(group)
+    income.do_filter = function(inc)
     {
 
         $('#tbl_list > tbody').empty();
 
         $('#main_paging').fadeIn('slow');
 
-        income.ajax.get_filter_total(group, function(err, data){
+        income.ajax.get_filter_total(inc, function(err, data){
             if(err){
                 app.alert(err);
             }else{
@@ -262,7 +266,7 @@ head.ready(function(){
                     lapping: 1,
                     page: 1,
                     onSelect: function(page){
-                        income.ajax.get_filter_list(group, this.slice[0], this.slice[1], function(err, data){
+                        income.ajax.get_filter_list(inc, this.slice[0], this.slice[1], function(err, data){
                             if(err){
                                 app.alert(err);
                                 $('#tbl_list > tbody').append('<tr><td colspan="5">ไม่พบข้อมูล</td></td></tr>');
@@ -337,22 +341,29 @@ head.ready(function(){
 
         if(!data.rows)
         {
-            $('#tbl_list > tbody').append('<tr><td colspan="5">ไม่พบข้อมูล</td></td></tr>');
+            $('#tbl_list > tbody').append('<tr><td colspan="6">ไม่พบข้อมูล</td></td></tr>');
         }
         else
         {
             _.each(data.rows, function(v)
             {
                 var status = v.active == 'Y' ? '<i class="icon-ok"></i>' : '<i class="icon-minus"></i>';
+
+                var name = v.name.length > 60 ? v.name.substr(0, 60) + '...' : v.name;
+                var income_name = v.income_name.length > 60 ? v.income_name.substr(0, 40) + '...' : v.income_name;
+
                 $('#tbl_list > tbody').append(
                     '<tr>' +
-                        '<td>'+ v.name +'</td>' +
-                        '<td>'+ v.group_name +'</td>' +
+                        '<td>'+ name +'</td>' +
+                        '<td>'+ income_name +'</td>' +
+                        '<td>'+ app.add_commars(v.cost) +'</td>' +
                         '<td>'+ app.add_commars(v.price) +'</td>' +
+                        '<td>'+ v.unit +'</td>' +
                         '<td>'+ status +'</td>' +
                         '<td><div class="btn-group">' +
                         '<a href="javascript:void(0);" data-name="btn_edit" class="btn" data-id="'+ v.id +'" ' +
-                        'data-vname="'+ v.name +'" data-group="'+ v.group + '" data-price="'+ v.price +'" data-active="'+ v.active +'">' +
+                        'data-vname="'+ v.name +'" data-income="'+ v.income + '" data-price="'+ v.price +'" ' +
+                        'data-cost="'+ v.cost +'" data-active="'+ v.active +'" data-unit="'+ v.unit +'">' +
                         '<i class="icon-edit"></i></a>' +
                         '<a href="javascript:void(0);" data-name="btn_remove" class="btn" data-id="'+ v.id +'">' +
                         '<i class="icon-trash"></i></a>' +
@@ -366,14 +377,18 @@ head.ready(function(){
     $(document).on('click', 'a[data-name="btn_edit"]', function(){
         var id = $(this).data('id'),
             name = $(this).data('vname'),
-            group = $(this).data('group'),
+            inc = $(this).data('income'),
             price = $(this).data('price'),
+            cost = $(this).data('cost'),
+            unit = $(this).data('unit'),
             active = $(this).data('active');
 
         $('#is_update').val('1');
         $('#txt_reg_name').val(name);
-        $('#sl_reg_groups').val(group);
+        $('#sl_reg_income').val(inc);
         $('#txt_reg_price').val(price);
+        $('#txt_reg_cost').val(cost);
+        $('#txt_reg_unit').val(unit);
         $('#txt_id').val(id);
 
         if(active == 'Y')
@@ -416,14 +431,14 @@ head.ready(function(){
     });
 
     $('#btn_filter').on('click', function(){
-        var group = $('#sl_groups').val();
-        if(!group)
+        var inc = $('#sl_incomes').val();
+        if(!inc)
         {
             app.alert('กรุณาระบุกลุ่มค่าใช้จ่าย');
         }
         else
         {
-            income.do_filter(group);
+            income.do_filter(inc);
         }
     });
 
@@ -441,7 +456,7 @@ head.ready(function(){
                 if(err)
                 {
                     $('#tbl_list > tbody').empty();
-                    $('#tbl_list > tbody').append('<tr><td colspan="5">ไม่พบข้อมูล</td></td></tr>');
+                    $('#tbl_list > tbody').append('<tr><td colspan="6">ไม่พบข้อมูล</td></td></tr>');
                 }
                 else
                 {

@@ -11,10 +11,10 @@
             </button>
         </div>
 |
-        <select id="sl_groups">
+        <select id="sl_incomes">
             <option value="">เลือกหมวดหมู่</option>
             <?php
-            foreach($groups as $r)
+            foreach($incomes as $r)
             {
                 echo '<option value="'.get_first_object($r['_id']).'">' . $r['name'] . '</option>';
             }
@@ -34,13 +34,17 @@
         <tr>
             <th>รายการ</th>
             <th>หมวดหมู่</th>
-            <th>ราคา</th>
+            <th>ราคาซื้อ</th>
+            <th>ราคาขาย</th>
+            <th>หน่วย</th>
             <th>สถานะ</th>
             <th>#</th>
         </tr>
         </thead>
         <tbody>
         <tr>
+            <td>...</td>
+            <td>...</td>
             <td>...</td>
             <td>...</td>
             <td>...</td>
@@ -76,12 +80,12 @@
                 </div>
                 <div class="row-fluid">
                     <div class="control-group">
-                        <label class="control-label" for="sl_reg_groups">หมวดหมู่</label>
+                        <label class="control-label" for="sl_reg_incomes">หมวดหมู่</label>
                         <div class="controls">
-                            <select id="sl_reg_groups" class="input-xxlarge">
+                            <select id="sl_reg_income" class="input-xxlarge">
                                 <option value="">เลือกหมวดหมู่</option>
                                 <?php
-                                foreach($groups as $r)
+                                foreach($incomes as $r)
                                 {
                                     echo '<option value="'.get_first_object($r['_id']).'">' . $r['name'] . '</option>';
                                 }
@@ -93,12 +97,38 @@
                 <div class="row-fluid">
                     <div class="span3">
                         <div class="control-group">
-                            <label class="control-label" for="txt_reg_price">ราคา</label>
+                            <label class="control-label" for="txt_reg_cost">ราคาซื้อ</label>
                             <div class="controls">
-                                <input type="text" id="txt_reg_price" class="input-small" data-type="number">
+                                <div class="input-append">
+                                    <input id="txt_reg_cost" class="input-mini" type="text" data-type="number">
+                                    <span class="add-on">บาท</span>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <div class="span3">
+                        <div class="control-group">
+                            <label class="control-label" for="txt_reg_price">ราคาขาย</label>
+                            <div class="controls">
+                                <div class="input-append">
+                                    <input id="txt_reg_price" class="input-mini" type="text" data-type="number">
+                                    <span class="add-on">บาท</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span3">
+                        <div class="control-group">
+                            <label class="control-label" for="txt_reg_unit">หน่วย</label>
+                            <div class="controls">
+                                <div class="controls">
+                                    <input type="text" id="txt_reg_unit" class="input-medium">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row-fluid">
                     <div class="span2">
                         <div class="control-group">
                             <label class="control-label" for="chk_active">ใช้งาน</label>
