@@ -127,7 +127,7 @@
                             </li>
                             <li class="divider"></li>
                             <li>
-                                <a href="<?php echo site_url('dm'); ?>">
+                                <a href="<?php echo site_url('diabetes'); ?>">
                                     <i class="icon-tags"></i> ทะเบียนผู้ป่วยเบาหวาน (DM)
                                 </a>
                             </li>

@@ -119,6 +119,10 @@ class Women_model extends CI_Model
      */
     public function search_filter($house_id, $start, $limit)
     {
+        $this->mongo_db->add_index('person', array('owner_id' => -1));
+        $this->mongo_db->add_index('person', array('birthdate' => -1));
+        $this->mongo_db->add_index('person', array('house_code' => -1));
+
         $rs = $this->mongo_db
             ->where(array('owner_id' => new MongoId($this->owner_id)))
             ->where(array('sex' => '2'))
@@ -134,6 +138,10 @@ class Women_model extends CI_Model
 
     public function search($hn)
     {
+        $this->mongo_db->add_index('person', array('birthdate' => -1));
+        $this->mongo_db->add_index('person', array('sex' => -1));
+        $this->mongo_db->add_index('person', array('owner_id' => -1));
+
         $rs = $this->mongo_db
             ->where(array('owner_id' => new MongoId($this->owner_id)))
             ->where(array('sex' => '2'))
@@ -147,6 +155,11 @@ class Women_model extends CI_Model
 
     public function search_filter_total($house_id)
     {
+        $this->mongo_db->add_index('person', array('owner_id' => -1));
+        $this->mongo_db->add_index('person', array('sex' => -1));
+        $this->mongo_db->add_index('person', array('birthdate' => -1));
+        $this->mongo_db->add_index('person', array('house_code' => -1));
+
         $rs = $this->mongo_db
             ->where(array('owner_id' => new MongoId($this->owner_id)))
             ->where(array('sex' => '2'))
@@ -159,6 +172,7 @@ class Women_model extends CI_Model
 
     public function get_house_list($village_id)
     {
+        $this->mongo_db->add_index('houses', array('village_id' => -1));
         $rs = $this->mongo_db
             ->select(array('_id'))
             ->where(array('village_id' => new MongoId($village_id)))

@@ -2,22 +2,22 @@
     <li><a href="<?php echo site_url(); ?>">หน้าหลัก</a> <span class="divider">/</span></li>
     <li class="active">ทะเบียนผู้ป่วยเบาหวาน (DM)</li>
 </ul>
-<form action="#" class="well form-inline">
-    <label for="sl_village_id">หมู่บ้าน</label>
+<form action="#" class="well well-small form-inline">
+    <label for="sl_village">หมู่บ้าน</label>
     <select class="input-xlarge" id="sl_village">
-        <option value="00000000">---</option>
+        <option value="">---</option>
         <?php
         foreach ($villages as $r){
             echo '<option value="'.get_first_object($r['_id']).'">' . $r['village_code'] . ' ' . $r['village_name'] . '</option>';
         }
         ?>
     </select>
-    บ้านเลขที่
-    <select id="sl_house" class="input-medium"></select>
-    <button type="button" class="btn btn-info" id="btn_do_get_list"><i class="icon-search icon-white"></i> แสดงรายการ</button>
+    <button type="button" class="btn btn-info" id="btn_filter_by_village"><i class="icon-search"></i></button> |
+    ค้นหา <input type="text" class="input-xlarge" id="txt_query" placeholder="พิมพ์ HN หรือ เลขบัตรประชาชน หรือ ชื่อ-สกุล" />
+    <button type="button" id="btn_search" class="btn btn-info"><i class="icon-search"></i></button>
     <div class="btn-group pull-right">
-        <button type="button" id="btn_search" class="btn"><i class="icon-search"></i> ค้นหา</button>
-        <button type="button" id="btn_register" class="btn btn-success"><i class="icon-plus-sign icon-white"></i> ลงทะเบียน</button>
+        <button type="button" id="btn_refresh" class="btn"><i class="icon-refresh"></i> ทั้งหมด</button>
+        <button type="button" id="btn_register" class="btn btn-success"><i class="icon-plus-sign"></i> ลงทะเบียน</button>
     </div>
 </form>
 
@@ -26,18 +26,18 @@
     <tr>
         <th>HN</th>
         <th>CID</th>
-        <th>วันที่ลงทะเบียน</th>
         <th>ชื่อ - สกุล</th>
         <th>วันเกิด</th>
         <th>อายุ (ปี)</th>
         <th>เพศ</th>
-
+        <th>วันที่ลงทะเบียน</th>
+        <th>ประเภท</th>
         <th>#</th>
     </tr>
     </thead>
     <tbody>
     <tr>
-        <td colspan="8">กรุณากำหนดเงื่อนไขการแสดงข้อมูล</td>
+        <td colspan="9">กรุณากำหนดเงื่อนไขการแสดงข้อมูล</td>
     </tr>
     </tbody>
 </table>
@@ -53,33 +53,20 @@
         <h3>ลงทะเบียนผู้ป่วยเบาหวาน (DM)</h3>
     </div>
     <div class="modal-body">
-        <div class="alert alert-info" id="alert_regis_dm">
-            <strong>คำแนะนำ ! </strong><span>กรุณากรอกข้อมูลให้ครบ</span>
-        </div>
-        <form action="#" class="form-inline">
-            <div  data-name="blog_search">
-                <div class="span5">
-                    <div class="control-group">
-                        <div class="controls">
-                            <input type="hidden" data-name="txt_search_person_filter" value="0">
-                            <label class="control-label" for="tboSearch">คำค้นหา</label>
-                            <input type="text" id="tboSearch" placeholder="เลขบัตรประชาชน หรือ HN" />
-                            <div class="btn-group">
-                                <button type="button" class="btn btn-info" id="btnSearch"><i class="icon-search icon-white"></i>ค้นหา</button>
-                                <button class="btn btn-info dropdown-toggle" data-toggle="dropdown">
-                                    <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a href="javascript:void(0);" data-name="btn_set_search_person_filter" data-value="0"><i class="icon-qrcode"></i> ค้นจาก เลขบัตรประชาชน</a></li>
-                                    <li><a href="javascript:void(0);" data-name="btn_set_search_person_filter" data-value="1"><i class="icon-th-list"></i> ค้นจาก HN</a></li>
-                                </ul>
-                            </div>
-                            <input type="hidden" id="tboCheckRegis" value="" />
-                        </div>
+        <form action="#" class="well well-small form-inline">
+            <div class="control-group">
+                <div class="controls">
+                    <label class="control-label" for="tboSearch">ค้นหา</label>
+                    <input type="text" id="txt_search_person" class="input-xlarge" placeholder="เลขบัตรประชาชน หรือ HN"
+                           rel="tooltip" title="เลขบัตรประชาชน หรือ HN " data-placement="right">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-info" id="btn_search_person"><i class="icon-search icon-white"></i></button>
                     </div>
+                    <input type="hidden" id="txt_isupdate" value="0" />
                 </div>
-                <br><hr>
             </div>
+        </form>
+        <form action="#" class="form-inline">
             <div class="row-fluid">
                 <div class="span2">
                     <div class="control-group">
@@ -127,7 +114,7 @@
                     <div class="control-group">
                         <label class="control-label" for="slSex">เพศ</label>
                         <div class="controls">
-                            <select id="slSex" class="input-small" disabled>
+                            <select id="slSex" class="input-small" disabled style="background-color: white">
                                 <option value="ชาย">ชาย</option>
                                 <option value="หญิง">หญิง</option>
                             </select>
@@ -175,8 +162,10 @@
                         <div class="controls">
                             <select class="input-medium" id="cboDiseaseType">
                                 <option value="">----------</option>
-                                <option value="NIDDM">NIDDM</option>
-                                <option value="IDDM">IDDM</option>
+                                <?php
+                                foreach($diabetes_types as $dt)
+                                    echo '<option value="'.$dt->id.'">' . $dt->name . '</option>';
+                                ?>
                             </select>
                         </div>
                     </div>
@@ -201,40 +190,50 @@
                 <div class="span2">
                     <div class="control-group">
                         <div class="controls">
-                            <input type="checkbox" id="ch_pre_register" placeholder="Pre register" class="input-small" />
-                            <label class="control-label" for="ch_pre_register">Pre register</label>
+                            <label class="checkbox">
+                                <input type="checkbox" id="ch_pre_register" checked="checked" /> Pre register
+                            </label>
+
                         </div>
                     </div>
                 </div>
                 <div class="span2">
                     <div class="control-group">
                         <div class="controls">
-                            <input type="checkbox" id="ch_pregnancy" placeholder="Pregnancy" class="input-small" />
-                            <label class="control-label" for="ch_pregnancy">Pregnancy</label>
+                            <label class="checkbox">
+                                <input type="checkbox" id="ch_pregnancy"/> Pregnancy
+                            </label>
+
                         </div>
                     </div>
                 </div>
                 <div class="span3">
                     <div class="control-group">
                         <div class="controls">
-                            <input type="checkbox" id="ch_hypertension" placeholder="with Hypertension/DM" class="input-small" />
-                            <label class="control-label" for="ch_hypertension">with Hypertension/DM</label>
+                            <label class="checkbox">
+                                <input type="checkbox" id="ch_hypertension"/> with Hypertension/DM
+                            </label>
+
                         </div>
                     </div>
                 </div>
                 <div class="span2">
                     <div class="control-group">
                         <div class="controls">
-                            <input type="checkbox" id="ch_insulin" placeholder="with Insulin" class="input-small" />
-                            <label class="control-label" for="ch_insulin">with Insulin</label>
+                            <label class="checkbox">
+                                <input type="checkbox" id="ch_insulin"/> with Insulin
+                            </label>
+
                         </div>
                     </div>
                 </div>
                 <div class="span3">
                     <div class="control-group">
                         <div class="controls">
-                            <input type="checkbox" id="ch_newcase" placeholder="เป็นผู้ป่วยรายใหม่" class="input-small" />
-                            <label class="control-label" for="ch_newcase">เป็นผู้ป่วยรายใหม่</label>
+                            <label class="checkbox">
+                                <input type="checkbox" id="ch_newcase" /> เป็นผู้ป่วยรายใหม่
+                            </label>
+
                         </div>
                     </div>
                 </div>
@@ -242,13 +241,13 @@
         </form>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-success" id="btn_dm_do_register"><i class="icon-plus-sign icon-white"></i><span id="lblRegis" title="add">ลงทะเบียน</span></button>
-        <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="icon-off icon-white"></i>ปิดหน้าต่าง</button>
+        <button type="button" class="btn btn-success" id="btn_dm_do_register"><i class="icon-plus-sign icon-white"></i><span id="lblRegis" title="add"> ลงทะเบียน</span></button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</button>
     </div>
 </div>
 
 <script type="text/javascript">
-    head.js('<?php echo base_url(); ?>assets/apps/js/apps.dm.index.js');
+    head.js('<?php echo base_url(); ?>assets/apps/js/apps.diabetes.index.js');
 </script>
 
 

@@ -21,7 +21,7 @@ head.ready(function(){
          * @param   cb
          */
         get_list: function(start, stop, cb){
-            var url = 'dm/get_list',
+            var url = 'diabetes/get_list',
                 params = {
                     start: start,
                     stop: stop
@@ -32,7 +32,7 @@ head.ready(function(){
             });
         },
         get_list_total: function(cb){
-            var url = 'dm/get_list_total',
+            var url = 'diabetes/get_list_total',
                 params = {};
 
             app.ajax(url, params, function(err, data){
@@ -40,8 +40,21 @@ head.ready(function(){
             });
         },
 
-        get_house_list: function(village_id, cb){
-            var url = 'person/get_houses_list',
+        get_list_by_village: function(village_id, start, stop, cb){
+            var url = 'diabetes/get_list_by_villages',
+                params = {
+                    village_id: village_id,
+                    start: start,
+                    stop: stop
+                };
+
+            app.ajax(url, params, function(err, data){
+                err ? cb(err) : cb(null, data);
+            });
+        },
+
+        get_list_by_village_total: function(village_id, cb){
+            var url = 'diabetes/get_list_by_village_total',
                 params = {
                     village_id: village_id
                 };
@@ -51,22 +64,10 @@ head.ready(function(){
             });
         },
 
-        get_list_by_house: function(house_id, cb){
-            var url = 'dm/get_list_by_house',
+        get_detail: function(hn, cb){
+            var url = 'diabetes/get_detail',
                 params = {
-                    house_id: house_id
-                };
-
-            app.ajax(url, params, function(err, data){
-                err ? cb(err) : cb(null, data);
-            });
-        },
-
-        search_person: function(query, filter, cb){
-            var url = 'dm/search_person',
-                params = {
-                    query: query,
-                    filter: filter
+                    hn: hn
                 };
             //Do load ajax.
             app.ajax(url, params, function(err, data){
@@ -74,21 +75,10 @@ head.ready(function(){
             });
         },
 
-        do_register: function(hn, hid_regis, year_regis, date_regis, diag_type, doctor, pre_register, pregnancy, hypertension, insulin, newcase, hosp_serial, cb){
-            var url = 'dm/do_register',
+        do_register: function(items, cb){
+            var url = 'diabetes/do_register',
                 params = {
-                    hn: hn,
-                    hid_regis: hid_regis,
-                    year_regis: year_regis,
-                    date_regis: date_regis,
-                    diag_type: diag_type,
-                    doctor: doctor,
-                    pre_register: pre_register,
-                    pregnancy: pregnancy,
-                    hypertension: hypertension,
-                    insulin: insulin,
-                    newcase: newcase,
-                    hosp_serial: hosp_serial
+                    data: items
                 }
 
             app.ajax(url, params, function(err, data){
@@ -96,32 +86,10 @@ head.ready(function(){
             });
         },
 
-        do_update: function(hn, hid_regis, year_regis, date_regis, diag_type, doctor, pre_register, pregnancy, hypertension, insulin, newcase, hosp_serial, cb){
-            var url = 'dm/do_update',
+        search_person: function(query, cb){
+            var url = 'diabetes/search_person',
                 params = {
-                    hn: hn,
-                    hid_regis: hid_regis,
-                    year_regis: year_regis,
-                    date_regis: date_regis,
-                    diag_type: diag_type,
-                    doctor: doctor,
-                    pre_register: pre_register,
-                    pregnancy: pregnancy,
-                    hypertension: hypertension,
-                    insulin: insulin,
-                    newcase: newcase,
-                    hosp_serial: hosp_serial
-                }
-
-            app.ajax(url, params, function(err, data){
-                return err ? cb(err) : cb(null, data);
-            });
-        },
-
-        check_registration: function(hn, cb){
-            var url = 'dm/check_registration',
-                params = {
-                    hn: hn
+                    query: query
                 };
 
             app.ajax(url, params, function(err, data){
@@ -132,7 +100,7 @@ head.ready(function(){
     
     dm.update.ajax = {
         remove_ncd_register: function(person_id, cb) {
-            var url = 'dm/remove_dm_register',
+            var url = 'diabetes/remove_dm_register',
                 params = {
                     person_id: person_id
                 };
@@ -176,15 +144,16 @@ head.ready(function(){
                     '<tr>' +
                         '<td>' + v.hn + '</td>' +
                         '<td>' + app.clear_null(v.cid) + '</td>' +
-                        '<td>' + app.mongo_to_thai_date(v.reg_date) + '</td>' +
                         '<td>' + v.first_name +' '+ v.last_name + '</td>' +
                         '<td>' + app.mongo_to_thai_date(v.birthdate) + '</td>' +
                         '<td>' + v.age + '</td>' +
                         '<td>' + v.sex + '</td>' +
+                        '<td>' + app.mongo_to_thai_date(v.reg_date) + '</td>' +
+                        '<td>' + v.diag_type + '</td>' +
                         '<td>' +
                         '<div class="btn-group">' +
-                        '<a href="javascript:void(0);" class="btn btn-danger" data-name="remove" data-id="' + v.id + '"><i class="icon-trash"></i></a>' +
-                        '<a href="javascript:void(0);" class="btn" data-name="edit_dm" data-id="' + v.hn + '"><i class="icon-edit"></i></a>' +
+                        '<a href="javascript:void(0);" class="btn btn-danger" data-name="remove" data-hn="' + v.hn + '"><i class="icon-trash"></i></a>' +
+                        '<a href="javascript:void(0);" class="btn" data-name="edit" data-hn="' + v.hn + '"><i class="icon-edit"></i></a>' +
                         '</div>' +
                         '</td>' +
                         '</tr>'
@@ -212,6 +181,9 @@ head.ready(function(){
                             $('#tbl_list > tbody').empty();
                             if(err){
                                 app.alert(err);
+                                $('#tbl_list > tbody').append(
+                                    '<tr><td colspan="8">ไม่พบรายการ</td></tr>'
+                                );
                             }else{
                                 dm.set_list(data);
                             }
@@ -279,43 +251,43 @@ head.ready(function(){
     };
 
     $('#btn_register').click(function(){
+        dm.clear_register_form();
         $('div[data-name="blog_search"]').show();
         $('#lblRegis').html('ลงทะเบียน');
         $('#lblRegis').attr('title', 'add');
         dm.modal.show_register();
     });
 
-    dm.set_search_person_result = function(data)
+    dm.set_detail = function(v)
     {
-        _.each(data.rows, function(v)
-        {
-            $('#tboCheckRegis').val(v.chk_regis);
-            $('#tboHN').val(v.hn);
-            $('#tboCid').val(v.cid);
-            $('#tboFname').val(v.first_name);
-            $('#tboLname').val(v.last_name);
-            $('#tboAge').val(v.age);
-            $('#slSex').val(v.sex);
-            $('#tboRegCenterNumber').val(v.reg_serial);
-            $('#tboRegHosNumber').val(v.hosp_serial);
-            $('#tboYear').val(v.year);
-            $('#dtpRegisDate').val(v.reg_date);
-            $('#cboDiseaseType').val(v.diag_type);
-            $('#cboDoctor').val(v.doctor);
-            $('#ch_pre_register').prop('checked', v.pre_register);
-            $('#ch_pregnancy').prop('checked', v.pregnancy);
-            $('#ch_hypertension').prop('checked', v.hypertension);
-            $('#ch_insulin').prop('checked', v.insulin);
-            $('#ch_newcase').prop('checked', v.newcase);
-            
-            $('#tboRegHosNumber').focus();
-        });
+        $('#txt_isupdate').val('1');
+        $('#tboHN').val(v.hn);
+        $('#tboCid').val(v.cid);
+        $('#tboFname').val(v.first_name);
+        $('#tboLname').val(v.last_name);
+        $('#tboAge').val(v.age);
+        $('#slSex').val(v.sex);
+        $('#tboRegCenterNumber').val(v.reg_serial);
+        $('#tboRegHosNumber').val(v.hosp_serial);
+        $('#tboYear').val(v.year);
+        $('#dtpRegisDate').val(v.reg_date);
+        $('#cboDiseaseType').val(v.diag_type);
+        $('#cboDoctor').val(v.doctor);
+        $('#ch_pre_register').attr('checked', true);
+
+       //v.pre_register == "Y" ? $('#ch_pre_register').attr('checked', true) : $('#ch_pre_register').attr('checked', false);
+        v.pregnancy == "1" ? $('#ch_pregnancy').attr('checked', true) : $('#ch_pregnancy').attr('checked', false);
+        v.hypertension == "1" ? $('#ch_hypertension').attr('checked', true) : $('#ch_hypertension').attr('checked', false);
+        v.insulin == "1" ? $('#ch_insulin').attr('checked', true) : $('#ch_insulin').attr('checked', false);
+        v.newcase == "1" ? $('#ch_newcase').attr('checked', true) : $('#ch_newcase').attr('checked', false);
+
+        $('#tboRegHosNumber').focus();
+
     };
 
     //search person
-    $('#btnSearch').click(function(){
-        var query = $('#tboSearch').val(),
-            filter = $('input[data-name="txt_search_person_filter"]').val();
+    $('#btn_search_person').click(function(){
+        var query = $('#txt_search_person').val();
 
         if(!query)
         {
@@ -326,7 +298,7 @@ head.ready(function(){
             //do search
             dm.clear_register_form();
 
-            dm.ajax.search_person(query, filter, function(err, data){
+            dm.ajax.search_person(query, function(err, data){
 
                 if(err)
                 {
@@ -351,63 +323,101 @@ head.ready(function(){
         $('input[data-name="txt_search_person_filter"]').val(filter);
     });
 
-    $('#sl_village').on('change', function(){
-        var village_id = $(this).val();
+    $('#btn_filter_by_village').click(function(){
+        var village_id = $('#sl_village').val();
 
-        dm.ajax.get_house_list(village_id, function(err, data){
-            if(err)
-            {
+        dm.get_list_by_village(village_id);
+    });
+
+    dm.get_list_by_village = function(village_id)
+    {
+        $('#main_paging').fadeIn('slow');
+        dm.ajax.get_list_by_village_total(village_id, function(err, data){
+            if(err){
                 app.alert(err);
-            }
-            else
-            {
-                if(data)
-                {
-                    $('#sl_house').empty();
-                   // $('#sl_house').append('<option value="00000000">ทั้งหมด</option>');
+            }else{
+                $('#main_paging > ul').paging(data.total, {
+                    format: " < . (qq -) nnncnnn (- pp) . >",
+                    perpage: app.record_per_page,
+                    lapping: 1,
+                    page: 1,
+                    onSelect: function(page){
+                        dm.ajax.get_list_by_village(village_id, this.slice[0], this.slice[1], function(err, data){
+                            $('#tbl_list > tbody').empty();
+                            if(err){
+                                app.alert(err);
+                                $('#tbl_list > tbody').append(
+                                    '<tr><td colspan="8">ไม่พบรายการ</td></tr>'
+                                );
+                            }else{
+                                dm.set_list(data);
+                            }
 
-                    _.each(data.rows, function(v){
-                        $('#sl_house').append('<option value="'+ v.id +'">' + v.house + '</option>');
-                    });
+                        });
 
-                }
+                    },
+                    onFormat: function(type){
+                        switch (type) {
+
+                            case 'block':
+
+                                if (!this.active)
+                                    return '<li class="disabled"><a href="">' + this.value + '</a></li>';
+                                else if (this.value != this.page)
+                                    return '<li><a href="#' + this.value + '">' + this.value + '</a></li>';
+                                return '<li class="active"><a href="#">' + this.value + '</a></li>';
+
+                            case 'right':
+                            case 'left':
+
+                                if (!this.active) {
+                                    return "";
+                                }
+                                return '<li><a href="#' + this.value + '">' + this.value + '</a></li>';
+
+                            case 'next':
+
+                                if (this.active) {
+                                    return '<li><a href="#' + this.value + '">&raquo;</a></li>';
+                                }
+                                return '<li class="disabled"><a href="">&raquo;</a></li>';
+
+                            case 'prev':
+
+                                if (this.active) {
+                                    return '<li><a href="#' + this.value + '">&laquo;</a></li>';
+                                }
+                                return '<li class="disabled"><a href="">&laquo;</a></li>';
+
+                            case 'first':
+
+                                if (this.active) {
+                                    return '<li><a href="#' + this.value + '">&lt;</a></li>';
+                                }
+                                return '<li class="disabled"><a href="">&lt;</a></li>';
+
+                            case 'last':
+
+                                if (this.active) {
+                                    return '<li><a href="#' + this.value + '">&gt;</a></li>';
+                                }
+                                return '<li class="disabled"><a href="">&gt;</a></li>';
+
+                            case 'fill':
+                                if (this.active) {
+                                    return '<li class="disabled"><a href="#">...</a></li>';
+                                }
+                        }
+                        return ""; // return nothing for missing branches
+                    }
+                });
             }
         });
-    });
+    };
 
-    $('#btn_do_get_list').click(function(){
-        var house_id = $('#sl_house').val();
-
-        dm.ajax.get_list_by_house(house_id, function(err, data){
-
-            $('#tbl_list > tbody').empty();
-
-           if(err)
-           {
-               app.alert(err);
-               $('#tbl_list > tbody').append(
-                   '<tr><td colspan="8">ไม่พบรายการ</td></tr>'
-               );
-           }
-            else
-           {
-               if(data)
-               {
-                   $('#main_paging').fadeOut('slow');
-                   dm.set_list(data);
-               }
-               else
-               {
-                   $('#tbl_list > tbody').append(
-                       '<tr><td colspan="8">ไม่พบรายการ</td></tr>'
-                   );
-               }
-           }
-        });
-    });
     
     dm.clear_register_form = function() {
-        var d = new Date();
+        $('#txt_isupdate').val('0');
         $('#tboHN').val('');
         $('#tboCid').val('');
         $('#tboFname').val('');
@@ -417,7 +427,7 @@ head.ready(function(){
         $('#tboRegCenterNumber').val('');
         $('#tboRegHosNumber').val('');
         $('#tboYear').val('');
-        $('#dtpRegisDate').val((d.getDate()<10?'0'+d.getDate():d.getDate()) + '/' + (d.getMonth()<10?'0'+d.getMonth():d.getMonth()) + '/' + d.getFullYear());
+        $('#dtpRegisDate').val(app.get_current_date());
         $('#cboDiseaseType').val('');
         $('#cboDoctor').val('');
         $('#ch_pre_register').attr('checked', false);
@@ -426,11 +436,7 @@ head.ready(function(){
         $('#ch_insulin').attr('checked', false);
         $('#ch_newcase').attr('checked', false);
     };
-    
-    $('#mdlNewRegister').on('hidden', function() {
-        dm.clear_register_form();
-    });
-    
+
     $(document).on('click', 'a[data-name="remove"]', function() {
         var person_id = $(this).attr('data-id');
         //Confirm remove DM data
@@ -448,81 +454,66 @@ head.ready(function(){
             }
         });
     });
-    
-    $('#btn_do_register').click(function() {
-        app.alert('Test');
-    });
 
     $('#btn_dm_do_register').click(function() {
-        if($('#tboHN').val() == '') {
+        var items = {};
+        items.hn            = $('#tboHN').val();
+        items.hid_regis     = $('#tboRegHosNumber').val();
+        items.year_regis    = $('#tboYear').val();
+        items.date_regis    = $('#dtpRegisDate').val();
+        items.diag_type     = $('#cboDiseaseType').val();
+        items.doctor        = $('#cboDoctor').val();
+        items.pre_register  = $('#ch_pre_register').is(":checked") ? '1' : '0';
+        items.pregnancy     = $('#ch_pregnancy').is(":checked") ? '1' : '0';
+        items.hypertension  = $('#ch_hypertension').is(":checked") ? '1' : '0';
+        items.insulin       = $('#ch_insulin').is(":checked") ? '1' : '0';
+        items.newcase       = $('#ch_newcase').is(":checked") ? '1' : '0';
+        items.hosp_serial   = $('#tboRegHosNumber').val();
+        items.is_update     = $('#txt_isupdate').val();
+
+        if(!items.hn) {
             app.alert('กรุณาเลือกบุคคลที่ต้องการลงทะเบียนด้วย !');
-        } else {
-            if($('#lblRegis').attr('title') == 'edit') {
-                $('#tboCheckRegis').val('0');
-            }
-            if($('#tboCheckRegis').val() == "1") {
-                app.alert('บุคคลนี้ได้ลงทะเบียนก่อนนี้แล้ว');
-                $('#tboSearch').focus();
-            } else if($('#tboYear').val() == "") {
-                app.alert("กรุณาระบุปีที่เริ่มเป็นด้วย !");
-                $('#tboYear').focus()
-            } else if($('#cboDiseaseType').val() == "") {
-                app.alert('กรุณาระบุประเภทโรคด้วย !');
-                $('#cboDiseaseType').focus();
-            } else if($('#cboDoctor').val() == '') {
-                app.alert('กรุณาระบุแพทย์ผู้ดูแลด้วย !');
-                $('#cboDoctor').focus();
-            } else {
-                if($('#lblRegis').attr('title') == 'edit') {
-                    //app.alert('แก้ไขรายการ');
-                    if(confirm('คุณต้องการจะแก้ไขผู้ป่วยรายนี้หรือไม่ ?')) {
-                        var reg_date = $('#dtpRegisDate').val();
-                        
-                        dm.ajax.do_update($('#tboHN').val(), $('#tboRegHosNumber').val(), $('#tboYear').val(), reg_date, $('#cboDiseaseType').val(), $('#cboDoctor').val(), $('#ch_pre_register').is(":checked"), $('#ch_pregnancy').is(":checked"), $('#ch_hypertension').is(":checked"), $('#ch_insulin').is(":checked"), $('#ch_newcase').is(":checked"), $('#tboRegHosNumber').val(), function(err) {
-                            if(err) {
-                                app.alert(err);
-                            } else { 
-                                app.alert('แก้ไขรายการเรียบร้อยแล้ว');
-                                
-                                //dm.clear_register_form();
-                                dm.modal.hide_register();
-                                
-                                dm.get_list();
-                            }
-                        });
+        }
+        else if(!items.year_regis)
+        {
+            app.alert("กรุณาระบุปีที่เริ่มเป็นด้วย !");
+            $('#tboYear').focus();
+        }
+        else if(!items.diag_type)
+        {
+            app.alert('กรุณาระบุประเภทโรคด้วย !');
+            $('#cboDiseaseType').focus();
+        }
+        else if(!items.doctor)
+        {
+            app.alert('กรุณาระบุแพทย์ผู้ดูแลด้วย !');
+            $('#cboDoctor').focus();
+        }
+        else
+        {
+            if(confirm('คุณต้องการจะลงทะเบียนผู้ป่วยรายนี้หรือไม่ ?')) {
+                dm.ajax.do_register(items, function(err) {
+                    if(err) {
+                        app.alert(err);
+                    } else {
+                        app.alert('ลงทะเบียนเรียบร้อยแล้ว');
+                        dm.modal.hide_register();
+                        dm.get_list();
                     }
-                } else {
-                    if(confirm('คุณต้องการจะลงทะเบียนผู้ป่วยรายนี้หรือไม่ ?')) {
-                        var reg_date = $('#dtpRegisDate').val();
-                        
-                        dm.ajax.do_register($('#tboHN').val(), $('#tboRegHosNumber').val(), $('#tboYear').val(), reg_date, $('#cboDiseaseType').val(), $('#cboDoctor').val(), $('#ch_pre_register').is(":checked"), $('#ch_pregnancy').is(":checked"), $('#ch_hypertension').is(":checked"), $('#ch_insulin').is(":checked"), $('#ch_newcase').is(":checked"), $('#tboRegHosNumber').val(), function(err) {
-                            if(err) {
-                                app.alert(err);
-                            } else { 
-                                app.alert('ลงทะเบียนเรียบร้อยแล้ว');
-                                
-                                //dm.clear_register_form();
-                                dm.modal.hide_register();
-                                
-                                dm.get_list();
-                            }
-                        });
-                    }
-                }
+                });
             }
         }
     });
     
-    $(document).on('click', 'a[data-name="edit_dm"]', function() {
+    $(document).on('click', 'a[data-name="edit"]', function() {
         dm.modal.show_register();
         $('div[data-name="blog_search"]').hide();
         $('#lblRegis').html('แก้ไขรายการ');
-        $('#lblRegis').attr('title', 'edit');
+        $('#txt_isupdate').val('1');
         
-        var query = $(this).attr('data-id'),
-            filter = '1';
+        var hn = $(this).data('hn');
 
-        if(!query)
+        if(!hn)
         {
             app.alert('กรุณาระบุคำค้นหา โดยระบุ HN หรือ เลขบัตรประชาชน');
         }
@@ -530,9 +521,8 @@ head.ready(function(){
         {
             //do search
             dm.clear_register_form();
-            //$('#tboCid').val(query);
 
-            dm.ajax.search_person(query, filter, function(err, data){
+            dm.ajax.get_detail(hn, function(err, data){
 
                 if(err)
                 {
@@ -544,12 +534,16 @@ head.ready(function(){
                 }
                 else
                 {
-                   dm.set_search_person_result(data);
+                   dm.set_detail(data.rows);
                 }
             });
         }
 
     });
-    
+
+    $('#btn_refresh').on('click', function(){
+        dm.get_list();
+    });
+
     dm.get_list();
 });

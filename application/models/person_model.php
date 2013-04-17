@@ -726,6 +726,7 @@ class Person_model extends CI_Model
             'hn' => (string)$hn,
             'typearea.owner_id' => new MongoId($this->owner_id)
         ))
+            ->limit(1)
             ->get('person');
 
         return $rs;
