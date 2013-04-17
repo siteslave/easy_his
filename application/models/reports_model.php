@@ -118,7 +118,23 @@ class Reports_model extends CI_Model {
 
     public function get_mainmenu() {
         $rs = $this->mongo_db
+            ->limit(6)
             ->get('rpt_report_mainmenu');
+
+        return $rs;
+    }
+
+    public function get_other_mainmenu() {
+        $rs = $this->mongo_db
+            ->offset(6)
+            ->get('rpt_report_mainmenu');
+
+        return $rs;
+    }
+
+    public function get_mainmenu_count() {
+        $rs = $this->mongo_db
+            ->count('rpt_report_mainmenu');
 
         return $rs;
     }
