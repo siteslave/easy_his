@@ -297,6 +297,11 @@ var app = {
 
         return my_number;
     },
+    add_commars_with_out_decimal: function(str){
+        var my_number = numeral(str).format('0,0');
+
+        return my_number;
+    },
 
     clear_null: function(v)
     {

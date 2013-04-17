@@ -25,17 +25,6 @@ $(function() {
             app.ajax(url, params, function(err, data){
                 err ? cb(err) : cb(null, data);
             });
-        },
-        addCommas: function(val) {
-            val += '';
-            x = val.split('.');
-            x1 = x[0];
-            x2 = x.length > 1 ? '.' + x[1] : '';
-            var rgx = /(\d+)(\d{3})/;
-            while (rgx.test(x1)) {
-                x1 = x1.replace(rgx, '$1' + ',' + '$2');
-            }
-            return x1 + x2;
         }
     };
 
@@ -50,9 +39,9 @@ $(function() {
                     '<tr>'+
                         '<td>'+ v.code.substr(6) +'</td>'+
                         '<td>'+ v.name +'</td>'+
-                        '<td>'+ rpt.ajax.addCommas(v.house) +'</td>'+
-                        '<td>'+ rpt.ajax.addCommas(v.res1) +'</td>'+
-                        '<td>'+ rpt.ajax.addCommas(v.res2) +'</td>'+
+                        '<td>'+ app.add_commars_with_out_decimal(v.house) +'</td>'+
+                        '<td>'+ app.add_commars_with_out_decimal(v.res1) +'</td>'+
+                        '<td>'+ app.add_commars_with_out_decimal(v.res2) +'</td>'+
                     '</tr>'
                 );
             });
@@ -60,9 +49,9 @@ $(function() {
                 '<tr>'+
                     '<td>&nbsp;</td>'+
                     '<td><b>รวมทั้งหมด</b></td>'+
-                    '<td><b>'+ rpt.ajax.addCommas(house) +'</b></td>'+
-                    '<td><b>'+ rpt.ajax.addCommas(res1) +'</b></td>'+
-                    '<td><b>'+ rpt.ajax.addCommas(res2) +'</b></td>'+
+                    '<td><b>'+ app.add_commars_with_out_decimal(house) +'</b></td>'+
+                    '<td><b>'+ app.add_commars_with_out_decimal(res1) +'</b></td>'+
+                    '<td><b>'+ app.add_commars_with_out_decimal(res2) +'</b></td>'+
                     '</tr>'
             );
         }else{
