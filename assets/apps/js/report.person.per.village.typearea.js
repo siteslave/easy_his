@@ -25,17 +25,6 @@ $(function() {
             app.ajax(url, params, function(err, data){
                 err ? cb(err) : cb(null, data);
             });
-        },
-        addCommas: function(val) {
-            val += '';
-            x = val.split('.');
-            x1 = x[0];
-            x2 = x.length > 1 ? '.' + x[1] : '';
-            var rgx = /(\d+)(\d{3})/;
-            while (rgx.test(x1)) {
-                x1 = x1.replace(rgx, '$1' + ',' + '$2');
-            }
-            return x1 + x2;
         }
     };
 
@@ -52,13 +41,13 @@ $(function() {
                     '<tr>'+
                         '<td>'+ v.code.substr(6) +'</td>'+
                         '<td>'+ v.name +'</td>'+
-                        '<td>'+ rpt.ajax.addCommas(v.type0) +'</td>'+
-                        '<td>'+ rpt.ajax.addCommas(v.type1) +'</td>'+
-                        '<td>'+ rpt.ajax.addCommas(v.type2) +'</td>'+
-                        '<td>'+ rpt.ajax.addCommas(v.type3) +'</td>'+
-                        '<td>'+ rpt.ajax.addCommas(v.type4) +'</td>'+
-                        '<td>'+ rpt.ajax.addCommas(v.type1+v.type3) +'</td>'+
-                        '<td>'+ rpt.ajax.addCommas(v.type0+v.type1+v.type2+v.type3+v.type4) +'</td>'+
+                        '<td>'+ app.add_commars_with_out_decimal(v.type0) +'</td>'+
+                        '<td>'+ app.add_commars_with_out_decimal(v.type1) +'</td>'+
+                        '<td>'+ app.add_commars_with_out_decimal(v.type2) +'</td>'+
+                        '<td>'+ app.add_commars_with_out_decimal(v.type3) +'</td>'+
+                        '<td>'+ app.add_commars_with_out_decimal(v.type4) +'</td>'+
+                        '<td>'+ app.add_commars_with_out_decimal(v.type1+v.type3) +'</td>'+
+                        '<td>'+ app.add_commars_with_out_decimal(v.type0+v.type1+v.type2+v.type3+v.type4) +'</td>'+
                     '</tr>'
                 );
             });
@@ -67,13 +56,13 @@ $(function() {
             $('#tblList > tbody').append(
                 '<tr>'+
                     '<td colspan="2"><b>รวมทั้งหมด</b></td>'+
-                    '<td><b>'+ rpt.ajax.addCommas(type0) +'</b></td>'+
-                    '<td><b>'+ rpt.ajax.addCommas(type1) +'</b></td>'+
-                    '<td><b>'+ rpt.ajax.addCommas(type2) +'</b></td>'+
-                    '<td><b>'+ rpt.ajax.addCommas(type3) +'</b></td>'+
-                    '<td><b>'+ rpt.ajax.addCommas(type4) +'</b></td>'+
-                    '<td><b>'+ rpt.ajax.addCommas(type13) +'</b></td>'+
-                    '<td><b>'+ rpt.ajax.addCommas(type_all) +'</b></td>'+
+                    '<td><b>'+ app.add_commars_with_out_decimal(type0) +'</b></td>'+
+                    '<td><b>'+ app.add_commars_with_out_decimal(type1) +'</b></td>'+
+                    '<td><b>'+ app.add_commars_with_out_decimal(type2) +'</b></td>'+
+                    '<td><b>'+ app.add_commars_with_out_decimal(type3) +'</b></td>'+
+                    '<td><b>'+ app.add_commars_with_out_decimal(type4) +'</b></td>'+
+                    '<td><b>'+ app.add_commars_with_out_decimal(type13) +'</b></td>'+
+                    '<td><b>'+ app.add_commars_with_out_decimal(type_all) +'</b></td>'+
                 '</tr>'
             );
         }else{
