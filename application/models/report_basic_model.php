@@ -38,6 +38,30 @@ class Report_basic_model extends CI_Model {
         return $rs;
     }
 
+    #นับจำนวนประชากรในเขตรับผิดชอบที่มี Typearea = 1, 3 และเป็นเพศ ชาย
+    public function get_person_count_in_area_with_male($id) {
+        $rs = $this->mongo_db
+            ->where_in('house_code', $id)
+            ->where_in('typearea.typearea', array('1', '3'))
+            ->where('typearea.owner_id', new MongoId($this->owner_id))
+            ->where('sex', '1')
+            ->count('person');
+
+        return $rs;
+    }
+
+    #นับจำนวนประชากรในเขตรับผิดชอบที่มี Typearea = 1, 3 และเป็นเพศ หญิง
+    public function get_person_count_in_area_with_female($id) {
+        $rs = $this->mongo_db
+            ->where_in('house_code', $id)
+            ->where_in('typearea.typearea', array('1', '3'))
+            ->where('typearea.owner_id', new MongoId($this->owner_id))
+            ->where('sex', '2')
+            ->count('person');
+
+        return $rs;
+    }
+
     #นับจำนวนประชากรนอกเขตรับผิดชอบที่มี Typearea = 0, 2, 4
     public function get_person_count_per_house_id_out_area($id) {
         $rs = $this->mongo_db
