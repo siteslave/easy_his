@@ -1,18 +1,17 @@
 /**
  * Created By Mr.Utit Sairat.
  * E-mail: soodteeruk@gmail.com
- * Date: 10/4/2556 15:50 น.
+ * Date: 11/4/2556 10:46 น.
  */
 $(function() {
     var rpt = {};
 
     rpt.ajax = {
         get_list: function(start, stop, cb) {
-            var url = 'reports/get_sub_list',
+            var url = 'person_per_village/get_list',
                 params = {
                     start: start,
-                    stop: stop,
-                    group: $('#tboId').val()
+                    stop: stop
                 };
 
             app.ajax(url, params, function(err, data){
@@ -20,30 +19,52 @@ $(function() {
             });
         },
         get_list_total: function(cb){
-            var url = 'reports/get_sub_list_total',
-                params = { group: $('#tboId').val() };
+            var url = 'person_per_village/get_list_total',
+                params = {};
 
             app.ajax(url, params, function(err, data){
                 err ? cb(err) : cb(null, data);
             });
+        },
+        addCommas: function(val) {
+            val += '';
+            x = val.split('.');
+            x1 = x[0];
+            x2 = x.length > 1 ? '.' + x[1] : '';
+            var rgx = /(\d+)(\d{3})/;
+            while (rgx.test(x1)) {
+                x1 = x1.replace(rgx, '$1' + ',' + '$2');
+            }
+            return x1 + x2;
         }
     };
 
     rpt.set_list = function(data){
         if(_.size(data.rows) > 0){
+            var house = 0, res1 = 0, res2 = 0;
             _.each(data.rows, function(v){
+                house += v.house;
+                res1 += v.res1;
+                res2 += v.res2;
                 $('#tblList > tbody').append(
                     '<tr>'+
+                        '<td>'+ v.code +'</td>'+
                         '<td>'+ v.name +'</td>'+
-                        '<td>'+
-                        '<div class="btn-group">'+
-                            '<a class="btn btn-success" data-url="'+ v.url +'" id="btnView" title="แสดงรายงาน"><i class="icon-list"></i></a>'+
-                            '<!-- <a class="btn btn-info" data-url="'+ v.url +'" id="btnPrint" title="พิมพ์รายงาน"><i class="icon-print"></i></a> -->'+
-                        '</div>'+
-                        '</td>'+
-                        '</tr>'
+                        '<td>'+ rpt.ajax.addCommas(v.house) +'</td>'+
+                        '<td>'+ rpt.ajax.addCommas(v.res1) +'</td>'+
+                        '<td>'+ rpt.ajax.addCommas(v.res2) +'</td>'+
+                    '</tr>'
                 );
             });
+            $('#tblList > tbody').append(
+                '<tr>'+
+                    '<td>&nbsp;</td>'+
+                    '<td><b>รวมทั้งหมด</b></td>'+
+                    '<td><b>'+ rpt.ajax.addCommas(house) +'</b></td>'+
+                    '<td><b>'+ rpt.ajax.addCommas(res1) +'</b></td>'+
+                    '<td><b>'+ rpt.ajax.addCommas(res2) +'</b></td>'+
+                    '</tr>'
+            );
         }else{
             $('#tblList > tbody').append(
                 '<tr><td colspan="3">ไม่พบรายการ</td></tr>'
@@ -52,6 +73,7 @@ $(function() {
     };
     rpt.get_list = function(){
         $('#main_paging').fadeIn('slow');
+
         rpt.ajax.get_list_total(function(err, data){
             if(err){
                 app.alert(err);
@@ -69,9 +91,7 @@ $(function() {
                             }else{
                                 rpt.set_list(data);
                             }
-
                         });
-
                     },
                     onFormat: function(type){
                         switch (type) {
@@ -131,16 +151,6 @@ $(function() {
             }
         });
     };
-
-    $(document).on('click', '#btnView', function() {
-        var url = $(this).attr('data-url');
-        location.href=site_url + url;
-    });
-
-    $(document).on('click', '#btnPrint', function() {
-        var url = $(this).attr('data-url');
-        location.href=site_url + url + '/print';
-    });
 
     rpt.get_list();
 });
