@@ -2,7 +2,7 @@
     <li><a href="<?php echo site_url(); ?>">หน้าหลัก</a> <span class="divider">/</span></li>
     <li class="active">ทะเบียนหญิงวัยเจริญพันธุ์</li>
 </ul>
-<form action="#" class="well form-inline">
+<form action="#" class="well well-small form-inline">
     <label for="sl_year">ปีงบประมาณ</label>
     <select id="sl_year" class="input-small">
         <option value="2013">2556</option>
@@ -17,7 +17,7 @@
         }
         ?>
     </select>
-    <button type="button" class="btn btn-info" id="btn_do_get_list"><i class="icon-search"></i> แสดงรายการ</button> |
+    <button type="button" class="btn btn-info" id="btn_do_get_list"><i class="icon-search"></i></button> |
     ค้นหา <input type="text" class="input-xlarge" id="txt_query" placeholder="พิมพ์ HN หรือ เลขบัตรประชาชน หรือ ชื่อ-สกุล" />
     <button type="button" id="btn_do_search" class="btn btn-info"><i class="icon-search"></i></button>
     <button type="button" id="btn_refresh" class="btn btn-success pull-right"><i class="icon-refresh"></i> แสดงทั้งหมด</button>
@@ -54,7 +54,7 @@
         <h3>บันทึกข้อมูลการสำรวจหญิงวัยเจริญพันธุ์</h3>
     </div>
     <div class="modal-body">
-        <form class="form-inline well">
+        <form class="form-inline well well-small">
             <label>ชื่อ - สกุล</label>
             <input type="text" class="input-medium" disabled="disabled" id="txt_fullname">
             <label>HN</label>

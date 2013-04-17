@@ -2,7 +2,7 @@
     <li><a href="<?php echo site_url(); ?>">หน้าหลัก</a> <span class="divider">/</span></li>
     <li class="active">ทะเบียนผู้ป่วยความดัน (HT)</li>
 </ul>
-<form action="#" class="well form-inline">
+<form action="#" class="well well-small form-inline">
     <label for="sl_village_id">หมู่บ้าน</label>
     <select class="input-xlarge" id="sl_village">
         <option value="00000000">---</option>
@@ -12,13 +12,7 @@
         }
         ?>
     </select>
-    บ้านเลขที่
-    <select id="sl_house" class="input-medium"></select>
-    <button type="button" class="btn btn-info" id="btn_do_get_list"><i class="icon-search icon-white"></i> แสดงรายการ</button>
-    <div class="btn-group pull-right">
-        <button type="button" id="btn_search" class="btn"><i class="icon-search"></i> ค้นหา</button>
-        <button type="button" id="btn_register" class="btn btn-success"><i class="icon-plus-sign icon-white"></i> ลงทะเบียน</button>
-    </div>
+
 </form>
 
 <table class="table table-striped table-hover" id="tbl_list">
