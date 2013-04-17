@@ -94,6 +94,28 @@
                                 </li>
                             ';
                         }
+
+                        $rs_cnt = get_main_report_menu_count();
+                        if($rs_cnt > 6) {
+                            echo '<li class="dropdown">
+                                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                        <i class="icon-list"></i> เมนูเพิ่มเติม<b class="caret"></b>
+                                    </a>
+                                    <ul class="dropdown-menu">';
+
+                            $rs_other = get_other_mainmenu();
+                            foreach($rs_other as $r) {
+                                echo '
+                                <li>
+                                    <a href="'.site_url('reports/menu/'.$r['_id']).'">
+                                        <i class="'.$r['icon'].'"></i>
+                                        '.$r['name'].'
+                                    </a>
+                                </li>
+                                ';
+                            }
+                            echo '</ul></li>';
+                        }
                     ?>
                 </ul>
                 <div class="btn-group pull-right">
