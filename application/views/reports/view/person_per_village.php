@@ -8,13 +8,13 @@
 <ul class="breadcrumb">
     <li><a href="<?php echo site_url(); ?>">หน้าหลัก</a> <span class="divider">/</span></li>
     <li><a href="<?php echo site_url('reports'); ?>">รายงาน</a> <span class="divider">/</span></li>
-    <li class="active">แสดงรายงาน</li>
+    <li class="active">จำนวนประชากร แยกรายหมู่บ้าน</li>
 </ul>
 
 <table class="table table-striped table-hover" id="tblList">
     <thead>
     <tr>
-        <th>รหัสหมู่บ้าน</th>
+        <th>หมู่ที่</th>
         <th>ชื่อหมู่บ้าน</th>
         <th>จำนวนหลังคาเรือน</th>
         <th>ประชากรในเขต</th>

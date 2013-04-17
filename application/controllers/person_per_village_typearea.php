@@ -2,9 +2,9 @@
 /**
  * Created By Mr.Utit Sairat.
  * E-mail: soodteeruk@gmail.com
- * Date: 11/4/2556 10:49 น.
+ * Date: 17/4/2556 10:18 น.
  */
-class Person_per_village extends CI_Controller {
+class Person_per_village_typearea extends CI_Controller {
     protected $provider_id;
     protected $user_id;
     protected $owner_id;
@@ -45,19 +45,21 @@ class Person_per_village extends CI_Controller {
             foreach($rs as $r)
             {
                 $obj = new stdClass();
-                $obj->id = get_first_object($r['_id']);
-                $obj->code = $r['village_code'];
-                $obj->name = $r['village_name'];
-
-                $house = $this->rb->get_houses_count($obj->id);
-                $obj->house = $house;
+                $obj->id    = get_first_object($r['_id']);
+                $obj->code  = $r['village_code'];
+                $obj->name  = $r['village_name'];
 
                 $house_id = $this->rb->get_house_id_per_village($obj->id);
-                $person_in_area = $this->rb->get_person_count_per_house_id_in_area($house_id);
-                $obj->res1 = $person_in_area;
-
-                $person_out_area = $this->rb->get_person_count_per_house_id_out_area($house_id);
-                $obj->res2 = $person_out_area;
+                $type0 = $this->rb->get_person_count_with_typearea_0($house_id);
+                $type1 = $this->rb->get_person_count_with_typearea_1($house_id);
+                $type2 = $this->rb->get_person_count_with_typearea_2($house_id);
+                $type3 = $this->rb->get_person_count_with_typearea_3($house_id);
+                $type4 = $this->rb->get_person_count_with_typearea_4($house_id);
+                $obj->type0 = $type0;
+                $obj->type1 = $type1;
+                $obj->type2 = $type2;
+                $obj->type3 = $type3;
+                $obj->type4 = $type4;
 
                 $arr_result[] = $obj;
             }
