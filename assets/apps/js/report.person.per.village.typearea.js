@@ -1,14 +1,14 @@
 /**
  * Created By Mr.Utit Sairat.
  * E-mail: soodteeruk@gmail.com
- * Date: 11/4/2556 10:46 น.
+ * Date: 17/4/2556 10:09 น.
  */
 $(function() {
     var rpt = {};
 
     rpt.ajax = {
         get_list: function(start, stop, cb) {
-            var url = 'person_per_village/get_list',
+            var url = 'person_per_village_typearea/get_list',
                 params = {
                     start: start,
                     stop: stop
@@ -19,7 +19,7 @@ $(function() {
             });
         },
         get_list_total: function(cb){
-            var url = 'person_per_village/get_list_total',
+            var url = 'person_per_village_typearea/get_list_total',
                 params = {};
 
             app.ajax(url, params, function(err, data){
@@ -41,29 +41,40 @@ $(function() {
 
     rpt.set_list = function(data){
         if(_.size(data.rows) > 0){
-            var house = 0, res1 = 0, res2 = 0;
+            var type0 = 0, type1 = 0, type2 = 0, type3 = 0, type4 = 0, type13 = 0, type_all = 0;
             _.each(data.rows, function(v){
-                house += v.house;
-                res1 += v.res1;
-                res2 += v.res2;
+                type0 += v.type0;
+                type1 += v.type1;
+                type2 += v.type2;
+                type3 += v.type3;
+                type4 += v.type4;
                 $('#tblList > tbody').append(
                     '<tr>'+
                         '<td>'+ v.code.substr(6) +'</td>'+
                         '<td>'+ v.name +'</td>'+
-                        '<td>'+ rpt.ajax.addCommas(v.house) +'</td>'+
-                        '<td>'+ rpt.ajax.addCommas(v.res1) +'</td>'+
-                        '<td>'+ rpt.ajax.addCommas(v.res2) +'</td>'+
+                        '<td>'+ rpt.ajax.addCommas(v.type0) +'</td>'+
+                        '<td>'+ rpt.ajax.addCommas(v.type1) +'</td>'+
+                        '<td>'+ rpt.ajax.addCommas(v.type2) +'</td>'+
+                        '<td>'+ rpt.ajax.addCommas(v.type3) +'</td>'+
+                        '<td>'+ rpt.ajax.addCommas(v.type4) +'</td>'+
+                        '<td>'+ rpt.ajax.addCommas(v.type1+v.type3) +'</td>'+
+                        '<td>'+ rpt.ajax.addCommas(v.type0+v.type1+v.type2+v.type3+v.type4) +'</td>'+
                     '</tr>'
                 );
             });
+            type13 = (type1 + type3);
+            type_all = type0 + type2 + type4 + type13;
             $('#tblList > tbody').append(
                 '<tr>'+
-                    '<td>&nbsp;</td>'+
-                    '<td><b>รวมทั้งหมด</b></td>'+
-                    '<td><b>'+ rpt.ajax.addCommas(house) +'</b></td>'+
-                    '<td><b>'+ rpt.ajax.addCommas(res1) +'</b></td>'+
-                    '<td><b>'+ rpt.ajax.addCommas(res2) +'</b></td>'+
-                    '</tr>'
+                    '<td colspan="2"><b>รวมทั้งหมด</b></td>'+
+                    '<td><b>'+ rpt.ajax.addCommas(type0) +'</b></td>'+
+                    '<td><b>'+ rpt.ajax.addCommas(type1) +'</b></td>'+
+                    '<td><b>'+ rpt.ajax.addCommas(type2) +'</b></td>'+
+                    '<td><b>'+ rpt.ajax.addCommas(type3) +'</b></td>'+
+                    '<td><b>'+ rpt.ajax.addCommas(type4) +'</b></td>'+
+                    '<td><b>'+ rpt.ajax.addCommas(type13) +'</b></td>'+
+                    '<td><b>'+ rpt.ajax.addCommas(type_all) +'</b></td>'+
+                '</tr>'
             );
         }else{
             $('#tblList > tbody').append(

@@ -1,0 +1,106 @@
+<?php
+/**
+ * Created By Mr.Utit Sairat.
+ * E-mail: soodteeruk@gmail.com
+ * Date: 17/4/2556 10:24 น.
+ */
+class Report_basic_model extends CI_Model {
+    #นับจำนวนหลังคาเรือน แยกรายหมู่บ้าน
+    public function get_houses_count($id) {
+        $rs = $this->mongo_db
+            ->where('village_id', new MongoId($id))
+            ->count('houses');
+
+        return $rs;
+    }
+
+    #ดึก _id ของบ้านนั้นๆ แยกรายหมู่บ้าน
+    public function get_house_id_per_village($id) {
+        $rs = $this->mongo_db
+            ->where('village_id', new MongoId($id))
+            ->get('houses');
+
+        $arr_result = array();
+        foreach($rs as $r) {
+            $arr_result[] = $r['_id'];
+        }
+        return $arr_result;
+    }
+
+    #นับจำนวนประชากรในเขตรับผิดชอบที่มี Typearea = 1, 3
+    public function get_person_count_per_house_id_in_area($id) {
+        $rs = $this->mongo_db
+            ->where_in('house_code', $id)
+            ->where_in('typearea.typearea', array('1', '3'))
+            ->where('typearea.owner_id', new MongoId($this->owner_id))
+            ->count('person');
+
+        return $rs;
+    }
+
+    #นับจำนวนประชากรนอกเขตรับผิดชอบที่มี Typearea = 0, 2, 4
+    public function get_person_count_per_house_id_out_area($id) {
+        $rs = $this->mongo_db
+            ->where_in('house_code', $id)
+            ->where_in('typearea.typearea', array('0', '2', '4'))
+            ->where('typearea.owner_id', new MongoId($this->owner_id))
+            ->count('person');
+
+        return $rs;
+    }
+
+    #นับจำนวนประชากรที่มี Typearea = 0
+    public function get_person_count_with_typearea_0($id) {
+        $rs = $this->mongo_db
+            ->where_in('house_code', $id)
+            ->where('typearea.typearea', '0')
+            ->where('typearea.owner_id', new MongoId($this->owner_id))
+            ->count('person');
+
+        return $rs;
+    }
+
+    #นับจำนวนประชากรที่มี Typearea = 1
+    public function get_person_count_with_typearea_1($id) {
+        $rs = $this->mongo_db
+            ->where_in('house_code', $id)
+            ->where('typearea.typearea', '1')
+            ->where('typearea.owner_id', new MongoId($this->owner_id))
+            ->count('person');
+
+        return $rs;
+    }
+
+    #นับจำนวนประชากรที่มี Typearea = 2
+    public function get_person_count_with_typearea_2($id) {
+        $rs = $this->mongo_db
+            ->where_in('house_code', $id)
+            ->where('typearea.typearea', '2')
+            ->where('typearea.owner_id', new MongoId($this->owner_id))
+            ->count('person');
+
+        return $rs;
+    }
+
+    #นับจำนวนประชากรที่มี Typearea = 3
+    public function get_person_count_with_typearea_3($id) {
+        $rs = $this->mongo_db
+            ->where_in('house_code', $id)
+            ->where('typearea.typearea', '3')
+            ->where('typearea.owner_id', new MongoId($this->owner_id))
+            ->count('person');
+
+        return $rs;
+    }
+
+    #นับจำนวนประชากรที่มี Typearea = 4
+    public function get_person_count_with_typearea_4($id) {
+        $rs = $this->mongo_db
+            ->where_in('house_code', $id)
+            ->where('typearea.typearea', '4')
+            ->where('typearea.owner_id', new MongoId($this->owner_id))
+            ->count('person');
+
+        return $rs;
+    }
+}
