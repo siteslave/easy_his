@@ -106,6 +106,22 @@ class Basic_model extends CI_Model
 
         return $arr_result;
     }
+
+    public function get_diabetes_type_list()
+    {
+        $result = $this->mongo_db->order_by(array('name' => 1))->get('ref_diabetes_types');
+
+        $arr_result = array();
+        foreach($result as $r){
+            $obj = new stdClass();
+            $obj->id = get_first_object($r['_id']);
+            $obj->name = $r['name'];
+
+            $arr_result[] = $obj;
+        }
+
+        return $arr_result;
+    }
     public function get_labor_type()
     {
         $result = $this->mongo_db->order_by(array('name' => 1))->get('ref_labor_types');
@@ -992,6 +1008,27 @@ class Basic_model extends CI_Model
         return $result;
     }
 
+
+    public function get_providers() {
+        $rs = $this->mongo_db
+            ->where(array(
+                'owner_id' => new MongoId($this->owner_id),
+                'active' => 'Y'
+            ))
+            ->get('providers');
+
+        $arr_result = array();
+        foreach($rs as $r)
+        {
+            $obj = new stdClass();
+            $obj->name = $r['first_name'] . ' ' . $r['last_name'];
+            $obj->id = get_first_object($r['_id']);
+            $arr_result[] = $obj;
+        }
+
+        return $arr_result;
+    }
+
     public function get_house_detail($id){
         $rs = $this->mongo_db
             ->where('_id', new MongoId($id))
@@ -1181,6 +1218,12 @@ class Basic_model extends CI_Model
     public function get_fp_type_name($code)
     {
         $result = $this->mongo_db->where(array('code' => $code))->get('ref_fp_types');
+
+        return count($result) > 0 ? $result[0]['name'] : '-';
+    }
+    public function get_diabetes_type_name($id)
+    {
+        $result = $this->mongo_db->where(array('_id' => new MongoId($id)))->get('ref_diabetes_types');
 
         return count($result) > 0 ? $result[0]['name'] : '-';
     }

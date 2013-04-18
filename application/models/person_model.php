@@ -711,11 +711,15 @@ class Person_model extends CI_Model
      * @param   string  $owner_id
      * @return bool
      */
-    public function check_owner($hn, $owner_id)
+    public function check_owner($hn)
     {
-        $this->mongo_db->add_index('person', array('owner_id' => -1));
+        $this->mongo_db->add_index('person', array('hn' => -1));
+
         $rs = $this->mongo_db
-            ->where(array('owner_id' => new MongoId($owner_id), 'hn' => (string) $hn))
+            ->where(array(
+                'hn' => (string)$hn,
+                'typearea.owner_id' => new MongoId($this->owner_id)))
+            ->where_in('typearea.typearea', array('1', '3'))
             ->count('person');
         return $rs > 0 ? TRUE : FALSE;
     }
@@ -726,6 +730,7 @@ class Person_model extends CI_Model
             'hn' => (string)$hn,
             'typearea.owner_id' => new MongoId($this->owner_id)
         ))
+            ->limit(1)
             ->get('person');
 
         return $rs;

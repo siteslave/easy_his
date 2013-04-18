@@ -333,6 +333,8 @@ app.set_runtime = function()
     $('input[data-type="number"]').numeric();
     $('input[disabled]').css('background-color', 'white');
     $('textarea[disabled]').css('background-color', 'white');
+
+    $('[rel="tooltip"]').tooltip();
 };
 
 head.ready(function(){
