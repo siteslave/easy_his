@@ -95,7 +95,7 @@ class Diabetes_model extends CI_Model
                 'clinic_code'   => $this->clinic_code,
                 'owner_id'      => new MongoId($this->owner_id),
                 'user_id'       => new MongoId($this->user_id),
-                'reg_date'      => to_string_date($data['date_regis']),
+                'reg_date'      => to_string_date($data['reg_date']),
                 'reg_year'      => $data['year_regis'],
                 'reg_serial'    => $data['reg_serial'],
                 'hosp_serial'   => $data['hosp_serial'],
@@ -119,7 +119,7 @@ class Diabetes_model extends CI_Model
             ->where(array('hn' => (string) $data['hn'], 'registers.clinic_code' => $this->clinic_code))
             ->set(array(
                 'registers.$.user_id'       => new MongoId($this->user_id),
-                'registers.$.reg_date'      => to_string_date($data['date_regis']),
+                'registers.$.reg_date'      => to_string_date($data['reg_date']),
                 'registers.$.reg_year'      => $data['year_regis'],
                 'registers.$.hosp_serial'   => $data['hosp_serial'],
                 'registers.$.diag_type'     => new MongoId($data['diag_type']),
@@ -136,9 +136,9 @@ class Diabetes_model extends CI_Model
         return $rs;
     }
     
-    public function remove_register($person_id) {
+    public function remove($hn) {
         $rs = $this->mongo_db
-            ->where('_id', new MongoId($person_id))
+            ->where('hn', (string) $hn)
             ->pull('registers', array('clinic_code' => $this->clinic_code))
             ->update('person');
             

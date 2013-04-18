@@ -13,7 +13,7 @@
         ?>
     </select>
     <button type="button" class="btn btn-info" id="btn_filter_by_village"><i class="icon-search"></i></button> |
-    ค้นหา <input type="text" class="input-xlarge" id="txt_query" placeholder="พิมพ์ HN หรือ เลขบัตรประชาชน หรือ ชื่อ-สกุล" />
+    ค้นหา <input type="text" class="input-xlarge" id="txt_query" placeholder="พิมพ์ HN หรือ เลขบัตรประชาชน" />
     <button type="button" id="btn_search" class="btn btn-info"><i class="icon-search"></i></button>
     <div class="btn-group pull-right">
         <button type="button" id="btn_refresh" class="btn"><i class="icon-refresh"></i> ทั้งหมด</button>
@@ -115,8 +115,8 @@
                         <label class="control-label" for="slSex">เพศ</label>
                         <div class="controls">
                             <select id="slSex" class="input-small" disabled style="background-color: white">
-                                <option value="ชาย">ชาย</option>
-                                <option value="หญิง">หญิง</option>
+                                <option value="1">ชาย</option>
+                                <option value="2">หญิง</option>
                             </select>
                         </div>
                     </div>
@@ -241,8 +241,8 @@
         </form>
     </div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-success" id="btn_dm_do_register"><i class="icon-plus-sign icon-white"></i><span id="lblRegis" title="add"> ลงทะเบียน</span></button>
-        <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="icon-off icon-white"></i> ปิดหน้าต่าง</button>
+        <button type="button" class="btn btn-success" id="btn_dm_do_register"><i class="icon-save"></i><span id="lblRegis" title="add"> บันทึกข้อมูล</span></button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="icon-off"></i> ปิดหน้าต่าง</button>
     </div>
 </div>
 

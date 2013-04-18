@@ -200,47 +200,27 @@ class Diabetes extends CI_Controller
         else
         {
 
-            $type_area_check = false;
-            $chk_dm_regis = "0";
-            $reg_serial = "";
-            $hosp_serial = "";
-            $year = "";
-            $reg_date = date('Ymd');
-            $diag_type = "";
-            $doctor = "";
-            $pre_register = false;
-            $pregnancy = false;
-            $hypertension = false;
-            $insulin = false;
-            $newcase = false;
-
-            $rs = $this->person->search_person_by_hn_with_owner($hn);
+            $rs = $this->person->detail($hn);
 
             if($rs)
             {
-
                 $obj = new stdClass();
-                $obj->id            = get_first_object($rs[0]['_id']);
-                $obj->hn            = $rs[0]['hn'];
-                $obj->cid           = $rs[0]['cid'];
-                $obj->first_name    = $rs[0]['first_name'];
-                $obj->last_name     = $rs[0]['last_name'];
-                $obj->birthdate     = $rs[0]['birthdate'];
-                $obj->sex           = $rs[0]['sex'] == '1' ? 'ชาย' : 'หญิง';
-                $obj->age           = count_age($rs[0]['birthdate']);
+                $obj->id            = get_first_object($rs['_id']);
+                $obj->hn            = $rs['hn'];
+                $obj->cid           = $rs['cid'];
+                $obj->first_name    = $rs['first_name'];
+                $obj->last_name     = $rs['last_name'];
+                $obj->birthdate     = $rs['birthdate'];
+                $obj->sex           = $rs['sex'];
+                $obj->age           = count_age($rs['birthdate']);
 
-                foreach($rs[0]['typearea'] as $typearea) {
-                    if(($typearea['typearea']== "1" || $typearea['typearea'] == "3") && $typearea['owner_id'] == $this->owner_id)
-                        $type_area_check = true;
-                }
-
-                if(isset($rs[0]['registers'])) {
-                    foreach($rs[0]['registers'] as $reg) {
+                if(isset($rs['registers'])) {
+                    foreach($rs['registers'] as $reg) {
                         if($reg['clinic_code'] == '01') {
                             $reg_serial     = $reg['reg_serial'];
                             $hosp_serial    = $reg['hosp_serial'];
                             $year           = $reg['reg_year'];
-                            $reg_date       = $reg['reg_date'];
+                            $reg_date       = to_js_date($reg['reg_date']);
                             $diag_type      = get_first_object($reg['diag_type']);
                             $doctor         = get_first_object($reg['doctor']);
                             $pre_register   = $reg['pre_regis'];
@@ -250,27 +230,28 @@ class Diabetes extends CI_Controller
                             $newcase        = $reg['newcase'];
                         }
                     }
-                }
 
-                $obj->chk_regis     = $chk_dm_regis;
-                $obj->reg_serial    = $reg_serial;
-                $obj->hosp_serial   = $hosp_serial;
-                $obj->year          = $year;
-                $obj->reg_date      = to_js_date($reg_date);
-                $obj->diag_type     = $diag_type;
-                $obj->doctor        = $doctor;
-                $obj->pre_register  = $pre_register;
-                $obj->pregnancy     = $pregnancy;
-                $obj->hypertension  = $hypertension;
-                $obj->insulin       = $insulin;
-                $obj->newcase       = $newcase;
-                
-                if($type_area_check) {
+                    $obj->reg_serial    = $reg_serial;
+                    $obj->hosp_serial   = $hosp_serial;
+                    $obj->year          = $year;
+                    $obj->reg_date      = to_js_date($reg_date);
+                    $obj->diag_type     = $diag_type;
+                    $obj->doctor        = $doctor;
+                    $obj->pre_register  = $pre_register;
+                    $obj->pregnancy     = $pregnancy;
+                    $obj->hypertension  = $hypertension;
+                    $obj->insulin       = $insulin;
+                    $obj->newcase       = $newcase;
+
                     $rows = json_encode($obj);
                     $json = '{"success": true, "rows": '.$rows.'}';
-                } else {
-                    $json = '{ "success": false, "msg": "ไม่ใช่บุคคลในเขตรับผิดชอบ" }';
                 }
+                else
+                {
+                    $json = '{ "success": false, "msg": "ไม่พบรายการ00" }';
+                }
+
+
             }
             else
             {
@@ -312,6 +293,7 @@ class Diabetes extends CI_Controller
 
                 if($rs)
                 {
+                    //$this->person->do_register_clinic($data['hn'], $this->clinic_code);
                     $json = '{"success": true}';
                 }
                 else
@@ -336,18 +318,18 @@ class Diabetes extends CI_Controller
 
     private function _check_registration($hn)
     {
-        $rs = $this->person->do_register_clinic($hn, $this->clinic_code);
+        $rs = $this->person->check_clinic_exist($hn, $this->clinic_code);
 
         return $rs ? TRUE : FALSE;
     }
 
-    public function remove_dm_register() {
-        $person_id = $this->input->post('person_id');
+    public function remove() {
+        $hn = $this->input->post('hn');
         
-        if(empty($person_id)) {
-            $json = '{ "success": false, "msg": "No person id found." }';
+        if(empty($hn)) {
+            $json = '{ "success": false, "msg": "No HN found." }';
         } else {
-            $rs = $this->dm->remove_dm_register($person_id);
+            $rs = $this->dm->remove($hn);
             if($rs) {
                 $json = '{ "success": true }';
             } else {
@@ -374,31 +356,108 @@ class Diabetes extends CI_Controller
         }
     }
 
-    public function search_person()
-    {
+    public function search_person_ajax(){
         $query = $this->input->post('query');
-        if(empty($query))
+
+        if(!empty($query))
         {
-            $json = '{"success": false, "msg": "กรุณาระบุคำค้นหา เช่น เลขบัตรประชาชน หรือ HN"}';
-        }
-        else
-        {
-            if(strlen($query) > 10)
+
+            if(is_numeric($query))
             {
-                $rs = $this->person->search_person_by_cid_with_owner($query);
+                //search by code
+
+                if(strlen($query) == 13)
+                {
+                    $rs = $this->person->search_person_ajax_by_cid($query);
+                }
+                else
+                {
+                    $rs = $this->person->search_person_ajax_by_hn($query);
+                }
             }
             else
             {
-                $rs = $this->person->search_person_by_hn_with_owner($query);
+                //search by name
+                $fullname = explode(' ', $query);
+                $first_name = $fullname[0];
+                $last_name = isset($fullname[1]) ? $fullname[1] : ' ';
+
+                $rs = $this->person->search_person_ajax_by_name($first_name, $last_name);
             }
 
             if($rs)
             {
+                $arr_result = array();
+                foreach ($rs as $r)
+                {
+                    $obj = new stdClass();
+                    $obj->name = $r['hn'] . '#' . $r['first_name'] . ' ' . $r['last_name'];
+
+                    $arr_result[] = $obj;
+                }
+                $rows = json_encode($arr_result);
+                $json = '{"success": true, "rows": '.$rows.'}';
 
             }
+            else
+            {
+                $json = '{"success": false, "msg": "No data."}';
+            }
         }
+        else
+        {
+            $json = '{"success": false, "msg": "Query empty."}';
+        }
+
+        render_json($json);
     }
 
+    public function search_person()
+    {
+        $hn = $this->input->post('hn');
+        if(empty($hn))
+        {
+            $json = '{"success": false, "msg": "กรุณาระบุ HN"}';
+        }
+        else
+        {
+            //check owner
+            $is_owner = $this->person->check_owner($hn);
+            if(!$is_owner)
+            {
+                $json = '{"success": false, "msg": "บุคคลนี้ไม่ใช่กลุ่มเป้าหมายของคุณ [Typearea ไม่ใช่ 1 และ 3]"}';
+            }
+            else
+            {
+                //check registered
+                $duplicated = $this->_check_registration($hn);
+                if($duplicated)
+                {
+                    $json = '{"success": false, "msg": "บุคคลนี้ได้ถูกลงทะเบียนไว้เรียบร้อยแล้ว ไม่สามารถลงทะเบียนใหม่ได้"}';
+                }
+                else
+                {
+                    $person = $this->person->get_person_detail_with_hn($hn);
+
+                    $obj                = new stdClass();
+                    $obj->hn            = $hn;
+                    $obj->cid           = $person['cid'];
+                    $obj->first_name    = $person['first_name'];
+                    $obj->last_name     = $person['last_name'];
+                    $obj->sex           = $person['sex'];
+                    $obj->birthdate     = $person['birthdate'];
+                    $obj->age           = count_age($person['birthdate']);
+
+                    $rows = json_encode($obj);
+
+                    $json = '{"success": true, "rows": '.$rows.'}';
+                }
+            }
+
+        }
+
+        render_json($json);
+    }
 }
 
 //End of file

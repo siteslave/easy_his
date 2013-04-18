@@ -86,27 +86,25 @@ head.ready(function(){
             });
         },
 
-        search_person: function(query, cb){
+        search_person: function(hn, cb){
             var url = 'diabetes/search_person',
                 params = {
-                    query: query
+                    hn: hn
                 };
 
             app.ajax(url, params, function(err, data){
                 err ? cb(err) : cb(null, data);
             });
-        }
-    };
-    
-    dm.update.ajax = {
-        remove_ncd_register: function(person_id, cb) {
-            var url = 'diabetes/remove_dm_register',
+        },
+
+        remove: function(hn, cb){
+            var url = 'diabetes/remove',
                 params = {
-                    person_id: person_id
+                    hn: hn
                 };
-            
-            app.ajax(url, params, function(err, data) {
-                return err ? cb(err) : cb(null, data);
+
+            app.ajax(url, params, function(err, data){
+                err ? cb(err) : cb(null, data);
             });
         }
     };
@@ -285,6 +283,15 @@ head.ready(function(){
 
     };
 
+    dm.set_person_detail = function(v)
+    {
+        $('#tboHN').val(v.hn);
+        $('#tboCid').val(v.cid);
+        $('#tboFname').val(v.first_name);
+        $('#tboLname').val(v.last_name);
+        $('#tboAge').val(v.age);
+        $('#slSex').val(v.sex);
+    };
     //search person
     $('#btn_search_person').click(function(){
         var query = $('#txt_search_person').val();
@@ -304,13 +311,9 @@ head.ready(function(){
                 {
                     app.alert(err);
                 }
-                else if(!data)
-                {
-                    app.alert('ไม่พบรายการ');
-                }
                 else
                 {
-                   dm.set_search_person_result(data);
+                   dm.set_person_detail(data.rows);
                 }
             });
         }
@@ -347,7 +350,7 @@ head.ready(function(){
                             if(err){
                                 app.alert(err);
                                 $('#tbl_list > tbody').append(
-                                    '<tr><td colspan="8">ไม่พบรายการ</td></tr>'
+                                    '<tr><td colspan="9">ไม่พบรายการ</td></tr>'
                                 );
                             }else{
                                 dm.set_list(data);
@@ -427,7 +430,7 @@ head.ready(function(){
         $('#tboRegCenterNumber').val('');
         $('#tboRegHosNumber').val('');
         $('#tboYear').val('');
-        $('#dtpRegisDate').val(app.get_current_date());
+        $('#dtpRegisDate').val();
         $('#cboDiseaseType').val('');
         $('#cboDoctor').val('');
         $('#ch_pre_register').attr('checked', false);
@@ -435,20 +438,24 @@ head.ready(function(){
         $('#ch_hypertension').attr('checked', false);
         $('#ch_insulin').attr('checked', false);
         $('#ch_newcase').attr('checked', false);
+        $('#txt_search_person').val('');
+        $('#txt_search_person').removeAttr('disabled');
+        $('#btn_search_person').removeAttr('disabled');
     };
 
     $(document).on('click', 'a[data-name="remove"]', function() {
-        var person_id = $(this).attr('data-id');
+        var hn = $(this).data('hn');
         //Confirm remove DM data
-        app.confirm('คุณต้องการจะลบรายการนี้หรือไม่?', function(cb) {
+        var obj = $(this).parent().parent().parent();
+        app.confirm('คุณต้องการจะลบรายการนี้หรือไม่ [hn = '+ hn +']?', function(cb) {
             if(cb) {
-                dm.update.ajax.remove_ncd_register(person_id, function(err) {
+                dm.ajax.remove(hn, function(err) {
                     if(err) {
                         app.alert(err);
                     } else {
                         app.alert('ลบรายการเรียบร้อยแล้ว');
-                        
-                        dm.get_list();
+                        obj.fadeOut('slow');
+                        //dm.get_list();
                     }
                 });
             }
@@ -460,7 +467,7 @@ head.ready(function(){
         items.hn            = $('#tboHN').val();
         items.hid_regis     = $('#tboRegHosNumber').val();
         items.year_regis    = $('#tboYear').val();
-        items.date_regis    = $('#dtpRegisDate').val();
+        items.reg_date    = $('#dtpRegisDate').val();
         items.diag_type     = $('#cboDiseaseType').val();
         items.doctor        = $('#cboDoctor').val();
         items.pre_register  = $('#ch_pre_register').is(":checked") ? '1' : '0';
@@ -478,6 +485,11 @@ head.ready(function(){
         {
             app.alert("กรุณาระบุปีที่เริ่มเป็นด้วย !");
             $('#tboYear').focus();
+        }
+        else if(!items.reg_date)
+        {
+            app.alert("กรุณาระบุวันที่ขึ้นทะเบียน");
+            $('#dtpRegisDate').focus();
         }
         else if(!items.diag_type)
         {
@@ -506,11 +518,16 @@ head.ready(function(){
     });
     
     $(document).on('click', 'a[data-name="edit"]', function() {
-        dm.modal.show_register();
-        $('div[data-name="blog_search"]').hide();
-        $('#lblRegis').html('แก้ไขรายการ');
+
+        //do search
+        dm.clear_register_form();
+
+        $('#txt_search_person').attr('disabled', 'disabled').css('background-color', 'white');
+        $('#btn_search_person').attr('disabled', 'disabled');
         $('#txt_isupdate').val('1');
-        
+
+        dm.modal.show_register();
+
         var hn = $(this).data('hn');
 
         if(!hn)
@@ -519,9 +536,6 @@ head.ready(function(){
         }
         else
         {
-            //do search
-            dm.clear_register_form();
-
             dm.ajax.get_detail(hn, function(err, data){
 
                 if(err)
@@ -543,6 +557,66 @@ head.ready(function(){
 
     $('#btn_refresh').on('click', function(){
         dm.get_list();
+    });
+
+    $('#txt_search_person').typeahead({
+        ajax: {
+            url: site_url + 'diabetes/search_person_ajax',
+            timeout: 500,
+            displayField: 'name',
+            triggerLength: 3,
+            preDispatch: function(query){
+                return {
+                    query: query,
+                    csrf_token: csrf_token
+                }
+            },
+
+            preProcess: function(data){
+                if(data.success){
+                    return data.rows;
+                }else{
+                    return false;
+                }
+            }
+        },
+        updater: function(data){
+            var d = data.split('#');
+            var code = d[0],
+                name = d[1];
+
+            return code;
+        }
+    });
+
+    $('#txt_query').typeahead({
+        ajax: {
+            url: site_url + 'diabetes/search_person_ajax',
+            timeout: 500,
+            displayField: 'name',
+            triggerLength: 3,
+            preDispatch: function(query){
+                return {
+                    query: query,
+                    csrf_token: csrf_token
+                }
+            },
+
+            preProcess: function(data){
+                if(data.success){
+                    return data.rows;
+                }else{
+                    return false;
+                }
+            }
+        },
+        updater: function(data){
+            var d = data.split('#');
+            var code = d[0],
+                name = d[1];
+
+            return code;
+        }
     });
 
     dm.get_list();
