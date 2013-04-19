@@ -7,12 +7,12 @@
  */
 head.ready(function(){
     // DM name space with object.
-    var dm = {};
-    dm.update = {};
+    var ht = {};
+    ht.update = {};
 
     //------------------------------------------------------------------------------------------------------------------
     //ajax object
-    dm.ajax = {
+    ht.ajax = {
         /**
          * Get person list
          *
@@ -21,7 +21,7 @@ head.ready(function(){
          * @param   cb
          */
         get_list: function(start, stop, cb){
-            var url = 'diabetes/get_list',
+            var url = 'hypertension/get_list',
                 params = {
                     start: start,
                     stop: stop
@@ -32,7 +32,7 @@ head.ready(function(){
             });
         },
         get_list_total: function(cb){
-            var url = 'diabetes/get_list_total',
+            var url = 'hypertension/get_list_total',
                 params = {};
 
             app.ajax(url, params, function(err, data){
@@ -41,7 +41,7 @@ head.ready(function(){
         },
 
         get_list_by_village: function(village_id, start, stop, cb){
-            var url = 'diabetes/get_list_by_villages',
+            var url = 'hypertension/get_list_by_villages',
                 params = {
                     village_id: village_id,
                     start: start,
@@ -54,7 +54,7 @@ head.ready(function(){
         },
 
         get_list_by_village_total: function(village_id, cb){
-            var url = 'diabetes/get_list_by_village_total',
+            var url = 'hypertension/get_list_by_village_total',
                 params = {
                     village_id: village_id
                 };
@@ -65,7 +65,7 @@ head.ready(function(){
         },
 
         get_detail: function(hn, cb){
-            var url = 'diabetes/get_detail',
+            var url = 'hypertension/get_detail',
                 params = {
                     hn: hn
                 };
@@ -76,7 +76,7 @@ head.ready(function(){
         },
 
         do_register: function(items, cb){
-            var url = 'diabetes/do_register',
+            var url = 'hypertension/do_register',
                 params = {
                     data: items
                 }
@@ -87,7 +87,7 @@ head.ready(function(){
         },
 
         search_person: function(hn, cb){
-            var url = 'diabetes/search_person',
+            var url = 'hypertension/search_person',
                 params = {
                     hn: hn
                 };
@@ -98,7 +98,7 @@ head.ready(function(){
         },
 
         remove: function(hn, cb){
-            var url = 'diabetes/remove',
+            var url = 'hypertension/remove',
                 params = {
                     hn: hn
                 };
@@ -109,7 +109,7 @@ head.ready(function(){
         },
 
         search: function(hn, cb){
-            var url = 'diabetes/search',
+            var url = 'hypertension/search',
                 params = {
                     hn: hn
                 };
@@ -120,7 +120,7 @@ head.ready(function(){
         }
     };
 
-    dm.modal = {
+    ht.modal = {
         show_register: function()
         {
             $('#mdlNewRegister').modal({
@@ -135,7 +135,7 @@ head.ready(function(){
         hide_register: function()
         {
             $('#tboSearch').val('');
-            dm.clear_register_form();
+            ht.clear_register_form();
             $('#mdlNewRegister').modal('hide');
         }
     };
@@ -146,7 +146,7 @@ head.ready(function(){
      * @param data
      */
 
-    dm.set_list = function(data){
+    ht.set_list = function(data){
         if(_.size(data.rows) > 0){
             _.each(data.rows, function(v){
                 $('#tbl_list > tbody').append(
@@ -174,9 +174,9 @@ head.ready(function(){
             );
         }
     };
-    dm.get_list = function(){
+    ht.get_list = function(){
         $('#main_paging').fadeIn('slow');
-        dm.ajax.get_list_total(function(err, data){
+        ht.ajax.get_list_total(function(err, data){
             if(err){
                 app.alert(err);
             }else{
@@ -186,7 +186,7 @@ head.ready(function(){
                     lapping: 1,
                     page: 1,
                     onSelect: function(page){
-                        dm.ajax.get_list(this.slice[0], this.slice[1], function(err, data){
+                        ht.ajax.get_list(this.slice[0], this.slice[1], function(err, data){
                             $('#tbl_list > tbody').empty();
                             if(err){
                                 app.alert(err);
@@ -194,7 +194,7 @@ head.ready(function(){
                                     '<tr><td colspan="8">ไม่พบรายการ</td></tr>'
                                 );
                             }else{
-                                dm.set_list(data);
+                                ht.set_list(data);
                             }
 
                         });
@@ -260,14 +260,14 @@ head.ready(function(){
     };
 
     $('#btn_register').click(function(){
-        dm.clear_register_form();
+        ht.clear_register_form();
         $('div[data-name="blog_search"]').show();
         $('#lblRegis').html('ลงทะเบียน');
         $('#lblRegis').attr('title', 'add');
-        dm.modal.show_register();
+        ht.modal.show_register();
     });
 
-    dm.set_detail = function(v)
+    ht.set_detail = function(v)
     {
         $('#txt_isupdate').val('1');
         $('#tboHN').val(v.hn);
@@ -294,7 +294,7 @@ head.ready(function(){
 
     };
 
-    dm.set_person_detail = function(v)
+    ht.set_person_detail = function(v)
     {
         $('#tboHN').val(v.hn);
         $('#tboCid').val(v.cid);
@@ -314,9 +314,9 @@ head.ready(function(){
         else
         {
             //do search
-            dm.clear_register_form();
+            ht.clear_register_form();
 
-            dm.ajax.search_person(query, function(err, data){
+            ht.ajax.search_person(query, function(err, data){
 
                 if(err)
                 {
@@ -324,7 +324,7 @@ head.ready(function(){
                 }
                 else
                 {
-                   dm.set_person_detail(data.rows);
+                   ht.set_person_detail(data.rows);
                 }
             });
         }
@@ -340,13 +340,13 @@ head.ready(function(){
     $('#btn_filter_by_village').click(function(){
         var village_id = $('#sl_village').val();
 
-        dm.get_list_by_village(village_id);
+        ht.get_list_by_village(village_id);
     });
 
-    dm.get_list_by_village = function(village_id)
+    ht.get_list_by_village = function(village_id)
     {
         $('#main_paging').fadeIn('slow');
-        dm.ajax.get_list_by_village_total(village_id, function(err, data){
+        ht.ajax.get_list_by_village_total(village_id, function(err, data){
             if(err){
                 app.alert(err);
             }else{
@@ -356,7 +356,7 @@ head.ready(function(){
                     lapping: 1,
                     page: 1,
                     onSelect: function(page){
-                        dm.ajax.get_list_by_village(village_id, this.slice[0], this.slice[1], function(err, data){
+                        ht.ajax.get_list_by_village(village_id, this.slice[0], this.slice[1], function(err, data){
                             $('#tbl_list > tbody').empty();
                             if(err){
                                 app.alert(err);
@@ -364,7 +364,7 @@ head.ready(function(){
                                     '<tr><td colspan="9">ไม่พบรายการ</td></tr>'
                                 );
                             }else{
-                                dm.set_list(data);
+                                ht.set_list(data);
                             }
 
                         });
@@ -430,7 +430,7 @@ head.ready(function(){
     };
 
     
-    dm.clear_register_form = function() {
+    ht.clear_register_form = function() {
         $('#txt_isupdate').val('0');
         $('#tboHN').val('');
         $('#tboCid').val('');
@@ -460,13 +460,13 @@ head.ready(function(){
         var obj = $(this).parent().parent().parent();
         app.confirm('คุณต้องการจะลบรายการนี้หรือไม่ [hn = '+ hn +']?', function(cb) {
             if(cb) {
-                dm.ajax.remove(hn, function(err) {
+                ht.ajax.remove(hn, function(err) {
                     if(err) {
                         app.alert(err);
                     } else {
                         app.alert('ลบรายการเรียบร้อยแล้ว');
                         obj.fadeOut('slow');
-                        //dm.get_list();
+                        //ht.get_list();
                     }
                 });
             }
@@ -478,7 +478,7 @@ head.ready(function(){
         items.hn            = $('#tboHN').val();
         items.hid_regis     = $('#tboRegHosNumber').val();
         items.year_regis    = $('#tboYear').val();
-        items.reg_date      = $('#dtpRegisDate').val();
+        items.reg_date    = $('#dtpRegisDate').val();
         items.diag_type     = $('#cboDiseaseType').val();
         items.doctor        = $('#cboDoctor').val();
         items.pre_register  = $('#ch_pre_register').is(":checked") ? '1' : '0';
@@ -515,13 +515,13 @@ head.ready(function(){
         else
         {
             if(confirm('คุณต้องการจะลงทะเบียนผู้ป่วยรายนี้หรือไม่ ?')) {
-                dm.ajax.do_register(items, function(err) {
+                ht.ajax.do_register(items, function(err) {
                     if(err) {
                         app.alert(err);
                     } else {
                         app.alert('ลงทะเบียนเรียบร้อยแล้ว');
-                        dm.modal.hide_register();
-                        dm.get_list();
+                        ht.modal.hide_register();
+                        ht.get_list();
                     }
                 });
             }
@@ -531,13 +531,13 @@ head.ready(function(){
     $(document).on('click', 'a[data-name="edit"]', function() {
 
         //do search
-        dm.clear_register_form();
+        ht.clear_register_form();
 
         $('#txt_search_person').attr('disabled', 'disabled').css('background-color', 'white');
         $('#btn_search_person').attr('disabled', 'disabled');
         $('#txt_isupdate').val('1');
 
-        dm.modal.show_register();
+        ht.modal.show_register();
 
         var hn = $(this).data('hn');
 
@@ -547,7 +547,7 @@ head.ready(function(){
         }
         else
         {
-            dm.ajax.get_detail(hn, function(err, data){
+            ht.ajax.get_detail(hn, function(err, data){
 
                 if(err)
                 {
@@ -559,7 +559,7 @@ head.ready(function(){
                 }
                 else
                 {
-                   dm.set_detail(data.rows);
+                   ht.set_detail(data.rows);
                 }
             });
         }
@@ -567,12 +567,12 @@ head.ready(function(){
     });
 
     $('#btn_refresh').on('click', function(){
-        dm.get_list();
+        ht.get_list();
     });
 
     $('#txt_search_person').typeahead({
         ajax: {
-            url: site_url + 'diabetes/search_person_ajax',
+            url: site_url + 'hypertension/search_person_ajax',
             timeout: 500,
             displayField: 'name',
             triggerLength: 3,
@@ -602,7 +602,7 @@ head.ready(function(){
 
     $('#txt_query').typeahead({
         ajax: {
-            url: site_url + 'diabetes/search_person_ajax',
+            url: site_url + 'hypertension/search_person_ajax',
             timeout: 500,
             displayField: 'name',
             triggerLength: 3,
@@ -641,7 +641,7 @@ head.ready(function(){
             $('#tbl_list > tbody').empty();
             $('#main_paging').fadeIn('slow');
 
-            dm.ajax.search(hn, function(err, data){
+            ht.ajax.search(hn, function(err, data){
                 if(err)
                 {
                     app.alert('ไม่พบรายการ');
@@ -651,11 +651,11 @@ head.ready(function(){
                 }
                 else
                 {
-                    dm.set_list(data);
+                    ht.set_list(data);
                 }
             });
         }
     });
 
-    dm.get_list();
+    ht.get_list();
 });

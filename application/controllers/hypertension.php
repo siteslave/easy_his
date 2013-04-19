@@ -9,7 +9,7 @@
      * @license     http://his.mhkdc.com/licenses
      */
 
-class Diabetes extends CI_Controller
+class Hypertension extends CI_Controller
 {
     //------------------------------------------------------------------------------------------------------------------
     /*
@@ -38,9 +38,9 @@ class Diabetes extends CI_Controller
         $this->user_id = $this->session->userdata('user_id');
         $this->provider_id = $this->session->userdata('provider_id');
         //Set clinic code
-        $this->clinic_code = '01';
+        $this->clinic_code = '02';
         //Load model
-        $this->load->model('Diabetes_model', 'dm');
+        $this->load->model('Hypertension_model', 'ht');
         $this->load->model('Service_model', 'service');
         $this->load->model('Basic_model', 'basic');
         $this->load->model('Person_model', 'person');
@@ -50,8 +50,8 @@ class Diabetes extends CI_Controller
         $this->basic->owner_id      = $this->owner_id;
         $this->person->owner_id     = $this->owner_id;
         $this->person->clinic_code  = $this->clinic_code;
-        $this->dm->owner_id         = $this->owner_id;
-        $this->dm->user_id          = $this->user_id;
+        $this->ht->owner_id         = $this->owner_id;
+        $this->ht->user_id          = $this->user_id;
     }
 
     /**
@@ -63,7 +63,7 @@ class Diabetes extends CI_Controller
         $data['providers'] = $this->basic->get_providers();
         $data['diabetes_types'] = $this->basic->get_diabetes_type_list();
         
-        $this->layout->view('diabetes/index_view', $data);
+        $this->layout->view('hypertension/index_view', $data);
     }
 
     //------------------------------------------------------------------------------------------------------------------
@@ -77,8 +77,8 @@ class Diabetes extends CI_Controller
 
         $limit = (int) $stop - (int) $start;
 
-        $this->dm->owner_id = $this->owner_id;
-        $rs = $this->dm->get_list($start, $limit);
+        $this->ht->owner_id = $this->owner_id;
+        $rs = $this->ht->get_list($start, $limit);
 
         if($rs)
         {
@@ -125,9 +125,9 @@ class Diabetes extends CI_Controller
 
         $limit = (int) $stop - (int) $start;
 
-        $houses = $this->dm->get_house_list($village_id);
+        $houses = $this->ht->get_house_list($village_id);
 
-        $rs = $this->dm->get_list_by_village($houses, $start, $limit);
+        $rs = $this->ht->get_list_by_village($houses, $start, $limit);
 
         if($rs)
         {
@@ -165,7 +165,7 @@ class Diabetes extends CI_Controller
 
     public function get_list_total()
     {
-        $total = $this->dm->get_list_total();
+        $total = $this->ht->get_list_total();
         $json = '{"success": true, "total": '.$total.'}';
 
         render_json($json);
@@ -175,9 +175,9 @@ class Diabetes extends CI_Controller
     {
         $village_id = $this->input->post('village_id');
 
-        $houses = $this->dm->get_house_list($village_id);
+        $houses = $this->ht->get_house_list($village_id);
 
-        $total = $this->dm->get_list_by_village_total($houses);
+        $total = $this->ht->get_list_by_village_total($houses);
         $json = '{"success": true, "total": '.$total.'}';
 
         render_json($json);
@@ -216,7 +216,7 @@ class Diabetes extends CI_Controller
 
                 if(isset($rs['registers'])) {
                     foreach($rs['registers'] as $reg) {
-                        if($reg['clinic_code'] == '01') {
+                        if($reg['clinic_code'] == '02') {
                             $reg_serial     = $reg['reg_serial'];
                             $hosp_serial    = $reg['hosp_serial'];
                             $year           = $reg['reg_year'];
@@ -275,7 +275,7 @@ class Diabetes extends CI_Controller
         {
             if($data['is_update'] == '1')
             {
-                $rs = $this->dm->do_update($data);
+                $rs = $this->ht->do_update($data);
                 if($rs)
                 {
                     $json = '{"success": true}';
@@ -287,9 +287,9 @@ class Diabetes extends CI_Controller
             }
             else
             {
-                $data['reg_serial'] = generate_serial('DM');
+                $data['reg_serial'] = generate_serial('HT');
 
-                $rs = $this->dm->do_register($data);
+                $rs = $this->ht->do_register($data);
 
                 if($rs)
                 {
@@ -329,11 +329,11 @@ class Diabetes extends CI_Controller
         if(empty($hn)) {
             $json = '{ "success": false, "msg": "No HN found." }';
         } else {
-            $rs = $this->dm->remove($hn);
+            $rs = $this->ht->remove($hn);
             if($rs) {
                 $json = '{ "success": true }';
             } else {
-                $json = '{ "success": false, "msg": "Can\'t remove dm register." }';
+                $json = '{ "success": false, "msg": "Can\'t remove ht register." }';
             }
         }
         
@@ -341,7 +341,7 @@ class Diabetes extends CI_Controller
     }
     
     public function get_providers_by_active() {
-        $rs = $this->dm->get_providers_by_active();
+        $rs = $this->ht->get_providers_by_active();
         if($rs) {
             $arr_result = array();
             foreach($rs as $r) {
@@ -469,7 +469,7 @@ class Diabetes extends CI_Controller
         }
         else
         {
-            $rs = $this->dm->search($hn);
+            $rs = $this->ht->search($hn);
 
             if($rs)
             {
