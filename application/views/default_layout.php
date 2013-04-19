@@ -95,7 +95,7 @@
                                 </a>
                             </li>
                              <li>
-                                 <a href="<?php echo site_url('ncd'); ?>">
+                                 <a href="<?php echo site_url('ncdscreen'); ?>">
                                      <i class="icon-book"></i> คัดกรองเบาหวาน/ความดัน 15 ปีขึ้นไป
                                  </a>
                             </li>

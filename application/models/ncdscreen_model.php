@@ -9,7 +9,7 @@
  * @license     http://his.mhkdc.com/licenses
  */
 
-class Women_model extends CI_Model
+class Ncdscreen_model extends CI_Model
 {
 
     public $owner_id;
@@ -23,19 +23,21 @@ class Women_model extends CI_Model
 
     public function get_list($start, $limit)
     {
+        $this->mongo_db->add_index('person', array('typearea' => -1));
+        $this->mongo_db->add_index('person', array('birthdate' => -1));
+
         $rs = $this->mongo_db
             ->where(array(
                 'typearea' =>
-                array(
-                    '$elemMatch' =>
+            array(
+                '$elemMatch' =>
                     array(
                         'typearea' => array('$in' => array('1', '3')),
                         'owner_id' => new MongoId($this->owner_id)
                     )
-                )))
-            ->where(array('sex' => '2'))
+            )))
             ->where_lte('birthdate', (string) ((int) date('Y') - 15).'1231')
-            ->where_gte('birthdate', (string) ((int) date('Y') - 49).'0101')
+            ->where_not_in('registers.clinic_code', array('01', '02'))
             ->offset($start)
             ->limit($limit)
             ->order_by(array('first_name' => 'ASC'))
@@ -45,6 +47,9 @@ class Women_model extends CI_Model
 
     public function get_list_total()
     {
+        $this->mongo_db->add_index('person', array('typearea' => -1));
+        $this->mongo_db->add_index('person', array('birthdate' => -1));
+
         $rs = $this->mongo_db
             ->where(array(
                 'typearea' =>
@@ -55,18 +60,17 @@ class Women_model extends CI_Model
                         'owner_id' => new MongoId($this->owner_id)
                     )
                 )))
-            ->where(array('sex' => '2'))
+            ->where_not_in('registers.clinic_code', array('01', '02'))
             ->where_lte('birthdate', (string) ((int) date('Y') - 15).'1231')
-            ->where_gte('birthdate', (string) ((int) date('Y') - 49).'0101')
             ->count('person');
         return $rs;
     }
 
-    public function get_fp_detail($year, $hn)
+    public function get_detail($year, $hn)
     {
         $rs = $this->mongo_db
             ->where(array('hn' => (string) $hn, 'year' => (string) $year))
-            ->get('women');
+            ->get('ncdscreen');
 
         return count($rs) ? $rs[0] : NULL;
     }
@@ -74,7 +78,7 @@ class Women_model extends CI_Model
     public function save($data)
     {
         $rs = $this->mongo_db
-            ->insert('women', array(
+            ->insert('ncdscreen', array(
                 'fptype' => $data['fptype'],
                 'nofpcause' => $data['nofpcause'],
                 'totalson' => $data['totalson'],
@@ -105,7 +109,7 @@ class Women_model extends CI_Model
                 //'owner_id' => new MongoId($this->owner_id),
                 'last_update' => date('Y-m-d H:i:s')
             ))
-            ->update('women');
+            ->update('ncdscreen');
 
         return $rs;
     }
@@ -114,7 +118,7 @@ class Women_model extends CI_Model
     {
         $rs = $this->mongo_db
             ->where(array('hn' => (string) $hn, 'year' => (string) $year))
-            ->count('women');
+            ->count('ncdscreen');
 
         return $rs > 0 ? TRUE : FALSE;
     }
@@ -123,7 +127,7 @@ class Women_model extends CI_Model
     {
         $rs = $this->mongo_db
             ->where(array('hn' => (string) $hn, 'year' => (string) $year))
-            ->delete('women');
+            ->delete('ncdscreen');
 
         return $rs;
     }
@@ -138,6 +142,7 @@ class Women_model extends CI_Model
         $this->mongo_db->add_index('person', array('owner_id' => -1));
         $this->mongo_db->add_index('person', array('birthdate' => -1));
         $this->mongo_db->add_index('person', array('house_code' => -1));
+        $this->mongo_db->add_index('person', array('typearea' => -1));
 
         $rs = $this->mongo_db
             ->where(array(
@@ -149,9 +154,8 @@ class Women_model extends CI_Model
                         'owner_id' => new MongoId($this->owner_id)
                     )
                 )))
-            ->where(array('sex' => '2'))
+            ->where_not_in('registers.clinic_code', array('01', '02'))
             ->where_lte('birthdate', (string) ((int) date('Y') - 15).'1231')
-            ->where_gte('birthdate', (string) ((int) date('Y') - 49).'0101')
             ->where_in('house_code', $house_id)
             ->offset($start)
             ->limit($limit)
@@ -163,7 +167,7 @@ class Women_model extends CI_Model
     public function search($hn)
     {
         $this->mongo_db->add_index('person', array('birthdate' => -1));
-        $this->mongo_db->add_index('person', array('sex' => -1));
+        $this->mongo_db->add_index('person', array('typearea' => -1));
         $this->mongo_db->add_index('person', array('owner_id' => -1));
 
         $rs = $this->mongo_db
@@ -178,7 +182,7 @@ class Women_model extends CI_Model
                 )))
             ->where(array('sex' => '2'))
             ->where_lte('birthdate', (string) ((int) date('Y') - 15).'1231')
-            ->where_gte('birthdate', (string) ((int) date('Y') - 49).'0101')
+            ->where_not_in('registers.clinic_code', array('01', '02'))
             ->where('hn', (string) $hn)
             ->order_by(array('first_name' => 'ASC'))
             ->get('person');
@@ -188,7 +192,7 @@ class Women_model extends CI_Model
     public function search_filter_total($house_id)
     {
         $this->mongo_db->add_index('person', array('owner_id' => -1));
-        $this->mongo_db->add_index('person', array('sex' => -1));
+        $this->mongo_db->add_index('person', array('typearea' => -1));
         $this->mongo_db->add_index('person', array('birthdate' => -1));
         $this->mongo_db->add_index('person', array('house_code' => -1));
 
@@ -202,9 +206,8 @@ class Women_model extends CI_Model
                         'owner_id' => new MongoId($this->owner_id)
                     )
                 )))
-            ->where(array('sex' => '2'))
             ->where_lte('birthdate', (string) ((int) date('Y') - 15).'1231')
-            ->where_gte('birthdate', (string) ((int) date('Y') - 49).'0101')
+            ->where_not_in('registers.clinic_code', array('01', '02'))
             ->where_in('house_code', $house_id)
             ->count('person');
         return $rs;

@@ -1,5 +1,5 @@
 <?php
-class Ncd_model extends CI_Model
+class Ncdscreen_model extends CI_Model
 {
     public $owner_id;
     public $user_id;

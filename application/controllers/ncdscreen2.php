@@ -9,7 +9,7 @@
      * @license     http://his.mhkdc.com/licenses
      */
 
-class Ncd extends CI_Controller
+class Ncdscreen extends CI_Controller
 {
     //------------------------------------------------------------------------------------------------------------------
     /*
@@ -40,11 +40,11 @@ class Ncd extends CI_Controller
 
         $this->clinic_code = '06';
 
-        $this->load->model('Ncd_model', 'ncd');
+        $this->load->model('Ncdscreen_model', 'ncd');
         $this->load->model('Service_model', 'service');
         $this->load->model('Basic_model', 'basic');
         $this->load->model('Person_model', 'person');
-        $this->load->model('Dm_model', 'dm');
+        $this->load->model('Diabetes_model', 'dm');
 
         $this->load->helper(array('person'));
     }
