@@ -163,5 +163,19 @@ class Diabetes_model extends CI_Model
         return $arr_house;
     }
 
+    public function search($hn)
+    {
+        $this->mongo_db->add_index('person', array('registers.clinic_code' => -1));
+        $this->mongo_db->add_index('person', array('registers.owner_id' => -1));
+
+        $rs = $this->mongo_db
+            ->where(array(
+                'registers.clinic_code' => $this->clinic_code,
+                'registers.owner_id' => new MongoId($this->owner_id),
+                'hn' => (string) $hn
+            ))
+            ->get('person');
+        return $rs;
+    }
 
 }

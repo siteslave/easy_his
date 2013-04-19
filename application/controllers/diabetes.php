@@ -458,6 +458,53 @@ class Diabetes extends CI_Controller
 
         render_json($json);
     }
+
+    public function search()
+    {
+        $hn = $this->input->post('hn');
+
+        if(empty($hn))
+        {
+            $json = '{"success": false, "msg": "กรุณาระบุ HN"}';
+        }
+        else
+        {
+            $rs = $this->dm->search($hn);
+
+            if($rs)
+            {
+
+                $arr_result = array();
+
+                foreach($rs as $r)
+                {
+                    $obj = new stdClass();
+                    $obj->hn            = $r['hn'];
+                    $obj->cid           = $r['cid'];
+                    $obj->id            = get_first_object($r['_id']);
+                    $obj->first_name    = $r['first_name'];
+                    $obj->last_name     = $r['last_name'];
+                    $obj->sex           = $r['sex'] == '1' ? 'ชาย' : 'หญิง';
+                    $obj->birthdate     = $r['birthdate'];
+                    $obj->age           = count_age($r['birthdate']);
+                    $obj->reg_date      = isset($r['registers'][0]['reg_date']) ? $r['registers'][0]['reg_date'] : '';
+                    $obj->diag_type     = $this->basic->get_diabetes_type_name(get_first_object($r['registers'][0]['diag_type']));
+                    $obj->diag_type_code= $r['registers'][0]['diag_type'];
+
+                    $arr_result[] = $obj;
+                }
+
+                $rows = json_encode($arr_result);
+                $json = '{"success": true, "rows": '.$rows.'}';
+            }
+            else
+            {
+                $json = '{"success": false, "msg": "No result."}';
+            }
+        }
+
+        render_json($json);
+    }
 }
 
 //End of file

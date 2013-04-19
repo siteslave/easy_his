@@ -106,6 +106,17 @@ head.ready(function(){
             app.ajax(url, params, function(err, data){
                 err ? cb(err) : cb(null, data);
             });
+        },
+
+        search: function(hn, cb){
+            var url = 'diabetes/search',
+                params = {
+                    hn: hn
+                };
+
+            app.ajax(url, params, function(err, data){
+                err ? cb(err) : cb(null, data);
+            });
         }
     };
 
@@ -616,6 +627,33 @@ head.ready(function(){
                 name = d[1];
 
             return code;
+        }
+    });
+
+    $('#btn_search').on('click', function(){
+        var hn = $('#txt_query').val();
+        if(!hn)
+        {
+            app.alert('กรุณาระบุ HN เพื่อค้นหา');
+        }
+        else
+        {
+            $('#tbl_list > tbody').empty();
+            $('#main_paging').fadeIn('slow');
+
+            dm.ajax.search(hn, function(err, data){
+                if(err)
+                {
+                    app.alert('ไม่พบรายการ');
+                    $('#tbl_list > tbody').append(
+                        '<tr><td colspan="9">ไม่พบรายการ</td></tr>'
+                    );
+                }
+                else
+                {
+                    dm.set_list(data);
+                }
+            });
         }
     });
 
