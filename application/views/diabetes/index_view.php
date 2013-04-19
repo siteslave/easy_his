@@ -13,11 +13,13 @@
         ?>
     </select>
     <button type="button" class="btn btn-info" id="btn_filter_by_village"><i class="icon-search"></i></button> |
-    ค้นหา <input type="text" class="input-xlarge" id="txt_query" placeholder="พิมพ์ HN หรือ เลขบัตรประชาชน" />
+    <input type="text" class="input-xlarge" id="txt_query" placeholder="พิมพ์ HN หรือ เลขบัตรประชาชน"
+        title="พิมพ์ HN หรือ เลขบัตรประชาชน" rel="tooltip" autocomplete="off" />
     <button type="button" id="btn_search" class="btn btn-info"><i class="icon-search"></i></button>
     <div class="btn-group pull-right">
-        <button type="button" id="btn_refresh" class="btn"><i class="icon-refresh"></i> ทั้งหมด</button>
-        <button type="button" id="btn_register" class="btn btn-success"><i class="icon-plus-sign"></i> ลงทะเบียน</button>
+        <button type="button" id="btn_refresh" class="btn" title="แสดงข้อมูลทั้งหมด (Refresh)" rel="tooltip"><i class="icon-refresh"></i></button>
+        <button type="button" id="btn_register" class="btn btn-success" title="ลงทะเบียนผู้ป่วยรายใหม่ (Register)" rel="tooltip"><i class="icon-plus-sign"></i></button>
+        <button type="button" id="btn_print" class="btn" title="พิมพ์รายชื่อผู้ป่วยทั้งหมด (Print)" rel="tooltip"><i class="icon-print"></i></button>
     </div>
 </form>
 
