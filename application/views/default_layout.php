@@ -132,7 +132,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="<?php echo site_url('ht'); ?>">
+                                <a href="<?php echo site_url('hypertension'); ?>">
                                     <i class="icon-tags"></i> ทะเบียนผู้ป่วยความดัน (HT)
                                 </a>
                             </li>
