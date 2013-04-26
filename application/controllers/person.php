@@ -429,19 +429,44 @@ class Person extends CI_Controller
         }
     }
 
+    public function get_list_total()
+    {
+        $house_code = $this->input->post('house_code');
+        $village_id = $this->input->post('village_id');
+
+        $total = empty($house_code) ? $this->person->get_list_all_total($village_id) :
+            $this->person->get_list_total($house_code, $village_id);
+
+        $json = '{"success": true, "total": '.$total.'}';
+
+        render_json($json);
+    }
+
     /**
      * Get person list
      *
      * @internal    param   string  $house_code     The House code
      * @return      Mixed
      */
-    public function get_person_list(){
+    public function get_list(){
         $house_code = $this->input->post('house_code');
-        if(empty($house_code)){
+        $village_id = $this->input->post('village_id');
+
+        $start = $this->input->post('start');
+        $stop = $this->input->post('stop');
+
+        $start = empty($start) ? 0 : $start;
+        $stop = empty($stop) ? 25 : $stop;
+
+        $limit = (int) $stop - (int) $start;
+
+        if(!isset($house_code)){
             $json = '{"success": false, "msg": "No house id defined"}';
         }else{
             //get person list
-            $result = $this->person->get_person_list($house_code);
+            $result = empty($house_code) ? $this->person->get_list_all($village_id, $start, $limit) :
+                $this->person->get_list($house_code, $start, $limit);
+
             if($result){
                 $arr_result = array();
                 foreach($result as $r){
@@ -456,6 +481,8 @@ class Person extends CI_Controller
                     $obj->age           = count_age( (string)$r['birthdate']);
                     $obj->fstatus       = get_fstatus_name($r['fstatus']);
                     $obj->title         = $this->basic->get_title_name($r['title']);
+                    $obj->typearea      = $this->person->get_typearea($r['hn']);
+                    $obj->discharge_status = $r['discharge_status'];
 
                     $arr_result[] = $obj;
                 }
@@ -470,6 +497,7 @@ class Person extends CI_Controller
 
         render_json($json);
     }
+
 
     public function edit($hn = ''){
         if(empty($hn)){
@@ -1003,6 +1031,30 @@ class Person extends CI_Controller
         else
         {
             $json = '{"success": false, "msg": "ไม่พบข้อมุลที่ต้องการบันทึก"}';
+        }
+
+        render_json($json);
+    }
+
+    public function remove()
+    {
+        $hn = $this->input->post('hn');
+
+        if(empty($hn))
+        {
+            $json = '{"success": false, "msg": "กรุณาระบุ HN"}';
+        }
+        else
+        {
+            $rs = $this->person->remove($hn);
+            if($rs)
+            {
+                $json = '{"success": true}';
+            }
+            else
+            {
+                $json = '{"success": false, "msg": "ไม่สามารถลบรายการได้"}';
+            }
         }
 
         render_json($json);

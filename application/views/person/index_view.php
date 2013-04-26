@@ -2,9 +2,13 @@
         <li><a href="<?php echo site_url(); ?>">หน้าหลัก</a> <span class="divider">/</span></li>
         <li class="active">ประชากรในเขต</li>
     </ul>
+    <div class="alert">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <strong>ข้อแนะนำ!</strong> เนื่องจากรายชื่อประชากรมีจำนวนมาก การโหลดครั้งแรกอาจจะนาน กรุณาเลือกหมู่บ้านหรือบ้านที่ต้องการแสดงรายชื่อประชากร หรือค้นหา
+    </div>
     <form action="#" class="well well-small form-inline">
-        <label for="sl_village">หมู่บ้าน</label>
-        <select class="input-xlarge" id="sl_village">
+        <label for="sl_villages">หมู่บ้าน</label>
+        <select class="input-xlarge" id="sl_villages">
             <option value="">---</option>
             <?php
             foreach ($villages as $r){
@@ -12,26 +16,27 @@
             }
             ?>
         </select>
+        <button type="button" class="btn" id="btn_village_survey" rel="tooltip" title="สำรวจข้อมูลหมู่บ้าน"><i class="icon-check"></i></button>
+        |
+        <label for="sl_houses">หลังคาเรือน</label>
+        <select class="input-medium" id="sl_houses">
+        </select>
         <div class="btn-group">
-            <button type="button" class="btn btn-info" id="btn_do_get_list" rel="tooltip" title="แสดงรายชื่อประชากร"><i class="icon-refresh"></i></button>
-            <button type="button" class="btn" id="btn_do_survey" rel="tooltip" title="สำรวจข้อมูลหมู่บ้าน"><i class="icon-eye-open"></i></button>
+            <button type="button" class="btn btn-success" id="btn_get_list" rel="tooltip" title="แสดงรายชื่อประชากร"><i class="icon-refresh"></i></button>
+            <button type="button" class="btn" id="btn_add_house" rel="tooltip" title="เพิ่มหลังคาเรือน"><i class="icon-home"></i></button>
+            <button type="button" class="btn" id="btn_add_person" rel="tooltip" title="เพิ่มคนในบ้าน"><i class="icon-user"></i></button>
+            <button type="button" class="btn" id="btn_house_survey" rel="tooltip" title="สำรวจข้อมูลหลังคาเรือน"><i class="icon-check"></i></button>
         </div>
 
-        |
-        <input type="text" class="input-xlarge" id="txt_query" placeholder="พิมพ์ HN หรือ เลขบัตรประชาชน" title="พิมพ์ HN หรือ เลขบัตรประชาชน" rel="tooltip" autocomplete="off" />
-        <button type="button" id="btn_do_search" class="btn btn-info"><i class="icon-search"></i></button>
-
         <div class="btn-group pull-right">
-            <button type="button" id="btn_result" class="btn" title="ผลการปฏิบัติงาน" rel="tooltip"><i class="icon-bar-chart"></i></button>
-            <button type="button" id="btn_refresh" class="btn btn-success" title="รีเฟรช (Refresh)" rel="tooltip"><i class="icon-refresh"></i></button>
+            <button type="button" id="btn_search_person" class="btn btn-success" title="ค้นหาประชากร" rel="tooltip"><i class="icon-search"></i></button>
             <button type="button" id="btn_print" class="btn" title="พิมพ์รายชื่อ (Print)" rel="tooltip"><i class="icon-print"></i></button>
         </div>
 
     </form>
-    <table class="table table-striped table-hover" id="tbl_person_in_house">
+    <table class="table table-striped table-hover" id="tbl_person">
         <thead>
         <tr>
-            <th>#</th>
             <th>HN</th>
             <th>เลขบัตรประชาชน</th>
             <th>คำนำ</th>
@@ -40,6 +45,8 @@
             <th>อายุ</th>
             <th>เพศ</th>
             <th>สถานะในครอบครัว</th>
+            <th>สถานะ</th>
+            <th>Typearea</th>
             <th>#</th>
         </tr>
         </thead>
@@ -55,87 +62,20 @@
             <td>...</td>
             <td>...</td>
             <td>...</td>
+            <td>...</td>
         </tr>
         </tbody>
     </table>
-    <div class="row-fluid">
-        <div class="span6">
-            <div class="row-fluid">
-                <div class="span12">
-                    <div class="page-header">
-                        <p class="lead">หมู่บ้านในเขตรับผิดชอบ</p>
-                    </div>
-                </div>
-            </div>
-            <div class="row-fluid">
-                <div class="span12" style="max-height: 640px; display: block; overflow: auto">
-                    <table class="table table-striped table-hover" id="tblVillageList">
-                        <thead>
-                        <tr>
-                            <th>รหัสหมู่บ้าน</th>
-                            <th>หมู่ที่</th>
-                            <th>ชื่อหมู่บ้าน</th>
-                            <th></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>...</td>
-                            <td>...</td>
-                            <td>...</td>
-                            <td></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
 
-
-        </div>
-        <div class="span6">
-            <div class="row-fluid">
-                <div class="span12">
-                    <div class="page-header">
-                        <p class="lead">หลังคาเรือนในหมู่บ้าน <span id="vMooName"> เลือกหมู่บ้าน </span></p>
-                        <input type="hidden" id="village_id">
-                        <input type="hidden" id="txtHouseId">
-                    </div>
-                </div>
-            </div>
-            <div class="row-fluid">
-                <div class="span12" style="max-height: 640px; display: block; overflow: auto">
-                    <table class="table table-striped table-hover" id="tbl_houses_list">
-                        <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>รหัสบ้าน</th>
-                            <th>บ้านเลขที่</th>
-                            <th>จำนวน (คน)</th>
-                            <th></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td colspan="5">เลือกหมู่บ้านที่ต้อง (ซ้ายมือ)</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <br />
-            <button type="button" style="display: none;" class="btn btn-success pull-right" id="btnShowModalNewHouse">
-                <i class="icon-plus-sign"></i> เพิ่มบ้าน
-            </button>
-        </div>
+    <div class="pagination pagination-centered" id="main_paging">
+        <ul></ul>
     </div>
-    <div id="showPersonList"></div>
 
     <!-- modal new house -->
     <div class="modal hide fade" id="mdlNewHouse">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h3>เพิ่มบ้านใหม่</h3>
+            <h4><i class="icon-file-alt"></i> เพิ่มบ้านใหม่</h4>
         </div>
         <div class="modal-body">
             <div class="alert alert-info" id="alert_save_house">
@@ -238,56 +178,60 @@
         </div>
     </div>
     <!-- end modal new house -->
-    <!-- show person list -->
-    <div class="modal hide fade" id="mdl_show_person_list">
+
+    <div class="modal hide fade" id="mdl_search_person">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h3>ข้อมูลคนในบ้าน</h3>
+            <h4>
+                <i class="icon-search"></i>
+                ค้นหาข้อมูลประชากร
+            </h4>
         </div>
         <div class="modal-body">
-            <div class="row-fluid">
-                <div class="span12">
-                    <p class="lead">ประชากรในบ้านเลขที่ :  <span class="badge badge-success" id="txt_show_house_address"></span></p>
-                    <table class="table table-striped table-hover" id="tbl_person_in_house">
-                        <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>HN</th>
-                            <th>เลขบัตรประชาชน</th>
-                            <th>คำนำ</th>
-                            <th>ชื่อ - สกุล</th>
-                            <th>วันเกิด</th>
-                            <th>อายุ</th>
-                            <th>เพศ</th>
-                            <th>สถานะในครอบครัว</th>
-                            <th>#</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>...</td>
-                            <td>...</td>
-                            <td>...</td>
-                            <td>...</td>
-                            <td>...</td>
-                            <td>...</td>
-                            <td>...</td>
-                            <td>...</td>
-                            <td>...</td>
-                        </tr>
-                        </tbody>
-                    </table>
+            <form action="#" class="form-inline well well-small">
+                <input type="hidden" id="txt_search_person_filter" value="0" />
+                <div class="input-append">
+                    <input class="input-xlarge" id="txt_search_query" type="text">
+                    <button class="btn" type="button">
+                        <i class="icon-search"></i>
+                    </button>
                     <div class="btn-group">
-                        <button class="btn btn-inverse"><i class="icon-print"></i> พิมพ์รายชื่อ</button>
+                        <button class="btn dropdown-toggle" data-toggle="dropdown">
+                            <i class="icon-cog"></i>
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a href="#" data-name="btn_search_person_fillter" data-value="0">ค้นจาก HN</a></li>
+                            <li><a href="#" data-name="btn_search_person_fillter" data-value="1">ค้นจาก เลขบัตรประชาชน</a></li>
+                            <li><a href="#" data-name="btn_search_person_fillter" data-value="2">ค้นจาก ชื่อ - สกุล</a></li>
+                        </ul>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="icon-off"></i> ปิดหน้าต่าง</button>
+            </form>
+            <table class="table table-striped" id="tbl_search_person_result">
+                <thead>
+                <tr>
+                    <th>HN</th>
+                    <th>เลขบัตรประชาชน</th>
+                    <th>ชื่อ - สกุล</th>
+                    <th>วันเกิด</th>
+                    <th>อายุ</th>
+                    <th>#</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>...</td>
+                    <td>...</td>
+                    <td>...</td>
+                    <td>...</td>
+                    <td>...</td>
+                    <td>...</td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
-    <!-- /show person list -->
 
     <!-- modal house survey -->
     <div class="modal hide fade" id="mdlHouseSurvey">
@@ -549,286 +493,6 @@
     </div>
     </div>
     <!-- end modal survey -->
-
-    <!-- modal person -->
-    <div class="modal hide fade" id="mdlPersonDetail">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>ข้อมูลบุคคล</h3>
-    </div>
-    <div class="modal-body">
-    <form action="#">
-    <div class="row-fluid">
-        <div class="span4">
-            <label>เลขบัตรประชาชน</label>
-            <div class="input-append">
-                <input class="input-medium" id="txtCID" type="text" placeholder="xxxxxxxxxxxxx">
-                <button class="btn" type="button"><i class="icon-refresh"></i></button>
-                <button class="btn btn-info" type="button"><i class="icon-search"></i></button>
-            </div>
-        </div>
-        <div class="span3">
-            <div class="control-group">
-                <label class="control-label" for="txtPassport">เลขที่ Passport</label>
-                <div class="controls">
-                    <input type="text" id="txtPassport" placeholder="เลขที่ Passport" class="input-medium">
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row-fluid">
-        <div class="span2">
-            <div class="control-group">
-                <label class="control-label" for="txtAddress">คำนำหน้า</label>
-                <div class="controls">
-                    <select  id="slTitle" class="input-small">
-                        <option value="x">นาย</option>
-                        <option value="x">นาง</option>
-                        <option value="x">นางสาว</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-        <div class="span3">
-            <div class="control-group">
-                <label class="control-label" for="txtHouseId">ชื่อ</label>
-                <div class="controls">
-                    <input type="text" id="txtFirstName" placeholder="ชื่อ" class="input-medium">
-                </div>
-            </div>
-        </div>
-        <div class="span3">
-            <div class="control-group">
-                <label class="control-label" for="txtLastName">สกุล</label>
-                <div class="controls">
-                    <input type="text" id="txtLastName" placeholder="สกุล" class="input-medium">
-                </div>
-            </div>
-        </div>
-        <div class="span2">
-            <div class="control-group">
-                <label class="control-label" for="txtBirthDate">วันเกิด</label>
-                <div class="controls">
-                    <input type="text" id="txtBirthDate" placeholder="วันเกิด" class="input-small">
-                </div>
-            </div>
-        </div>
-        <div class="span2">
-            <div class="control-group">
-                <label class="control-label" for="slSex">เพศ</label>
-                <div class="controls">
-                    <select  id="slSex" class="input-small">
-                        <option value="x">ชาย</option>
-                        <option value="x">หญิง</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row-fluid">
-        <div class="span3">
-            <div class="control-group">
-                <label class="control-label" for="slMStatus">สถานะสมรส</label>
-                <div class="controls">
-                    <select  id="slMStatus" class="input-medium">
-                        <option value="1">โสด</option>
-                        <option value="2">คู่</option>
-                        <option value="3">ม่าย</option>
-                        <option value="4">หย่า</option>
-                        <option value="5">แยกกันอยู่</option>
-                        <option value="6">สมณะ</option>
-                        <option value="9">ไม่ทราบ</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-        <div class="span5">
-            <div class="control-group">
-                <label class="control-label" for="slOccupation">อาชีพ</label>
-                <div class="controls">
-                    <select  id="slOccupation" class="input-xlarge">
-                        <option value="1">โสด</option>
-                        <option value="2">คู่</option>
-                        <option value="3">ม่าย</option>
-                        <option value="4">หย่า</option>
-                        <option value="5">แยกกันอยู่</option>
-                        <option value="6">สมณะ</option>
-                        <option value="9">ไม่ทราบ</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-        <div class="span3">
-            <label class="control-label" for="txtEducation">การศึกษา</label>
-            <div class="controls">
-                <select  id="txtEducation" class="input-medium">
-                    <option value="1">โสด</option>
-                    <option value="2">คู่</option>
-                    <option value="3">ม่าย</option>
-                    <option value="4">หย่า</option>
-                    <option value="5">แยกกันอยู่</option>
-                    <option value="6">สมณะ</option>
-                    <option value="9">ไม่ทราบ</option>
-                </select>
-            </div>
-        </div>
-    </div>
-    <div class="row-fluid">
-
-        <div class="span3">
-            <div class="control-group">
-                <label class="control-label" for="slNation">สัญชาติ</label>
-                <div class="controls">
-                    <select  id="slNation" class="input-medium">
-                        <option value="1">โสด</option>
-                        <option value="2">คู่</option>
-                        <option value="3">ม่าย</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-        <div class="span3">
-            <div class="control-group">
-                <label class="control-label" for="slRace">เชื้อชาติ</label>
-                <div class="controls">
-                    <select  id="slRace" class="input-medium">
-                        <option value="1">โสด</option>
-                        <option value="2">คู่</option>
-                        <option value="3">ม่าย</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-        <div class="span3">
-            <div class="control-group">
-                <label class="control-label" for="slReligion">ศาสนา</label>
-                <div class="controls">
-                    <select  id="slReligion" class="input-medium">
-                        <option value="1">โสด</option>
-                        <option value="2">คู่</option>
-                        <option value="3">ม่าย</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-        <div class="span3">
-            <div class="control-group">
-                <label class="control-label" for="slFstatus">สถานะในครอบครัว</label>
-                <div class="controls">
-                    <select  id="slFstatus" class="input-medium">
-                        <option value="2">ผู้อาศัย</option>
-                        <option value="1">เจ้าบ้าน</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row-fluid">
-        <div class="span3">
-            <div class="control-group">
-                <label class="control-label" for="slVstatus">สถานะในชุมชน</label>
-                <div class="controls">
-                    <select  id="slVstatus" class="input-medium">
-                        <option value="1">กำนันผู้ใหญ่บ้าน</option>
-                        <option value="2">อสม.</option>
-                        <option value="3">แพทย์ประจำตำบล</option>
-                        <option value="4">สมาชิก อบต.</option>
-                        <option value="5">อื่นๆ</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-        <div class="span3">
-            <div class="control-group">
-                <label class="control-label" for="txtFatherCid">CID บิดา</label>
-                <div class="controls">
-                    <input type="text" id="txtFatherCid" placeholder="xxxxxxxxxxxxx" class="input-medium">
-                </div>
-            </div>
-        </div>
-        <div class="span3">
-            <div class="control-group">
-                <label class="control-label" for="txtMotherCid">CID มารดา</label>
-                <div class="controls">
-                    <input type="text" id="txtMotherCid" placeholder="xxxxxxxxxxxxx" class="input-medium">
-                </div>
-            </div>
-        </div>
-
-        <div class="span3">
-            <div class="control-group">
-                <label class="control-label" for="txtCoupleCid">CID คู่สมรส</label>
-                <div class="controls">
-                    <input type="text" id="txtCoupleCid" placeholder="xxxxxxxxxxxxx" class="input-medium">
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="row-fluid">
-        <div class="span2">
-            <div class="control-group">
-                <label class="control-label" for="txtMoveinDate">วันที่ย้ายเข้า</label>
-                <div class="controls">
-                    <input type="text" id="txtMoveinDate" placeholder="วันที่ย้ายเข้า" class="input-small">
-                </div>
-            </div>
-        </div>
-        <div class="span2">
-            <div class="control-group">
-                <label class="control-label" for="txtDischargeDate">วันที่ย้ายออก</label>
-                <div class="controls">
-                    <input type="text" id="txtDischargeDate" placeholder="วันที่ย้ายออก" class="input-small">
-                </div>
-            </div>
-        </div>
-        <div class="span3">
-            <div class="control-group">
-                <label class="control-label" for="slDischarge">สถานะการจำหน่าย</label>
-                <div class="controls">
-                    <select  id="slDischarge" class="input-medium">
-                        <option value="9">ไม่จำหน่าย</option>
-                        <option value="1">ตาย</option>
-                        <option value="2">ย้าย</option>
-                        <option value="3">สาบสูญ</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-        <div class="span2">
-            <div class="control-group">
-                <label class="control-label" for="slABOGroup">หมู่เลือด</label>
-                <div class="controls">
-                    <select  id="slABOGroup" class="input-small">
-                        <option value="1">A</option>
-                        <option value="2">B</option>
-                        <option value="3">AB</option>
-                        <option value="4">O</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-
-        <div class="span2">
-            <div class="control-group">
-                <label class="control-label" for="slRHGroup">หมู่เลือด RH</label>
-                <div class="controls">
-                    <select  id="slRHGroup" class="input-small">
-                        <option value="1">Positive</option>
-                        <option value="2">Negative</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-    </div>
-    </form>
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="icon-off"></i> ปิดหน้าต่าง</button>
-        <button type="button" class="btn btn-success"><i class="icon-save"></i> บันทึก</button>
-    </div>
-    </div>
-    <!-- end person -->
-
 
 <!--  village survey  -->
     <div class="modal hide fade" id="mdl_village_survey">
