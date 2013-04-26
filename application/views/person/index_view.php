@@ -2,7 +2,62 @@
         <li><a href="<?php echo site_url(); ?>">หน้าหลัก</a> <span class="divider">/</span></li>
         <li class="active">ประชากรในเขต</li>
     </ul>
+    <form action="#" class="well well-small form-inline">
+        <label for="sl_village">หมู่บ้าน</label>
+        <select class="input-xlarge" id="sl_village">
+            <option value="">---</option>
+            <?php
+            foreach ($villages as $r){
+                echo '<option value="'.get_first_object($r['_id']).'">' . $r['village_code'] . ' ' . $r['village_name'] . '</option>';
+            }
+            ?>
+        </select>
+        <div class="btn-group">
+            <button type="button" class="btn btn-info" id="btn_do_get_list" rel="tooltip" title="แสดงรายชื่อประชากร"><i class="icon-refresh"></i></button>
+            <button type="button" class="btn" id="btn_do_survey" rel="tooltip" title="สำรวจข้อมูลหมู่บ้าน"><i class="icon-eye-open"></i></button>
+        </div>
 
+        |
+        <input type="text" class="input-xlarge" id="txt_query" placeholder="พิมพ์ HN หรือ เลขบัตรประชาชน" title="พิมพ์ HN หรือ เลขบัตรประชาชน" rel="tooltip" autocomplete="off" />
+        <button type="button" id="btn_do_search" class="btn btn-info"><i class="icon-search"></i></button>
+
+        <div class="btn-group pull-right">
+            <button type="button" id="btn_result" class="btn" title="ผลการปฏิบัติงาน" rel="tooltip"><i class="icon-bar-chart"></i></button>
+            <button type="button" id="btn_refresh" class="btn btn-success" title="รีเฟรช (Refresh)" rel="tooltip"><i class="icon-refresh"></i></button>
+            <button type="button" id="btn_print" class="btn" title="พิมพ์รายชื่อ (Print)" rel="tooltip"><i class="icon-print"></i></button>
+        </div>
+
+    </form>
+    <table class="table table-striped table-hover" id="tbl_person_in_house">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>HN</th>
+            <th>เลขบัตรประชาชน</th>
+            <th>คำนำ</th>
+            <th>ชื่อ - สกุล</th>
+            <th>วันเกิด</th>
+            <th>อายุ</th>
+            <th>เพศ</th>
+            <th>สถานะในครอบครัว</th>
+            <th>#</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>...</td>
+            <td>...</td>
+            <td>...</td>
+            <td>...</td>
+            <td>...</td>
+            <td>...</td>
+            <td>...</td>
+            <td>...</td>
+            <td>...</td>
+            <td>...</td>
+        </tr>
+        </tbody>
+    </table>
     <div class="row-fluid">
         <div class="span6">
             <div class="row-fluid">

@@ -38,6 +38,8 @@ class Person extends CI_Controller
         $this->load->model('Person_model', 'person');
         $this->load->model('Basic_model', 'basic');
 
+        $this->person->owner_id = $this->owner_id;
+
         //helpers
         $this->load->helper('person');
     }
@@ -45,7 +47,8 @@ class Person extends CI_Controller
     //index action
     public function index()
     {
-        $this->layout->view('person/index_view');
+        $data['villages'] = $this->person->get_villages();
+        $this->layout->view('person/index_view', $data);
     }
 
     public function register($house_id=''){
