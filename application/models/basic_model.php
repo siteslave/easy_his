@@ -1039,7 +1039,7 @@ class Basic_model extends CI_Model
     public function get_house_code($hn){
         $rs = $this->mongo_db
             ->select(array('house_code'))
-            ->where('hn', $hn)
+            ->where(array('hn' => (string) $hn))
             ->get('person');
 
         return count($rs) > 0 ? $rs[0]['house_code'] : NULL;

@@ -40,20 +40,6 @@ class Ncdscreen extends CI_Controller {
         $this->layout->view('ncdscreen/index_view', $data);
     }
 
-    public function screening($hn='', $year='', $vn='')
-    {
-        if(empty($hn))
-        {
-            $data['error'] = 'กรุณาระบุ HN';
-        }
-        else
-        {
-            $data['error'] = '';
-        }
-
-        $this->layout->view('ncdscreen/screen_view', $data);
-    }
-
     public function get_list()
     {
         $start = $this->input->post('start');
@@ -73,7 +59,7 @@ class Ncdscreen extends CI_Controller {
             foreach($rs as $r)
             {
                 $person = $this->person->get_person_detail_with_hn($r['hn']);
-                $fp = $this->ncd->get_detail($year, $r['hn']);
+                $detail = $this->ncd->get_detail($year, $r['hn']);
 
                 $obj                = new stdClass();
                 $obj->hn            = $r['hn'];
@@ -84,11 +70,13 @@ class Ncdscreen extends CI_Controller {
                 $obj->sex           = $person['sex'] == '1' ? 'ชาย' : 'หญิง';
                 $obj->birthdate     = $person['birthdate'];
                 $obj->age           = count_age($person['birthdate']);
-                $obj->fptype        = $fp['fptype'];
-                $obj->year          = $fp['year'];
-                $obj->fptype_name   = get_fp_type_name($obj->fptype);
+                $obj->screen_date   = !empty($detail['screen_date']) ? from_mongo_to_thai_date($detail['screen_date']) : NULL;
+                $obj->screen_place  = $detail['screen_place'];
+                $obj->weight        = $detail['weight'];
+                $obj->height        = $detail['height'];
+                $obj->fbs           = $detail['fbs'];
+
                 $obj->mstatus       = get_mstatus_name(get_first_object($person['mstatus']));
-                $obj->numberson     = (int) $fp['numberson'];
 
                 $arr_result[]       = $obj;
             }
@@ -292,7 +280,7 @@ class Ncdscreen extends CI_Controller {
                 foreach($rs as $r)
                 {
                     $person = $this->person->get_person_detail_with_hn($r['hn']);
-                    $fp = $this->ncd->get_detail($year, $r['hn']);
+                    $detail = $this->ncd->get_detail($year, $r['hn']);
 
                     $obj                = new stdClass();
                     $obj->hn            = $r['hn'];
@@ -303,11 +291,13 @@ class Ncdscreen extends CI_Controller {
                     $obj->sex           = $person['sex'] == '1' ? 'ชาย' : 'หญิง';
                     $obj->birthdate     = $person['birthdate'];
                     $obj->age           = count_age($person['birthdate']);
-                    $obj->fptype        = $fp['fptype'];
-                    $obj->year          = $fp['year'];
-                    $obj->fptype_name   = get_fp_type_name($obj->fptype);
+                    $obj->screen_date   = !empty($detail['screen_date']) ? from_mongo_to_thai_date($detail['screen_date']) : NULL;
+                    $obj->screen_place  = $detail['screen_place'];
+                    $obj->weight        = $detail['weight'];
+                    $obj->height        = $detail['height'];
+                    $obj->fbs           = $detail['fbs'];
+
                     $obj->mstatus       = get_mstatus_name(get_first_object($person['mstatus']));
-                    $obj->numberson     = (int) $fp['numberson'];
 
                     $arr_result[]       = $obj;
                 }
@@ -324,6 +314,16 @@ class Ncdscreen extends CI_Controller {
         render_json($json);
     }
 
+    public function get_result()
+    {
+        $year = $this->input->post('year');
+        $total = $this->ncd->get_list_total();
+        $result = $this->ncd->get_result_total($year);
+
+        $json = '{"success": true, "total": '.$total.', "result": '.$result.'}';
+
+        render_json($json);
+    }
 }
 
 /* End of file ncdscreen.php */

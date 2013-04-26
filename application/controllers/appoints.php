@@ -90,11 +90,15 @@ class Appoints extends CI_Controller
         {
             show_error('VN don\'t exist, please check visit number and try again.', 404);
         }
+        else if(!$this->person->check_person_exist_by_hn($hn))
+        {
+            show_error('Person don\'t exist, please check person and try again.', 404);
+        }
         else
         {
             $this->basic->owner_id  = $this->owner_id;
 
-            $data = get_patient_info($hn);
+            $data['person'] = get_patient_info($hn);
             $data['vn']         = $vn;
             $data['hn']         = $hn;
             $data['address']    = get_address($hn);

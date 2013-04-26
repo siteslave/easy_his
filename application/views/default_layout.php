@@ -45,6 +45,9 @@
                 '<?php echo base_url(); ?>assets/js/numeral.min.js',
                 '<?php echo base_url(); ?>assets/js/bootbox.min.js',
                 '<?php echo base_url(); ?>assets/js/bootstrap-timepicker.min.js',
+                '<?php echo base_url(); ?>assets/js/highchart/highcharts.js',
+                '<?php echo base_url(); ?>assets/js/highchart/highcharts-more.js',
+                '<?php echo base_url(); ?>assets/js/holder.js',
                 '<?php echo base_url(); ?>assets/apps/js/apps.js'
         );
 

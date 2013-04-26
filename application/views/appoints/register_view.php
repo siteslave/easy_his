@@ -12,9 +12,9 @@
 <form action="#" class="well form-inline">
     <label class="control-label" for="txt_fullname">ชื่อ - สกุล</label>
     <input type="text" disabled="disabled" class="uneditable-input" id="txt_fullname"
-        value="<?php echo $first_name . ' ' . $last_name; ?>">
+        value="<?php echo $person['first_name'] . ' ' . $person['last_name']; ?>">
     <label class="control-label" for="txt_birth">วันเกิด</label>
-    <input type="text" disabled="disabled" class="input-small uneditable-input" id="txt_birth" value="<?php echo from_mongo_to_thai_date($birthdate); ?>">
+    <input type="text" disabled="disabled" class="input-small uneditable-input" id="txt_birth" value="<?php echo from_mongo_to_thai_date($person['birthdate']); ?>">
 
     <label class="control-label" for="txt_birth">ที่อยู่</label>
     <input type="text" disabled="disabled" class="input-xxlarge uneditable-input" id="txt_birth" value="<?php echo $address; ?>">

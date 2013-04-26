@@ -547,7 +547,7 @@ class Person_model extends CI_Model
     public function get_person_detail_with_hn($hn){
         $rs = $this->mongo_db
             ->select(array('hn', 'first_name', 'last_name', 'cid', 'birthdate', 'sex', 'mstatus'))
-            ->where('hn', $hn)
+            ->where(array('hn' => (string) $hn))
             ->limit(1)
             ->get('person');
 

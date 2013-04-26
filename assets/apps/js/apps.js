@@ -89,6 +89,22 @@ var app = {
         }
 
     },
+    mongo_to_js_date: function(d){
+        if(!d){
+            return '';
+        }else{
+            var old_date = d.toString();
+
+            var year = parseInt(old_date.substr(0, 4).toString()),
+                month = old_date.substr(4, 2).toString(),
+                day = old_date.substr(6, 2).toString();
+
+            var new_date = day + '/' + month + '/' + year;
+
+            return new_date;
+        }
+
+    },
     to_thai_date: function(d){
         if(!d){
             return '-';

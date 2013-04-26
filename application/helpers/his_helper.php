@@ -337,7 +337,7 @@ if(!function_exists('get_patient_info')){
 			$ci->load->model('Person_model', 'person');
 			
 			$data = $ci->person->get_person_detail_with_hn($hn);
-			$data['address'] = get_address($hn);
+			//$data['address'] = get_address($hn);
 			
 			return $data;
 		}
