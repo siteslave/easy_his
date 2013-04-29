@@ -192,7 +192,7 @@
                 <input type="hidden" id="txt_search_person_filter" value="0" />
                 <div class="input-append">
                     <input class="input-xlarge" id="txt_search_query" type="text">
-                    <button class="btn" type="button">
+                    <button class="btn" type="button" id="btn_do_search_person">
                         <i class="icon-search"></i>
                     </button>
                     <div class="btn-group">
@@ -201,8 +201,8 @@
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a href="#" data-name="btn_search_person_fillter" data-value="0">ค้นจาก HN</a></li>
-                            <li><a href="#" data-name="btn_search_person_fillter" data-value="1">ค้นจาก เลขบัตรประชาชน</a></li>
+                            <li><a href="#" data-name="btn_search_person_fillter" data-value="0">ค้นจาก เลขบัตรประชาชน</a></li>
+                            <li><a href="#" data-name="btn_search_person_fillter" data-value="1">ค้นจาก HN</a></li>
                             <li><a href="#" data-name="btn_search_person_fillter" data-value="2">ค้นจาก ชื่อ - สกุล</a></li>
                         </ul>
                     </div>
@@ -216,11 +216,13 @@
                     <th>ชื่อ - สกุล</th>
                     <th>วันเกิด</th>
                     <th>อายุ</th>
+                    <th>เพศ</th>
                     <th>#</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr>
+                    <td>...</td>
                     <td>...</td>
                     <td>...</td>
                     <td>...</td>

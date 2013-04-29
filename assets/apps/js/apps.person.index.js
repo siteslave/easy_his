@@ -42,6 +42,9 @@ head.ready(document).ready(function(){
                     }
                 });
         },
+        hide_search_person: function(){
+            $('#mdl_search_person').modal('hide');
+        },
         show_village_survey: function(){
             $('#mdl_village_survey').modal({
                 backdrop: 'static'
@@ -202,6 +205,29 @@ head.ready(document).ready(function(){
         remove: function(hn, cb){
 
             var url = 'person/remove',
+                params = {
+                    hn: hn
+                };
+
+            app.ajax(url, params, function(err, data){
+                return err ? cb(err) : cb(null, data);
+            });
+        },
+        search_person: function(query, filter, cb){
+
+            var url = 'person/search',
+                params = {
+                    filter: filter,
+                    query: query
+                };
+
+            app.ajax(url, params, function(err, data){
+                return err ? cb(err) : cb(null, data);
+            });
+        },
+        search_result: function(hn, cb){
+
+            var url = 'person/search_result',
                 params = {
                     hn: hn
                 };
@@ -428,7 +454,7 @@ head.ready(document).ready(function(){
                         '<td>'+ v.sex +'</td>' +
                         '<td>'+ v.fstatus +'</td>' +
                         '<td>'+ discharge_status +'</td>' +
-                        '<td>'+ v.typearea +'</td>' +
+                        '<td>'+ app.clear_null(v.typearea) +'</td>' +
                         '<td> <div class="btn-group">' +
 /*                        '<a class="btn" href="javascript:void(0);" data-name="btn_remove_person" data-hn="'+ v.hn +'" title="ลบ">' +
                         '<i class="icon-trash"></i></a>' +*/
@@ -698,7 +724,97 @@ head.ready(document).ready(function(){
 
     //do search person
     $('a[data-name="btn_search_person_fillter"]').on('click', function(){
-        var by = $(this).data('value');
-        $('#txt_search_person_filter').val(by);
+        var filter = $(this).data('value');
+        $('#txt_search_person_filter').val(filter);
+
+    });
+
+    person.set_search_person_result = function(data)
+    {
+        if(!data)
+        {
+            $('#tbl_search_person_result > tbody').append(
+                '<tr><td colspan="7">ไม่พบรายการ</td></tr>');
+        }
+        else
+        {
+            _.each(data.rows, function(v){
+                var t = typeof v.typearea == 'undefined' ? '0' : '1';
+
+                $('#tbl_search_person_result > tbody').append(
+                    '<tr>' +
+                    '<td>'+ v.hn +'</td>' +
+                    '<td>'+ v.cid +'</td>' +
+                    '<td>'+ v.first_name + ' ' + v.last_name +'</td>' +
+                    '<td>'+ app.mongo_to_thai_date(v.birthdate) +'</td>' +
+                    '<td>'+ v.age +'</td>' +
+                    '<td>'+ v.sex +'</td>' +
+                    '<td><a href="#" class="btn" data-hn="'+ v.hn + '" data-name="btn_selected_person" data-owner="'+ t +'">' +
+                        '<i class="icon-ok"></i></a></td>' +
+                    '</tr>');
+            });
+        }
+    };
+
+   $(document).on('click', 'a[data-name="btn_selected_person"]', function(e){
+       if($(this).data('owner') == '0')
+       {
+           app.alert('บุคคลนี้ไม่ใช่บุคคลในเขตรับผิดชอบ');
+       }
+       else
+       {
+           var hn = $(this).data('hn');
+
+           $('#tbl_person > tbody').empty();
+
+           $('#main_paging').fadeOut('slow');
+
+           person.ajax.search_result(hn, function(err, data){
+               if(err)
+               {
+                   app.alert('ไม่พบรายการ');
+                   $('#tbl_person > tbody').append(
+                       '<tr>' +
+                           '<td colspan="11">ไม่พบรายการ</td>' +
+                           '</tr>'
+                   );
+               }
+               else
+               {
+                   person.set_person(data);
+                   person.modal.hide_search_person();
+               }
+
+
+           });
+       }
+        e.preventDefault();
+    });
+
+    $('#btn_do_search_person').on('click', function(){
+        var query = $('#txt_search_query').val(),
+            filter = $('#txt_search_person_filter').val();
+
+        if(!query)
+        {
+            app.alert('กรุณาระบุคำค้นหา');
+        }
+        else
+        {
+            $('#tbl_search_person_result > tbody').empty();
+
+            person.ajax.search_person(query,filter, function(err, data){
+                if(err)
+                {
+                    app.alert(err);
+                    $('#tbl_search_person_result > tbody').append(
+                        '<tr><td colspan="7">ไม่พบรายการ</td></tr>');
+                }
+                else
+                {
+                    person.set_search_person_result(data);
+                }
+            });
+        }
     });
 });

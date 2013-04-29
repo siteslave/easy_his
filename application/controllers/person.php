@@ -498,6 +498,45 @@ class Person extends CI_Controller
         render_json($json);
     }
 
+    public function search_result(){
+        $hn = $this->input->post('hn');
+
+        if(empty($hn)){
+            $json = '{"success": false, "msg": "No HN defined"}';
+        }else{
+            $rs = $this->person->search_person_by_hn($hn);
+
+            if($rs){
+                $arr_result = array();
+                foreach($rs as $r){
+                    $obj                = new stdClass();
+                    $obj->first_name    = $r['first_name'];
+                    $obj->last_name     = $r['last_name'];
+                    $obj->birthdate     = to_js_date($r['birthdate']);
+                    $obj->sex           = get_sex( (string) $r['sex']);
+                    $obj->hn            = $r['hn'];
+                    $obj->cid           = $r['cid'];
+                    $obj->id            = get_first_object($r['_id']);
+                    $obj->age           = count_age( (string)$r['birthdate']);
+                    $obj->fstatus       = get_fstatus_name($r['fstatus']);
+                    $obj->title         = $this->basic->get_title_name($r['title']);
+                    $obj->typearea      = $this->person->get_typearea($r['hn']);
+                    $obj->discharge_status = $r['discharge_status'];
+
+                    $arr_result[] = $obj;
+                }
+
+                $rows = json_encode($arr_result);
+
+                $json = '{"success": true, "rows": '.$rows.'}';
+            }else{
+                $json = '{"success": false, "msg": "Model error, please check your data."}';
+            }
+        }
+
+        render_json($json);
+    }
+
 
     public function edit($hn = ''){
         if(empty($hn)){
@@ -944,7 +983,7 @@ class Person extends CI_Controller
     * @internal param	string 	$query	The query for search
     * @internal param	string	$filter	The filter type. 0 = CID, 1 = HN, 2 = First name and last name
     */
-    public function search_person()
+    public function search()
     {
         $query = $this->input->post('query');
         $filter = $this->input->post('filter');

@@ -730,7 +730,7 @@ class Person_model extends CI_Model
     public function search_person_by_hn($hn)
     {
         $rs = $this->mongo_db
-            ->where('hn', $hn)
+            ->where(array('hn' => (string) $hn))
             ->get('person');
 
         return $rs;
