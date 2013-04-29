@@ -40,7 +40,7 @@ class Person_model extends CI_Model
 
         $result = $this->mongo_db
                         ->where(array('village_id' => new MongoId($village_id)))
-                        ->order_by(array('_id' => 1))
+                        ->order_by(array('house' => 1))
                         ->get('houses');
         return $result;
     }
@@ -351,10 +351,78 @@ class Person_model extends CI_Model
      * @param $house_code
      * @return mixed
      */
-    public function get_person_list($house_code){
+    public function get_list($house_code, $start, $limit){
         $this->mongo_db->add_index('person', array('house_code' => -1));
-        $result = $this->mongo_db->where(array('house_code' => new MongoId($house_code)))->get('person');
+
+        $result = $this->mongo_db
+            ->where(array(
+                'house_code' => new MongoId($house_code),
+                'typearea.owner_id' => new MongoId($this->owner_id)
+            ))
+            ->order_by(array('first_name' => 1))
+            ->offset($start)
+            ->limit($limit)
+            ->get('person');
         return $result;
+    }
+
+    public function get_list_total($house_code){
+        $this->mongo_db->add_index('person', array('house_code' => -1));
+
+        $result = $this->mongo_db
+            ->where(array(
+                'house_code' => new MongoId($house_code),
+                'typearea.owner_id' => new MongoId($this->owner_id)
+            ))
+            ->count('person');
+        return $result;
+    }
+
+    public function get_list_all($village_id, $start, $limit){
+        $this->mongo_db->add_index('person', array('house_code' => -1));
+
+        $houses = $this->_get_house_list($village_id);
+
+        $result = $this->mongo_db
+            ->where(array(
+                'typearea.owner_id' => new MongoId($this->owner_id)
+            ))
+            ->where_in('house_code', $houses)
+            ->order_by(array('first_name' => 1))
+            ->offset($start)
+            ->limit($limit)
+            ->get('person');
+        return $result;
+    }
+    public function get_list_all_total($village_id){
+        $this->mongo_db->add_index('person', array('house_code' => -1));
+
+        $houses = $this->_get_house_list($village_id);
+
+        $result = $this->mongo_db
+            ->where(array(
+                'typearea.owner_id' => new MongoId($this->owner_id)
+            ))
+            ->where_in('house_code', $houses)
+            ->count('person');
+        return $result;
+    }
+
+
+    private function _get_house_list($village_id)
+    {
+        $this->mongo_db->add_index('houses', array('village_id' => -1));
+
+        $rs = $this->mongo_db
+            ->select(array('_id'))
+            ->where(array('village_id' => new MongoId($village_id)))
+            ->get('houses');
+
+        $arr = array();
+        foreach($rs as $r)
+            $arr[] = $r['_id'];
+
+        return $arr;
     }
 
     /**
@@ -662,7 +730,7 @@ class Person_model extends CI_Model
     public function search_person_by_hn($hn)
     {
         $rs = $this->mongo_db
-            ->where('hn', $hn)
+            ->where(array('hn' => (string) $hn))
             ->get('person');
 
         return $rs;
@@ -798,5 +866,42 @@ class Person_model extends CI_Model
             ->get('villages');
 
         return $rs ? $rs[0]['survey'] : NULL;
+    }
+
+    public function remove($hn)
+    {
+        $rs = $this->mongo_db->where(array('hn' => (string) $hn))
+            ->set(array('marked_delete' => 'Y'))
+            ->update('person');
+        return $rs;
+    }
+
+    public function get_typearea($hn)
+    {
+        $rs = $this->mongo_db
+            ->select(array('typearea'))
+            ->where(array('hn' => (string) $hn))
+            ->limit(1)
+            ->get('person');
+
+        if($rs)
+        {
+            foreach($rs[0]['typearea'] as $r)
+            {
+                if(get_first_object($r['owner_id']) == $this->owner_id)
+                {
+                    return $r['typearea'];
+                }
+                else
+                {
+                    return NULL;
+                }
+            }
+        }
+        else
+        {
+            return NULL;
+        }
+
     }
 }
