@@ -756,7 +756,7 @@
                     </tbody>
                 </table>
             </div>
-            <div class="span6" id="div_result_chart" style="height: 260px;"> </div>
+            <div class="span6" id="div_result_chart" style="height: 250px;"> </div>
         </div>
     </div>
 </div>

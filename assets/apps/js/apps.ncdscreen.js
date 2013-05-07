@@ -997,11 +997,18 @@ head.ready(function(){
     });
 
     ncdscreen.set_result_chart = function(total, result){
+
         var mean = total / 3;
-        var low = mean;
         var medium = mean * 2.5;
 
+        var m = (mean * 100) / total;
+        var d = (medium * 100) / total;
+        var r = parseFloat(((result * 100) / total).toFixed(2));
+
         $('#div_result_chart').highcharts({
+                credits : {
+                    enabled : false
+                },
                 chart: {
                     type: 'gauge',
                     plotBackgroundColor: null,
@@ -1050,7 +1057,7 @@ head.ready(function(){
                 // the value axis
                 yAxis: {
                     min: 0,
-                    max: total,
+                    max: 100,
 
                     minorTickInterval: 'auto',
                     minorTickWidth: 1,
@@ -1064,33 +1071,33 @@ head.ready(function(){
                     tickLength: 10,
                     tickColor: '#666',
                     labels: {
-                        step: 5,
+                        step: 2,
                         rotation: 'auto'
                     },
                     title: {
-                        text: 'คน'
+                        text: '%'
                     },
                     plotBands: [{
                         from: 0,
-                        to: low,
+                        to: 50,
                         color: '#DF5353' // red
 
                     }, {
-                        from: low,
-                        to: medium,
+                        from: 50,
+                        to: 90,
                         color: '#DDDF0D' // yellow
                     }, {
-                        from: medium,
-                        to: total,
+                        from: 90,
+                        to: 100,
                         color: '#55BF3B' // green
                     }]
                 },
 
                 series: [{
-                    name: 'คน',
-                    data: [result],
+                    name: '%',
+                    data: [r],
                     tooltip: {
-                        valueSuffix: ' '
+                        valueSuffix: ' %'
                     }
                 }]
 
