@@ -380,6 +380,9 @@ class Service_model extends CI_Model
     public function save_diag_opd($data){
         $rs = $this->mongo_db
             ->insert('diagnosis_opd', array(
+                'owner_id'      => new MongoId($this->owner_id),
+                'user_id'       => new MongoId($this->user_id),
+                'provider_id'   => new MongoId($this->provider_id),
                 'vn'            => (string) $data['vn'],
                 'code'          => $data['code'],
                 'diag_type'     => $data['diag_type'],
@@ -407,6 +410,8 @@ class Service_model extends CI_Model
     public function  save_proced_opd($data){
         $rs = $this->mongo_db
             ->insert('procedures_opd', array(
+                'owner_id'      => new MongoId($this->owner_id),
+                'user_id'       => new MongoId($this->user_id),
                 'code'          => $data['code'],
                 'price'         => (float) $data['price'],
                 'provider'      => (string) $data['provider'],
@@ -466,12 +471,13 @@ class Service_model extends CI_Model
     {
         $rs = $this->mongo_db
             ->insert('drugs_opd', array(
+                'owner_id'      => new MongoId($this->owner_id),
+                'user_id'       => new MongoId($this->user_id),
+                'provider_id'   => new MongoId($this->provider_id),
                 'vn'            => (string) $data['vn'],
                 'drug_id'       => new MongoId($data['drug_id']),
-                'usage_id'      => new MongoId($data['usage_id']),
                 'price'         => (float) $data['price'],
                 'qty'           => (int) $data['qty'],
-                'provider_id'   => new MongoId($data['provider_id']),
                 'last_update'   => date('Y-m-d H:i:s')
             ));
         return $rs;
@@ -487,6 +493,8 @@ class Service_model extends CI_Model
             ->set(array(
                 'qty'           => (float) $data['qty'],
                 'price'         => (float) $data['price'],
+                'user_id'       => new MongoId($this->user_id),
+                'provider_id'   => new MongoId($this->provider_id),
                 'last_update'   => date('Y-m-d H:i:s')
             ))
             ->update('drugs_opd');
@@ -688,7 +696,7 @@ class Service_model extends CI_Model
 
     public function get_fp_list_all($hn)
     {
-        $rs = $this->mongo_db->where(array('hn' => $hn))->get('visit_fp');
+        $rs = $this->mongo_db->where(array('hn' => (string) $hn))->get('visit_fp');
         return $rs;
     }
     //------------------------------------------------------------------------------------------------------------------
