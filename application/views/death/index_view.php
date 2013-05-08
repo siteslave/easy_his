@@ -17,7 +17,6 @@
 <table class="table table-striped table-hover" id="tbl_list">
     <thead>
         <tr>
-            <th>ลำดับ</th>
             <th>HN</th>
             <th>เลขบัตรประชาชน</th>
             <th>ชื่อ - สกุล</th>
@@ -30,7 +29,7 @@
     </thead>
     <tbody>
     <tr>
-        <td colspan="9">ไม่พบรายการ</td>
+        <td colspan="8">ไม่พบรายการ</td>
     </tr>
     </tbody>
 </table>
@@ -184,7 +183,7 @@
 <!-- end register service -->
 
 <script type="text/javascript">
-    head.js('<?php echo base_url(); ?>assets/apps/js/app.death.js');
+    head.js('<?php echo base_url(); ?>assets/apps/js/apps.death.js');
 </script>
 
 

@@ -173,7 +173,7 @@ head.ready(function(){
 
         if(!data)
         {
-            $('#tbl_list > tbody').append('<tr><td colspan="9">ไม่พบข้อมูล</td></td></tr>');
+            $('#tbl_list > tbody').append('<tr><td colspan="8">ไม่พบข้อมูล</td></td></tr>');
         }
         else
         {
@@ -182,7 +182,6 @@ head.ready(function(){
             {
                 $('#tbl_list > tbody').append(
                     '<tr>' +
-                        '<td>'+ i +'</td>' +
                         '<td>'+ v.hn +'</td>' +
                         '<td>'+ v.cid +'</td>' +
                         '<td>'+ v.first_name + ' ' + v.last_name +'</td>' +

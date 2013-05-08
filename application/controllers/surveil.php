@@ -145,7 +145,7 @@ class Surveil extends CI_Controller {
         }
         else
         {
-            $rs = $this->women->clear($data['hn'], $data['year']);
+            $rs = $this->surveil->clear($data);
             if($rs)
             {
                 $json = '{"success": true}';
@@ -228,6 +228,7 @@ class Surveil extends CI_Controller {
 
         render_json($json);
     }
+
 
 }
 

@@ -190,6 +190,18 @@ class Surveil_model extends CI_Model
 
         return $rs > 0 ? TRUE : FALSE;
     }
+    public function clear($data)
+    {
+        $rs = $this->mongo_db
+            ->where(array(
+                'vn' => (string) $data['vn'],
+                'diagcode' => $data['diag'],
+                'hn' => (string) $data['hn']
+            ))
+            ->delete('visit_surveillance');
+
+        return $rs ? TRUE : FALSE;
+    }
 
     public function save($data)
     {

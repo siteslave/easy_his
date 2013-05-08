@@ -20,7 +20,11 @@
     <button type="button" class="btn btn-info" id="btn_do_get_list"><i class="icon-search"></i></button> |
     ค้นหา <input type="text" class="input-xlarge" id="txt_query" placeholder="พิมพ์ HN หรือ เลขบัตรประชาชน หรือ ชื่อ-สกุล" />
     <button type="button" id="btn_do_search" class="btn btn-info"><i class="icon-search"></i></button>
-    <button type="button" id="btn_refresh" class="btn btn-success pull-right"><i class="icon-refresh"></i> แสดงทั้งหมด</button>
+    <div class="btn-group pull-right">
+        <button type="button" id="btn_chart" rel="tooltip" title="ดูผลงานการปฏิบัติงาน" class="btn"><i class="icon-bar-chart"></i></button>
+        <button type="button" id="btn_refresh" rel="tooltip" title="รีเฟรชข้อมูลใหม่" class="btn btn-success"><i class="icon-refresh"></i></button>
+    </div>
+
 </form>
 
 <table class="table table-striped table-hover" id="tbl_list">

@@ -37,6 +37,23 @@ class Basic_model extends CI_Model
 
         return $arr_result;
     }
+    public function get_inscl()
+    {
+        $result = $this->mongo_db
+            ->order_by(array('inscl' => 1))
+            ->get('ref_inscls');
+
+        $arr_result = array();
+        foreach($result as $r){
+            $obj = new stdClass();
+            $obj->code = $r['inscl'];
+            $obj->name = '[' . $r['inscl'] . '] ' . $r['name'];
+
+            $arr_result[] = $obj;
+        }
+
+        return $arr_result;
+    }
 
     public function search_drug_usage_by_alias($query)
     {

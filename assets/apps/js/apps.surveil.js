@@ -285,7 +285,8 @@ head.ready(function(){
                         'data-age="'+ v.age +'" data-birthdate="'+ app.mongo_to_thai_date(v.birthdate) +'" ' +
                         'data-diag_code="'+ v.diag_code +'" data-vn="'+ v.vn +'" data-diag_name="'+ v.diag_name +'">' +
                         '<i class="icon-edit"></i></a>' +
-                        '<a href="javascript:void(0);" data-name="btn_clear" class="btn" data-hn="'+ v.hn +'" data-year="">' +
+                        '<a href="javascript:void(0);" data-name="btn_clear" class="btn" data-vn="'+ v.vn +'" ' +
+                        'data-hn="'+ v.hn +'" data-diag="'+ v.diag_code +'">' +
                         '<i class="icon-trash"></i></a>' +
                         '</div></td>' +
                         '</tr>'
@@ -450,10 +451,11 @@ head.ready(function(){
     //clear
     $(document).on('click', 'a[data-name="btn_clear"]', function(){
         var items = {};
-        items.year = $(this).data('year');
+        items.diag = $(this).data('diag');
         items.hn = $(this).data('hn');
+        items.vn = $(this).data('vn');
 
-        app.confirm('คุณต้องการลบรายการสำรวจ ใช่หรือไม่?', function(res){
+        app.confirm('คุณต้องการลบรายการ ใช่หรือไม่?', function(res){
             if(res)
             {
                 surveil.ajax.clear(items, function(err){
@@ -463,7 +465,7 @@ head.ready(function(){
                     }
                     else
                     {
-                        app.alert('ยกเลิกรายการเสร็จเรียบร้อย');
+                        app.alert('ลบรายการเสร็จเรียบร้อยแล้ว');
                         surveil.get_list();
                     }
                 });
