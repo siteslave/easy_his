@@ -102,6 +102,13 @@
                                      <i class="icon-book"></i> คัดกรองเบาหวาน/ความดัน 15 ปีขึ้นไป
                                  </a>
                             </li>
+                            <li class="divider"></li>
+                             <li>
+                                 <a href="<?php echo site_url('surveil'); ?>">
+                                     <i class="icon-book"></i> บันทึกข้อมูลระบาดวิทยา (R506)
+                                 </a>
+                            </li>
+
                         </ul>
                     </li>
                     <li class="dropdown">
