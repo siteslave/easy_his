@@ -1447,6 +1447,19 @@ class Basic_model extends CI_Model
 
         return $arr_result;
     }
+
+    public function get_506_list()
+    {
+        $rs = $this->mongo_db
+            ->select(array('icd'))
+            ->get('ref_506_code');
+
+        $icd = array();
+        foreach($rs as $r)
+            $icd[] = $r['icd'];
+
+        return $icd;
+    }
 }
 
 //End file

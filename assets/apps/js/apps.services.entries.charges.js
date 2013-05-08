@@ -201,6 +201,7 @@ head.ready(function(){
         $('#txt_charge_qty').val('0');
         $('#charge_isupdate').val('0');
         $('#txt_charge_code').val('');
+        $('#service_charge_id').val('');
     };
     //save charge
     $('#btn_charge_do_save').click(function(){
@@ -263,7 +264,7 @@ head.ready(function(){
     });
 
     $('#mdl_charge_new').on('hidden', function(){
-        //charge.clear_form();
+        charge.clear_form();
     });
 
     //remove charge

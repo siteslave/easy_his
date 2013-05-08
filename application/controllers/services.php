@@ -35,12 +35,15 @@ class Services extends CI_Controller
 
         $this->load->helper('person');
 
+        $this->service->owner_id = $this->owner_id;
+        $this->service->user_id = $this->user_id;
+        $this->service->provider_id = $this->provider_id;
+        $this->basic->owner_id  = $this->owner_id;
+
     }
 
     public function index()
     {
-        $this->basic->owner_id  = $this->owner_id;
-
         $doctor_rooms           = $this->basic->get_doctor_room();
         $clinics                = $this->basic->get_clinic();
         $inscls                 = $this->basic->get_insurance();
@@ -53,8 +56,6 @@ class Services extends CI_Controller
     }
     public function entries($vn = '')
     {
-    	$this->service->owner_id = $this->owner_id;
-    	
         if(empty($vn) || !isset($vn))
         {
             show_error('No vn found.', 404);
@@ -1171,7 +1172,8 @@ class Services extends CI_Controller
    					$obj->fp_name = get_fp_type_name($r['fp_type']);
    					$obj->provider_name = get_provider_name_by_id(get_first_object($r['provider_id']));
    					$obj->owner_name = get_owner_name(get_first_object($r['owner_id']));
-   					array_push($arr_result, $obj);
+
+                    $arr_result[] = $obj;
    				}
    					
    				$rows = json_encode($arr_result);
@@ -1574,6 +1576,7 @@ class Services extends CI_Controller
         }
 
     }
+
 }
 
 /* End of file services.php */
