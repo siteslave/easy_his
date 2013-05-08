@@ -46,7 +46,7 @@ class Services extends CI_Controller
     {
         $doctor_rooms           = $this->basic->get_doctor_room();
         $clinics                = $this->basic->get_clinic();
-        $inscls                 = $this->basic->get_insurance();
+        $inscls                 = $this->basic->get_inscl();
 
         $data['doctor_rooms']   = $doctor_rooms;
         $data['clinics']        = $clinics;
@@ -200,10 +200,6 @@ class Services extends CI_Controller
         if(empty($data)){
             $json = '{"success": false, "msg": "No data for save."}';
         }else{
-
-            $this->service->owner_id = $this->owner_id;
-            $this->service->user_id = $this->user_id;
-            $this->service->provider_id = $this->provider_id;
 
             if(empty($data['vn'])){
                 //insert

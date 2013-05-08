@@ -25,6 +25,15 @@ class Death extends CI_Controller {
         $this->load->model('Person_model', 'person');
         $this->load->model('Death_model', 'death');
 
+        $this->person->owner_id = $this->owner_id;
+        $this->person->user_id = $this->user_id;
+        $this->person->provider_id = $this->provider_id;
+
+
+        $this->death->provider_id = $this->provider_id;
+        $this->death->user_id = $this->user_id;
+        $this->death->owner_id = $this->owner_id;
+
         $this->load->helper('person');
     }
     public function index()
@@ -38,15 +47,10 @@ class Death extends CI_Controller {
         if(!empty($data))
         {
             //check person exist
-            $person_exist = $this->person->check_person_exist_by_hn($data['hn']);
+            $person_exist = $this->person->check_owner($data['hn']);
 
             if($person_exist)
             {
-
-                $this->death->provider_id = $this->provider_id;
-                $this->death->user_id = $this->user_id;
-                $this->death->owner_id = $this->owner_id;
-
                 if($data['isupdate'] == '1')
                 {
                     //update
@@ -109,7 +113,6 @@ class Death extends CI_Controller {
 
         $limit = (int) $stop - (int) $start;
 
-        $this->death->owner_id = $this->owner_id;
         $rs = $this->death->get_list($start, $limit);
 
         if($rs)
@@ -146,8 +149,6 @@ class Death extends CI_Controller {
 
     public function get_list_total()
     {
-        $this->death->owner_id = $this->owner_id;
-
         $total = $this->death->get_list_total();
 
         $json = '{"success": true, "total": '.$total.'}';
@@ -157,8 +158,6 @@ class Death extends CI_Controller {
     public function search()
     {
         $query = $this->input->post('query');
-
-        $this->death->owner_id = $this->owner_id;
         $rs = $this->death->search_by_hn($query);
 
         if($rs)
@@ -167,6 +166,7 @@ class Death extends CI_Controller {
             foreach($rs as $r)
             {
                 $person = $this->person->get_person_detail_with_hn($r['hn']);
+
                 $obj                = new stdClass();
                 $obj->hn            = $r['hn'];
                 $obj->cid           = $person['cid'];

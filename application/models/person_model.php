@@ -785,9 +785,15 @@ class Person_model extends CI_Model
 
         $rs = $this->mongo_db
             ->where(array(
-                'hn' => (string)$hn,
-                'typearea.owner_id' => new MongoId($this->owner_id)))
-            ->where_in('typearea.typearea', array('1', '3'))
+                'hn' => (string) $hn,
+                'typearea' =>
+                array(
+                    '$elemMatch' =>
+                    array(
+                        'typearea' => array('$in' => array('1', '3')),
+                        'owner_id' => new MongoId($this->owner_id)
+                    )
+                )))
             ->count('person');
         return $rs > 0 ? TRUE : FALSE;
     }

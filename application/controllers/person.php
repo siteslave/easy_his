@@ -38,10 +38,14 @@ class Person extends CI_Controller
         $this->load->model('Person_model', 'person');
         $this->load->model('Basic_model', 'basic');
 
-        $this->person->owner_id = $this->owner_id;
-
         //helpers
         $this->load->helper('person');
+
+        $this->person->owner_id = $this->owner_id;
+        $this->person->user_id = $this->user_id;
+        $this->person->provider_id = $this->provider_id;
+
+        $this->basic->owner_id = $this->owner_id;
     }
 
     //index action
@@ -57,7 +61,7 @@ class Person extends CI_Controller
         }else{
             $educations     = $this->basic->get_education();
             $titles         = $this->basic->get_title();
-            $inscls         = $this->basic->get_insurance();
+            $inscls         = $this->basic->get_inscl();
             $occupations    = $this->basic->get_occupation();
             $marry_status   = $this->basic->get_marry_status();
             $races          = $this->basic->get_races();
@@ -323,9 +327,6 @@ class Person extends CI_Controller
         if(empty($data)){
             $json = '{"success": false, "msg": "No data found"}';
         }else{
-            //check cid
-            $this->person->owner_id = $this->owner_id;
-
             $person_exist = $this->person->check_person_exist($data['cid']);
             if($person_exist){
                 $json = '{"success": false, "msg": "CID duplicate."}';
@@ -356,8 +357,6 @@ class Person extends CI_Controller
 
     public function do_update(){
         $data = $this->input->post('data');
-
-        $this->person->owner_id = $this->owner_id;
 
         if(empty($data)){
 
@@ -615,7 +614,7 @@ class Person extends CI_Controller
                 $data['chronic_discharge_types'] = $this->basic->get_chronic_discharge_type();
                 $data['educations']     = $this->basic->get_education();
                 $data['titles']         = $this->basic->get_title();
-                $data['inscls']         = $this->basic->get_insurance();
+                $data['inscls']         = $this->basic->get_inscl();
                 $data['occupations']    = $this->basic->get_occupation();
                 $data['marry_status']   = $this->basic->get_marry_status();
                 $data['races']          = $this->basic->get_races();
@@ -1033,6 +1032,7 @@ class Person extends CI_Controller
                     $obj->birthdate     = $r['birthdate'];
                     $obj->sex           = $r['sex'] == '1' ? 'ชาย' : 'หญิง';
                     $obj->age           = count_age($r['birthdate']);
+                    $obj->typearea      = $this->person->get_typearea($r['hn']);
 
                     $arr_result[] = $obj;
                 }

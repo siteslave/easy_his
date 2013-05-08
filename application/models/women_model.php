@@ -25,6 +25,8 @@ class Women_model extends CI_Model
     {
         $rs = $this->mongo_db
             ->where(array(
+                'mstatus' => new MongoId('5098989500082f0e2451c907'),
+                'sex' => '2',
                 'typearea' =>
                 array(
                     '$elemMatch' =>
@@ -33,7 +35,6 @@ class Women_model extends CI_Model
                         'owner_id' => new MongoId($this->owner_id)
                     )
                 )))
-            ->where(array('sex' => '2'))
             ->where_lte('birthdate', (string) ((int) date('Y') - 15).'1231')
             ->where_gte('birthdate', (string) ((int) date('Y') - 49).'0101')
             ->offset($start)
@@ -47,6 +48,8 @@ class Women_model extends CI_Model
     {
         $rs = $this->mongo_db
             ->where(array(
+                'mstatus' => new MongoId('5098989500082f0e2451c907'),
+                'sex' => '2',
                 'typearea' =>
                 array(
                     '$elemMatch' =>
@@ -55,7 +58,6 @@ class Women_model extends CI_Model
                         'owner_id' => new MongoId($this->owner_id)
                     )
                 )))
-            ->where(array('sex' => '2'))
             ->where_lte('birthdate', (string) ((int) date('Y') - 15).'1231')
             ->where_gte('birthdate', (string) ((int) date('Y') - 49).'0101')
             ->count('person');
@@ -93,6 +95,7 @@ class Women_model extends CI_Model
     public function update($data)
     {
         $rs = $this->mongo_db
+            ->where(array('hn' => (string) $data['hn']))
             ->set(array(
                 'fptype' => $data['fptype'],
                 'nofpcause' => $data['nofpcause'],

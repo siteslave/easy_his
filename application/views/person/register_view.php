@@ -307,6 +307,9 @@
                             <option value="">--</option>
                             <?php foreach($inscls as $t) echo '<option value="'.$t->code.'">['.$t->code.'] '.$t->name.'</option>'; ?>
                         </select>
+                        <a href="#" class="btn">
+                            <i class="icon-refresh"></i>
+                        </a>
                     </div>
                 </div>
 
