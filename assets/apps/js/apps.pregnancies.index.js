@@ -368,7 +368,7 @@ head.ready(function(){
 
     $(document).on('click', 'a[data-name="btn_selected_person"]', function(){
 
-        if( ! _.indexOf(['1', '3'], $(this).data('typearea')))
+        if( ! _.indexOf(['1', '3'], $(this).data('typearea')) || !$(this).data('typearea'))
         {
             app.alert('บุคคลนี้ไม่ใช่บุคคลในเขตรับผิดชอบ');
         }

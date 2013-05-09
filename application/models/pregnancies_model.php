@@ -38,18 +38,6 @@ class Pregnancies_model extends CI_Model
         return $rs;
     }
 
-    public function anc_get_list_by_house_total()
-    {
-        $rs = $this->mongo_db
-            ->where(array(
-                        'registers.clinic_code' => $this->clinic_code,
-                        'registers.owner_id' => new MongoId($this->owner_id)
-            ))
-            ->count('person');
-
-        return $rs;
-    }
-
     //------------------------------------------------------------------------------------------------------------------
     /**
      * Save anc visit
@@ -66,7 +54,7 @@ class Pregnancies_model extends CI_Model
                 'owner_id' => new MongoId($this->owner_id),
                 'provider_id' => new MongoId($this->provider_id),
                 'user_id' => new MongoId($this->user_id),
-                'last_update' => date('Ymd H:i:s')
+                'last_update' => date('Y-m-d H:i:s')
             ))->update('pregnancies');
 
         return $rs;
@@ -288,7 +276,7 @@ class Pregnancies_model extends CI_Model
                 'postnatal.$.uterus'            => $data['uterus'],
                 'postnatal.$.tits'              => $data['tits'],
                 'postnatal.$.user_id'           => new MongoId($this->user_id),
-                'last_update'                   => date('Ymd H:i:s')
+                'last_update'                   => date('Y-m-d H:i:s')
             ))->update('pregnancies');
 
         return $rs;
@@ -334,18 +322,19 @@ class Pregnancies_model extends CI_Model
         $rs = $this->mongo_db
             ->where(array('hn' => $data['hn'], 'gravida' => $data['gravida']))
             ->set(array(
-                        'prenatal.lmp'              => to_string_date($data['lmp']),
-                        'prenatal.edc'              => to_string_date($data['edc']),
-                        'prenatal.vdrl'             => $data['vdrl'],
-                        'prenatal.hb'               => $data['hb'],
-                        'prenatal.hiv'              => $data['hiv'],
-                        'prenatal.hct'              => $data['hct'],
-                        'prenatal.hct_date'         => to_string_date($data['hct_date']),
-                        'prenatal.thalassemia'      => $data['thalassemia'],
-                        'prenatal.do_export'        => $data['do_export'],
-                        'prenatal.do_export_date'   => to_string_date($data['do_export_date']),
-                        'prenatal.user_id'          => new MongoId($this->user_id),
-                        'preg_status'               => $data['preg_status'],
+                'prenatal.lmp'              => to_string_date($data['lmp']),
+                'prenatal.edc'              => to_string_date($data['edc']),
+                'prenatal.vdrl'             => $data['vdrl'],
+                'prenatal.hb'               => $data['hb'],
+                'prenatal.hiv'              => $data['hiv'],
+                'prenatal.hct'              => $data['hct'],
+                'prenatal.hct_date'         => to_string_date($data['hct_date']),
+                'prenatal.thalassemia'      => $data['thalassemia'],
+                'prenatal.do_export'        => $data['do_export'],
+                'prenatal.do_export_date'   => to_string_date($data['do_export_date']),
+                'prenatal.user_id'          => new MongoId($this->user_id),
+                'preg_status'               => $data['preg_status'],
+                'last_update'                   => date('Y-m-d H:i:s')
 
         ))->update('pregnancies');
 
@@ -362,3 +351,5 @@ class Pregnancies_model extends CI_Model
         return count($rs) > 0 ? $rs[0] : NULL;
     }
 }
+
+//End of file
