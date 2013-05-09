@@ -132,14 +132,33 @@ $(function() {
         });
     };
 
+    rpt.date2_show = function() {
+        $('#mdlDate2').modal({
+            backdrop: 'static'
+        }).css({
+            //width: 680,
+            'margin-left': function() {
+                return -($(this).width() / 2);
+            }
+        });
+    }
+    rpt.date2_hide = function() {
+        $('#mdlDate2').modal('hide');
+    }
+
     $(document).on('click', '#btnView', function() {
         var url = $(this).attr('data-url');
-        location.href=site_url + url;
+        if(url.substr(8, 5) == 'date2') {
+            //app.alert('Date2');
+            rpt.date2_show();
+        } else {
+            location.href=site_url + url;
+        }
     });
 
     $(document).on('click', '#btnPrint', function() {
-        var url = $(this).attr('data-url');
-        location.href=site_url + url + '/print';
+        //var url = $(this).attr('data-url');
+        //location.href=site_url + url + '/print';
     });
 
     rpt.get_list();

@@ -34,6 +34,20 @@
     <ul></ul>
 </div>
 
+<div class="modal hide fade" id="mdlDate2">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>Modal header</h3>
+    </div>
+    <div class="modal-body">
+        
+    </div>
+    <div class="modal-footer">
+        <a class="btn btn-danger" data-dismiss="modal">ยกเลิก</a>
+        <a class="btn btn-primary">แสดงรายงาน</a>
+    </div>
+</div>
+
 <script type="text/javascript">
     head.js('<?php echo base_url(); ?>assets/apps/js/report.menu.report.js');
 </script>
