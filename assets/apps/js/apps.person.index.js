@@ -739,7 +739,6 @@ head.ready(document).ready(function(){
         else
         {
             _.each(data.rows, function(v){
-                var t = typeof v.typearea == 'undefined' ? '0' : '1';
 
                 $('#tbl_search_person_result > tbody').append(
                     '<tr>' +
@@ -749,7 +748,7 @@ head.ready(document).ready(function(){
                     '<td>'+ app.mongo_to_thai_date(v.birthdate) +'</td>' +
                     '<td>'+ v.age +'</td>' +
                     '<td>'+ v.sex +'</td>' +
-                    '<td><a href="#" class="btn" data-hn="'+ v.hn + '" data-name="btn_selected_person" data-owner="'+ t +'">' +
+                    '<td><a href="#" class="btn" data-hn="'+ v.hn + '" data-name="btn_selected_person" data-typearea="'+ v.typearea +'">' +
                         '<i class="icon-ok"></i></a></td>' +
                     '</tr>');
             });
@@ -757,7 +756,7 @@ head.ready(document).ready(function(){
     };
 
    $(document).on('click', 'a[data-name="btn_selected_person"]', function(e){
-       if($(this).data('owner') == '0')
+       if( ! _.indexOf(['1', '3'], $(this).data('typearea')))
        {
            app.alert('บุคคลนี้ไม่ใช่บุคคลในเขตรับผิดชอบ');
        }

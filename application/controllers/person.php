@@ -1009,7 +1009,6 @@ class Person extends CI_Controller
                 $last_name = count($name) == 2 ? $name[1] : '';
 
                 $rs = $this->person->search_person_by_first_last_name($first_name, $last_name);
-
             }
             else
             {

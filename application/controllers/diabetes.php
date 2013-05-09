@@ -287,19 +287,29 @@ class Diabetes extends CI_Controller
             }
             else
             {
-                $data['reg_serial'] = generate_serial('DM');
+                $is_owner = $this->person->check_owner($data['hn']);
 
-                $rs = $this->dm->do_register($data);
-
-                if($rs)
+                if($is_owner)
                 {
-                    //$this->person->do_register_clinic($data['hn'], $this->clinic_code);
-                    $json = '{"success": true}';
+                    $data['reg_serial'] = generate_serial('DM');
+
+                    $rs = $this->dm->do_register($data);
+
+                    if($rs)
+                    {
+                        //$this->person->do_register_clinic($data['hn'], $this->clinic_code);
+                        $json = '{"success": true}';
+                    }
+                    else
+                    {
+                        $json = '{"success": false, "msg": "ไม่สามารถบันทึกข้อมูลได้"}';
+                    }
                 }
                 else
                 {
-                    $json = '{"success": false, "msg": "ไม่สามารถบันทึกข้อมูลได้"}';
+                    $json = '{"success": false, "msg": "ไม่ใช่บุคคลในเขตรับผิดชอบ (Typearea ไม่ใช่ 1 หรือ 3)"}';
                 }
+
             }
 
         }

@@ -76,8 +76,6 @@ class Hypertension extends CI_Controller
         $stop = empty($stop) ? 25 : $stop;
 
         $limit = (int) $stop - (int) $start;
-
-        $this->ht->owner_id = $this->owner_id;
         $rs = $this->ht->get_list($start, $limit);
 
         if($rs)
@@ -287,21 +285,28 @@ class Hypertension extends CI_Controller
             }
             else
             {
-                $data['reg_serial'] = generate_serial('HT');
-
-                $rs = $this->ht->do_register($data);
-
-                if($rs)
+                $is_owner = $this->person->check_owner($data['hn']);
+                if($is_owner)
                 {
-                    //$this->person->do_register_clinic($data['hn'], $this->clinic_code);
-                    $json = '{"success": true}';
+                    $data['reg_serial'] = generate_serial('HT');
+
+                    $rs = $this->ht->do_register($data);
+
+                    if($rs)
+                    {
+                        //$this->person->do_register_clinic($data['hn'], $this->clinic_code);
+                        $json = '{"success": true}';
+                    }
+                    else
+                    {
+                        $json = '{"success": false, "msg": "ไม่สามารถบันทึกข้อมูลได้"}';
+                    }
                 }
                 else
                 {
-                    $json = '{"success": false, "msg": "ไม่สามารถบันทึกข้อมูลได้"}';
+                    $json = '{"success": false, "msg": "ไม่ใช่บุคคลในเขตรับผิดชอบ (Typearea ไม่ใช่ 1 หรือ 3)"}';
                 }
             }
-
         }
 
         render_json($json);

@@ -13,7 +13,7 @@ head.ready(function(){
     //ajax object
     preg.ajax = {
         search_person: function(query, filter, cb){
-            var url = 'pregnancies/search_person',
+            var url = 'person/search',
                 params = {
                     query: query,
                     filter: filter
@@ -128,10 +128,10 @@ head.ready(function(){
     preg.modal = {
         show_register: function()
         {
-            $('#mdl_register').modal({
+            $('#mdl_search_person').modal({
                 backdrop: 'static'
             }).css({
-                    width: 780,
+                    width: 960,
                     'margin-left': function() {
                         return -($(this).width() / 2);
                     }
@@ -161,7 +161,7 @@ head.ready(function(){
         },
         hide_register: function()
         {
-            $('#mdl_register').modal('hide');
+            $('#mdl_search_person').modal('hide');
         },
         hide_labor: function()
         {
@@ -207,7 +207,7 @@ head.ready(function(){
             });
         }else{
             $('#tbl_list > tbody').append(
-                '<tr><td colspan="8">ไม่พบรายการ</td></tr>'
+                '<tr><td colspan="10">ไม่พบรายการ</td></tr>'
             );
         }
     };
@@ -218,7 +218,7 @@ head.ready(function(){
             if(err){
                 app.alert(err);
                 $('#tbl_list > tbody').append(
-                    '<tr><td colspan="8">ไม่พบรายการ</td></tr>'
+                    '<tr><td colspan="10">ไม่พบรายการ</td></tr>'
                 );
             }else{
                 $('#main_paging > ul').paging(data.total, {
@@ -230,6 +230,9 @@ head.ready(function(){
                         preg.ajax.get_list(this.slice[0], this.slice[1], function(err, data){
                             if(err){
                                 app.alert(err);
+                                $('#tbl_list > tbody').append(
+                                    '<tr><td colspan="10">ไม่พบรายการ</td></tr>'
+                                );
                             }else{
                                 preg.set_list(data);
                             }
@@ -302,26 +305,34 @@ head.ready(function(){
 
     preg.set_search_person_result = function(data)
     {
-        _.each(data.rows, function(v)
+        if(!data)
         {
             $('#tbl_search_person_result > tbody').append(
-                '<tr>' +
-                    '<td>'+ v.hn +'</td>' +
-                    '<td>'+ v.cid +'</td>' +
-                    '<td>'+ v.first_name + ' ' + v.last_name +'</td>' +
-                    '<td>'+ app.mongo_to_thai_date(v.birthdate) +'</td>' +
-                    '<td>'+ v.age +'</td>' +
-                    '<td>'+ v.sex +'</td>' +
-                    '<td><a href="javascript:void(0);" data-name="btn_selected_person" class="btn" data-hn="'+ v.hn +'"><i class="icon-ok"></i></a></td>' +
-                    '</tr>'
-            );
-        });
+                '<tr><td colspan="7">ไม่พบรายการ</td></tr>');
+        }
+        else
+        {
+            _.each(data.rows, function(v){
+                $('#tbl_search_person_result > tbody').append(
+                    '<tr>' +
+                        '<td>'+ v.hn +'</td>' +
+                        '<td>'+ v.cid +'</td>' +
+                        '<td>'+ v.first_name + ' ' + v.last_name +'</td>' +
+                        '<td>'+ app.mongo_to_thai_date(v.birthdate) +'</td>' +
+                        '<td>'+ v.age +'</td>' +
+                        '<td>'+ v.sex +'</td>' +
+                        '<td><a href="#" class="btn" data-hn="'+ v.hn + '" data-sex="'+ v.sex +'" ' +
+                        'data-name="btn_selected_person" data-typearea="'+ v.typearea +'">' +
+                        '<i class="icon-ok"></i></a></td>' +
+                        '</tr>');
+            });
+        }
     };
 
     //search person
     $('#btn_do_search_person').click(function(){
-        var query = $('#txt_query_person').val(),
-            filter = $('input[data-name="txt_search_person_filter"]').val();
+        var query = $('#txt_search_query').val(),
+            filter = $('#txt_search_person_filter').val();
 
         if(!query)
         {
@@ -337,79 +348,63 @@ head.ready(function(){
                 if(err)
                 {
                     app.alert(err);
-                }
-                else if(!data)
-                {
-                    app.alert('ไม่พบรายการ');
+                    $('#tbl_search_person_result > tbody').append(
+                        '<tr><td colspan="7">ไม่พบรายการ</td></tr>');
                 }
                 else
                 {
-                   preg.set_search_person_result(data);
+                    preg.set_search_person_result(data);
                 }
             });
         }
     });
 
     //set filter
-    $('a[data-name="btn_set_search_person_filter"]').click(function(){
+    $('a[data-name="btn_search_person_fillter"]').click(function(){
         var filter = $(this).attr('data-value');
 
-        $('input[data-name="txt_search_person_filter"]').val(filter);
+        $('#txt_search_person_filter').val(filter);
     });
 
     $(document).on('click', 'a[data-name="btn_selected_person"]', function(){
 
-        var gravida = prompt('กรุณาระบุครรภ์ที่', 1);
-
-        if(gravida || gravida > 0)
+        if( ! _.indexOf(['1', '3'], $(this).data('typearea')))
         {
-            var data = {};
-            data.hn = $(this).attr('data-hn');
-            data.gravida = gravida;
+            app.alert('บุคคลนี้ไม่ใช่บุคคลในเขตรับผิดชอบ');
+        }
+        else if($(this).data('sex') == 'ชาย')
+        {
+            app.alert('บุคคลนี้เป็นเพศชาย ไม่สามารถลงทะเบียนได้');
+        }
+        else
+        {
+            var gravida = prompt('กรุณาระบุครรภ์ที่', 1);
 
-            if(confirm('คุณต้องการลงทะเบียนข้อมูลนี้ใช่หรือไม่?'))
+            if(gravida || gravida > 0)
             {
-                //do register
-                preg.ajax.do_register(data, function(err){
-                    if(err)
-                    {
-                        app.alert(err);
-                    }
-                    else
-                    {
-                        app.alert('ลงทะเบียนรายการเสร็จเรียบร้อยแล้ว');
-                        preg.modal.hide_register();
-                        preg.get_list();
-                    }
-                });
+                var data = {};
+                data.hn = $(this).data('hn');
+                data.gravida = gravida;
+
+                if(confirm('คุณต้องการลงทะเบียนข้อมูลนี้ใช่หรือไม่?'))
+                {
+                    //do register
+                    preg.ajax.do_register(data, function(err){
+                        if(err)
+                        {
+                            app.alert(err);
+                        }
+                        else
+                        {
+                            app.alert('ลงทะเบียนรายการเสร็จเรียบร้อยแล้ว');
+                            preg.modal.hide_register();
+                            preg.get_list();
+                        }
+                    });
+                }
             }
         }
     });
-
-    $('#sl_village').on('change', function(){
-        var village_id = $(this).val();
-
-        preg.ajax.get_house_list(village_id, function(err, data){
-            if(err)
-            {
-                app.alert(err);
-            }
-            else
-            {
-                if(data)
-                {
-                    $('#sl_house').empty();
-                   // $('#sl_house').append('<option value="00000000">ทั้งหมด</option>');
-
-                    _.each(data.rows, function(v){
-                        $('#sl_house').append('<option value="'+ v.id +'">' + v.house + '</option>');
-                    });
-
-                }
-            }
-        });
-    });
-
     preg.labor = {
         get_detail: function(anc_code)
         {
@@ -757,6 +752,10 @@ head.ready(function(){
 
         preg.anc_info.get_history_list(hn, gravida);
     });
+
+    $('#btn_refresh').on('click', function(){
+        preg.get_list();
+    })
 
     preg.get_list();
 });

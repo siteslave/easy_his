@@ -1,8 +1,8 @@
 /**
  * DM scripts
  *
- * @author      Mr.Utit Sairat <soodteeruk@gmail.com>
- * @copyright   Copyright 2013, Mr.Utit Sairat
+ * @author      Mr.Satit Rianpit(rianpit@gmail.com)
+ * @copyright   Copyright 2013, Mr.Satit Rianpit
  * @since       Version 1.0
  */
 head.ready(function(){
@@ -282,13 +282,13 @@ head.ready(function(){
         $('#dtpRegisDate').val(v.reg_date);
         $('#cboDiseaseType').val(v.diag_type);
         $('#cboDoctor').val(v.doctor);
-        $('#ch_pre_register').attr('checked', true);
+        $('#ch_pre_register').prop('checked', true);
 
        //v.pre_register == "Y" ? $('#ch_pre_register').attr('checked', true) : $('#ch_pre_register').attr('checked', false);
-        v.pregnancy == "1" ? $('#ch_pregnancy').attr('checked', true) : $('#ch_pregnancy').attr('checked', false);
-        v.hypertension == "1" ? $('#ch_hypertension').attr('checked', true) : $('#ch_hypertension').attr('checked', false);
-        v.insulin == "1" ? $('#ch_insulin').attr('checked', true) : $('#ch_insulin').attr('checked', false);
-        v.newcase == "1" ? $('#ch_newcase').attr('checked', true) : $('#ch_newcase').attr('checked', false);
+        v.pregnancy == "1" ? $('#ch_pregnancy').prop('checked', true) : $('#ch_pregnancy').removeProp('checked');
+        v.hypertension == "1" ? $('#ch_hypertension').prop('checked', true) : $('#ch_hypertension').removeProp('checked');
+        v.insulin == "1" ? $('#ch_insulin').prop('checked', true) : $('#ch_insulin').removeProp('checked');
+        v.newcase == "1" ? $('#ch_newcase').prop('checked', true) : $('#ch_newcase').removeProp('checked');
 
         $('#tboRegHosNumber').focus();
 
@@ -332,7 +332,7 @@ head.ready(function(){
     
     //set filter
     $('a[data-name="btn_set_search_person_filter"]').click(function(){
-        var filter = $(this).attr('data-value');
+        var filter = $(this).data('value');
 
         $('input[data-name="txt_search_person_filter"]').val(filter);
     });
@@ -444,14 +444,14 @@ head.ready(function(){
         $('#dtpRegisDate').val();
         $('#cboDiseaseType').val('');
         $('#cboDoctor').val('');
-        $('#ch_pre_register').attr('checked', false);
-        $('#ch_pregnancy').attr('checked', false);
-        $('#ch_hypertension').attr('checked', false);
-        $('#ch_insulin').attr('checked', false);
-        $('#ch_newcase').attr('checked', false);
+        $('#ch_pre_register').removeProp('checked');
+        $('#ch_pregnancy').removeProp('checked');
+        $('#ch_hypertension').removeProp('checked');
+        $('#ch_insulin').removeProp('checked');
+        $('#ch_newcase').removeProp('checked');
         $('#txt_search_person').val('');
-        $('#txt_search_person').removeAttr('disabled');
-        $('#btn_search_person').removeAttr('disabled');
+        $('#txt_search_person').removeProp('disabled');
+        $('#btn_search_person').removeProp('disabled');
     };
 
     $(document).on('click', 'a[data-name="remove"]', function() {
@@ -533,8 +533,8 @@ head.ready(function(){
         //do search
         ht.clear_register_form();
 
-        $('#txt_search_person').attr('disabled', 'disabled').css('background-color', 'white');
-        $('#btn_search_person').attr('disabled', 'disabled');
+        $('#txt_search_person').prop('disabled', true).css('background-color', 'white');
+        $('#btn_search_person').prop('disabled', true);
         $('#txt_isupdate').val('1');
 
         ht.modal.show_register();

@@ -62,7 +62,7 @@ head.ready(function(){
         },
 
         search_person: function(query, filter, cb){
-            var url = 'epis/search_person',
+            var url = 'person/search',
                 params = {
                     query: query,
                     filter: filter
@@ -99,7 +99,7 @@ head.ready(function(){
     epi.modal = {
         show_register: function()
         {
-            $('#mdl_register').modal({
+            $('#mdl_search_person').modal({
                 backdrop: 'static'
             }).css({
                     width: 780,
@@ -110,7 +110,7 @@ head.ready(function(){
         },
         hide_register: function()
         {
-            $('#mdl_register').modal('hide');
+            $('#mdl_search_person').modal('hide');
         }
     };
     //------------------------------------------------------------------------------------------------------------------
@@ -134,8 +134,8 @@ head.ready(function(){
                         '<td>' + v.sex + '</td>' +
                         '<td>' +
                         '<div class="btn-group">' +
-                        '<a href="javascript:void(0);" class="btn" data-name="edit" data-vname="' + v.name + '" data-id="' + v.id + '"><i class="icon-edit"></i></a>' +
-                        '<a href="javascript:void(0);" class="btn" data-name="remove" data-id="' + v.id + '"><i class="icon-trash"></i></a>' +
+                        '<a href="javascript:void(0);" class="btn" title="ความครอบคลุม" data-name="edit" data-vname="' + v.name + '" data-id="' + v.id + '"><i class="icon-edit"></i></a>' +
+                        '<a href="javascript:void(0);" class="btn" data-name="remove" title="จำหน่ายรายการ" data-id="' + v.id + '"><i class="icon-trash"></i></a>' +
                         '</div>' +
                         '</td>' +
                         '</tr>'
@@ -236,26 +236,33 @@ head.ready(function(){
 
     epi.set_search_person_result = function(data)
     {
-        _.each(data.rows, function(v)
+        if(!data)
         {
             $('#tbl_search_person_result > tbody').append(
-                '<tr>' +
-                    '<td>'+ v.hn +'</td>' +
-                    '<td>'+ v.cid +'</td>' +
-                    '<td>'+ v.first_name + ' ' + v.last_name +'</td>' +
-                    '<td>'+ app.mongo_to_thai_date(v.birthdate) +'</td>' +
-                    '<td>'+ v.age +'</td>' +
-                    '<td>'+ v.sex +'</td>' +
-                    '<td><a href="javascript:void(0);" data-name="btn_selected_person" class="btn" data-hn="'+ v.hn +'"><i class="icon-ok"></i></a></td>' +
-                    '</tr>'
-            );
-        });
+                '<tr><td colspan="7">ไม่พบรายการ</td></tr>');
+        }
+        else
+        {
+            _.each(data.rows, function(v){
+                $('#tbl_search_person_result > tbody').append(
+                    '<tr>' +
+                        '<td>'+ v.hn +'</td>' +
+                        '<td>'+ v.cid +'</td>' +
+                        '<td>'+ v.first_name + ' ' + v.last_name +'</td>' +
+                        '<td>'+ app.mongo_to_thai_date(v.birthdate) +'</td>' +
+                        '<td>'+ v.age +'</td>' +
+                        '<td>'+ v.sex +'</td>' +
+                        '<td><a href="#" class="btn" data-hn="'+ v.hn + '" data-name="btn_selected_person" data-typearea="'+ v.typearea +'">' +
+                        '<i class="icon-ok"></i></a></td>' +
+                        '</tr>');
+            });
+        }
     };
 
     //search person
     $('#btn_do_search_person').click(function(){
-        var query = $('#txt_query_person').val(),
-            filter = $('input[data-name="txt_search_person_filter"]').val();
+        var query = $('#txt_search_query').val(),
+            filter = $('#txt_search_person_filter').val();
 
         if(!query)
         {
@@ -271,10 +278,8 @@ head.ready(function(){
                 if(err)
                 {
                     app.alert(err);
-                }
-                else if(!data)
-                {
-                    app.alert('ไม่พบรายการ');
+                    $('#tbl_search_person_result > tbody').append(
+                        '<tr><td colspan="7">ไม่พบรายการ</td></tr>');
                 }
                 else
                 {
@@ -285,30 +290,38 @@ head.ready(function(){
     });
 
     //set filter
-    $('a[data-name="btn_set_search_person_filter"]').click(function(){
-        var filter = $(this).attr('data-value');
+    $('a[data-name="btn_search_person_fillter"]').click(function(){
+        var filter = $(this).data('value');
 
-        $('input[data-name="txt_search_person_filter"]').val(filter);
+        $('#txt_search_person_filter').val(filter);
     });
 
     $(document).on('click', 'a[data-name="btn_selected_person"]', function(){
-        var hn = $(this).attr('data-hn');
 
-        if(confirm('คุณต้องการลงทะเบียนข้อมูลนี้ใช่หรือไม่?'))
+        if( ! _.indexOf(['1', '3'], $(this).data('typearea')))
         {
-            //do register
-            epi.ajax.do_register(hn, function(err){
-                if(err)
-                {
-                    app.alert(err);
-                }
-                else
-                {
-                    app.alert('ลงทะเบียนรายการเสร็จเรียบร้อยแล้ว');
-                    epi.modal.hide_register();
-                    epi.get_list();
-                }
-            });
+            app.alert('บุคคลนี้ไม่ใช่บุคคลในเขตรับผิดชอบ');
+        }
+        else
+        {
+            var hn = $(this).data('hn');
+
+            if(confirm('คุณต้องการลงทะเบียนข้อมูลนี้ใช่หรือไม่?'))
+            {
+                //do register
+                epi.ajax.do_register(hn, function(err){
+                    if(err)
+                    {
+                        app.alert(err);
+                    }
+                    else
+                    {
+                        app.alert('ลงทะเบียนรายการเสร็จเรียบร้อยแล้ว');
+                        epi.modal.hide_register();
+                        epi.get_list();
+                    }
+                });
+            }
         }
     });
 

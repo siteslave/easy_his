@@ -41,13 +41,16 @@ class Disabilities extends CI_Controller
         $this->load->model('Basic_model', 'basic');
         $this->load->model('Disability_model', 'disb');
 
+        $this->person->owner_id = $this->owner_id;
+        $this->disb->owner_id = $this->owner_id;
+        $this->disb->user_id = $this->user_id;
+        $this->disb->provider_id = $this->provider_id;
+
         $this->load->helper(array('person'));
     }
 
     public function index()
     {
-        $this->person->owner_id = $this->owner_id;
-
         $data['disabilities_types'] = $this->basic->get_disabilities_list();
         $data['villages'] = $this->person->get_villages();
 
@@ -65,12 +68,10 @@ class Disabilities extends CI_Controller
         else
         {
             //check owner
-            $is_owner = $this->person->check_owner($data['hn'], $this->owner_id);
+            $is_owner = $this->person->check_owner($data['hn']);
 
             if($is_owner)
             {
-                $this->disb->user_id = $this->user_id;
-                $this->disb->owner_id = $this->owner_id;
                 //check duplicate
                 $is_duplicated = $this->disb->check_duplicated($data['hn'], $data['dtype']);
 

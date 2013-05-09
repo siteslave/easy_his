@@ -46,6 +46,13 @@ class Pregnancies extends CI_Controller
         $this->load->model('Basic_model', 'basic');
         $this->load->model('Person_model', 'person');
 
+        $this->person->owner_id = $this->owner_id;
+        $this->person->clinic_code = $this->clinic_code;
+
+        $this->preg->owner_id = $this->owner_id;
+        $this->preg->user_id = $this->user_id;
+        $this->preg->provider_id = $this->provider_id;
+
         $this->load->helper(array('person'));
     }
 
@@ -54,9 +61,6 @@ class Pregnancies extends CI_Controller
      */
     public function index()
     {
-        $this->person->owner_id = $this->owner_id;
-        $this->person->clinic_code = $this->clinic_code;
-
         $data['villages'] = $this->person->get_villages();
         $this->layout->view('pregnancies/index_view', $data);
     }
@@ -90,13 +94,10 @@ class Pregnancies extends CI_Controller
 
         $limit = (int) $stop - (int) $start;
 
-        $this->preg->owner_id = $this->owner_id;
-
         $rs = $this->preg->get_list($start, $limit);
 
         if($rs)
         {
-
             $arr_result = array();
 
             foreach($rs as $r)
@@ -137,79 +138,6 @@ class Pregnancies extends CI_Controller
 
         render_json($json);
     }
-    //------------------------------------------------------------------------------------------------------------------
-    /*
-     * Search person
-    *
-    * @internal param	string 	$query	The query for search
-    * @internal param	string	$filter	The filter type. 0 = CID, 1 = HN, 2 = First name and last name
-    */
-    public function search_person()
-    {
-        $query = $this->input->post('query');
-        $filter = $this->input->post('filter');
-
-        $filter = empty($filter) ? '0' : $filter;
-
-        if(empty($query))
-        {
-            $json = '{"success": false, "msg": "No query found"}';
-        }
-        else
-        {
-
-            if($filter == '0') //by cid
-            {
-                $rs = $this->person->search_person_by_cid($query);
-            }
-            else if($filter == '2')
-            {
-                //get hn by first name and last name
-                $name = explode(' ', $query); // [0] = first name, [1] = last name
-
-                $first_name = count($name) == 2 ? $name[0] : '';
-                $last_name = count($name) == 2 ? $name[1] : '';
-
-                $rs = $this->person->search_person_by_first_last_name($first_name, $last_name);
-
-            }
-            else
-            {
-                $rs = $this->person->search_person_by_hn($query);
-            }
-
-            if($rs)
-            {
-
-                $arr_result = array();
-
-                foreach($rs as $r)
-                {
-                    $obj = new stdClass();
-                    $obj->id = get_first_object($r['_id']);
-                    $obj->hn = $r['hn'];
-                    $obj->cid = $r['cid'];
-                    $obj->first_name = $r['first_name'];
-                    $obj->last_name = $r['last_name'];
-                    $obj->birthdate = $r['birthdate'];
-                    $obj->sex = $r['sex'] == '1' ? 'ชาย' : 'หญิง';
-                    $obj->age = count_age($r['birthdate']);
-
-                    $arr_result[] = $obj;
-                }
-
-                $rows = json_encode($arr_result);
-                $json = '{"success": true, "rows": '.$rows.'}';
-            }
-            else
-            {
-                $json = '{"success": false, "msg ": "ไม่พบรายการ"}';
-            }
-
-        }
-
-        render_json($json);
-    }
 
     public function do_register()
     {
@@ -221,10 +149,6 @@ class Pregnancies extends CI_Controller
         }
         else
         {
-
-            $this->preg->owner_id = $this->owner_id;
-            $this->preg->user_id = $this->user_id;
-            $this->preg->provider_id = $this->provider_id;
 
             $exists = $this->preg->check_register_status($data['hn'], $data['gravida']);
 
@@ -267,9 +191,6 @@ class Pregnancies extends CI_Controller
         }
         else
         {
-            $this->preg->owner_id = $this->owner_id;
-            $this->preg->user_id = $this->user_id;
-            $this->preg->provider_id = $this->provider_id;
             $rs = $this->preg->sevice_save($data);
 
             if($rs)
@@ -341,10 +262,6 @@ class Pregnancies extends CI_Controller
         {
             //check duplicated
             $duplicated = $this->preg->anc_check_visit_duplicated($data['hn'], $data['vn'], $data['gravida']);
-
-            $this->preg->owner_id = $this->owner_id;
-            $this->preg->user_id = $this->user_id;
-            $this->preg->provider_id = $this->provider_id;
 
             if($duplicated)
             {
@@ -528,10 +445,6 @@ class Pregnancies extends CI_Controller
             //check duplicated
             $duplicated = $this->preg->postnatal_check_visit_duplicated($data['hn'], $data['vn'], $data['gravida']);
 
-            $this->preg->owner_id = $this->owner_id;
-            $this->preg->user_id = $this->user_id;
-            $this->preg->provider_id = $this->provider_id;
-
             if($duplicated)
             {
                 //$json = '{"success": false, "msg": "ข้อมูลซ้ำ"}';
@@ -655,10 +568,6 @@ class Pregnancies extends CI_Controller
         }
         else
         {
-            $this->preg->owner_id = $this->owner_id;
-            $this->preg->user_id = $this->user_id;
-            $this->preg->provider_id = $this->provider_id;
-
             $rs = $this->preg->save_anc_info($data);
 
             if($rs)
@@ -715,4 +624,4 @@ class Pregnancies extends CI_Controller
     }
 }
 
-//End file
+//End of file
