@@ -192,18 +192,10 @@ class Women extends CI_Controller {
         }
         else
         {
-            $this->women->owner_id = $this->owner_id;
-            //get house list
-            $houses = $this->women->get_house_list($village_id);
-
-            $arr_house = array();
-            foreach($houses as $r)
-            {
-                $arr_house[] = $r['_id'];
-            }
+            $houses = $this->person->get_houses_in_village($village_id);
             //echo var_dump($arr_house);
 
-            $rs = $this->women->search_filter($arr_house, $start, $limit);
+            $rs = $this->women->search_filter($houses, $start, $limit);
 
             $arr_result = array();
             foreach($rs as $r)

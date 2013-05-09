@@ -213,17 +213,6 @@ class Women_model extends CI_Model
         return $rs;
     }
 
-    public function get_house_list($village_id)
-    {
-        $this->mongo_db->add_index('houses', array('village_id' => -1));
-        $rs = $this->mongo_db
-            ->select(array('_id'))
-            ->where(array('village_id' => new MongoId($village_id)))
-            ->get('houses');
-
-        return $rs;
-    }
-
 }
 
 //End of file
