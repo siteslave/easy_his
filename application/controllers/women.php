@@ -23,13 +23,17 @@ class Women extends CI_Controller {
         $this->load->model('Basic_model', 'basic');
         $this->load->model('Women_model', 'women');
 
+        $this->women->owner_id = $this->owner_id;
+        $this->women->user_id = $this->user_id;
+        $this->women->provider_id = $this->provider_id;
+
+        $this->person->owner_id = $this->owner_id;
         //helpers
         $this->load->helper('person');
     }
 
     public function index()
     {
-        $this->person->owner_id = $this->owner_id;
         $data['villages'] = $this->person->get_villages();
         $data['fptypes'] = $this->basic->get_fp_type();
 
@@ -46,8 +50,6 @@ class Women extends CI_Controller {
         $stop = empty($stop) ? 25 : $stop;
 
         $limit = (int) $stop - (int) $start;
-
-        $this->women->owner_id = $this->owner_id;
         $rs = $this->women->get_list($start, $limit);
 
         if($rs)
@@ -89,7 +91,6 @@ class Women extends CI_Controller {
 
     public function get_list_total()
     {
-        $this->women->owner_id = $this->owner_id;
         $total = $this->women->get_list_total();
 
         $json = '{"success": true, "total": '.$total.'}';
@@ -106,9 +107,6 @@ class Women extends CI_Controller {
         }
         else
         {
-            $this->women->owner_id = $this->owner_id;
-            $this->women->user_id = $this->user_id;
-            $this->women->provider_id = $this->provider_id;
             //check exist
             $exist = $this->women->check_exist($data['hn'], $data['year']);
             $rs = $exist ? $this->women->update($data) : $this->women->save($data);
@@ -193,8 +191,6 @@ class Women extends CI_Controller {
         else
         {
             $houses = $this->person->get_houses_in_village($village_id);
-            //echo var_dump($arr_house);
-
             $rs = $this->women->search_filter($houses, $start, $limit);
 
             $arr_result = array();
@@ -229,24 +225,13 @@ class Women extends CI_Controller {
 
         render_json($json);
     }
-
-
-
     public function search_filter_total()
     {
-        $this->women->owner_id = $this->owner_id;
         $village_id = $this->input->post('village_id');
 
         //get house list
-        $houses = $this->women->get_house_list($village_id);
-
-        $arr_house = array();
-        foreach($houses as $r)
-        {
-            $arr_house[] = $r['_id'];
-        }
-
-        $total = $this->women->search_filter_total($arr_house);
+        $houses = $this->person->get_houses_in_village($village_id);
+        $total = $this->women->search_filter_total($houses);
 
         $json = '{"success": true, "total": '.$total.'}';
 
@@ -265,8 +250,6 @@ class Women extends CI_Controller {
         }
         else
         {
-            $this->women->owner_id = $this->owner_id;
-
             $rs = $this->women->search($query);
 
             if($rs)

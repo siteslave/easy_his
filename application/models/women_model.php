@@ -139,6 +139,7 @@ class Women_model extends CI_Model
     public function search_filter($house_id, $start, $limit)
     {
         $this->mongo_db->add_index('person', array('owner_id' => -1));
+        $this->mongo_db->add_index('person', array('sex' => -1));
         $this->mongo_db->add_index('person', array('birthdate' => -1));
         $this->mongo_db->add_index('person', array('house_code' => -1));
 
@@ -156,6 +157,7 @@ class Women_model extends CI_Model
             ->where_lte('birthdate', (string) ((int) date('Y') - 15).'1231')
             ->where_gte('birthdate', (string) ((int) date('Y') - 49).'0101')
             ->where_in('house_code', $house_id)
+
             ->offset($start)
             ->limit($limit)
             ->order_by(array('first_name' => 'ASC'))
