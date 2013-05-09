@@ -50,6 +50,9 @@ class Diabetes extends CI_Controller
         $this->basic->owner_id      = $this->owner_id;
         $this->person->owner_id     = $this->owner_id;
         $this->person->clinic_code  = $this->clinic_code;
+        $this->person->user_id  = $this->user_id;
+
+        $this->dm->clinic_code  = $this->clinic_code;
         $this->dm->owner_id         = $this->owner_id;
         $this->dm->user_id          = $this->user_id;
     }
@@ -125,7 +128,7 @@ class Diabetes extends CI_Controller
 
         $limit = (int) $stop - (int) $start;
 
-        $houses = $this->dm->get_house_list($village_id);
+        $houses = $this->person->get_houses_in_village($village_id);
 
         $rs = $this->dm->get_list_by_village($houses, $start, $limit);
 
@@ -175,20 +178,14 @@ class Diabetes extends CI_Controller
     {
         $village_id = $this->input->post('village_id');
 
-        $houses = $this->dm->get_house_list($village_id);
+        $houses = $this->person->get_houses_in_village($village_id);
 
         $total = $this->dm->get_list_by_village_total($houses);
         $json = '{"success": true, "total": '.$total.'}';
 
         render_json($json);
     }
-    //------------------------------------------------------------------------------------------------------------------
-    /*
-     * Search person
-    *
-    * @internal param	string 	$query	The query for search
-    * @internal param	string	$filter	The filter type. 0 = CID, 1 = HN, 2 = First name and last name
-    */
+
     public function get_detail()
     {
         $hn = $this->input->post('hn');
@@ -250,14 +247,11 @@ class Diabetes extends CI_Controller
                 {
                     $json = '{ "success": false, "msg": "ไม่พบรายการ00" }';
                 }
-
-
             }
             else
             {
                 $json = '{ "success": false, "msg": "ไม่พบรายการ" }';
             }
-
         }
 
         render_json($json);
@@ -292,59 +286,36 @@ class Diabetes extends CI_Controller
                 if($is_owner)
                 {
                     $data['reg_serial'] = generate_serial('DM');
-
                     $rs = $this->dm->do_register($data);
-
-                    if($rs)
-                    {
-                        //$this->person->do_register_clinic($data['hn'], $this->clinic_code);
-                        $json = '{"success": true}';
-                    }
-                    else
-                    {
-                        $json = '{"success": false, "msg": "ไม่สามารถบันทึกข้อมูลได้"}';
-                    }
+                    $json = $rs ? '{"success": true}' : '{"success": false, "msg": "ไม่สามารถบันทึกข้อมูลได้"}';
                 }
                 else
                 {
                     $json = '{"success": false, "msg": "ไม่ใช่บุคคลในเขตรับผิดชอบ (Typearea ไม่ใช่ 1 หรือ 3)"}';
                 }
-
             }
-
         }
 
         render_json($json);
     }
 
-
-    //------------------------------------------------------------------------------------------------------------------
-    /**
-     * Check DM registration
-     *
-     * @return void
-     * @param string $hn
-     */
-
     private function _check_registration($hn)
     {
         $rs = $this->person->check_clinic_exist($hn, $this->clinic_code);
-
         return $rs ? TRUE : FALSE;
     }
 
     public function remove() {
         $hn = $this->input->post('hn');
         
-        if(empty($hn)) {
+        if(empty($hn))
+        {
             $json = '{ "success": false, "msg": "No HN found." }';
-        } else {
+        }
+        else
+        {
             $rs = $this->dm->remove($hn);
-            if($rs) {
-                $json = '{ "success": true }';
-            } else {
-                $json = '{ "success": false, "msg": "Can\'t remove dm register." }';
-            }
+            $json = $rs ? '{ "success": true }' : '{ "success": false, "msg": "Can\'t remove dm register." }';
         }
         
         render_json($json);
@@ -354,12 +325,13 @@ class Diabetes extends CI_Controller
         $rs = $this->dm->get_providers_by_active();
         if($rs) {
             $arr_result = array();
-            foreach($rs as $r) {
+            foreach($rs as $r)
+            {
                 $obj = new stdClass();
                 $obj->id = get_first_object($r['_id']);
                 $obj->name = $r['first_name'].' '.$r['last_name'];
-                
-                array_push($arr_result, $obj);
+
+                $arr_result[] = $obj;
             }
             
             return $arr_result;
@@ -371,11 +343,8 @@ class Diabetes extends CI_Controller
 
         if(!empty($query))
         {
-
             if(is_numeric($query))
             {
-                //search by code
-
                 if(strlen($query) == 13)
                 {
                     $rs = $this->person->search_person_ajax_by_cid($query);

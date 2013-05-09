@@ -52,7 +52,7 @@
 <div class="modal hide fade" id="mdlNewRegister">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>ลงทะเบียนผู้ป่วยเบาหวาน (DM)</h3>
+        <h4>ลงทะเบียนผู้ป่วยเบาหวาน (DM)</h4>
     </div>
     <div class="modal-body">
         <form action="#" class="well well-small form-inline">

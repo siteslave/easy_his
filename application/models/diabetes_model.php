@@ -7,11 +7,6 @@ class Diabetes_model extends CI_Model
     public $provider_id;
     public $clinic_code;
 
-
-    public function __construct()
-    {
-        $this->clinic_code = '01';
-    }
     //------------------------------------------------------------------------------------------------------------------
     /**
      * Get DM list
@@ -27,8 +22,14 @@ class Diabetes_model extends CI_Model
 
         $rs = $this->mongo_db
             ->where(array(
-                'registers.clinic_code' => $this->clinic_code,
-                'registers.owner_id' => new MongoId($this->owner_id)
+                'registers' =>
+                array(
+                    '$elemMatch' =>
+                    array(
+                        'clinic_code' => $this->clinic_code,
+                        'owner_id' => new MongoId($this->owner_id)
+                    )
+                )
             ))
             ->offset($start)
             ->limit($limit)
@@ -43,8 +44,14 @@ class Diabetes_model extends CI_Model
 
         $rs = $this->mongo_db
             ->where(array(
-                'registers.clinic_code' => $this->clinic_code,
-                'registers.owner_id' => new MongoId($this->owner_id)
+                'registers' =>
+                array(
+                    '$elemMatch' =>
+                    array(
+                        'clinic_code' => $this->clinic_code,
+                        'owner_id' => new MongoId($this->owner_id)
+                    )
+                )
             ))
             ->count('person');
 
@@ -63,8 +70,14 @@ class Diabetes_model extends CI_Model
     {
         $rs = $this->mongo_db
             ->where(array(
-                'registers.clinic_code' => $this->clinic_code,
-                'registers.owner_id' => new MongoId($this->owner_id)
+                'registers' =>
+                array(
+                    '$elemMatch' =>
+                    array(
+                        'clinic_code' => $this->clinic_code,
+                        'owner_id' => new MongoId($this->owner_id)
+                    )
+                )
             ))
             ->where_in('house_code', $houses)
             ->offset($start)
@@ -77,8 +90,14 @@ class Diabetes_model extends CI_Model
     {
         $rs = $this->mongo_db
             ->where(array(
-                'registers.clinic_code' => $this->clinic_code,
-                'registers.owner_id' => new MongoId($this->owner_id)
+                'registers' =>
+                array(
+                    '$elemMatch' =>
+                    array(
+                        'clinic_code' => $this->clinic_code,
+                        'owner_id' => new MongoId($this->owner_id)
+                    )
+                )
             ))
             ->where_in('house_code', $houses)
             ->count('person');
@@ -145,23 +164,6 @@ class Diabetes_model extends CI_Model
         return $rs;
     }
 
-    public function get_house_list($village_id)
-    {
-        $this->mongo_db->add_index('houses', array('village_id' => -1));
-        $rs = $this->mongo_db
-            ->select(array('_id'))
-            ->where(array('village_id' => new MongoId($village_id)))
-            ->get('houses');
-
-        $arr_house = array();
-
-        foreach($rs as $r)
-        {
-            $arr_house[] = $r['_id'];
-        }
-
-        return $arr_house;
-    }
 
     public function search($hn)
     {
@@ -170,12 +172,19 @@ class Diabetes_model extends CI_Model
 
         $rs = $this->mongo_db
             ->where(array(
-                'registers.clinic_code' => $this->clinic_code,
-                'registers.owner_id' => new MongoId($this->owner_id),
+                'registers' =>
+                array(
+                    '$elemMatch' =>
+                    array(
+                        'clinic_code' => $this->clinic_code,
+                        'owner_id' => new MongoId($this->owner_id)
+                    )
+                ),
                 'hn' => (string) $hn
             ))
             ->get('person');
         return $rs;
     }
-
 }
+
+//End of file
