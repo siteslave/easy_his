@@ -7,19 +7,6 @@ class Hypertension_model extends CI_Model
     public $provider_id;
     public $clinic_code;
 
-
-    public function __construct()
-    {
-        $this->clinic_code = '02';
-    }
-    //------------------------------------------------------------------------------------------------------------------
-    /**
-     * Get DM list
-     *
-     * @param $start
-     * @param $limit
-     * @return mixed
-     */
     public function get_list($start, $limit)
     {
         $this->mongo_db->add_index('person', array('registers.clinic_code' => -1));
@@ -27,8 +14,14 @@ class Hypertension_model extends CI_Model
 
         $rs = $this->mongo_db
             ->where(array(
-                'registers.clinic_code' => $this->clinic_code,
-                'registers.owner_id' => new MongoId($this->owner_id)
+                'registers' =>
+                array(
+                    '$elemMatch' =>
+                    array(
+                        'clinic_code' => $this->clinic_code,
+                        'owner_id' => new MongoId($this->owner_id)
+                    )
+                )
             ))
             ->offset($start)
             ->limit($limit)
@@ -43,28 +36,32 @@ class Hypertension_model extends CI_Model
 
         $rs = $this->mongo_db
             ->where(array(
-                'registers.clinic_code' => $this->clinic_code,
-                'registers.owner_id' => new MongoId($this->owner_id)
+                'registers' =>
+                array(
+                    '$elemMatch' =>
+                    array(
+                        'clinic_code' => $this->clinic_code,
+                        'owner_id' => new MongoId($this->owner_id)
+                    )
+                )
             ))
             ->count('person');
 
         return $rs;
     }
 
-
-    //------------------------------------------------------------------------------------------------------------------
-    /**
-     * Get by villages
-     *
-     * @param $houses
-     * @return mixed
-     */
     public function get_list_by_village($houses, $start, $limit)
     {
         $rs = $this->mongo_db
             ->where(array(
-                'registers.clinic_code' => $this->clinic_code,
-                'registers.owner_id' => new MongoId($this->owner_id)
+                'registers' =>
+                array(
+                    '$elemMatch' =>
+                    array(
+                        'clinic_code' => $this->clinic_code,
+                        'owner_id' => new MongoId($this->owner_id)
+                    )
+                )
             ))
             ->where_in('house_code', $houses)
             ->offset($start)
@@ -77,8 +74,14 @@ class Hypertension_model extends CI_Model
     {
         $rs = $this->mongo_db
             ->where(array(
-                'registers.clinic_code' => $this->clinic_code,
-                'registers.owner_id' => new MongoId($this->owner_id)
+                'registers' =>
+                array(
+                    '$elemMatch' =>
+                    array(
+                        'clinic_code' => $this->clinic_code,
+                        'owner_id' => new MongoId($this->owner_id)
+                    )
+                )
             ))
             ->where_in('house_code', $houses)
             ->count('person');
@@ -145,37 +148,28 @@ class Hypertension_model extends CI_Model
         return $rs;
     }
 
-    public function get_house_list($village_id)
-    {
-        $this->mongo_db->add_index('houses', array('village_id' => -1));
-        $rs = $this->mongo_db
-            ->select(array('_id'))
-            ->where(array('village_id' => new MongoId($village_id)))
-            ->get('houses');
-
-        $arr_house = array();
-
-        foreach($rs as $r)
-        {
-            $arr_house[] = $r['_id'];
-        }
-
-        return $arr_house;
-    }
 
     public function search($hn)
     {
         $this->mongo_db->add_index('person', array('registers.clinic_code' => -1));
         $this->mongo_db->add_index('person', array('registers.owner_id' => -1));
+        $this->mongo_db->add_index('person', array('hn' => -1));
 
         $rs = $this->mongo_db
             ->where(array(
-                'registers.clinic_code' => $this->clinic_code,
-                'registers.owner_id' => new MongoId($this->owner_id),
-                'hn' => (string) $hn
+                'hn' => (string) $hn,
+                'registers' =>
+                array(
+                    '$elemMatch' =>
+                    array(
+                        'clinic_code' => $this->clinic_code,
+                        'owner_id' => new MongoId($this->owner_id)
+                    )
+                )
             ))
             ->get('person');
         return $rs;
     }
-
 }
+
+//End of file

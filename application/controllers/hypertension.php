@@ -48,8 +48,11 @@ class Hypertension extends CI_Controller
         $this->load->helper(array('person'));
         //Set owner id for all model
         $this->basic->owner_id      = $this->owner_id;
+        
         $this->person->owner_id     = $this->owner_id;
         $this->person->clinic_code  = $this->clinic_code;
+
+        $this->ht->clinic_code      = $this->clinic_code;
         $this->ht->owner_id         = $this->owner_id;
         $this->ht->user_id          = $this->user_id;
     }
@@ -123,7 +126,7 @@ class Hypertension extends CI_Controller
 
         $limit = (int) $stop - (int) $start;
 
-        $houses = $this->ht->get_house_list($village_id);
+        $houses = $this->person->get_houses_in_village($village_id);
 
         $rs = $this->ht->get_list_by_village($houses, $start, $limit);
 
@@ -173,7 +176,7 @@ class Hypertension extends CI_Controller
     {
         $village_id = $this->input->post('village_id');
 
-        $houses = $this->ht->get_house_list($village_id);
+        $houses = $this->person->get_houses_in_village($village_id);
 
         $total = $this->ht->get_list_by_village_total($houses);
         $json = '{"success": true, "total": '.$total.'}';
@@ -328,6 +331,54 @@ class Hypertension extends CI_Controller
         return $rs ? TRUE : FALSE;
     }
 
+    public function search_person()
+    {
+        $hn = $this->input->post('hn');
+        if(empty($hn))
+        {
+            $json = '{"success": false, "msg": "กรุณาระบุ HN"}';
+        }
+        else
+        {
+            //check owner
+            $is_owner = $this->person->check_owner($hn);
+            if(!$is_owner)
+            {
+                $json = '{"success": false, "msg": "บุคคลนี้ไม่ใช่กลุ่มเป้าหมายของคุณ [Typearea ไม่ใช่ 1 และ 3]"}';
+            }
+            else
+            {
+                //check registered
+                $duplicated = $this->_check_registration($hn);
+                if($duplicated)
+                {
+                    $json = '{"success": false, "msg": "บุคคลนี้ได้ถูกลงทะเบียนไว้เรียบร้อยแล้ว ไม่สามารถลงทะเบียนใหม่ได้"}';
+                }
+                else
+                {
+                    $person = $this->person->get_person_detail_with_hn($hn);
+
+                    $obj = new stdClass();
+                    $obj->hn = $hn;
+                    $obj->cid = $person['cid'];
+                    $obj->first_name = $person['first_name'];
+                    $obj->last_name = $person['last_name'];
+                    $obj->sex = $person['sex'];
+                    $obj->birthdate = $person['birthdate'];
+                    $obj->age = count_age($person['birthdate']);
+
+                    $rows = json_encode($obj);
+
+                    $json = '{"success": true, "rows": '.$rows.'}';
+                }
+            }
+
+        }
+
+        render_json($json);
+    }
+
+
     public function remove() {
         $hn = $this->input->post('hn');
         
@@ -412,53 +463,6 @@ class Hypertension extends CI_Controller
         else
         {
             $json = '{"success": false, "msg": "Query empty."}';
-        }
-
-        render_json($json);
-    }
-
-    public function search_person()
-    {
-        $hn = $this->input->post('hn');
-        if(empty($hn))
-        {
-            $json = '{"success": false, "msg": "กรุณาระบุ HN"}';
-        }
-        else
-        {
-            //check owner
-            $is_owner = $this->person->check_owner($hn);
-            if(!$is_owner)
-            {
-                $json = '{"success": false, "msg": "บุคคลนี้ไม่ใช่กลุ่มเป้าหมายของคุณ [Typearea ไม่ใช่ 1 และ 3]"}';
-            }
-            else
-            {
-                //check registered
-                $duplicated = $this->_check_registration($hn);
-                if($duplicated)
-                {
-                    $json = '{"success": false, "msg": "บุคคลนี้ได้ถูกลงทะเบียนไว้เรียบร้อยแล้ว ไม่สามารถลงทะเบียนใหม่ได้"}';
-                }
-                else
-                {
-                    $person = $this->person->get_person_detail_with_hn($hn);
-
-                    $obj                = new stdClass();
-                    $obj->hn            = $hn;
-                    $obj->cid           = $person['cid'];
-                    $obj->first_name    = $person['first_name'];
-                    $obj->last_name     = $person['last_name'];
-                    $obj->sex           = $person['sex'];
-                    $obj->birthdate     = $person['birthdate'];
-                    $obj->age           = count_age($person['birthdate']);
-
-                    $rows = json_encode($obj);
-
-                    $json = '{"success": true, "rows": '.$rows.'}';
-                }
-            }
-
         }
 
         render_json($json);
