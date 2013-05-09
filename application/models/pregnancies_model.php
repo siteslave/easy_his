@@ -191,7 +191,7 @@ class Pregnancies_model extends CI_Model
                         'labor.bdoctor' => $data['bdoctor'],
                         'labor.lborn'   => $data['lborn'],
                         'labor.sborn'   => $data['sborn'],
-                        'last_update'   => date('Ymd H:i:s')
+                        'last_update'   => date('Y-m-d H:i:s')
         ))->update('pregnancies');
 
         return $rs;
@@ -350,6 +350,16 @@ class Pregnancies_model extends CI_Model
 
         return count($rs) > 0 ? $rs[0] : NULL;
     }
+
+
+    public function get_person_list_village($persons){
+        $rs = $this->mongo_db
+            ->where_in('hn', $persons)
+            ->get('pregnancies');
+
+        return $rs;
+    }
+
 }
 
 //End of file

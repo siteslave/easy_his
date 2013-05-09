@@ -34,6 +34,16 @@ head.ready(function(){
                 err ? cb(err) : cb(null, data);
             });
         },
+        get_list_by_village: function(village_id, cb){
+            var url = 'pregnancies/get_list_by_village',
+                params = {
+                    village_id: village_id
+                };
+
+            app.ajax(url, params, function(err, data){
+                err ? cb(err) : cb(null, data);
+            });
+        },
         get_list_total: function(cb){
             var url = 'pregnancies/get_list_total',
                 params = {};
@@ -166,6 +176,10 @@ head.ready(function(){
         hide_labor: function()
         {
             $('#mdl_labor').modal('hide');
+        },
+        hide_anc_info: function()
+        {
+            $('#mdl_anc_info').modal('hide');
         }
     };
     //------------------------------------------------------------------------------------------------------------------
@@ -298,10 +312,36 @@ head.ready(function(){
         });
     };
 
+    preg.get_list_by_village = function(village_id){
+        $('#main_paging').fadeOut('slow');
+        $('#tbl_list > tbody').empty();
+        preg.ajax.get_list_by_village(village_id, function(err, data){
+            if(err){
+                app.alert(err);
+                $('#tbl_list > tbody').append(
+                    '<tr><td colspan="10">ไม่พบรายการ</td></tr>'
+                );
+            }else{
+                preg.set_list(data);
+            }
+        });
+    };
+
     $('#btn_register').click(function(){
         preg.modal.show_register();
     });
 
+    $('#btn_do_get_list').on('click', function(e){
+        var village_id = $('#sl_village').val();
+        if(!village_id)
+        {
+            preg.get_list();
+        }
+        else
+        {
+            preg.get_list_by_village(village_id);
+        }
+    });
 
     preg.set_search_person_result = function(data)
     {
@@ -528,6 +568,8 @@ head.ready(function(){
                 else
                {
                    app.alert('บันทึกข้อมูลเสร็จเรียบร้อยแล้ว');
+                   preg.modal.hide_labor();
+                   preg.get_list();
                }
             });
         }
@@ -740,6 +782,8 @@ head.ready(function(){
                 else
                {
                    app.alert('บันทึกข้อมูลเสร็จเรียบร้อยแล้ว');
+                   preg.modal.hide_anc_info();
+                   preg.get_list();
                }
             });
         }

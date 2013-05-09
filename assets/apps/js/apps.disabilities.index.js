@@ -54,7 +54,7 @@ head.ready(function(){
             });
         },
         get_list_by_village: function(village_id, cb){
-            var url = 'houses/get_disb_person_in_village',
+            var url = 'disabilities/get_list_by_village',
                 params = {
                     village_id: village_id
                 };

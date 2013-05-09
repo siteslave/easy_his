@@ -41,6 +41,7 @@ class Pregnancies extends CI_Controller
         $this->load->model('Service_model', 'service');
         $this->load->model('Basic_model', 'basic');
         $this->load->model('Person_model', 'person');
+        $this->load->model('House_model', 'house');
 
         $this->person->owner_id = $this->owner_id;
 
@@ -368,7 +369,7 @@ class Pregnancies extends CI_Controller
             }
             else
             {
-                $json = '{"success": false, "msg": }';
+                $json = '{"success": false, "msg": "ไม่สามารถบันทึกรายการได้"}';
             }
         }
 
@@ -623,6 +624,73 @@ class Pregnancies extends CI_Controller
 
         render_json($json);
     }
+
+    public function get_list_by_village()
+    {
+        $village_id = $this->input->post('village_id');
+
+        $houses = $this->_get_house_list($village_id);
+        $persons = $this->_get_person_list($houses);
+
+        $person_disb = $this->preg->get_person_list_village($persons);
+
+        if($person_disb)
+        {
+            $arr_result = array();
+            foreach($person_disb as $r)
+            {
+                $person = $this->person->get_person_detail_with_hn($r['hn']);
+                $obj = new stdClass();
+                $obj->hn = $r['hn'];
+                $obj->cid = $person['cid'];
+                $obj->id = get_first_object($r['_id']);
+                $obj->first_name = $person['first_name'];
+                $obj->last_name = $person['last_name'];
+                $obj->sex = $person['sex'] == '1' ? 'ชาย' : 'หญิง';
+                $obj->birthdate = $person['birthdate'];
+                $obj->age = count_age($person['birthdate']);
+                $obj->reg_date = $r['reg_date'];
+                $obj->anc_code = $r['anc_code'];
+                $obj->gravida = $r['gravida'];
+                $obj->preg_status = $r['preg_status'] == '0' ? 'ยังไม่คลอด' : 'คลอดแล้ว';
+                $arr_result[] = $obj;
+            }
+
+            $rows = json_encode($arr_result);
+            $json = '{"success": true, "rows": '.$rows.'}';
+        }
+        else
+        {
+            $json = '{"success": false, "msg": "No result."}';
+        }
+
+        render_json($json);
+    }
+
+    private function _get_house_list($village_id)
+    {
+        $rs = $this->house->get_house_list($village_id);
+
+        return $rs;
+    }
+
+    private function _get_person_list($houses)
+    {
+        $arr_person = array();
+
+        for($i=0; $i < count($houses); $i++) {
+
+            $persons = $this->house->get_person_list($houses[$i]);
+
+            foreach($persons as $p)
+            {
+                $arr_person[] = $p['hn'];
+            }
+        }
+
+        return $arr_person;
+    }
+
 }
 
 //End of file
