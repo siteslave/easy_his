@@ -51,6 +51,7 @@ class Hypertension extends CI_Controller
         
         $this->person->owner_id     = $this->owner_id;
         $this->person->clinic_code  = $this->clinic_code;
+        $this->person->user_id  = $this->user_id;
 
         $this->ht->clinic_code      = $this->clinic_code;
         $this->ht->owner_id         = $this->owner_id;

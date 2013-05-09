@@ -2,6 +2,7 @@
  * DM scripts
  *
  * @author      Mr.Utit Sairat <soodteeruk@gmail.com>
+ * @modified    Mr.Satit Rianpit <rianpit@gmail.com>
  * @copyright   Copyright 2013, Mr.Utit Sairat
  * @since       Version 1.0
  */
@@ -13,13 +14,6 @@ head.ready(function(){
     //------------------------------------------------------------------------------------------------------------------
     //ajax object
     dm.ajax = {
-        /**
-         * Get person list
-         *
-         * @param   start
-         * @param   stop
-         * @param   cb
-         */
         get_list: function(start, stop, cb){
             var url = 'diabetes/get_list',
                 params = {
@@ -139,12 +133,6 @@ head.ready(function(){
             $('#mdlNewRegister').modal('hide');
         }
     };
-    //------------------------------------------------------------------------------------------------------------------
-    /**
-     * Set person list
-     *
-     * @param data
-     */
 
     dm.set_list = function(data){
         if(_.size(data.rows) > 0){
