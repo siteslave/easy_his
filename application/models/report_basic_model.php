@@ -31,8 +31,16 @@ class Report_basic_model extends CI_Model {
     public function get_person_count_per_house_id_in_area($id) {
         $rs = $this->mongo_db
             ->where_in('house_code', $id)
-            ->where_in('typearea.typearea', array('1', '3'))
-            ->where('typearea.owner_id', new MongoId($this->owner_id))
+            ->where(array(
+                'typearea' => array(
+                    '$elemMatch' => array(
+                        'typearea' => array(
+                            '$in' => array('1', '3')
+                        ),
+                        'owner_id' => new MongoId($this->owner_id)
+                    )
+                )
+            ))
             ->count('person');
 
         return $rs;
@@ -42,8 +50,16 @@ class Report_basic_model extends CI_Model {
     public function get_person_count_in_area_with_male($id) {
         $rs = $this->mongo_db
             ->where_in('house_code', $id)
-            ->where_in('typearea.typearea', array('1', '3'))
-            ->where('typearea.owner_id', new MongoId($this->owner_id))
+            ->where(array(
+                'typearea' => array(
+                    '$elemMatch' => array(
+                        'typearea' => array(
+                            '$in' => array('1', '3')
+                        ),
+                        'owner_id' => new MongoId($this->owner_id)
+                    )
+                )
+            ))
             ->where('sex', '1')
             ->count('person');
 
@@ -54,8 +70,16 @@ class Report_basic_model extends CI_Model {
     public function get_person_count_in_area_with_female($id) {
         $rs = $this->mongo_db
             ->where_in('house_code', $id)
-            ->where_in('typearea.typearea', array('1', '3'))
-            ->where('typearea.owner_id', new MongoId($this->owner_id))
+            ->where(array(
+                'typearea' => array(
+                    '$elemMatch' => array(
+                        'typearea' => array(
+                            '$in' => array('1', '3')
+                        ),
+                        'owner_id' => new MongoId($this->owner_id)
+                    )
+                )
+            ))
             ->where('sex', '2')
             ->count('person');
 
@@ -66,8 +90,16 @@ class Report_basic_model extends CI_Model {
     public function get_person_count_per_house_id_out_area($id) {
         $rs = $this->mongo_db
             ->where_in('house_code', $id)
-            ->where_in('typearea.typearea', array('0', '2', '4'))
-            ->where('typearea.owner_id', new MongoId($this->owner_id))
+            ->where(array(
+                'typearea' => array(
+                    '$elemMatch' => array(
+                        'typearea' => array(
+                            '$in' => array('0', '2', '4')
+                        ),
+                        'owner_id' => new MongoId($this->owner_id)
+                    )
+                )
+            ))
             ->count('person');
 
         return $rs;
@@ -77,8 +109,7 @@ class Report_basic_model extends CI_Model {
     public function get_person_count_with_typearea_0($id) {
         $rs = $this->mongo_db
             ->where_in('house_code', $id)
-            ->where('typearea.typearea', '0')
-            ->where('typearea.owner_id', new MongoId($this->owner_id))
+            ->where(array('typearea' => array('$elemMatch' => array('typearea' => '0', 'owner_id' => new MongoId($this->owner_id)))))
             ->count('person');
 
         return $rs;
@@ -88,8 +119,7 @@ class Report_basic_model extends CI_Model {
     public function get_person_count_with_typearea_1($id) {
         $rs = $this->mongo_db
             ->where_in('house_code', $id)
-            ->where('typearea.typearea', '1')
-            ->where('typearea.owner_id', new MongoId($this->owner_id))
+            ->where(array('typearea' => array('$elemMatch' => array('typearea' => '1', 'owner_id' => new MongoId($this->owner_id)))))
             ->count('person');
 
         return $rs;
@@ -99,8 +129,7 @@ class Report_basic_model extends CI_Model {
     public function get_person_count_with_typearea_2($id) {
         $rs = $this->mongo_db
             ->where_in('house_code', $id)
-            ->where('typearea.typearea', '2')
-            ->where('typearea.owner_id', new MongoId($this->owner_id))
+            ->where(array('typearea' => array('$elemMatch' => array('typearea' => '2', 'owner_id' => new MongoId($this->owner_id)))))
             ->count('person');
 
         return $rs;
@@ -110,8 +139,7 @@ class Report_basic_model extends CI_Model {
     public function get_person_count_with_typearea_3($id) {
         $rs = $this->mongo_db
             ->where_in('house_code', $id)
-            ->where('typearea.typearea', '3')
-            ->where('typearea.owner_id', new MongoId($this->owner_id))
+            ->where(array('typearea' => array('$elemMatch' => array('typearea' => '3', 'owner_id' => new MongoId($this->owner_id)))))
             ->count('person');
 
         return $rs;
@@ -121,8 +149,7 @@ class Report_basic_model extends CI_Model {
     public function get_person_count_with_typearea_4($id) {
         $rs = $this->mongo_db
             ->where_in('house_code', $id)
-            ->where('typearea.typearea', '4')
-            ->where('typearea.owner_id', new MongoId($this->owner_id))
+            ->where(array('typearea' => array('$elemMatch' => array('typearea' => '4', 'owner_id' => new MongoId($this->owner_id)))))
             ->count('person');
 
         return $rs;
