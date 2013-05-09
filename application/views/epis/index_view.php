@@ -3,20 +3,18 @@
     <li class="active">ทะเบียน EPI</li>
 </ul>
 <form action="#" class="well form-inline">
-    <label for="sl_village_id">หมู่บ้าน</label>
+    <label for="sl_village">หมู่บ้าน</label>
     <select class="input-xlarge" id="sl_village">
-        <option value="00000000">---</option>
+        <option value="">-- ทั้งหมด --</option>
         <?php
         foreach ($villages as $r){
             echo '<option value="'.get_first_object($r['_id']).'">' . $r['village_code'] . ' ' . $r['village_name'] . '</option>';
         }
         ?>
     </select>
-    บ้านเลขที่
-    <select id="sl_house" class="input-medium"></select>
-    <button type="button" class="btn btn-info" id="btn_do_get_list"><i class="icon-search"></i> แสดงรายการ</button>
+    <button type="button" class="btn btn-info" id="btn_fillter"><i class="icon-search"></i></button>
     <div class="btn-group pull-right">
-        <button rel="tooltip" title="รีเฟรช" type="button" id="btn_search" class="btn"><i class="icon-refresh"></i></button>
+        <button rel="tooltip" title="รีเฟรช" type="button" id="btn_refresh" class="btn"><i class="icon-refresh"></i></button>
         <button rel="tooltip" title="ลงทะเบียนรายใหม่" type="button" id="btn_register" class="btn btn-success"><i class="icon-plus-sign"></i></button>
     </div>
 </form>
@@ -30,7 +28,8 @@
         <th>ชื่อ - สกุล</th>
         <th>วันเกิด</th>
         <th>อายุ (ปี)</th>
-        <th>เพศ</th>
+        <th>%</th>
+        <th>กราฟ</th>
 
         <th>#</th>
     </tr>

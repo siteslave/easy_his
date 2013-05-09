@@ -910,4 +910,21 @@ class Person_model extends CI_Model
         }
 
     }
+
+    public function get_houses_in_village($village_id)
+    {
+        $this->mongo_db->add_index('houses', array('village_id' => -1));
+        $rs = $this->mongo_db
+            ->select(array('_id'))
+            ->where(array('village_id' => new MongoId($village_id)))
+            ->get('houses');
+
+        $arr_house = array();
+        foreach($rs as $r)
+        {
+            $arr_house[] = $r['_id'];
+        }
+
+        return $arr_house;
+    }
 }

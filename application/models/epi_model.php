@@ -23,9 +23,15 @@ class Epi_model extends CI_Model
     {
         $rs = $this->mongo_db
             ->where(array(
-                'registers.clinic_code' => '05',
-                'registers.owner_id' => new MongoId($this->owner_id)
-            ))
+                'registers' =>
+                    array(
+                        '$elemMatch' =>
+                        array(
+                            'clinic_code' => '05',
+                            'owner_id' => new MongoId($this->owner_id)
+                        )
+                    )
+                ))
             ->offset($start)
             ->limit($limit)
             ->get('person');
@@ -38,16 +44,22 @@ class Epi_model extends CI_Model
      * @param $house_id
      * @return mixed
      */
-    public function get_list_by_house($house_id)
+    public function get_list_by_village($houses, $start, $limit)
     {
         $rs = $this->mongo_db
             ->where(array(
-                'registers.clinic_code' => '05',
-                'registers.owner_id' => new MongoId($this->owner_id),
-                'house_code' => new MongoId($house_id)
-            ))
-            //->offset($start)
-            //->limit($limit)
+                'registers' =>
+                    array(
+                        '$elemMatch' =>
+                        array(
+                            'clinic_code' => '05',
+                            'owner_id' => new MongoId($this->owner_id)
+                        )
+                    )
+                ))
+            ->where_in('house_code', $houses)
+            ->offset($start)
+            ->limit($limit)
             ->get('person');
         return $rs;
     }
@@ -56,20 +68,33 @@ class Epi_model extends CI_Model
     {
         $rs = $this->mongo_db
             ->where(array(
-                        'registers.clinic_code' => $this->clinic_code,
-                        'registers.owner_id' => new MongoId($this->owner_id)
-            ))
+                'registers' =>
+                    array(
+                        '$elemMatch' =>
+                        array(
+                            'clinic_code' => '05',
+                            'owner_id' => new MongoId($this->owner_id)
+                        )
+                    )
+                ))
             ->count('person');
 
         return $rs;
     }
-    public function get_list_by_house_total()
+    public function get_list_by_village_total($houses)
     {
         $rs = $this->mongo_db
             ->where(array(
-                        'registers.clinic_code' => $this->clinic_code,
-                        'registers.owner_id' => new MongoId($this->owner_id)
-            ))
+                'registers' =>
+                    array(
+                        '$elemMatch' =>
+                        array(
+                            'clinic_code' => '05',
+                            'owner_id' => new MongoId($this->owner_id)
+                        )
+                    )
+                ))
+            ->where_in('house_code', $houses)
             ->count('person');
 
         return $rs;
@@ -122,4 +147,16 @@ class Epi_model extends CI_Model
         return $rs;
     }
 
+    public function remove($hn)
+    {
+        $rs = $this->mongo_db
+            ->where(array('hn' => (string) $hn))
+            ->pull('registers', array(
+                'clinic_code' => '05'
+            ))
+            ->update('person');
+
+
+        return $rs;
+    }
 }
