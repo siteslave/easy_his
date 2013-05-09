@@ -245,7 +245,7 @@ class Diabetes extends CI_Controller
                 }
                 else
                 {
-                    $json = '{ "success": false, "msg": "ไม่พบรายการ00" }';
+                    $json = '{ "success": false, "msg": "ไม่พบรายการ" }';
                 }
             }
             else
