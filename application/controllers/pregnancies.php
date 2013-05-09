@@ -18,7 +18,6 @@ class Pregnancies extends CI_Controller
     protected $user_id;
     protected $owner_id;
     protected $provider_id;
-    protected $clinic_code;
     //------------------------------------------------------------------------------------------------------------------
     /*
      * Construction function
@@ -38,16 +37,12 @@ class Pregnancies extends CI_Controller
         $this->user_id = $this->session->userdata('user_id');
         $this->provider_id = $this->session->userdata('provider_id');
 
-        //Initialized clinic code
-        $this->clinic_code = '04';
-
         $this->load->model('Pregnancies_model', 'preg');
         $this->load->model('Service_model', 'service');
         $this->load->model('Basic_model', 'basic');
         $this->load->model('Person_model', 'person');
 
         $this->person->owner_id = $this->owner_id;
-        $this->person->clinic_code = $this->clinic_code;
 
         $this->preg->owner_id = $this->owner_id;
         $this->preg->user_id = $this->user_id;
@@ -68,7 +63,6 @@ class Pregnancies extends CI_Controller
     public function check_registration()
     {
         $hn = $this->input->post('hn');
-        //$this->preg->owner_id = $this->owner_id;
 
         $rs = $this->preg->check_register_status($hn);
 
@@ -150,27 +144,34 @@ class Pregnancies extends CI_Controller
         else
         {
 
-            $exists = $this->preg->check_register_status($data['hn'], $data['gravida']);
-
-            if($exists)
+            $is_owner = $this->person->check_owner($data['hn']);
+            if($is_owner)
             {
-                $json = '{"success": false, "msg": "ทะเบียนซ้ำ - ชื่อนี้มีอยู่ในทะเบียนเรียบร้อยแล้ว"}';
-            }
-            else
-            {
-                $data['anc_code'] = generate_serial('ANC');
-                $rs = $this->preg->do_register($data);
+                $exists = $this->preg->check_register_status($data['hn'], $data['gravida']);
 
-                if($rs)
+                if($exists)
                 {
-                    $json = '{"success": true}';
+                    $json = '{"success": false, "msg": "ทะเบียนซ้ำ - ชื่อนี้มีอยู่ในทะเบียนเรียบร้อยแล้ว"}';
                 }
                 else
                 {
-                    $json = '{"success": false, "msg": "ไม่สามารถบันทึกข้อมูลได้"}';
+                    $data['anc_code'] = generate_serial('ANC');
+                    $rs = $this->preg->do_register($data);
+
+                    if($rs)
+                    {
+                        $json = '{"success": true}';
+                    }
+                    else
+                    {
+                        $json = '{"success": false, "msg": "ไม่สามารถบันทึกข้อมูลได้"}';
+                    }
                 }
             }
-
+            else
+            {
+                $json = '{"success": false, "msg": "บุคคลนี้ไม่ใช่คนในเขตรับผิดชอบ (Typearea ไม่ใช่ 1 หรือ 3)"}';
+            }
         }
 
         render_json($json);
