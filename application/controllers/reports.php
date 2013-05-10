@@ -71,6 +71,18 @@ class Reports extends CI_Controller {
         $this->layout->view('reports/index_view', $data);
     }
 
+    public function date_bw($url, $date1, $date2) {
+        if(empty($url)) redirect(site_url('reports'));
+        if(empty($date1)) redirect(site_url('reports'));
+        if(empty($date2)) redirect(site_url('reports'));
+
+        $data['date1'] = $date1;
+        $data['date2'] = $date2;
+
+        $this->layout->layout('report_layout');
+        $this->layout->view('reports/view/'.$url, $data);
+    }
+
     public function addreport() {
         redirect('reports/add_report/main');
     }
