@@ -148,13 +148,24 @@ $(function() {
 
     $(document).on('click', '#btnView', function() {
         var url = $(this).attr('data-url');
-        if(url.substr(8, 5) == 'date2') {
+        if(url.substr(8, 7) == 'date_bw') {
             //app.alert('Date2');
+            $('#tboUrl').val(url);
             rpt.date2_show();
         } else {
             location.href=site_url + url;
         }
     });
+
+    $('#btnDate2View').click(function() {
+        location.href=site_url + $('#tboUrl').val() + '/' + rpt.ConvertDate($('#tboStart').val()) + '/' + rpt.ConvertDate($('#tboStop').val());
+    });
+
+    rpt.ConvertDate = function(d) {
+        var _tmp = '';
+        _tmp = d.substr(d.lastIndexOf('/')+1, 4) + '-' + d.substr(d.indexOf('/')+1, 2) + '-' + d.substr(0, 2);
+        return _tmp;
+    }
 
     $(document).on('click', '#btnPrint', function() {
         //var url = $(this).attr('data-url');

@@ -40,11 +40,30 @@
         <h3>Modal header</h3>
     </div>
     <div class="modal-body">
-        
+        <div class="row-fluid">
+            <div class="span4">
+                <div class="control-group">
+                    <label class="control-label" for="tboStart">จากวันที่</label>
+                    <div class="input-append date" data-name="datepicker">
+                        <input value="<?php echo date('d/m/Y'); ?>" type="text" id="tboStart" style="width: 80px;" disabled />
+                        <span class="add-on"><i class="icon-th"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="span4">
+                <div class="control-group">
+                    <label class="control-label" for="tboStop">ถึงวันที่</label>
+                    <div class="input-append date" data-name="datepicker">
+                        <input value="<?php echo date('d/m/Y'); ?>" type="text" id="tboStop" style="width: 80px;" disabled />
+                        <span class="add-on"><i class="icon-th"></i></span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="modal-footer">
         <a class="btn btn-danger" data-dismiss="modal">ยกเลิก</a>
-        <a class="btn btn-primary">แสดงรายงาน</a>
+        <a class="btn btn-primary" id="btnDate2View">แสดงรายงาน</a><input type="hidden" id="tboUrl">
     </div>
 </div>
 
