@@ -476,6 +476,7 @@ class Service_model extends CI_Model
                 'provider_id'   => new MongoId($this->provider_id),
                 'vn'            => (string) $data['vn'],
                 'drug_id'       => new MongoId($data['drug_id']),
+                'usage_id'      => new MongoId($data['usage_id']),
                 'price'         => (float) $data['price'],
                 'qty'           => (int) $data['qty'],
                 'last_update'   => date('Y-m-d H:i:s')
@@ -493,6 +494,7 @@ class Service_model extends CI_Model
             ->set(array(
                 'qty'           => (float) $data['qty'],
                 'price'         => (float) $data['price'],
+                'usage_id'      => new MongoId($data['usage_id']),
                 'user_id'       => new MongoId($this->user_id),
                 'provider_id'   => new MongoId($this->provider_id),
                 'last_update'   => date('Y-m-d H:i:s')

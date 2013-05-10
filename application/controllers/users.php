@@ -23,12 +23,6 @@ class Users extends CI_Controller
         //load model
         $this->load->model('User_model', 'user');
 
-        //$this->csrf_token = $this->security->get_csrf_hash();
-
-        //$this->twiggy->set('site_url', site_url());
-        //$this->twiggy->set('base_url', base_url());
-        //$this->twiggy->set('csrf_token', $this->csrf_token);
-
     }
 
     //index action
@@ -37,7 +31,6 @@ class Users extends CI_Controller
         $this->login();
     }
     public function login(){
-        //$this->twiggy->layout('login')->template('users/login')->display();
         $this->layout->view('users/login_view');
     }
 

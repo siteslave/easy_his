@@ -1092,7 +1092,7 @@
                             <label class="control-label" for="sl_epi_vaccines">วัคซีน</label>
                             <div class="controls">
                                 <select id="sl_epi_vaccines" class="input-xlarge"></select>
-                                <a href="#" class="btn btn-success" id="btn_do_add">
+                                <a href="#" class="btn btn-success" id="btn_do_add_epi">
                                     <i class="icon-plus-sign"></i> เพิ่มรายการ
                                 </a>
                             </div>

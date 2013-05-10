@@ -305,7 +305,7 @@
                     <div class="controls">
                         <select name="slInstype" id="sl_inscl_type" class="input-xlarge">
                             <option value="">--</option>
-                            <?php foreach($inscls as $t) echo '<option value="'.$t->code.'">['.$t->code.'] '.$t->name.'</option>'; ?>
+                            <?php foreach($inscls as $t) echo '<option value="'.$t->code.'">'.$t->name.'</option>'; ?>
                         </select>
                         <a href="#" class="btn">
                             <i class="icon-refresh"></i>

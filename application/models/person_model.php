@@ -679,7 +679,8 @@ class Person_model extends CI_Model
 	
 	public function get_all_person()
 	{
-		$rs = $this->mongo_db->get('person');
+		$rs = $this->mongo_db
+            ->get('person');
 		return $rs;
 	}
 	

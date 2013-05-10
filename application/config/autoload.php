@@ -80,7 +80,7 @@ $autoload['helper'] = array('url', 'his', 'basic');
 |
 */
 
-$autoload['config'] = array('twiggy');
+$autoload['config'] = array();
 
 
 /*

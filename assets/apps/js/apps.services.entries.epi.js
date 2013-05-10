@@ -136,7 +136,7 @@ head.ready(function(){
         });
     };
 
-    $('#btn_do_add').click(function(){
+    $('#btn_do_add_epi').click(function(){
         var data = {};
 
         data.hn = $('#hn').val(),
@@ -157,7 +157,8 @@ head.ready(function(){
                else
                {
                    app.alert('เพิ่มรายการเรียบร้อยแล้ว');
-                   epis.modal.hide_new_epi();
+                   epis.get_epi_visit_list();
+                   //epis.modal.hide_new_epi();
                }
             });
         }

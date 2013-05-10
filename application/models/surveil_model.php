@@ -224,6 +224,8 @@ class Surveil_model extends CI_Model
                 'date_death' => to_string_date($data['date_death']),
                 'complication' => $data['complication'],
                 'organism' => $data['organism'],
+                'school_class' => $data['school_class'],
+                'school_name' => $data['school_name'],
                 'provider_id' => new MongoId($this->provider_id),
                 'user_id' => new MongoId($this->user_id),
                 'owner_id' => new MongoId($this->owner_id)

@@ -65,7 +65,7 @@ class Pregnancies extends CI_Controller
     {
         $hn = $this->input->post('hn');
 
-        $rs = $this->preg->check_register_status($hn);
+        $rs = $this->preg->check_register_status_without_gravida($hn);
 
         if($rs)
         {
@@ -398,20 +398,20 @@ class Pregnancies extends CI_Controller
                 foreach($rs as $r)
                 {
                     $obj = new stdClass();
-                    $obj->gravida = $r['gravida'];
-                    $obj->lmp = to_js_date($r['labor']['lmp']);
-                    $obj->edc = to_js_date($r['labor']['edc']);
-                    $obj->bdate = to_js_date($r['labor']['bdate']);
-                    $obj->btime = $r['labor']['btime'];
-                    $obj->icd_code = $r['labor']['bresult'];
-                    $obj->icd_name = get_diag_name($r['labor']['bresult']);
-                    $obj->bplace = $r['labor']['bplace'];
-                    $obj->bhosp = $r['labor']['bhosp'];
-                    $obj->bhosp_name = get_hospital_name($r['labor']['bhosp']);
-                    $obj->btype = $r['labor']['btype'];
-                    $obj->bdoctor = $r['labor']['bdoctor'];
-                    $obj->sborn = $r['labor']['sborn'];
-                    $obj->lborn = $r['labor']['lborn'];
+                    $obj->gravida = isset($r['labor']) ? $r['gravida'] : NULL;
+                    $obj->lmp = isset($r['labor']) ? to_js_date($r['labor']['lmp']) : NULL;
+                    $obj->edc = isset($r['labor']) ? to_js_date($r['labor']['edc']) : NULL;
+                    $obj->bdate = isset($r['labor']) ? to_js_date($r['labor']['bdate']) : NULL;
+                    $obj->btime = isset($r['labor']) ? $r['labor']['btime'] : NULL;
+                    $obj->icd_code = isset($r['labor']) ? $r['labor']['bresult'] : NULL;
+                    $obj->icd_name = isset($r['labor']) ? get_diag_name($r['labor']['bresult']) : NULL;
+                    $obj->bplace = isset($r['labor']) ? $r['labor']['bplace'] : NULL;
+                    $obj->bhosp = isset($r['labor']) ? $r['labor']['bhosp'] : NULL;
+                    $obj->bhosp_name = isset($r['labor']) ? get_hospital_name($r['labor']['bhosp']) : NULL;
+                    $obj->btype = isset($r['labor']) ? $r['labor']['btype'] : NULL;
+                    $obj->bdoctor = isset($r['labor']) ? $r['labor']['bdoctor'] : NULL;
+                    $obj->sborn = isset($r['labor']) ? $r['labor']['sborn'] : NULL;
+                    $obj->lborn = isset($r['labor']) ? $r['labor']['lborn'] : NULL;
                     $obj->preg_status = $r['preg_status'];
 
                     $arr_result[] = $obj;
