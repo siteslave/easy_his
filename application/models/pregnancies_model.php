@@ -140,10 +140,19 @@ class Pregnancies_model extends CI_Model
         return $rs;
     }
 
-    public function check_register_status($hn, $gravida)
+    public function check_register_status($hn, $gravida='')
     {
         $rs = $this->mongo_db
             ->where(array('hn' => (string) $hn, 'gravida' => $gravida))
+            ->count('pregnancies');
+
+        return $rs > 0 ? TRUE : FALSE;
+    }
+
+    public function check_register_status_without_gravida($hn)
+    {
+        $rs = $this->mongo_db
+            ->where(array('hn' => (string) $hn))
             ->count('pregnancies');
 
         return $rs > 0 ? TRUE : FALSE;

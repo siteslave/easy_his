@@ -61,7 +61,7 @@ class Appoints extends CI_Controller
             $data['clinics']        = $this->basic->get_clinic();
             $data['aptypes']        = $this->basic->get_appoint_type();
             $data['doctor_rooms']   = $this->basic->get_doctor_room();
-            $data['inscls']         = $this->basic->get_insurance();
+            $data['inscls']         = $this->basic->get_inscl();
 
             $this->layout->view('appoints/index_view', $data);
         }

@@ -210,6 +210,12 @@
                                     ข้อมูลแผนกให้บริการ (Clinics)
                                 </a>
                             </li>
+                            <li>
+                                <a href="<?php echo site_url('admin'); ?>">
+                                    <i class="icon-group"></i>
+                                    ข้อมูลผู้ใช้งาน (Users)
+                                </a>
+                            </li>
                         </ul>
                     </li>
                     <li>

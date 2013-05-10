@@ -6,6 +6,15 @@
  * @since       Version 1.0
  * @copyright   Copyright 2013 Maha Sarakham Hospital Information center.
  */
+
+if(!function_exists('get_salt'))
+{
+    function get_salt()
+    {
+        $salt = '739a1fd7ec6923105c5435f068fad773';
+        return $salt;
+    }
+}
 if( ! function_exists('render_json')){
     function render_json($json){
         header('Cache-Control: no-cache, must-revalidate');

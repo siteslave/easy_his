@@ -1097,6 +1097,18 @@ class Person extends CI_Controller
 
         render_json($json);
     }
+
+    public function auto_gen_hn()
+    {
+        ini_set('memory_limit', '-1');
+        $person = $this->person->get_all_person();
+
+        foreach($person as $r)
+        {
+            $hn = generate_serial('HN');
+            $this->person->set_hn(get_first_object($r['_id']), $hn);
+        }
+    }
 }
 
 //End of file

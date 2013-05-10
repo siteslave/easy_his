@@ -322,6 +322,17 @@ var app = {
     clear_null: function(v)
     {
         return v == null ? '-' : v;
+    },
+
+    mongo_datetime_to_thai: function(v)
+    {
+        var d = v.split(' ');
+        var date = d[0].split('-');
+        var cd = date[2],
+            cm = date[1],
+            cy = parseInt(date[2]) + 543;
+
+        return cd + '/' + cm + '/' + cy;
     }
 };
 //Record pre page
