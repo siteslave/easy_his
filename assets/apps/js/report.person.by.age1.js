@@ -1,18 +1,17 @@
 /**
  * Created By Mr.Utit Sairat.
  * E-mail: soodteeruk@gmail.com
- * Date: 10/4/2556 15:50 น.
+ * Date: 17/4/2556 15:51 น.
  */
 $(function() {
     var rpt = {};
 
     rpt.ajax = {
         get_list: function(start, stop, cb) {
-            var url = 'reports/get_sub_list',
+            var url = 'person_by_age1/get_list',
                 params = {
                     start: start,
-                    stop: stop,
-                    group: $('#tboId').val()
+                    stop: stop
                 };
 
             app.ajax(url, params, function(err, data){
@@ -20,8 +19,8 @@ $(function() {
             });
         },
         get_list_total: function(cb){
-            var url = 'reports/get_sub_list_total',
-                params = { group: $('#tboId').val() };
+            var url = 'person_by_age1/get_list_total',
+                params = {};
 
             app.ajax(url, params, function(err, data){
                 err ? cb(err) : cb(null, data);
@@ -31,19 +30,56 @@ $(function() {
 
     rpt.set_list = function(data){
         if(_.size(data.rows) > 0){
+            var a0001m = 0, a0001f = 0,
+                a0104m = 0, a0104f = 0,
+                a0509m = 0, a0509f = 0,
+                a1014m = 0, a1014f = 0,
+                a1519m = 0, a1519f = 0,
+                a2024m = 0, a2024f = 0,
+                a2529m = 0, a2529f = 0,
+                a3034m = 0, a3034f = 0,
+                a3539m = 0, a3539f = 0;
             _.each(data.rows, function(v){
+                a0001m += v.age0001m;   a0001f += v.age0001f;
+                a0104m += v.age0104m;   a0104f += v.age0104f;
+                a0509m += v.age0509m;   a0509f += v.age0509f;
+                a1014m += v.age1014m;   a1014f += v.age1014f;
+                a1519m += v.age1519m;   a1519f += v.age1519f;
+                a2024m += v.age2024m;   a2024f += v.age2024f;
+                a2529m += v.age2529m;   a2529f += v.age2529f;
+                a3034m += v.age3034m;   a3034f += v.age3034f;
+                a3539m += v.age3539m;   a3539f += v.age3539f;
+
                 $('#tblList > tbody').append(
                     '<tr>'+
+                        '<td>'+ v.code.substr(6) +'</td>'+
                         '<td>'+ v.name +'</td>'+
-                        '<td>'+
-                        '<div class="btn-group">'+
-                            '<a class="btn btn-success" data-url="'+ v.url +'" id="btnView" title="แสดงรายงาน"><i class="icon-list"></i></a>'+
-                            '<!-- <a class="btn btn-info" data-url="'+ v.url +'" id="btnPrint" title="พิมพ์รายงาน"><i class="icon-print"></i></a> -->'+
-                        '</div>'+
-                        '</td>'+
-                        '</tr>'
+                        '<td>'+ v.age0001m +'</td><td>'+ v.age0001f +'</td>'+
+                        '<td>'+ v.age0104m +'</td><td>'+ v.age0104f +'</td>'+
+                        '<td>'+ v.age0509m +'</td><td>'+ v.age0509f +'</td>'+
+                        '<td>'+ v.age1014m +'</td><td>'+ v.age1014f +'</td>'+
+                        '<td>'+ v.age1519m +'</td><td>'+ v.age1519f +'</td>'+
+                        '<td>'+ v.age2024m +'</td><td>'+ v.age2024f +'</td>'+
+                        '<td>'+ v.age2529m +'</td><td>'+ v.age2529f +'</td>'+
+                        '<td>'+ v.age3034m +'</td><td>'+ v.age3034f +'</td>'+
+                        '<td>'+ v.age3539m +'</td><td>'+ v.age3539f +'</td>'+
+                    '</tr>'
                 );
             });
+            $('#tblList > tbody').append(
+                '<tr>'+
+                    '<td colspan="2"><b>รวมทั้งหมด</b></td>'+
+                    '<td><b>'+ a0001m +'</b></td><td><b>'+ a0001f +'</b></td>'+
+                    '<td><b>'+ a0104m +'</b></td><td><b>'+ a0104f +'</b></td>'+
+                    '<td><b>'+ a0509m +'</b></td><td><b>'+ a0509f +'</b></td>'+
+                    '<td><b>'+ a1014m +'</b></td><td><b>'+ a1014f +'</b></td>'+
+                    '<td><b>'+ a1519m +'</b></td><td><b>'+ a1519f +'</b></td>'+
+                    '<td><b>'+ a2024m +'</b></td><td><b>'+ a2024f +'</b></td>'+
+                    '<td><b>'+ a2529m +'</b></td><td><b>'+ a2529f +'</b></td>'+
+                    '<td><b>'+ a3034m +'</b></td><td><b>'+ a3034f +'</b></td>'+
+                    '<td><b>'+ a3539m +'</b></td><td><b>'+ a3539f +'</b></td>'+
+                '</tr>'
+            );
         }else{
             $('#tblList > tbody').append(
                 '<tr><td colspan="3">ไม่พบรายการ</td></tr>'
@@ -52,6 +88,7 @@ $(function() {
     };
     rpt.get_list = function(){
         $('#main_paging').fadeIn('slow');
+
         rpt.ajax.get_list_total(function(err, data){
             if(err){
                 app.alert(err);
@@ -69,9 +106,7 @@ $(function() {
                             }else{
                                 rpt.set_list(data);
                             }
-
                         });
-
                     },
                     onFormat: function(type){
                         switch (type) {
@@ -131,46 +166,6 @@ $(function() {
             }
         });
     };
-
-    rpt.date2_show = function() {
-        $('#mdlDate2').modal({
-            backdrop: 'static'
-        }).css({
-            //width: 680,
-            'margin-left': function() {
-                return -($(this).width() / 2);
-            }
-        });
-    }
-    rpt.date2_hide = function() {
-        $('#mdlDate2').modal('hide');
-    }
-
-    $(document).on('click', '#btnView', function() {
-        var url = $(this).attr('data-url');
-        if(url.substr(8, 7) == 'date_bw') {
-            //app.alert('Date2');
-            $('#tboUrl').val(url);
-            rpt.date2_show();
-        } else {
-            location.href=site_url + url;
-        }
-    });
-
-    $('#btnDate2View').click(function() {
-        location.href=site_url + $('#tboUrl').val() + '/' + rpt.ConvertDate($('#tboStart').val()) + '/' + rpt.ConvertDate($('#tboStop').val());
-    });
-
-    rpt.ConvertDate = function(d) {
-        var _tmp = '';
-        _tmp = d.substr(d.lastIndexOf('/')+1, 4) + '-' + d.substr(d.indexOf('/')+1, 2) + '-' + d.substr(0, 2);
-        return _tmp;
-    }
-
-    $(document).on('click', '#btnPrint', function() {
-        //var url = $(this).attr('data-url');
-        //location.href=site_url + url + '/print';
-    });
 
     rpt.get_list();
 });
