@@ -280,11 +280,13 @@ head.ready(function(){
                         '<td>'+ v.name +'</td>' +
                         '<td>'+ v.strength + ' ' + v.strength_unit +'</td>' +
                         '<td>'+ v.unit_name +'</td>' +
-                        '<td>'+ app.add_commars(v.unit_cost) +'</td>' +
-                        '<td>'+ app.add_commars(v.unit_price) +'</td>' +
+                        '<td>'+ app.add_commars(v.cost) +'</td>' +
+                        '<td>'+ app.add_commars(v.price) +'</td>' +
                         '<td>'+ app.add_commars(v.qty) +'</td>' +
                         '<td><div class="btn-group">' +
-                        '<a href="javascript:void(0);" data-name="btn_edit" class="btn" data-id="'+ v.id +'">' +
+                        '<a href="javascript:void(0);" data-name="btn_edit" class="btn" data-id="'+ v.id +'" ' +
+                        'data-vname="'+ v.name +'" data-did="'+ v.did +'" data-cost="'+ v.cost +'" data-price="'+ v.price +'" ' +
+                        'data-qty="'+ v.qty +'">' +
                         '<i class="icon-edit"></i></a>' +
                         '<a href="javascript:void(0);" data-name="btn_remove" class="btn" data-id="'+ v.id +'">' +
                         '<i class="icon-trash"></i></a>' +
@@ -304,58 +306,22 @@ head.ready(function(){
     {
         $('#txt_reg_did').val('');
         $('#txt_reg_name').val('');
-        $('#txt_reg_strength_value').val('');
-        app.set_first_selected($('#sl_reg_strength_unit'));
-        app.set_first_selected($('#sl_reg_unit'));
         $('#txt_reg_unit_cost').val('');
         $('#txt_reg_unit_price').val('');
         $('#txt_reg_qty').val('');
 
         $('#txt_id').val('');
-        $('#txt_isupdate').val('0');
-
     };
 
     $('#btn_save').click(function(){
         var data = {};
 
-        data.did = $('#txt_reg_did').val();
-        data.name = $('#txt_reg_name').val();
-        data.strength = $('#txt_reg_strength_value').val();
-        data.strength_unit = $('#sl_reg_strength_unit').val();
-        data.unit = $('#sl_reg_unit').val();
-        data.unit_cost = $('#txt_reg_unit_cost').val();
-        data.unit_price = $('#txt_reg_unit_price').val();
+        data.price = $('#txt_reg_unit_price').val();
         data.qty = $('#txt_reg_qty').val();
 
         data.id = $('#txt_id').val();
-        data.isupdate = $('#txt_isupdate').val();
 
-        if(!data.did)
-        {
-            app.alert('กรุณาระบุ รหัสมาตรฐาน');
-        }
-        else if(!data.name)
-        {
-            app.alert('กรุณาระบุชื่อ');
-        }
-        else if(!data.strength)
-        {
-            app.alert('กรุณาระบุค่าความแรง');
-        }
-        else if(!data.strength_unit)
-        {
-            app.alert('กรุณาระบุหน่วยความแรง');
-        }
-        else if(!data.unit)
-        {
-            app.alert('กรุณาระบุหน่วย');
-        }
-        else if(!data.unit_cost)
-        {
-            app.alert('กรุณาระบุราคาทุน');
-        }
-        else if(!data.unit_price)
+        if(!data.price)
         {
             app.alert('กรุณาระบุราคาขาย');
         }
@@ -400,22 +366,25 @@ head.ready(function(){
     {
         var data = v.rows;
 
-        $('#txt_reg_did').val(data.did);
-        $('#txt_reg_name').val(data.name);
-        $('#txt_reg_strength_value').val(data.strength);
-        $('#sl_reg_strength_unit').val(data.strength_unit);
-        $('#sl_reg_unit').val(data.unit);
-        $('#txt_reg_unit_cost').val(data.unit_cost);
-        $('#txt_reg_unit_price').val(data.unit_price);
+        $('#txt_reg_unit_price').val(data.price);
         $('#txt_reg_qty').val(data.qty);
-
-        $('#txt_isupdate').val('1');
-        $('#txt_id').val(data.id);
     };
 
     $(document).on('click', 'a[data-name="btn_edit"]', function(){
-        var id = $(this).data('id');
-        drugs.get_detail(id);
+        var id = $(this).data('id'),
+            name = $(this).data('vname'),
+            did = $(this).data('did'),
+            cost = $(this).data('cost'),
+            price = $(this).data('price'),
+            qty = $(this).data('qty');
+
+        $('#txt_id').val(id);
+        $('#txt_reg_unit_cost').val(cost);
+        $('#txt_reg_did').val(did);
+        $('#txt_reg_name').val(name);
+        $('#txt_reg_unit_price').val(price);
+        $('#txt_reg_qty').val(qty);
+
         drugs.modal.show_register();
     });
 
@@ -455,6 +424,10 @@ head.ready(function(){
         {
             drugs.search(query);
         }
+    })
+
+    $('#btn_refresh').on('click', function(){
+        drugs.get_list();
     })
 
     drugs.get_list();
