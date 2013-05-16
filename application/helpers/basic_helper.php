@@ -96,23 +96,23 @@ if(!function_exists('get_owner_name')){
 }
 
 if(!function_exists('get_strength_name')){
-    function get_strength_name($code, $owner_id){
+    function get_strength_name($code){
         $ci =& get_instance();
 
         $ci->load->model('Basic_model', 'basic');
 
-        $result = $ci->basic->get_strength_name($code, $owner_id);
+        $result = $ci->basic->get_strength_name($code);
 
         return $result;
     }
 }
 if(!function_exists('get_unit_name')){
-    function get_unit_name($code, $owner_id){
+    function get_unit_name($code){
         $ci =& get_instance();
 
         $ci->load->model('Basic_model', 'basic');
 
-        $result = $ci->basic->get_unit_name($code, $owner_id);
+        $result = $ci->basic->get_unit_name($code);
 
         return $result;
     }

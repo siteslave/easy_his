@@ -2,6 +2,7 @@
 head.ready(function(){
     var drug = {};
     drug.vn = $('#vn').val();
+    drug.hn = $('#hn').val();
 
     drug.modal = {
         show_new: function(){
@@ -290,6 +291,7 @@ head.ready(function(){
         items.qty = $('#txt_drug_qty').val();
 
         items.vn = drug.vn;
+        items.hn = drug.hn;
 
         items.isupdate = $('#drug_isupdate').val();
 
@@ -322,17 +324,18 @@ head.ready(function(){
     });
 
     $(document).on('click', 'a[data-name="btn_drug_edit"]', function(){
-        var id = $(this).attr('data-id'),
-            drug_id = $(this).attr('data-drug_id'),
-            drug_name = $(this).attr('data-drug_name'),
-            price = $(this).attr('data-price'),
-            qty = $(this).attr('data-qty'),
-            usage_id = $(this).attr('data-usage_id'),
-            usage_name = $(this).attr('data-usage_name');
+        var id = $(this).data('id'),
+            drug_id = $(this).data('drug_id'),
+            drug_name = $(this).data('drug_name'),
+            price = $(this).data('price'),
+            qty = $(this).data('qty'),
+            usage_id = $(this).data('usage_id'),
+            usage_name = $(this).data('usage_name');
 
         //set data
 
         $('#txt_drug_usage_id').val(usage_id);
+        $('#txt_drug_name').val(drug_name);
         $('#txt_drug_usage_name').val(usage_name);
         $('#txt_drug_id').val(drug_id);
         $('#btn_drug_show_search').attr('disabled', 'disabled');

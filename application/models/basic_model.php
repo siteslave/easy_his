@@ -718,18 +718,14 @@ class Basic_model extends CI_Model
         return count($result) > 0 ? $result[0]['name'] : '-';
     }
 
-    public function get_strength_name($id, $owner_id){
-        $result = $this->mongo_db->where(array(
-                    '_id' => new MongoId($id),
-                    'owner_id' => new MongoId($owner_id)))
+    public function get_strength_name($id){
+        $result = $this->mongo_db->where(array('_id' => new MongoId($id)))
                 ->get('ref_drug_strengths');
 
         return count($result) > 0 ? $result[0]['name'] : '-';
 }
-    public function get_unit_name($id, $owner_id){
-        $result = $this->mongo_db->where(array(
-                        '_id' => new MongoId($id),
-                        'owner_id' => new MongoId($owner_id)))
+    public function get_unit_name($id){
+        $result = $this->mongo_db->where(array('_id' => new MongoId($id)))
                 ->get('ref_drug_units');
 
         return count($result) > 0 ? $result[0]['name'] : '-';
@@ -890,10 +886,10 @@ class Basic_model extends CI_Model
             $obj = new stdClass();
             $obj->stdcode = $result[0]['did'];
             $obj->name = $result[0]['name'];
-            $obj->unit = get_unit_name($result[0]['unit'], $this->owner_id);
-            $obj->streng = $result[0]['strength'] . ' ' . get_strength_name($result[0]['strength_unit'], $this->owner_id);
-            $obj->price = $result[0]['unit_price'];
-            $obj->cost = $result[0]['unit_cost'];
+            $obj->unit = get_unit_name($result[0]['unit']);
+            $obj->streng = $result[0]['strength'] . ' ' . get_strength_name($result[0]['strength_unit']);
+            //$obj->price = $result[0]['unit_price'];
+            //$obj->cost = $result[0]['unit_cost'];
 
             return $obj;
         }else{
@@ -923,7 +919,6 @@ class Basic_model extends CI_Model
 
     public function search_drug($query){
         $result = $this->mongo_db
-            ->where(array('owner_id' => new MongoId($this->owner_id)))
             ->like('name', $query)
             ->limit(10)
             ->get('ref_drugs');
