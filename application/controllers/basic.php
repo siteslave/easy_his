@@ -27,8 +27,10 @@ class Basic extends CI_Controller
         }
 
         $this->load->model('Basic_model', 'basic');
+        $this->load->model('Drug_model', 'drug');
 
         $this->basic->owner_id = $this->owner_id;
+        $this->drug->owner_id = $this->owner_id;
     }
 
     public function index()
@@ -108,7 +110,6 @@ class Basic extends CI_Controller
         if(empty($query)){
             $json = '{"success": false, "msg": "No query found."}';
         }else{
-            $this->basic->owner_id = $this->owner_id;
             $result = $this->basic->search_drug($query);
             if($result){
                 $arr_result = array();
@@ -117,12 +118,16 @@ class Basic extends CI_Controller
                     $obj->id = get_first_object($r['_id']);
                     $obj->name = $r['name'];
                     $obj->unit = $r['unit'];
-                    $obj->cost = $r['unit_cost'];
-                    $obj->price = $r['unit_price'];
-                    $obj->stdcode = $r['did'];
-                    $obj->streng = $r['strength'] .' '.get_strength_name($r['strength_unit'], $this->owner_id);
 
-                    array_push($arr_result, $obj);
+                    $price_qty = $this->drug->get_price_qty($r['_id']);
+
+                    $obj->cost = $r['cost'];
+                    $obj->price = $price_qty[0]['price'];
+                    $obj->qty = $price_qty[0]['qty'];
+                    $obj->stdcode = $r['did'];
+                    $obj->streng = $r['strength'] .' '.get_strength_name($r['strength_unit']);
+
+                    $arr_result[] = $obj;
                 }
                 $rows = json_encode($arr_result);
                 $json = '{"success": true, "rows": '.$rows.'}';

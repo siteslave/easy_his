@@ -32,6 +32,7 @@ class Services extends CI_Controller
         $this->load->model('Service_model', 'service');
         $this->load->model('Basic_model', 'basic');
         $this->load->model('Person_model', 'person');
+        $this->load->model('Drug_model', 'drug');
 
         $this->load->helper('person');
 
@@ -39,6 +40,7 @@ class Services extends CI_Controller
         $this->service->user_id = $this->user_id;
         $this->service->provider_id = $this->provider_id;
         $this->basic->owner_id  = $this->owner_id;
+        $this->drug->owner_id  = $this->owner_id;
 
     }
 
@@ -733,12 +735,12 @@ class Services extends CI_Controller
                     $obj->code = $r['code'];
                     $obj->proced_name = get_procedure_name($obj->code);
                     $obj->price = $r['price'];
-                    $obj->start_time = $r['start_time'];
-                    $obj->end_time = $r['end_time'];
-                    $obj->provider_id = get_first_object($r['provider_id']);
-                    $obj->clinic_id = get_first_object($r['clinic_id']);
+                    $obj->start_time = isset($r['start_time']) ? $r['start_time'] : NULL;
+                    $obj->end_time = isset($r['end_time']) ? $r['end_time'] : NULL;
+                    $obj->provider_id = isset($r['provider_id']) ? get_first_object($r['provider_id']) : NULL;
+                    $obj->clinic_id = isset($r['clinic_id']) ? get_first_object($r['clinic_id']) : NULL;
                     $obj->clinic_name = get_clinic_name($obj->clinic_id);
-                    $obj->provider_name = get_provider_name_by_id(get_first_object($r['provider_id']));
+                    $obj->provider_name = get_provider_name_by_id($obj->provider_id);
 
                     array_push($arr_result, $obj);
                 }
@@ -785,7 +787,7 @@ class Services extends CI_Controller
     {
         $data = $this->input->post('data');
         $this->service->owner_id = $this->owner_id;
-        
+
         if(empty($data))
         {
             $json = '{"success": false, "msg": "No data for save."}';
@@ -797,6 +799,14 @@ class Services extends CI_Controller
         else if(!$this->service->check_visit_exist($data['vn']))
         {
            $json = '{"success": false, "msg": "No visit found."}';
+        }
+        else if($this->person->check_drug_allergy_duplicate($data['hn'], $data['drug_id']))
+        {
+            $json = '{"success": false, "msg": "ผู้ป่วยแพ้ยานี้ ไม่สามารถสั่งได้ กรุณาตรวจสอบ"}';
+        }
+        else if(!$this->drug->check_order_qyt($data['drug_id'], $data['qty']))
+        {
+            $json = '{"success": false, "msg": "จำนวนยาในสต๊อกไม่พอจ่าย กรุณาตรวจสอบ"}';
         }
         else if($data['isupdate'] == '1')
         {

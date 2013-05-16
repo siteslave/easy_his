@@ -134,12 +134,11 @@ class Drug_model extends CI_Model
         return $rs;
     }
 
-    public function remove($id)
+    public function check_order_qyt($id, $qty)
     {
-        $rs = $this->mongo_db
-            ->where(array('_id' => new MongoId($id)))
-            ->delete('ref_drugs');
+        $pqty = $this->get_price_qty($id);
+        $stock_qty = isset($pqty[0]['qty']) ? $pqty[0]['qty'] : 0;
 
-        return $rs;
+        return $qty > $stock_qty ? FALSE : TRUE;
     }
 }
