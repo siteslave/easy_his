@@ -20,9 +20,7 @@ class Drug_model extends CI_Model
 
     public function get_list($start, $limit)
     {
-        $this->mongo_db->add_index('ref_drugs', array('owner_id' => -1));
         $rs = $this->mongo_db
-            ->where(array('owner_id' => new MongoId($this->owner_id)))
             ->order_by(array('name' => 1))
             ->offset($start)
             ->limit($limit)
@@ -33,19 +31,33 @@ class Drug_model extends CI_Model
 
     public function get_list_total()
     {
-        $this->mongo_db->add_index('ref_drugs', array('owner_id' => -1));
         $rs = $this->mongo_db
-            ->where(array('owner_id' => new MongoId($this->owner_id)))
             ->count('ref_drugs');
         return $rs;
     }
 
-    public function check_duplicated($data)
+    //get drug price, qty
+    public function get_price_qty($id)
     {
-        $this->mongo_db->add_index('ref_drugs', array('name' => -1));
-        $this->mongo_db->add_index('ref_drugs', array('owner_id' => -1));
         $rs = $this->mongo_db
-            ->where(array('name' => $data['name'], 'owner_id' => new MongoId($this->owner_id)))
+            ->select(array('owners'))
+            ->where(array(
+                '_id' => $id,
+                'owners.owner_id' => new MongoId($this->owner_id)
+                ))
+            ->limit(1)
+            ->get('ref_drugs');
+
+        return count($rs) > 0 ? $rs[0]['owners'] : NULL;
+    }
+
+
+    public function check_duplicated($id)
+    {
+        $rs = $this->mongo_db
+            ->where(array(
+                '_id' => new MongoId($id),
+                'owners.owner_id' => new MongoId($this->owner_id)))
             ->count('ref_drugs');
 
         return $rs > 0 ? TRUE : FALSE;
@@ -54,19 +66,17 @@ class Drug_model extends CI_Model
     public function save($data)
     {
         $rs = $this->mongo_db
-            ->insert('ref_drugs', array(
-                'name' => $data['name'],
-                'did' => $data['did'],
-                'strength' => $data['strength'],
-                'strength_unit' => new MongoId($data['strength_unit']),
-                'qty' => $data['qty'],
-                'unit_price' => $data['unit_price'],
-                'unit_cost' => $data['unit_cost'],
-                'unit' => new MongoId($data['unit']),
-                'owner_id' => new MongoId($this->owner_id),
-                'user_id' => new MongoId($this->user_id),
-                'last_update' => date('Y-m-d H:i:s')
-            ));
+            ->where(array('_id' => new MongoId($data['id'])))
+            ->push('owners',
+                array(
+                    'price'  => (float) $data['price'],
+                    'qty'  => (float) $data['qty'],
+                    'owner_id'  => new MongoId($this->owner_id),
+                    'user_id'  => new MongoId($this->user_id),
+                    'last_update'  => date('Y-m-d H:i:s')
+                )
+            )
+            ->update('ref_drugs');
 
         return $rs;
     }
@@ -74,18 +84,14 @@ class Drug_model extends CI_Model
     {
 
         $rs = $this->mongo_db
-            ->where(array('_id' => new MongoId($data['id'])))
+            ->where(array(
+                '_id' => new MongoId($data['id']),
+                'owners.owner_id' => new MongoId($this->owner_id)))
             ->set(array(
-                'name' => $data['name'],
-                'did' => $data['did'],
-                'strength' => $data['strength'],
-                'strength_unit' => new MongoId($data['strength_unit']),
-                'qty' => $data['qty'],
-                'unit_price' => $data['unit_price'],
-                'unit_cost' => $data['unit_cost'],
-                'unit' => new MongoId($data['unit']),
-                'user_id' => new MongoId($this->user_id),
-                'last_update' => date('Y-m-d H:i:s')
+                'owners.$.price'  => (float) $data['price'],
+                'owners.$.qty'  => (float) $data['qty'],
+                'owners.$.user_id'  => new MongoId($this->user_id),
+                'owners.$.last_update'  => date('Y-m-d H:i:s')
             ))
             ->update('ref_drugs');
 
@@ -94,9 +100,16 @@ class Drug_model extends CI_Model
 
     public function detail($id)
     {
-        $this->mongo_db->add_index('ref_drugs', array('owner_id' => -1));
         $rs = $this->mongo_db
-            ->where(array('owner_id' => new MongoId($this->owner_id), '_id' => new MongoId($id)))
+            ->where(array(
+                '_id' => new MongoId($id),
+                'owners' =>
+                array(
+                    '$elemMatch' =>
+                    array(
+                        'owner_id' => new MongoId($this->owner_id)
+                    )
+                )))
             ->limit(1)
             ->get('ref_drugs');
 
@@ -104,9 +117,7 @@ class Drug_model extends CI_Model
     }
     public function search($query, $start, $limit)
     {
-        $this->mongo_db->add_index('ref_drugs', array('owner_id' => -1));
         $rs = $this->mongo_db
-            ->where(array('owner_id' => new MongoId($this->owner_id)))
             ->like('name', $query)
             ->offset($start)
             ->limit($limit)
@@ -116,9 +127,7 @@ class Drug_model extends CI_Model
     }
     public function search_total($query)
     {
-        $this->mongo_db->add_index('ref_drugs', array('owner_id' => -1));
         $rs = $this->mongo_db
-            ->where(array('owner_id' => new MongoId($this->owner_id)))
             ->like('name', $query)
             ->count('ref_drugs');
 

@@ -36,6 +36,9 @@ class Drugs extends CI_Controller
 
         $this->load->model('Drug_model', 'drug');
         $this->load->model('Basic_model', 'basic');
+
+        $this->drug->owner_id = $this->owner_id;
+        $this->drug->user_id = $this->user_id;
     }
 
 
@@ -67,7 +70,6 @@ class Drugs extends CI_Controller
 
         $limit = (int) $stop - (int) $start;
 
-        $this->drug->owner_id = $this->owner_id;
         $rs = $this->drug->get_list($start, $limit);
 
         if($rs)
@@ -75,6 +77,7 @@ class Drugs extends CI_Controller
             $arr_result = array();
             foreach($rs as $r)
             {
+                $price_qty = $this->drug->get_price_qty($r['_id']);
                 $obj                = new stdClass();
                 $obj->id            = get_first_object($r['_id']);
                 $obj->name          = $r['name'];
@@ -82,9 +85,10 @@ class Drugs extends CI_Controller
                 $obj->strength_unit = get_strength_name(get_first_object($r['strength_unit']), $this->owner_id);
                 $obj->strength      = $r['strength'];
                 $obj->unit_name     = get_unit_name(get_first_object($r['unit']), $this->owner_id);
-                $obj->unit_price    = $r['unit_price'];
-                $obj->unit_cost     = $r['unit_cost'];
-                $obj->qty           = $r['qty'];
+                $obj->cost          = $r['cost'];
+
+                $obj->price         = isset($price_qty[0]['price']) ? $price_qty[0]['price'] : 0;
+                $obj->qty           = isset($price_qty[0]['qty']) ? $price_qty[0]['qty'] : 0;
 
                 $arr_result[]       = $obj;
             }
@@ -122,7 +126,6 @@ class Drugs extends CI_Controller
 
         $limit = (int) $stop - (int) $start;
 
-        $this->drug->owner_id = $this->owner_id;
         $rs = $this->drug->search($query, $start, $limit);
 
         if($rs)
@@ -130,6 +133,8 @@ class Drugs extends CI_Controller
             $arr_result = array();
             foreach($rs as $r)
             {
+
+                $price_qty = $this->drug->get_price_qty($r['_id']);
                 $obj                = new stdClass();
                 $obj->id            = get_first_object($r['_id']);
                 $obj->name          = $r['name'];
@@ -137,9 +142,10 @@ class Drugs extends CI_Controller
                 $obj->strength_unit = get_strength_name(get_first_object($r['strength_unit']), $this->owner_id);
                 $obj->strength      = $r['strength'];
                 $obj->unit_name     = get_unit_name(get_first_object($r['unit']), $this->owner_id);
-                $obj->unit_price    = $r['unit_price'];
-                $obj->unit_cost     = $r['unit_cost'];
-                $obj->qty           = $r['qty'];
+                $obj->cost          = $r['cost'];
+
+                $obj->price         = isset($price_qty[0]['price']) ? $price_qty[0]['price'] : 0;
+                $obj->qty           = isset($price_qty[0]['qty']) ? $price_qty[0]['qty'] : 0;
 
                 $arr_result[]       = $obj;
             }
@@ -164,42 +170,16 @@ class Drugs extends CI_Controller
         }
         else
         {
-            $this->drug->owner_id = $this->owner_id;
-            $this->drug->user_id = $this->user_id;
+            $exist = $this->drug->check_duplicated($data['id']);
 
-            if($data['isupdate'] == '1')
+            $rs = $exist ? $this->drug->update($data) : $this->drug->save($data);
+            if($rs)
             {
-                $rs = $this->drug->update($data);
-                if($rs)
-                {
-                    $json = '{"success": true, "msg": "Update"}';
-                }
-                else
-                {
-                    $json = '{"success": false, "msg": "ไม่สามารถบันทึกได้"}';
-                }
-
+                $json = '{"success": true}';
             }
             else
             {
-                //check duplicated
-                $exist = $this->drug->check_duplicated($data);
-                if($exist)
-                {
-                    $json = '{"success": false, "msg": "รายการซ้ำ กรุณาตรวจสอบ"}';
-                }
-                else
-                {
-                    $rs = $this->drug->save($data);
-                    if($rs)
-                    {
-                        $json = '{"success": true, "msg": "Insert"}';
-                    }
-                    else
-                    {
-                        $json = '{"success": false, "msg": "ไม่สามารถบันทึกได้"}';
-                    }
-                }
+                $json = '{"success": false, "msg": "ไม่สามารถบันทึกได้"}';
             }
 
         }
@@ -216,18 +196,10 @@ class Drugs extends CI_Controller
         }
         else
         {
-            $this->drug->owner_id = $this->owner_id;
+            $rs = $this->drug->get_price_qty(new MongoId($id));
 
-            $rs = $this->drug->detail($id);
             $obj = new stdClass();
-            $obj->id = get_first_object($rs['_id']);
-            $obj->did = $rs['did'];
-            $obj->name = $rs['name'];
-            $obj->unit = get_first_object($rs['unit']);
-            $obj->strength = $rs['strength'];
-            $obj->strength_unit = get_first_object($rs['strength_unit']);
-            $obj->unit_price = $rs['unit_price'];
-            $obj->unit_cost = $rs['unit_cost'];
+            $obj->price = $rs['price'];
             $obj->qty = $rs['qty'];
 
             $rows = json_encode($obj);
