@@ -414,7 +414,10 @@ class Service_model extends CI_Model
                 'user_id'       => new MongoId($this->user_id),
                 'code'          => $data['code'],
                 'price'         => (float) $data['price'],
-                'provider'      => (string) $data['provider'],
+                'start_time'    => (string) $data['start_time'],
+                'end_time'    => (string) $data['end_time'],
+                'provider_id'      => new MongoId($data['provider_id']),
+                'clinic_id'      => new MongoId($data['clinic_id']),
                 'vn'            => (string) $data['vn'],
                 'last_update'   => date('Y-m-d H:i:s')
             ));
@@ -446,10 +449,12 @@ class Service_model extends CI_Model
 
     public function update_opd_proced($data){
         $rs = $this->mongo_db
-            ->where('vn', $data['vn'])
+            ->where(array('vn' =>$data['vn'], 'code' => $data['code']))
             ->set(array(
-                'price'         => $data['price'],
-                'provider'      => $data['provider'],
+                'start_time'    => (string) $data['start_time'],
+                'end_time'    => (string) $data['end_time'],
+                'provider_id'      => new MongoId($data['provider_id']),
+                'clinic_id'      => new MongoId($data['clinic_id']),
                 'last_update'   => date('Y-m-d H:i:s')
             ))
             ->update('procedures_opd');

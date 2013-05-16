@@ -401,4 +401,22 @@ class Basic extends CI_Controller
         render_json($json);
     }
 
+    public function get_providers()
+    {
+        $rs = $this->basic->get_providers();
+        $rows = json_encode($rs);
+        $json = '{"success": true, "rows": '.$rows.'}';
+
+        render_json($json);
+    }
+
+    public function get_clinics()
+    {
+        $rs = $this->basic->get_clinic();
+        $rows = json_encode($rs);
+        $json = '{"success": true, "rows": '.$rows.'}';
+
+        render_json($json);
+    }
+
 }

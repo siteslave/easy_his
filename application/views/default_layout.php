@@ -237,7 +237,10 @@
                             <a href="#"><i class="icon-key"></i> เปลี่ยนรหัสผ่าน (Change password)</a>
                         </li>
                         <li>
-                            <a href="#"> <i class="icon-info-sign"></i> แก้ไขข้อมูลส่วนตัว</a>
+                            <a href="#"> <i class="icon-info-sign"></i> แก้ไขข้อมูลส่วนตัว (Edit profiles)</a>
+                        </li>
+                        <li>
+                            <a href="#" id="btn_idx_set_provider_clinic"> <i class="icon-user"></i> กำหนดแพทย์/คลินิก (Provider/Clinic)</a>
                         </li>
                         <li class="divider"></li>
                         <li>
@@ -253,6 +256,42 @@
 <div class="container">
     <?php echo $content_for_layout; ?>
 </div> <!-- /container -->
+
+
+<div class="modal hide fade" id="modal_provider_clinic">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4>เลือกแพทย์และแผนก</h4>
+    </div>
+    <div class="modal-body">
+        <form action="#">
+            <input type="hidden" id="txt_id">
+            <input type="hidden" id="is_update" value="0">
+            <div class="row-fluid">
+                <div class="span5">
+                    <div class="control-group">
+                        <label class="control-label" for="sl_clinics">แผนก</label>
+                        <div class="controls">
+                            <select id="sl_clinics" class="input-xlarge"></select>
+                        </div>
+                    </div>
+                </div>
+                <div class="span5">
+                    <div class="control-group">
+                        <label class="control-label" for="txt_export_code">แพทย์</label>
+                        <div class="controls">
+                            <select id="sl_providers" class="input-xlarge"></select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-success" id="btn_do_save"><i class="icon-save"></i> บันทึกข้อมูล</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="icon-off"></i> ปิดหน้าต่าง</button>
+    </div>
+</div>
 
 </body>
 

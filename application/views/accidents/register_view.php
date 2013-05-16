@@ -33,7 +33,7 @@
 	<input type="text" disabled="disabled" class="input-small uneditable-input" id="txt_birth" value="<?php echo from_mongo_to_thai_date($birthdate); ?>">
 	
 	<label class="control-label" for="txt_birth">ที่อยู่</label>
-	<input type="text" disabled="disabled" class="input-xxlarge uneditable-input" id="txt_birth" value="<?php echo $address; ?>">
+	<input type="text" disabled="disabled" class="input-xxlarge uneditable-input" id="txt_birth" value="<?php echo isset($address) ? $address : '-'; ?>">
 </form>
 
 <legend>ข้อมูลการเกิดอุบัติเหตุ</legend>

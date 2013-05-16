@@ -366,4 +366,78 @@ app.set_runtime = function()
 
 head.ready(function(){
     app.set_runtime();
+
+    app.get_providers = function(cb){
+        var url = 'basic/get_providers',
+            params = {};
+
+        app.ajax(url, params, function(err, data){
+            err ? cb(err) : cb(null, data);
+        });
+    };
+    app.get_clinics = function(cb){
+        var url = 'basic/get_clinics',
+            params = {};
+
+        app.ajax(url, params, function(err, data){
+            err ? cb(err) : cb(null, data);
+        });
+    };
+
+    app.show_set_provider_clinic = function()
+    {
+        $('#modal_provider_clinic').modal({
+            backdrop: 'static'
+        }).css({
+                width: 780,
+                'margin-left': function() {
+                    return -($(this).width() / 2);
+                }
+            });
+    };
+    app.hide_set_provider_clinic = function()
+    {
+        $('#modal_provider_clinic').modal('hide');
+    };
+
+    $('#btn_idx_set_provider_clinic').on('click', function(e){
+        app.set_clinics();
+        app.set_providers();
+        app.show_set_provider_clinic();
+
+        e.preventDefault();
+    });
+
+    app.set_clinics = function(){
+        $('#sl_clinics').empty();
+        app.get_clinics(function(err, data){
+            if(err)
+            {
+                app.alert(err);
+            }
+            else
+            {
+                $('#sl_clinics').append('<option value="">---</option>');
+                _.each(data.rows, function(v){
+                    $('#sl_clinics').append('<option value="'+ v.id +'">' + v.name + '</option>');
+                });
+            }
+        });
+    };
+    app.set_providers = function(){
+        $('#sl_providers').empty();
+        app.get_providers(function(err, data){
+            if(err)
+            {
+                app.alert(err);
+            }
+            else
+            {
+                $('#sl_providers').append('<option value="">---</option>');
+                _.each(data.rows, function(v){
+                    $('#sl_providers').append('<option value="'+ v.id +'">' + v.name + '</option>');
+                });
+            }
+        });
+    };
 });

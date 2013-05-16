@@ -272,13 +272,15 @@ if(!function_exists('generate_serial')){
         $new_sn = null;
 
         switch(strlen($sn)){
-            case 1: $new_sn = '000000' . $sn; break;
-            case 2: $new_sn = '00000' . $sn; break;
-            case 3: $new_sn = '0000' . $sn; break;
-            case 4: $new_sn = '000' . $sn; break;
-            case 5: $new_sn = '00' . $sn; break;
-            case 6: $new_sn = '0' . $sn; break;
-            case 7: $new_sn = $sn; break;
+            case 1: $new_sn = '00000000' . $sn; break;
+            case 2: $new_sn = '0000000' . $sn; break;
+            case 3: $new_sn = '000000' . $sn; break;
+            case 4: $new_sn = '00000' . $sn; break;
+            case 5: $new_sn = '0000' . $sn; break;
+            case 6: $new_sn = '000' . $sn; break;
+            case 7: $new_sn = '00' . $sn; break;
+            case 8: $new_sn = '0' . $sn; break;
+            case 9: $new_sn = $sn; break;
             default: $new_sn = '0000001';
         }
 

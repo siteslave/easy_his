@@ -512,15 +512,21 @@
             <table class="table table-hover tabble-striped" id="tbl_proced_list">
                 <thead>
                 <tr>
+                    <th>แผนก</th>
                     <th>รหัส</th>
                     <th>รายการ</th>
                     <th>ราคา</th>
+                    <th>เวลาเริ่ม</th>
+                    <th>เวลาสิ้นสุด</th>
                     <th>ผู้ทำหัถการ</th>
                     <th>#</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr>
+                    <td>...</td>
+                    <td>...</td>
+                    <td>...</td>
                     <td>...</td>
                     <td>...</td>
                     <td>...</td>
@@ -718,6 +724,19 @@
                     </select>
                 </div>
             </div>
+            <div class="control-group">
+                <label class="control-label" for="sl_diag_clinic">คลินิก</label>
+                <div class="controls">
+                    <select id="sl_diag_clinic" class="input-xlarge">
+                        <option value="">--</option>
+                        <?php
+                        foreach($clinics as $t) {
+                            echo '<option value="'.$t->id.'">'.$t->name.'</option>';
+                        }
+                        ?>
+                    </select>
+                </div>
+            </div>
         </form>
     </div>
     <div class="modal-footer">
@@ -737,23 +756,65 @@
         <form class="form-horizontal">
             <input type="hidden" id="txt_proced_isupdate">
             <div class="control-group">
-                <label class="control-label" for="txt_diag_query">หัตถการ</label>
+                <label class="control-label" for="txt_proced_query">หัตถการ</label>
                 <div class="controls">
                     <input type="text" class="input-small uneditable-input" disabled="disabled" id="txt_proced_query_code">
                     <input type="text" id="txt_proced_query" class="input-xxlarge" placeholder="พิมพ์รหัส หรือ ชื่อหัตถการ">
                 </div>
             </div>
-            <div class="control-group">
-                <label class="control-label" for="txt_diag_query">ราคา</label>
-                <div class="controls">
-                    <input type="text" id="txt_proced_price" class="input-mini" data-type="number"> บาท
+            <div class="row-fluid">
+                <div class="span3">
+                    <div class="control-group">
+                        <label class="control-label" for="txt_proced_price">ราคา</label>
+                        <div class="controls">
+                            <div class="input-append">
+                                <input class="input-mini" data-type="number" id="txt_proced_price" type="text">
+                                <span class="add-on">บาท</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="span3">
+                    <div class="control-group">
+                        <label class="control-label" for="txt_proced_start_time">เวลาเริ่ม</label>
+                        <div class="controls">
+                            <input type="text" id="txt_proced_start_time" class="input-mini" data-type="time">
+                        </div>
+                    </div>
+                </div>
+                <div class="span3">
+                    <div class="control-group">
+                        <label class="control-label" for="txt_proced_end_time">เวลาสิ้นสุด</label>
+                        <div class="controls">
+                            <input type="text" id="txt_proced_end_time" class="input-mini" data-type="time">
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="control-group">
-                <label class="control-label" for="txt_diag_query">ผู้ทำหัตถการ</label>
+                <label class="control-label" for="sl_proced_clinic">คลินิก</label>
                 <div class="controls">
-                    <input type="text" class="input-medium uneditable-input" disabled="disabled" id="txt_proced_provider_code">
-                    <input type="text" id="txt_proced_provider_name" class="input-xlarge" placeholder="พิมพ์ชื่อเจ้าหน้าที่">
+                    <select id="sl_proced_clinic" class="input-xlarge">
+                        <option value="">--</option>
+                        <?php
+                        foreach($clinics as $t) {
+                            echo '<option value="'.$t->id.'">'.$t->name.'</option>';
+                        }
+                        ?>
+                    </select>
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="sl_proced_provider">ผู้ทำหัตถการ</label>
+                <div class="controls">
+                    <select id="sl_proced_provider" class="input-xlarge">
+                        <option value="">--</option>
+                        <?php
+                        foreach($providers as $prov) {
+                            echo '<option value="'.$prov->id.'">'.$prov->name.'</option>';
+                        }
+                        ?>
+                    </select>
                 </div>
             </div>
 

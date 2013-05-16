@@ -110,6 +110,9 @@ class Services extends CI_Controller
             $data['icf_qualifiers']     = $this->basic->get_icf_qualifiers();
             $data['patient_name']       = $patient_name;
 
+            $data['providers'] = $this->basic->get_providers();
+            $data['clinics']   = $this->basic->get_clinic();
+
             $this->layout->view('services/entries_view', $data);
         }
 
@@ -730,8 +733,12 @@ class Services extends CI_Controller
                     $obj->code = $r['code'];
                     $obj->proced_name = get_procedure_name($obj->code);
                     $obj->price = $r['price'];
-                    $obj->provider = $r['provider'];
-                    $obj->provider_name = get_provider_name($obj->provider);
+                    $obj->start_time = $r['start_time'];
+                    $obj->end_time = $r['end_time'];
+                    $obj->provider_id = get_first_object($r['provider_id']);
+                    $obj->clinic_id = get_first_object($r['clinic_id']);
+                    $obj->clinic_name = get_clinic_name($obj->clinic_id);
+                    $obj->provider_name = get_provider_name_by_id(get_first_object($r['provider_id']));
 
                     array_push($arr_result, $obj);
                 }
