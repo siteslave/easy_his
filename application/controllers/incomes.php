@@ -19,6 +19,7 @@ class Incomes extends CI_Controller {
         $this->load->model('Income_model', 'income');
 
         $this->income->owner_id = $this->owner_id;
+        $this->income->user_id = $this->user_id;
     }
 
     public function index()
@@ -27,7 +28,7 @@ class Incomes extends CI_Controller {
         $this->layout->view('incomes/index_view', $data);
     }
 
-    public function save_item()
+    public function save()
     {
         $data = $this->input->post('data');
         if(empty($data))
@@ -36,26 +37,18 @@ class Incomes extends CI_Controller {
         }
         else
         {
-            if($data['is_update'] == '1')
+            $exist = $this->income->check_duplicated($data['id']);
+
+            $rs = $exist ? $this->income->update($data) : $this->income->save($data);
+            if($rs)
             {
-                $rs = $this->income->update_item($data);
-                $json = $rs ? '{"success": true}' : '{"success": false, "msg": "ไม่สามารถปรับปรุงรายการได้"}';
+                $json = '{"success": true}';
             }
             else
             {
-                //check exist
-                $duplicated = $this->income->check_item_duplicated($data['name']);
-                if($duplicated)
-                {
-                    $json = '{"success": false, "msg": "รายการซ้ำ"}';
-                }
-                else
-                {
-                    $data['code'] = generate_serial('ITEM', FALSE);
-                    $rs = $this->income->save_item($data);
-                    $json = $rs ? '{"success": true}' : '{"success": false, "msg": "ไม่สามารถบันทึกรายการได้"}';
-                }
+                $json = '{"success": false, "msg": "ไม่สามารถบันทึกได้"}';
             }
+
         }
 
         render_json($json);
@@ -78,17 +71,20 @@ class Incomes extends CI_Controller {
             $arr_result = array();
             foreach($rs as $r)
             {
-
                 $obj                = new stdClass();
                 $obj->id            = get_first_object($r['_id']);
                 $obj->income        = get_first_object($r['income']);
                 $obj->income_name   = $this->income->get_income_name($obj->income);
-                $obj->name          = $r['name'];
-                $obj->price         = $r['price'];
-                $obj->cost          = $r['cost'];
-                $obj->unit          = $r['unit'];
-                $obj->active        = $r['active'];
-                $obj->code          = $r['code'];
+                $obj->name          = isset($r['name']) ? $r['name'] : '-';
+
+                $price_qty          = $this->income->get_price_qty($r['_id']);
+                $obj->price         = isset($price_qty[0]['price']) ? $price_qty[0]['price'] : 0;
+                //$obj->qty           = isset($price_qty[0]['qty']) ? $price_qty[0]['qty'] : 0;
+
+                $obj->cost          = isset($r['cost']) ? $r['cost'] : '-';
+                $obj->unit          = isset($r['unit']) ? $r['unit'] : '-';
+                $obj->active        = isset($r['active']) ? $r['active'] : '-';
+                $obj->code          = isset($r['code']) ? $r['code'] : '-';
 
                 $arr_result[]   = $obj;
             }
@@ -126,12 +122,16 @@ class Incomes extends CI_Controller {
                 $obj->id            = get_first_object($r['_id']);
                 $obj->income        = get_first_object($r['income']);
                 $obj->income_name   = $this->income->get_income_name($obj->income);
-                $obj->name          = $r['name'];
-                $obj->price         = $r['price'];
-                $obj->cost          = $r['cost'];
-                $obj->unit          = $r['unit'];
-                $obj->active        = $r['active'];
-                $obj->code          = $r['code'];
+                $obj->name          = isset($r['name']) ? $r['name'] : '-';
+
+                $price_qty          = $this->income->get_price_qty($r['_id']);
+                $obj->price         = isset($price_qty[0]['price']) ? $price_qty[0]['price'] : 0;
+                //$obj->qty           = isset($price_qty[0]['qty']) ? $price_qty[0]['qty'] : 0;
+
+                $obj->cost          = isset($r['cost']) ? $r['cost'] : '-';
+                $obj->unit          = isset($r['unit']) ? $r['unit'] : '-';
+                $obj->active        = isset($r['active']) ? $r['active'] : '-';
+                $obj->code          = isset($r['code']) ? $r['code'] : '-';
 
                 $arr_result[]       = $obj;
             }
@@ -147,7 +147,7 @@ class Incomes extends CI_Controller {
         render_json($json);
     }
 
-    public function search_item()
+    public function search()
     {
         $query = $this->input->post('query');
 
@@ -157,7 +157,7 @@ class Incomes extends CI_Controller {
         }
         else
         {
-            $rs = $this->income->search_item($query);
+            $rs = $this->income->search($query);
 
             if($rs)
             {
@@ -169,12 +169,16 @@ class Incomes extends CI_Controller {
                     $obj->id            = get_first_object($r['_id']);
                     $obj->income        = get_first_object($r['income']);
                     $obj->income_name   = $this->income->get_income_name($obj->income);
-                    $obj->name          = $r['name'];
-                    $obj->price         = $r['price'];
-                    $obj->cost          = $r['cost'];
-                    $obj->unit          = $r['unit'];
-                    $obj->active        = $r['active'];
-                    $obj->code          = $r['code'];
+                    $obj->name          = isset($r['name']) ? $r['name'] : '-';
+
+                    $price_qty          = $this->income->get_price_qty($r['_id']);
+                    $obj->price         = isset($price_qty[0]['price']) ? $price_qty[0]['price'] : 0;
+                    //$obj->qty           = isset($price_qty[0]['qty']) ? $price_qty[0]['qty'] : 0;
+
+                    $obj->cost          = isset($r['cost']) ? $r['cost'] : '-';
+                    $obj->unit          = isset($r['unit']) ? $r['unit'] : '-';
+                    $obj->active        = isset($r['active']) ? $r['active'] : '-';
+                    $obj->code          = isset($r['code']) ? $r['code'] : '-';
 
                     $arr_result[]       = $obj;
                 }
