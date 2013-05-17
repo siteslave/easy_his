@@ -806,7 +806,7 @@ class Services extends CI_Controller
         {
             $json = '{"success": false, "msg": "ผู้ป่วยแพ้ยานี้ ไม่สามารถสั่งได้ กรุณาตรวจสอบ"}';
         }
-        else if(!$this->drug->check_order_qyt($data['drug_id'], $data['qty']))
+        else if(!$this->drug->check_order_qty($data['drug_id'], $data['qty']))
         {
             $json = '{"success": false, "msg": "จำนวนยาในสต๊อกไม่พอจ่าย กรุณาตรวจสอบ"}';
         }

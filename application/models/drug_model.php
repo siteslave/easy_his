@@ -151,7 +151,7 @@ class Drug_model extends CI_Model
         return $rs;
     }
 
-    public function check_order_qyt($id, $qty)
+    public function check_order_qty($id, $qty)
     {
         $pqty = $this->get_price_qty($id);
         $stock_qty = isset($pqty[0]['qty']) ? $pqty[0]['qty'] : 0;
