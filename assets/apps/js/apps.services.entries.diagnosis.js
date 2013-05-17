@@ -57,6 +57,7 @@ head.ready(function(){
 
     diags.clear_form = function(){
         app.set_first_selected($('#sl_diag_type'));
+        app.set_first_selected($('#sl_diag_clinic'));
         $('#txt_diag_query').val('');
         $('#txt_diag_isupdate').val('');
         $('#txt_diag_query_code').val('');
@@ -73,7 +74,7 @@ head.ready(function(){
                 app.alert(err);
                 $('#tbl_diag_list > tbody').append(
                     '<tr>' +
-                        '<td colspan="4">ไม่พบรายการ</td>' +
+                        '<td colspan="6">ไม่พบรายการ</td>' +
                         '</tr>'
                 );
             }else{
@@ -85,6 +86,8 @@ head.ready(function(){
                                     '<td><strong>'+ v.code +'</strong></td>' +
                                     '<td><strong>'+ v.diag_name +'</strong></td>' +
                                     '<td><strong>'+ '[' + v.diag_type + '] ' +v.diag_type_name +'</strong></td>' +
+                                    '<td><strong>'+ v.provider_name +'</strong></td>' +
+                                    '<td><strong>'+ v.clinic_name +'</strong></td>' +
                                     '<td><a href="javascript:void(0);" class="btn" data-name="btn_diag_remove" data-code="'+ v.code +'" title="ลบรายการ">' +
                                     '<i class="icon-remove"></i>' +
                                     '</a></td>' +
@@ -96,6 +99,8 @@ head.ready(function(){
                                     '<td>'+ v.code +'</td>' +
                                     '<td>'+ v.diag_name +'</td>' +
                                     '<td>'+ '[' + v.diag_type + '] ' +v.diag_type_name +'</td>' +
+                                    '<td>'+ v.provider_name +'</td>' +
+                                    '<td>'+ v.clinic_name +'</td>' +
                                     '<td><a href="javascript:void(0);" class="btn" data-name="btn_diag_remove" data-code="'+ v.code +'" title="ลบรายการ">' +
                                     '<i class="icon-remove"></i>' +
                                     '</a></td>' +
@@ -108,7 +113,7 @@ head.ready(function(){
                 }else{
                     $('#tbl_diag_list > tbody').append(
                         '<tr>' +
-                            '<td colspan="4">ไม่พบรายการ</td>' +
+                            '<td colspan="6">ไม่พบรายการ</td>' +
                             '</tr>'
                     );
                 }
@@ -130,7 +135,7 @@ head.ready(function(){
         var items = {};
         items.code = $('#txt_diag_query_code').val();
         items.diag_type = $('#sl_diag_type').val();
-        items.isupdate = $('#txt_diag_isupdate').val();
+        items.clinic = $('#sl_diag_clinic').val();
 
         items.vn = $('#vn').val();
 
@@ -138,6 +143,8 @@ head.ready(function(){
             app.alert('กรุณาระบุ รหัสการวินิจฉัยโรค');
         }else if(!items.diag_type){
             app.alert('กรุณาระบุ ประเภทการวินิจฉัยโรค');
+        }else if(!items.clinic){
+            app.alert('กรุณาระบุ คลินิกที่ให้บริการ');
         }else{
             //do save
             diags.ajax.save_diag_opd(items, function(err){

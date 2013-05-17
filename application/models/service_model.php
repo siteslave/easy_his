@@ -386,6 +386,7 @@ class Service_model extends CI_Model
                 'vn'            => (string) $data['vn'],
                 'code'          => $data['code'],
                 'diag_type'     => $data['diag_type'],
+                'clinic'        => new MongoId($data['clinic']),
                 'last_update'   => date('Y-m-d H:i:s')
             ));
         return $rs;

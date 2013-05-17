@@ -976,10 +976,14 @@ class Basic_model extends CI_Model
         return $result;
     }
     public function search_charge_item_ajax($query){
+
+        $this->mongo_db->add_index('ref_charge_items', array('name' => -1));
+        $this->mongo_db->add_index('ref_charge_items', array('active' => -1));
+
         $result = $this->mongo_db
             ->like('name', $query)
-            ->where(array('active' => 'Y', 'owner_id' => new MongoId($this->owner_id)))
-            ->limit(10)
+            ->where(array('active' => 'Y'))
+            ->limit(15)
             ->get('ref_charge_items');
         return $result;
     }

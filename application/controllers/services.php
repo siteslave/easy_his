@@ -653,8 +653,10 @@ class Services extends CI_Controller
                     $obj->diag_type = $r['diag_type'];
                     $obj->diag_name = get_diag_name($obj->code);
                     $obj->diag_type_name = get_diag_type_name($obj->diag_type);
+                    $obj->clinic_name = get_clinic_name(get_first_object($r['clinic']));
+                    $obj->provider_name = get_provider_name_by_id(get_first_object($r['provider_id']));
 
-                    array_push($arr_result, $obj);
+                    $arr_result[] = $obj;
 
                 }
 
@@ -1018,11 +1020,12 @@ class Services extends CI_Controller
                     $obj->price = $r['price'];
                     $obj->qty = $r['qty'];
 
-                    array_push($arr_result, $obj);
-
-                    $rows = json_encode($arr_result);
-                    $json = '{"success": true, "rows": '.$rows.'}';
+                    $arr_result[] = $obj;
                 }
+
+                $rows = json_encode($arr_result);
+                $json = '{"success": true, "rows": '.$rows.'}';
+
             }else{
                 $json = '{"success": false, "msg": "Can\'t get charge list."}';
             }

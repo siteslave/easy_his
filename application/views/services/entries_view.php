@@ -494,11 +494,15 @@
                     <th>รหัส</th>
                     <th>รายการ</th>
                     <th>ประเภทการวินิจฉัย</th>
+                    <th>เจ้าหน้าที่</th>
+                    <th>แผนก</th>
                     <th></th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr>
+                    <td>...</td>
+                    <td>...</td>
                     <td>...</td>
                     <td>...</td>
                     <td>...</td>
@@ -1010,55 +1014,6 @@
     </div>
 </div>
 <!-- end new charge item -->
-
-<!-- modal search charge item
-<div class="modal hide fade" id="mdl_charge_search_item">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>ค้นหารายการ</h3>
-    </div>
-    <div class="modal-body">
-        <form class="form-horizontal">
-            <input type="hidden" id="charge_isupdate" value="0">
-            <input type="hidden" id="service_charge_id" value="">
-            <div class="control-group">
-                <label class="control-label" for="txt_drug_name">รายการค่าใช้จ่าย</label>
-                <div class="controls">
-                    <div class="input-append">
-                        <input type="hidden" id="txt_charge_id">
-                        <input id="txt_charge_name" class="input-xlarge uneditable-input" disabled="disabled" type="text" placeholder="คลิกปุ่มค้นหา">
-                        <button class="btn btn-info" type="button" id="btn_charge_show_search">
-                            <i class="icon-search"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div class="control-group">
-                <label class="control-label" for="txt_charge_qty">จำนวน</label>
-                <div class="controls">
-                    <input id="txt_charge_qty" class="input-mini" type="text" data-type="number" value="1">
-                </div>
-            </div>
-
-            <div class="control-group">
-                <label class="control-label" for="txt_charge_price">ราคา</label>
-                <div class="controls">
-                    <div class="input-append">
-                        <input class="input-mini" id="txt_charge_price" type="text" data-type="number">
-                        <span class="add-on">บาท</span>
-                    </div>
-                </div>
-            </div>
-
-        </form>
-    </div>
-    <div class="modal-footer">
-        <a href="#" class="btn btn-success" id="btn_charge_do_save"><i class="icon-plus"></i> เพิ่มรายการ/ปรับปรุง</a>
-        <a href="#" class="btn btn-danger" data-dismiss="modal"><i class="icon-off"></i> ปิดหน้าต่าง</a>
-
-    </div>
-</div>
-<!-- end search charge  -->
 
 <!-- FP -->
 <div class="modal hide fade" id="mdl_fp">

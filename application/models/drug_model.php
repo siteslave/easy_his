@@ -43,8 +43,13 @@ class Drug_model extends CI_Model
             ->select(array('owners'))
             ->where(array(
                 '_id' => $id,
-                'owners.owner_id' => new MongoId($this->owner_id)
-                ))
+                'owners' => array(
+                    '$elemMatch' =>
+                    array(
+                        'owner_id' => new MongoId($this->owner_id)
+                    )
+                )
+            ))
             ->limit(1)
             ->get('ref_drugs');
 
@@ -57,7 +62,13 @@ class Drug_model extends CI_Model
         $rs = $this->mongo_db
             ->where(array(
                 '_id' => new MongoId($id),
-                'owners.owner_id' => new MongoId($this->owner_id)))
+                'owners' => array(
+                    '$elemMatch' =>
+                    array(
+                        'owner_id' => new MongoId($this->owner_id)
+                    )
+                )
+            ))
             ->count('ref_drugs');
 
         return $rs > 0 ? TRUE : FALSE;
@@ -86,7 +97,13 @@ class Drug_model extends CI_Model
         $rs = $this->mongo_db
             ->where(array(
                 '_id' => new MongoId($data['id']),
-                'owners.owner_id' => new MongoId($this->owner_id)))
+                'owners' => array(
+                    '$elemMatch' =>
+                    array(
+                        'owner_id' => new MongoId($this->owner_id)
+                    )
+                )
+            ))
             ->set(array(
                 'owners.$.price'  => (float) $data['price'],
                 'owners.$.qty'  => (float) $data['qty'],

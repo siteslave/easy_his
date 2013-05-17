@@ -28,9 +28,11 @@ class Basic extends CI_Controller
 
         $this->load->model('Basic_model', 'basic');
         $this->load->model('Drug_model', 'drug');
+        $this->load->model('Income_model', 'income');
 
         $this->basic->owner_id = $this->owner_id;
         $this->drug->owner_id = $this->owner_id;
+        $this->income->owner_id = $this->owner_id;
     }
 
     public function index()
@@ -273,10 +275,12 @@ class Basic extends CI_Controller
             if($result){
                 $arr_result = array();
                 foreach ($result as $r) {
+                    $price = $this->income->get_price_qty($r['_id']);
+                    $vprice = isset($price[0]['price']) ? $price[0]['price'] : 0;
                     $obj = new stdClass();
-                    $obj->name = $r['code'] . '|' . $r['name'] . '|' . $r['price'] . '|' . $r['unit'];
+                    $obj->name = $r['code'] . '|' . $r['name'] . '|' . $vprice . '|' . $r['unit'];
 
-                    array_push($arr_result, $obj);
+                    $arr_result[] = $obj;
                 }
                 $rows = json_encode($arr_result);
                 $json = '{"success": true, "rows": '.$rows.'}';

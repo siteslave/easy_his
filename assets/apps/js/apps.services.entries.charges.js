@@ -83,6 +83,10 @@ head.ready(function(){
         charge.ajax.get_list(charge.vn, function(err, data){
             if(err){
                 app.alert(err);
+                $('#tbl_charge_list > tbody').empty();
+                $('#tbl_charge_list > tbody').append(
+                    '<tr><td colspan="6">ไม่พบรายการ</td></tr>'
+                );
             }else{
                 charge.set_list(data);
             }
