@@ -5,7 +5,7 @@
 <form action="#" class="well form-inline">
     <label for="sl_village">หมู่บ้าน</label>
     <select class="input-xlarge" id="sl_village">
-        <option value="">---</option>
+        <option value="">ทั้งหมด</option>
         <?php
         foreach ($villages as $r){
             echo '<option value="'.get_first_object($r['_id']).'">' . $r['village_code'] . ' ' . $r['village_name'] . '</option>';
@@ -13,11 +13,21 @@
         ?>
     </select>
     <div class="btn-group">
-        <button type="button" class="btn btn-info" id="btn_do_get_list" rel="tooltip" title="แสดงรายการ"><i class="icon-search"></i></button>
+        <button type="button" class="btn btn-success" id="btn_do_get_list" rel="tooltip" title="แสดงรายการ"><i class="icon-refresh"></i></button>
         <button type="button" class="btn" id="btn_do_print" rel="tooltip" title="พิมพ์รายชื่อตามหมู่บ้านที่เลือก"><i class="icon-print"></i></button>
     </div>
+    |
+    <label for="">HN:</label>
+    <div class="input-append">
+        <input class="input-medium" id="txt_query_babies" type="text" data-type="number" autocomplete="off" placeholder="ระบุ HN เพื่อค้นหา">
+        <button class="btn btn-info" type="button" id="btn_do_search_babies" ref="tooltip" title="ค้นหา">
+            <i class="icon-search"></i>
+        </button>
+    </div>
+
+
      <div class="btn-group pull-right">
-        <button type="button" id="btn_search" class="btn" rel="tooltip" title="ค้นหา"><i class="icon-search"></i></button>
+        <button type="button" id="btn_refresh" class="btn" rel="tooltip" title="Refresh"><i class="icon-refresh"></i></button>
         <button type="button" id="btn_register" class="btn btn-success" rel="tooltip" title="ลงทะเบียนรายใหม่"><i class="icon-plus-sign"></i></button>
     </div>
 </form>
@@ -29,7 +39,7 @@
         <th>CID</th>
         <th>ชื่อ - สกุล</th>
         <th>วันเกิด</th>
-        <th>อายุ (เดือน)</th>
+        <th>อายุ (ป.ด.ว)</th>
         <th>วันที่ลงทะเบียน</th>
         <th>ครรภ์ที่</th>
         <th>HN มารดา</th>
@@ -51,47 +61,56 @@
 <div class="modal hide fade" id="mdl_register">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>ลงทะเบียนใหม่</h3>
+        <h4>
+            <i class="icon-search"></i>
+            ค้นหาข้อมูลประชากร
+        </h4>
     </div>
-    <div class="modal-body" style="height: 250px;">
-        <form class="form-inline well">
-            <input type="hidden" data-name="txt_search_person_filter" value="0">
-            <label>คำค้นหา</label>
-            <input type="text" class="input-xlarge" id="txt_query_person">
-            <div class="btn-group">
-                <button type="button" class="btn btn-info" id="btn_do_search_person"><i class="icon-search"></i> ค้นหา</button>
-                <button class="btn btn-info dropdown-toggle" data-toggle="dropdown">
-                    <span class="caret"></span>
+    <div class="modal-body">
+        <form action="#" class="form-inline well well-small">
+            <input type="hidden" id="txt_search_person_filter" value="0" />
+            <div class="input-append">
+                <input class="input-xlarge" id="txt_search_query" type="text" autocomplete="off">
+                <button class="btn" type="button" id="btn_do_search_person">
+                    <i class="icon-search"></i>
                 </button>
-                <ul class="dropdown-menu">
-                    <li><a href="javascript:void(0);" data-name="btn_set_search_person_filter" data-value="0"><i class="icon-qrcode"></i> ค้นจาก เลขบัตรประชาชน</a></li>
-                    <li><a href="javascript:void(0);" data-name="btn_set_search_person_filter" data-value="1"><i class="icon-th-list"></i> ค้นจาก HN</a></li>
-                    <li><a href="javascript:void(0);" data-name="btn_set_search_person_filter" data-value="2"><i class="icon-list"></i> ค้นจาก ชื่อ - สกุล</a></li>
-                </ul>
+                <div class="btn-group">
+                    <button class="btn dropdown-toggle" data-toggle="dropdown">
+                        <i class="icon-cog"></i>
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#" data-name="btn_search_person_fillter" data-value="0">ค้นจาก เลขบัตรประชาชน</a></li>
+                        <li><a href="#" data-name="btn_search_person_fillter" data-value="1">ค้นจาก HN</a></li>
+                        <li><a href="#" data-name="btn_search_person_fillter" data-value="2">ค้นจาก ชื่อ - สกุล</a></li>
+                    </ul>
+                </div>
             </div>
         </form>
         <table class="table table-striped" id="tbl_search_person_result">
             <thead>
             <tr>
                 <th>HN</th>
-                <th>CID</th>
+                <th>เลขบัตรประชาชน</th>
                 <th>ชื่อ - สกุล</th>
                 <th>วันเกิด</th>
                 <th>อายุ</th>
                 <th>เพศ</th>
-                <th></th>
+                <th>#</th>
             </tr>
             </thead>
             <tbody>
             <tr>
-                <td colspan="7">กรุณาระบุเงื่อนไขการค้นหา</td>
+                <td>...</td>
+                <td>...</td>
+                <td>...</td>
+                <td>...</td>
+                <td>...</td>
+                <td>...</td>
+                <td>...</td>
             </tr>
             </tbody>
         </table>
-
-    </div>
-    <div class="modal-footer">
-        <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off"></i> ปิดหน้าต่าง</a>
     </div>
 </div>
 

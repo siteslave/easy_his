@@ -286,5 +286,17 @@ class Babies_model extends CI_Model
         return $rs;
     }
 
+    /**
+     * Search person
+     * @param $hn
+     */
+    public function search($hn)
+    {
+        $rs = $this->mongo_db
+            ->where(array('hn' => (string) $hn))
+            ->get('babies');
+
+        return $rs;
+    }
 
 }

@@ -13,10 +13,20 @@ head.ready(function(){
     //ajax object
     babies.ajax = {
         search_person: function(query, filter, cb){
-            var url = 'babies/search_person',
+            var url = 'person/search',
                 params = {
                     query: query,
                     filter: filter
+                };
+            //Do load ajax.
+            app.ajax(url, params, function(err, data){
+                return err ? cb(err) : cb(null, data);
+            });
+        },
+        search: function(hn, cb){
+            var url = 'babies/search',
+                params = {
+                    hn: hn
                 };
             //Do load ajax.
             app.ajax(url, params, function(err, data){
@@ -260,7 +270,7 @@ head.ready(function(){
             });
         }else{
             $('#tbl_list > tbody').append(
-                '<tr><td colspan="9">ไม่พบรายการ</td></tr>'
+                '<tr><td colspan="10">ไม่พบรายการ</td></tr>'
             );
         }
     };
@@ -285,7 +295,7 @@ head.ready(function(){
                 {
                     app.alert('ไม่พบรายการ');
                     $('#tbl_list > tbody').append(
-                        '<tr><td colspan="9">ไม่พบรายการ</td></tr>'
+                        '<tr><td colspan="10">ไม่พบรายการ</td></tr>'
                     );
                 }
                 else
@@ -402,27 +412,34 @@ head.ready(function(){
 
     babies.set_search_person_result = function(data)
     {
-        _.each(data.rows, function(v)
+        if(!data)
         {
             $('#tbl_search_person_result > tbody').append(
-                '<tr>' +
-                    '<td>'+ v.hn +'</td>' +
-                    '<td>'+ v.cid +'</td>' +
-                    '<td>'+ v.first_name + ' ' + v.last_name +'</td>' +
-                    '<td>'+ app.mongo_to_thai_date(v.birthdate) +'</td>' +
-                    '<td>'+ v.age +'</td>' +
-                    '<td>'+ v.sex +'</td>' +
-                    '<td><a href="javascript:void(0);" data-name="btn_selected_person" class="btn" data-hn="'+ v.hn +'">' +
-                    '<i class="icon-ok"></i></a></td>' +
-                    '</tr>'
-            );
-        });
+                '<tr><td colspan="7">ไม่พบรายการ</td></tr>');
+        }
+        else
+        {
+            _.each(data.rows, function(v){
+                $('#tbl_search_person_result > tbody').append(
+                    '<tr>' +
+                        '<td>'+ v.hn +'</td>' +
+                        '<td>'+ v.cid +'</td>' +
+                        '<td>'+ v.first_name + ' ' + v.last_name +'</td>' +
+                        '<td>'+ app.mongo_to_thai_date(v.birthdate) +'</td>' +
+                        '<td>'+ v.age +'</td>' +
+                        '<td>'+ v.sex +'</td>' +
+                        '<td><a href="#" class="btn" data-hn="'+ v.hn + '" data-sex="'+ v.sex +'" ' +
+                        'data-name="btn_selected_person" data-typearea="'+ v.typearea +'">' +
+                        '<i class="icon-ok"></i></a></td>' +
+                        '</tr>');
+            });
+        }
     };
 
     //search person
     $('#btn_do_search_person').click(function(){
-        var query = $('#txt_query_person').val(),
-            filter = $('input[data-name="txt_search_person_filter"]').val();
+        var query = $('#txt_search_query').val(),
+            filter = $('#txt_search_person_filter').val();
 
         if(!query)
         {
@@ -438,44 +455,49 @@ head.ready(function(){
                 if(err)
                 {
                     app.alert(err);
-                }
-                else if(!data)
-                {
-                    app.alert('ไม่พบรายการ');
+                    $('#tbl_search_person_result > tbody').append(
+                        '<tr><td colspan="7">ไม่พบรายการ</td></tr>');
                 }
                 else
                 {
-                   babies.set_search_person_result(data);
+                    babies.set_search_person_result(data);
                 }
             });
         }
     });
-
     //set filter
-    $('a[data-name="btn_set_search_person_filter"]').click(function(){
+    $('a[data-name="btn_search_person_fillter"]').click(function(){
         var filter = $(this).attr('data-value');
 
-        $('input[data-name="txt_search_person_filter"]').val(filter);
+        $('#txt_search_person_filter').val(filter);
     });
 
     $(document).on('click', 'a[data-name="btn_selected_person"]', function(){
 
-        var hn = $(this).attr('data-hn');
-        if(confirm('คุณต้องการลงทะเบียนข้อมูลนี้ใช่หรือไม่?'))
+        var hn = $(this).data('hn');
+
+        if( ! _.indexOf(['1', '3'], $(this).data('typearea')) || !$(this).data('typearea'))
         {
-            //do register
-            babies.ajax.do_register(hn, function(err){
-                if(err)
-                {
-                    app.alert(err);
-                }
-                else
-                {
-                    app.alert('ลงทะเบียนรายการเสร็จเรียบร้อยแล้ว');
-                    babies.modal.hide_register();
-                    babies.get_list();
-                }
-            });
+            app.alert('บุคคลนี้ไม่ใช่บุคคลในเขตรับผิดชอบ');
+        }
+        else
+        {
+            if(confirm('คุณต้องการลงทะเบียนข้อมูลนี้ใช่หรือไม่?'))
+            {
+                //do register
+                babies.ajax.do_register(hn, function(err){
+                    if(err)
+                    {
+                        app.alert(err);
+                    }
+                    else
+                    {
+                        app.alert('ลงทะเบียนรายการเสร็จเรียบร้อยแล้ว');
+                        babies.modal.hide_register();
+                        babies.get_list();
+                    }
+                });
+            }
         }
     });
 
@@ -914,6 +936,42 @@ head.ready(function(){
                 }
             }
         });
+        e.preventDefault();
+    });
+
+    $('#btn_refresh').on('click', function(e){
+        babies.get_list();
+        e.preventDefault();
+    })
+
+    /**
+     * Search babies
+     */
+    $('#btn_do_search_babies').on('click', function(e){
+        var hn = $('#txt_query_babies').val();
+        if(!hn)
+        {
+            app.alert('กรุณาระบุ HN เพื่อค้นหา');
+        }
+        else
+        {
+            $('#main_paging').fadeOut('slow');
+            $('#tbl_list > tbody').empty();
+            babies.ajax.search(hn, function(err, data){
+                if(err)
+                {
+                    app.alert(err);
+                    $('#tbl_list > tbody').append(
+                        '<tr><td colspan="10">ไม่พบรายการ</td></tr>'
+                    );
+                }
+                else
+                {
+                    babies.set_list(data);
+                }
+            });
+        }
+
         e.preventDefault();
     });
 
