@@ -42,14 +42,24 @@ class Babies extends CI_Controller
         $this->load->model('Basic_model', 'basic');
         $this->load->model('Person_model', 'person');
         $this->load->model('Pregnancies_model', 'preg');
+        $this->load->model('House_model', 'house');
+
+        $this->basic->owner_id = $this->owner_id;
+        $this->person->owner_id = $this->owner_id;
+        $this->service->owner_id = $this->owner_id;
+
+        $this->babies->owner_id = $this->owner_id;
+        $this->babies->user_id = $this->user_id;
+        $this->babies->provider_id = $this->provider_id;
+
+        $this->person->owner_id = $this->owner_id;
 
         $this->load->helper(array('person'));
     }
 
     public function index()
     {
-        $this->person->owner_id = $this->owner_id;
-
+        $data['providers'] = $this->basic->get_providers();
         $data['villages'] = $this->person->get_villages();
         $this->layout->view('babies/index_view', $data);
     }
@@ -149,10 +159,6 @@ class Babies extends CI_Controller
 
             if($is_owner)
             {
-                $this->babies->owner_id = $this->owner_id;
-                $this->babies->user_id = $this->user_id;
-                $this->babies->provider_id = $this->provider_id;
-
                 $exists = $this->babies->check_register_status($hn);
 
                 if($exists)
@@ -200,7 +206,6 @@ class Babies extends CI_Controller
 
         $limit = (int) $stop - (int) $start;
 
-        $this->babies->owner_id = $this->owner_id;
         $rs = $this->babies->get_list($start, $limit);
 
         if($rs)
@@ -248,7 +253,6 @@ class Babies extends CI_Controller
      */
     public function get_list_total()
     {
-        $this->babies->owner_id = $this->owner_id;
         $total = $this->babies->get_list_total();
 
         $json = '{"success": true, "total": '.$total.'}';
@@ -305,7 +309,6 @@ class Babies extends CI_Controller
             $obj_labors->bresult_name   = get_diag_name($rs_labors['labor']['bresult']);
             $obj_labors->btime          = $rs_labors['labor']['btime'];
             $obj_labors->btype          = $rs_labors['labor']['btype'];
-            $obj_labors->edc            = to_js_date($rs_labors['labor']['edc']);
 
             $labors = json_encode($obj_labors);
 
@@ -410,9 +413,6 @@ class Babies extends CI_Controller
             }
             else
             {
-                $this->babies->provider_id = $this->provider_id;
-                $this->babies->user_id = $this->user_id;
-                $this->babies->owner_id = $this->owner_id;
 
                 $rs = $this->babies->save_babies_detail($data);
 
@@ -456,6 +456,53 @@ class Babies extends CI_Controller
         render_json($json);
     }
 
+    public function save_cover()
+    {
+        $data = $this->input->post('data');
+        if(!empty($data))
+        {
+            //check duplicate
+            $duplicated = $this->babies->check_cover_duplicate(
+                $data['hn'],
+                $data['gravida'],
+                to_string_date($data['bcare']));
+            //if duplicated
+            if($duplicated)
+            {
+                $json = '{"success": false, "msg": "รายการนี้ซ้ำเนื่องจากมีการรับบริการในวันนี้แล้ว"}';
+            }
+            //if not duplicate
+            else
+            {
+                $rs = $this->babies->save_cover($data);
+                $json = $rs ? '{"success": true}' : '{"success": false, "msg": "ไม่สามารถบันทึกรายการได้"}';
+            }
+        }
+        else
+        {
+            $json = '{"success": false, "msg": "ไม่พบข้อมูลที่ต้องการบันทึก"}';
+        }
+
+        render_json($json);
+    }
+
+    public function remove_cover()
+    {
+        $data = $this->input->post('data');
+
+        if(!empty($data))
+        {
+            $rs = $this->babies->remove_cover($data['hn'], $data['gravida'], to_string_date($data['bcare']));
+            $json = $rs ? '{"success": true}' : '{"success": false, "msg": "ไม่สามารถลบรายการได้"}';
+        }
+        else
+        {
+            $json = '{"success": false, "msg": "ไม่พบเงื่อนไขในการลบรายการ"}';
+        }
+
+        render_json($json);
+    }
+
     //------------------------------------------------------------------------------------------------------------------
     public function save_service()
     {
@@ -464,10 +511,6 @@ class Babies extends CI_Controller
         {
             //check duplicate
             $is_duplicated = $this->babies->check_service_duplicate($data['vn'], $data['hn']);
-
-            $this->babies->provider_id = $this->provider_id;
-            $this->babies->owner_id = $this->owner_id;
-            $this->babies->user_id = $this->user_id;
 
             if($is_duplicated)
             {
@@ -561,7 +604,7 @@ class Babies extends CI_Controller
                         $obj->date_serv = $visit['date_serv'];
                         $obj->time_serv = $visit['time_serv'];
 
-                        $obj->result = get_bresult_name($r['result']);
+                        $obj->bcareresult = get_bresult_name($r['bcareresult']);
                         $obj->food = get_bfood_name($r['food']);
 
                         $obj->provider_name = get_provider_name_by_id(get_first_object($r['provider_id']));
@@ -586,6 +629,105 @@ class Babies extends CI_Controller
 
         render_json($json);
     }
+
+    public function get_ppcare_history()
+    {
+        $hn = $this->input->post('hn');
+        if(!empty($hn))
+        {
+            $rs = $this->babies->get_ppcare_history($hn);
+            $arr_care = array();
+
+            if(isset($rs[0]['cares']))
+            {
+                foreach($rs[0]['cares'] as $r)
+                {
+                    $obj = new stdClass();
+                    $obj->bcplace = get_owner_name($r['owner_id']);
+                    $visit = $this->service->get_visit_info($r['vn']);
+                    $obj->bcare = from_mongo_to_thai_date($visit['date_serv']);
+                    $obj->provider_name = get_provider_name_by_id(get_first_object($r['provider_id']));
+                    $obj->food = get_bfood_name($r['food']);
+                    $obj->bcareresult = get_bresult_name($r['bcareresult']);
+
+                    $arr_care[] = $obj;
+                }
+            }
+
+            if(isset($rs[0]['covers']))
+            {
+                foreach($rs[0]['covers'] as $rc)
+                {
+                    $obj = new stdClass();
+                    $obj->bcplace = get_owner_name($rc['owner_id']);
+                    $obj->bcare = from_mongo_to_thai_date($rc['bcare']);
+                    $obj->provider_name = get_provider_name_by_id(get_first_object($rc['provider_id']));
+                    $obj->food = get_bfood_name($rc['food']);
+                    $obj->bcareresult = get_bresult_name($rc['bcareresult']);
+
+                    $arr_care[] = $obj;
+                }
+            }
+
+            $rows_care = json_encode($arr_care);
+
+            $json = '{"success": true, "rows": '.$rows_care.'}';
+        }
+        else
+        {
+            $json = '{"success": false, "msg": "กรุณาระบุ HN"}';
+        }
+
+        render_json($json);
+    }
+
+
+    public function get_list_by_village()
+    {
+        $village_id = $this->input->post('village_id');
+
+        $houses = $this->house->get_houses_in_village($village_id);
+        $persons = $this->house->get_person_in_house($houses);
+
+        $rs = $this->babies->get_list_by_village($persons);
+
+        if($rs)
+        {
+            $arr_result = array();
+            foreach($rs as $r)
+            {
+                $person = $this->person->get_person_detail_with_hn($r['hn']);
+                $obj = new stdClass();
+                $obj->hn = $r['hn'];
+                $obj->cid = $person['cid'];
+                $obj->id = get_first_object($r['_id']);
+                $obj->first_name = $person['first_name'];
+                $obj->last_name = $person['last_name'];
+                $obj->sex = $person['sex'] == '1' ? 'ชาย' : 'หญิง';
+                $obj->birthdate = $person['birthdate'];
+                $obj->age = count_age($person['birthdate']);
+                $obj->reg_date = $r['reg_date'];
+                $obj->gravida = isset($r['gravida']) ? $r['gravida'] : '';
+
+                if(isset($r['mother_hn']))
+                {
+                    $obj->mother_detail = $this->person->get_person_detail_with_hn($r['mother_hn']);
+                }
+
+                $arr_result[] = $obj;
+            }
+
+            $rows = json_encode($arr_result);
+            $json = '{"success": true, "rows": '.$rows.'}';
+        }
+        else
+        {
+            $json = '{"success": false, "msg": "No result."}';
+        }
+
+        render_json($json);
+    }
+
 }
 
-//End file
+//End of file

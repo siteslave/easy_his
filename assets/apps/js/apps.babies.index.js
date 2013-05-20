@@ -124,6 +124,37 @@ head.ready(function(){
             app.ajax(url, params, function(err, data){
                 err ? cb(err) : cb(null, data);
             });
+        },
+        save_cover: function(data, cb){
+            var url = 'babies/save_cover',
+                params = {
+                    data: data
+                };
+
+            app.ajax(url, params, function(err, data){
+                err ? cb(err) : cb(null, data);
+            });
+        },
+        get_ppcare_history: function(hn, cb){
+            var url = 'babies/get_ppcare_history',
+                params = {
+                    hn: hn
+                };
+
+            app.ajax(url, params, function(err, data){
+                err ? cb(err) : cb(null, data);
+            });
+        },
+
+        get_list_by_village: function(village_id, cb){
+            var url = 'babies/get_list_by_village',
+                params = {
+                    village_id: village_id
+                };
+
+            app.ajax(url, params, function(err, data){
+                err ? cb(err) : cb(null, data);
+            });
         }
     };
 
@@ -138,6 +169,10 @@ head.ready(function(){
         });
 
     };
+    /**
+     * Modal object
+     *
+     */
     babies.modal = {
         show_register: function()
         {
@@ -161,9 +196,9 @@ head.ready(function(){
                     }
                 });
         },
-        show_anc_info: function()
+        show_ppcare: function()
         {
-            $('#mdl_anc_info').modal({
+            $('#mdl_ppcare').modal({
                 backdrop: 'static'
             }).css({
                     width: 960,
@@ -181,13 +216,13 @@ head.ready(function(){
             $('#mdl_labor').modal('hide');
         }
     };
+
     //------------------------------------------------------------------------------------------------------------------
     /**
-     * Set person list
+     * Set list
      *
      * @param data
      */
-
     babies.set_list = function(data){
         $('#tbl_list > tbody').empty();
         if(_.size(data.rows) > 0){
@@ -209,13 +244,13 @@ head.ready(function(){
                         '<td>' +
                         '<div class="btn-group">' +
                         '<a href="javascript:void(0);" class="btn" data-fullname="'+ v.first_name + ' ' + v.last_name +'" ' +
-                        'data-birthdate="'+app.mongo_to_thai_date(v.birthdate)+'" data-age="'+ v.age+'" data-hn="'+ v.hn+'" ' +
+                        'data-birthdate="'+app.mongo_to_thai_date(v.birthdate)+'" data-age="'+ v.age +'" data-hn="'+ v.hn+'" ' +
                         'data-anc_code="'+ v.anc_code+'" data-name="labor" data-hn="' + v.hn + '" ' +
                         'data-cid="' + v.cid +'" data-gravida="'+ v.gravida +'" data-mother_hn="'+ mother_hn +'" ' +
                         'title="ข้อมูลการคลอด"><i class="icon-check"></i></a>' +
                         '<a href="javascript:void(0);" class="btn" data-fullname="'+ v.first_name + ' ' + v.last_name +'" ' +
-                        'data-birthdate="'+app.mongo_to_thai_date(v.birthdate)+'" data-age="'+ v.age+'" data-hn="'+ v.hn+'" ' +
-                        'data-anc_code="'+ v.anc_code+'" data-name="anc_info" data-hn="' + v.hn + '" ' +
+                        'data-birthdate="'+app.mongo_to_thai_date(v.birthdate)+'" data-age="'+ v.age +'" data-hn="'+ v.hn+'" ' +
+                        'data-anc_code="'+ v.anc_code+'" data-name="ppcare" data-hn="' + v.hn + '" ' +
                         'data-cid="' + v.cid +'" data-gravida="'+ v.gravida +'" data-mother_hn="'+ mother_hn +'" ' +
                         'title="ข้อมูลหลังคลอด"><i class="icon-time"></i></a>' +
                         '</div>' +
@@ -229,6 +264,49 @@ head.ready(function(){
             );
         }
     };
+    /**
+     * Get list by village
+     */
+    babies.get_list_by_village = function()
+    {
+
+        $('#tbl_list > tbody').empty();
+
+        $('#main_paging').fadeOut('slow');
+        var village_id = $('#sl_village').val();
+        if(!village_id)
+        {
+            babies.get_list();
+        }
+        else
+        {
+            babies.ajax.get_list_by_village(village_id, function(err, data){
+                if(err)
+                {
+                    app.alert('ไม่พบรายการ');
+                    $('#tbl_list > tbody').append(
+                        '<tr><td colspan="9">ไม่พบรายการ</td></tr>'
+                    );
+                }
+                else
+                {
+                    babies.set_list(data);
+                }
+            });
+        }
+    };
+
+    /**
+     * Do get list filter by village id
+     */
+    $('#btn_do_get_list').on('click', function(e){
+        babies.get_list_by_village();
+        e.preventDefault();
+    });
+
+    /**
+     * Set list
+     */
     babies.get_list = function(){
         $('#main_paging').fadeIn('slow');
         $('#tbl_list > tbody').empty();
@@ -318,6 +396,10 @@ head.ready(function(){
     });
 
 
+    $('#mdl_labor').on('hidden', function(){
+        babies.get_list();
+    });
+
     babies.set_search_person_result = function(data)
     {
         _.each(data.rows, function(v)
@@ -397,30 +479,6 @@ head.ready(function(){
         }
     });
 
-    $('#sl_village').on('change', function(){
-        var village_id = $(this).val();
-
-        babies.ajax.get_house_list(village_id, function(err, data){
-            if(err)
-            {
-                app.alert(err);
-            }
-            else
-            {
-                if(data)
-                {
-                    $('#sl_house').empty();
-                   // $('#sl_house').append('<option value="00000000">ทั้งหมด</option>');
-
-                    _.each(data.rows, function(v){
-                        $('#sl_house').append('<option value="'+ v.id +'">' + v.house + '</option>');
-                    });
-
-                }
-            }
-        });
-    });
-
     babies.labor = {
         get_detail: function(hn, gravida)
         {
@@ -479,20 +537,20 @@ head.ready(function(){
     };
     //labor detail
     $(document).on('click', 'a[data-name="labor"]', function(e){
-        var hn = $(this).attr('data-hn'),
-            anc_code = $(this).attr('data-anc_code'),
-            fullname = $(this).attr('data-fullname'),
-            birthdate = $(this).attr('data-birthdate'),
-            age = $(this).attr('data-age'),
-            cid = $(this).attr('data-cid'),
-            gravida = $(this).attr('data-gravida'),
-            mother_hn = $(this).attr('data-mother_hn');
+        var hn = $(this).data('hn'),
+            fullname = $(this).data('fullname'),
+            birthdate = $(this).data('birthdate'),
+            age = $(this).data('age'),
+            cid = $(this).data('cid'),
+            gravida = $(this).data('gravida'),
+            mother_hn = $(this).data('mother_hn');
 
         $('#txt_labor_hn').val(hn);
         $('#txt_labor_cid').val(cid);
         $('#txt_labor_fullname').val(fullname);
         $('#txt_labor_birthdate').val(birthdate);
         $('#txt_labor_age').val(age);
+
         babies.labor.clear_form();
 
         //get detail
@@ -712,6 +770,152 @@ head.ready(function(){
         babies.get_babies_detail(hn);
     });
 
+
+    $(document).on('click', 'a[data-name="ppcare"]', function(e){
+
+        babies.clear_cover_form();
+
+        var hn = $(this).data('hn'),
+            fullname = $(this).data('fullname'),
+            birthdate = $(this).data('birthdate'),
+            age = $(this).data('age'),
+            cid = $(this).data('cid'),
+            gravida = $(this).data('gravida'),
+            mother_hn = $(this).data('mother_hn'),
+            gravida = $(this).data('gravida');
+
+        $('#txt_ppcare_hn').val(hn);
+        $('#txt_ppcare_cid').val(cid);
+        $('#txt_ppcare_fullname').val(fullname);
+        $('#txt_ppcare_birthdate').val(birthdate);
+        $('#txt_ppcare_age').val(age);
+        $('#txt_ppcare_gravida').val(gravida);
+
+        babies.modal.show_ppcare();
+        e.preventDefault();
+    });
+
+    babies.clear_cover_form = function()
+    {
+        $('#txt_ppcare_bcare').val('');
+        $('#txt_ppcare_hospcode').val('');
+        $('#txt_ppcare_hospname').val('');
+        app.set_first_selected($('#sl_ppcare_bcareresult'));
+        app.set_first_selected($('#sl_ppcare_food'));
+        app.set_first_selected($('#sl_ppcare_providers'));
+    };
+    //save cover
+    $('#btn_ppcare_save').on('click', function(e){
+        var items = {};
+        items.hn = $('#txt_ppcare_hn').val();
+        items.gravida = $('#txt_ppcare_gravida').val();
+        items.bcare = $('#txt_ppcare_bcare').val();
+        items.bcplace = $('#txt_ppcare_hospcode').val();
+        items.bcareresult = $('#sl_ppcare_bcareresult').val();
+        items.food = $('#sl_ppcare_food').val();
+        items.provider_id = $('#sl_ppcare_providers').val();
+
+        if(!items.hn)
+        {
+            app.alert('กรุณาระบุ HN');
+        }
+        else if(!items.bcare)
+        {
+            app.alert('กรุณาระบุวันที่ให้บริการ');
+        }
+        else if(!items.bcplace)
+        {
+            app.alert('กรุณาระบุสถานที่ให้บริการ');
+        }
+        else if(!items.provider_id)
+        {
+            app.alert('กรุณาระบุชื่อผู้ให้บริการ');
+        }
+        else
+        {
+            babies.ajax.save_cover(items, function(err){
+                if(err)
+                {
+                    app.alert(err);
+                }
+                else
+                {
+                    app.alert('บันทึกรายการเสร็จเรียบร้อยแล้ว');
+                    babies.clear_cover_form();
+                }
+            });
+        }
+        e.preventDefault();
+    });
+
+    $('#txt_ppcare_hospname').typeahead({
+        ajax: {
+            url: site_url + 'basic/search_hospital_ajax',
+            timeout: 500,
+            displayField: 'fullname',
+            triggerLength: 3,
+            preDispatch: function(query){
+                return {
+                    query: query,
+                    csrf_token: csrf_token
+                }
+            },
+
+            preProcess: function(data){
+                if(data.success){
+                    return data.rows;
+                }else{
+                    return false;
+                }
+            }
+        },
+        updater: function(data){
+            var d = data.split('#');
+            var name = d[0],
+                code = d[1];
+
+            $('#txt_ppcare_hospcode').val(code);
+            $('#txt_ppcare_hospname').val(name);
+
+            return name;
+        }
+    });
+
+    $('a[href="#tab_ppcare2"]').on('click', function(e){
+
+        var hn = $('#txt_ppcare_hn').val();
+        babies.ajax.get_ppcare_history(hn, function(err, data){
+            if(err)
+            {
+                app.alert(err);
+                $('#tbl_ppcare_history > tbody').append('<tr><td colspan="6">ไม่พบรายการ</td></tr>');
+            }
+            else
+            {
+                $('#tbl_ppcare_history > tbody').empty();
+                if(_.size(data.rows))
+                {
+                    _.each(data.rows, function(v){
+                        $('#tbl_ppcare_history tbody').append(
+                            '<tr>' +
+                                '<td>'+ v.bcare +'</td>' +
+                                '<td>'+ v.bcplace +'</td>' +
+                                '<td>'+ v.bcareresult +'</td>' +
+                                '<td>'+ v.food +'</td>' +
+                                '<td>'+ v.provider_name +'</td>' +
+                                '<td></td>' +
+                                '</tr>'
+                        );
+                    });
+                }
+                else
+                {
+                    $('#tbl_ppcare_history > tbody').append('<tr><td colspan="6">ไม่พบรายการ</td></tr>');
+                }
+            }
+        });
+        e.preventDefault();
+    });
 
     //Load list on page loaded.
     babies.get_list();

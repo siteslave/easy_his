@@ -76,7 +76,7 @@ head.ready(function(){
            }
             else
            {
-               $('#sl_babies_care_result').val(data.rows[0].result);
+               $('#sl_babies_care_result').val(data.rows[0].bcareresult);
                $('#sl_babies_care_food').val(data.rows[0].food);
            }
         });
@@ -114,7 +114,7 @@ head.ready(function(){
                     '<tr>' +
                         '<td>' + app.mongo_to_thai_date(v.date_serv) + '</td>' +
                         '<td>' + app.clear_null(v.owner_name) + '</td>' +
-                        '<td>' + app.clear_null(v.result) + '</td>' +
+                        '<td>' + app.clear_null(v.bcareresult) + '</td>' +
                         '<td>' + app.clear_null(v.food) + '</td>' +
                         '<td>' + app.clear_null(v.provider_name) + '</td>' +
                         '</tr>'
@@ -143,10 +143,10 @@ head.ready(function(){
        var data = {};
         data.vn = $('#vn').val();
         data.hn = $('#hn').val();
-        data.result = $('#sl_babies_care_result').val();
+        data.bcareresult = $('#sl_babies_care_result').val();
         data.food = $('#sl_babies_care_food').val();
 
-        if(!data.result)
+        if(!data.bcareresult)
         {
             app.alert('กรุณาระบุผลการตรวจ');
         }

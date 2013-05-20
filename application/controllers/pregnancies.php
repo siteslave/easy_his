@@ -399,8 +399,8 @@ class Pregnancies extends CI_Controller
                 {
                     $obj = new stdClass();
                     $obj->gravida = isset($r['labor']) ? $r['gravida'] : NULL;
-                    $obj->lmp = isset($r['labor']) ? to_js_date($r['labor']['lmp']) : NULL;
-                    $obj->edc = isset($r['labor']) ? to_js_date($r['labor']['edc']) : NULL;
+                    $obj->lmp = isset($r['prenatal']) ? to_js_date($r['prenatal']['lmp']) : NULL;
+                    $obj->edc = isset($r['prenatal']) ? to_js_date($r['prenatal']['edc']) : NULL;
                     $obj->bdate = isset($r['labor']) ? to_js_date($r['labor']['bdate']) : NULL;
                     $obj->btime = isset($r['labor']) ? $r['labor']['btime'] : NULL;
                     $obj->icd_code = isset($r['labor']) ? $r['labor']['bresult'] : NULL;
@@ -629,8 +629,8 @@ class Pregnancies extends CI_Controller
     {
         $village_id = $this->input->post('village_id');
 
-        $houses = $this->_get_house_list($village_id);
-        $persons = $this->_get_person_list($houses);
+        $houses = $this->house->get_houses_in_village($village_id);
+        $persons = $this->house->get_person_in_house($houses);
 
         $person_disb = $this->preg->get_person_list_village($persons);
 
@@ -667,29 +667,6 @@ class Pregnancies extends CI_Controller
         render_json($json);
     }
 
-    private function _get_house_list($village_id)
-    {
-        $rs = $this->house->get_house_list($village_id);
-
-        return $rs;
-    }
-
-    private function _get_person_list($houses)
-    {
-        $arr_person = array();
-
-        for($i=0; $i < count($houses); $i++) {
-
-            $persons = $this->house->get_person_list($houses[$i]);
-
-            foreach($persons as $p)
-            {
-                $arr_person[] = $p['hn'];
-            }
-        }
-
-        return $arr_person;
-    }
 
 }
 

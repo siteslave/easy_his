@@ -48,6 +48,16 @@ class Babies_model extends CI_Model
         return $rs;
     }
 
+    public function get_list_by_village($person)
+    {
+        $rs = $this->mongo_db
+            ->where(array('owner_id' => new MongoId($this->owner_id), 'discharge_status' => 'N'))
+            ->where_in('hn', $person)
+            ->get('babies');
+
+        return $rs;
+    }
+
     public function get_list_total()
     {
         $rs = $this->mongo_db
@@ -157,13 +167,49 @@ class Babies_model extends CI_Model
         return $rs > 0 ? TRUE : FALSE;
     }
 
+    public function save_cover($data){
+        $result = $this->mongo_db
+            ->where(array('hn' => (string) $data['hn'], 'gravida' => (string) $data['gravida']))
+            ->push('covers',
+                array(
+                    'bcare'         => to_string_date($data['bcare']),
+                    'bcplace'       => $data['bcplace'],
+                    'bcareresult'   => $data['bcareresult'],
+                    'food'          => $data['food'],
+                    'provider_id'   => new MongoId($data['provider_id']),
+                    'user_id'       => new MongoId($this->user_id),
+                    'owner_id'      => new MongoId($this->owner_id),
+                    'last_update'   => date('Y-m-d H:i:s')
+                )
+            )
+            ->update('babies');
+        return $result;
+    }
+
+    public function remove_cover($hn, $gravida, $bcare){
+        $result = $this->mongo_db
+            ->where(array('hn' => (string) $hn, 'gravida' => (string) $gravida))
+            ->pull('covers', array('owner_id' => new MongoId($this->owner_id), 'bcare' => $bcare))
+            ->update('babies');
+        return $result;
+    }
+
+    public function check_cover_duplicate($hn, $gravida, $bcare){
+        $result = $this->mongo_db
+            ->where(array('hn' => (string) $hn, 'gravida' => (string) $gravida))
+            ->where(array('covers.bcare' => $bcare))
+            ->count('babies');
+
+        return $result > 0 ? TRUE : FALSE;
+    }
+
     public function save_service($data)
     {
         $rs = $this->mongo_db
             ->where(array('hn' => (string) $data['hn']))
             ->push('cares', array(
                 'vn'            => $data['vn'],
-                'result'        => $data['result'],
+                'bcareresult'   => $data['bcareresult'],
                 'food'          => $data['food'],
                 'provider_id'   => new MongoId($this->provider_id),
                 'user_id'       => new MongoId($this->user_id),
@@ -174,12 +220,23 @@ class Babies_model extends CI_Model
         return $rs;
     }
 
+    public function get_ppcare_history($hn)
+    {
+        $rs = $this->mongo_db
+            ->select(array('cares', 'covers'))
+            ->where(array('hn' => (string) $hn))
+            ->get('babies');
+
+        return $rs;
+
+    }
+
     public function update_service($data)
     {
         $rs = $this->mongo_db
             ->where(array('hn' => (string) $data['hn'], 'cares.vn' => (string) $data['vn']))
             ->set(array(
-                'cares.$.result'  => $data['result'],
+                'cares.$.bcareresult'  => $data['bcareresult'],
                 'cares.$.food'    => $data['food'],
                 //'provider_id'   => new MongoId($this->provider_id),
                 'cares.$.user_id'       => new MongoId($this->user_id),
@@ -221,5 +278,13 @@ class Babies_model extends CI_Model
 
         return count($rs) > 0 ? $rs : NULL;
     }
+    public function get_person_list_village($persons){
+        $rs = $this->mongo_db
+            ->where_in('hn', $persons)
+            ->get('babies');
+
+        return $rs;
+    }
+
 
 }

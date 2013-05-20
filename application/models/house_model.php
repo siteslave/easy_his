@@ -55,4 +55,29 @@ class House_model extends CI_Model {
         return $rs;
     }
 
+
+    public function get_houses_in_village($village_id)
+    {
+        $rs = $this->house->get_house_list($village_id);
+
+        return $rs;
+    }
+
+    public function get_person_in_house($houses)
+    {
+        $arr_person = array();
+
+        for($i=0; $i < count($houses); $i++) {
+
+            $persons = $this->house->get_person_list($houses[$i]);
+
+            foreach($persons as $p)
+            {
+                $arr_person[] = $p['hn'];
+            }
+        }
+
+        return $arr_person;
+    }
+
 }
