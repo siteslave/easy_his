@@ -23,6 +23,16 @@ head.ready(function(){
                 return err ? cb(err) : cb(null, data);
             });
         },
+        search: function(hn, cb){
+            var url = 'pregnancies/search',
+                params = {
+                    hn: hn
+                };
+            //Do load ajax.
+            app.ajax(url, params, function(err, data){
+                return err ? cb(err) : cb(null, data);
+            });
+        },
         get_list: function(start, stop, cb){
             var url = 'pregnancies/get_list',
                 params = {
@@ -800,6 +810,36 @@ head.ready(function(){
     $('#btn_refresh').on('click', function(){
         preg.get_list();
     })
+
+    /**
+     * Do search pregnancies
+     */
+
+    $('#btn_do_search_preg').on('click', function(e){
+        var hn = $('#txt_query_preg').val();
+        if(!hn)
+        {
+            app.alert('กรุณาระบุ HN');
+        }
+        else
+        {
+            $('#main_paging').fadeOut('slow');
+            $('#tbl_list > tbody').empty();
+            preg.ajax.search(hn, function(err, data){
+                if(err)
+                {
+                    app.alert(err);
+                    $('#tbl_list > tbody').append(
+                        '<tr><td colspan="10">ไม่พบรายการ</td></tr>'
+                    );
+                }
+                else
+                {
+                    preg.set_list(data);
+                }
+            });
+        }
+    });
 
     preg.get_list();
 });

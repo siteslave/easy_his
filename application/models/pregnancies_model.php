@@ -38,6 +38,17 @@ class Pregnancies_model extends CI_Model
         return $rs;
     }
 
+    public function search($hn)
+    {
+        $rs = $this->mongo_db
+            ->where(array(
+                'owner_id' => new MongoId($this->owner_id),
+                'hn' => (string) $hn
+            ))
+            ->get('pregnancies');
+        return $rs;
+
+    }
     //------------------------------------------------------------------------------------------------------------------
     /**
      * Save anc visit
