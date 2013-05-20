@@ -2,7 +2,7 @@
     <li><a href="<?php echo site_url(); ?>">หน้าหลัก</a> <span class="divider">/</span></li>
     <li class="active">ทะเบียนฝากครรภ์</li>
 </ul>
-<form action="#" class="well form-inline">
+<form action="#" class="well well-small form-inline">
     <label for="sl_village">หมู่บ้าน</label>
     <select class="input-xlarge" id="sl_village">
         <option value="">-- ทั้งหมด --</option>
@@ -12,7 +12,18 @@
         }
         ?>
     </select>
-    <button type="button" class="btn btn-info" id="btn_do_get_list"><i class="icon-search"></i></button>
+    <div class="btn-group">
+        <button type="button" class="btn btn-success" id="btn_do_get_list" rel="tooltip" title="แสดงรายชื่อ"><i class="icon-refresh"></i></button>
+        <button type="button" class="btn" id="btn_print" rel="tooltip" title="พิมพ์รายชื่อ"><i class="icon-print"></i></button>
+    </div>
+    |
+    <label for="">HN:</label>
+    <div class="input-append">
+        <input class="input-medium" id="txt_query_preg" type="text" data-type="number" autocomplete="off" placeholder="ระบุ HN เพื่อค้นหา">
+        <button class="btn btn-info" type="button" id="btn_do_search_preg" rel="tooltip" title="ค้นหา">
+            <i class="icon-search"></i>
+        </button>
+    </div>
     <div class="btn-group pull-right">
         <button type="button" id="btn_refresh" rel="tooltip" title="รีเฟรช (Refresh)" class="btn"><i class="icon-refresh"></i></button>
         <button type="button" id="btn_register" rel="tooltip" title="ลงทะเบียนรายใหม่" class="btn btn-success"><i class="icon-plus-sign"></i></button>
@@ -27,7 +38,7 @@
         <th>CID</th>
         <th>ชื่อ - สกุล</th>
         <th>วันเกิด</th>
-        <th>อายุ (ปี)</th>
+        <th>อายุ (ป.ด.ว)</th>
         <th>วันที่ลงทะเบียน</th>
         <th>ครรภ์ที่</th>
         <th>สถานะ</th>
@@ -110,7 +121,7 @@
         <blockquote>
             บันทึกข้อมูลการคลอด
         </blockquote>
-        <form class="form-inline well">
+        <form class="form-inline well well-small">
             <label>HN</label>
             <input type="text" class="input-small uneditable-input" disabled="disabled" id="txt_labor_hn">
             <label>CID</label>
@@ -247,7 +258,7 @@
         <h3>ข้อมูลการฝากครรภ์</h3>
     </div>
     <div class="modal-body">
-        <form class="form-inline well">
+        <form class="form-inline  well well-small">
             <label>HN</label>
             <input type="text" class="input-small uneditable-input" disabled="disabled" id="txt_anc_info_hn">
             <label>CID</label>

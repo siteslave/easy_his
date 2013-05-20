@@ -667,7 +667,52 @@ class Pregnancies extends CI_Controller
         render_json($json);
     }
 
+    /**
+     * Search pregnancy
+     */
+    public function search()
+    {
+        $hn = $this->input->post('hn');
+        if(empty($hn))
+        {
+            $json = '{"success": false, "msg": "กรุณาระบุ HN"}';
+        }
+        else
+        {
+            $rs = $this->preg->search($hn);
+            if($rs)
+            {
+                $arr_result = array();
+                foreach($rs as $r)
+                {
+                    $person = $this->person->get_person_detail_with_hn($r['hn']);
+                    $obj = new stdClass();
+                    $obj->hn = $r['hn'];
+                    $obj->cid = $person['cid'];
+                    $obj->id = get_first_object($r['_id']);
+                    $obj->first_name = $person['first_name'];
+                    $obj->last_name = $person['last_name'];
+                    $obj->sex = $person['sex'] == '1' ? 'ชาย' : 'หญิง';
+                    $obj->birthdate = $person['birthdate'];
+                    $obj->age = count_age($person['birthdate']);
+                    $obj->reg_date = $r['reg_date'];
+                    $obj->anc_code = $r['anc_code'];
+                    $obj->gravida = $r['gravida'];
+                    $obj->preg_status = $r['preg_status'] == '0' ? 'ยังไม่คลอด' : 'คลอดแล้ว';
+                    $arr_result[] = $obj;
+                }
 
+                $rows = json_encode($arr_result);
+                $json = '{"success": true, "rows": '.$rows.'}';
+            }
+            else
+            {
+                $json = '{"success": false, "msg": "No result."}';
+            }
+        }
+
+        render_json($json);
+    }
 }
 
 //End of file

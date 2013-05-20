@@ -20,7 +20,7 @@
     <label for="">HN:</label>
     <div class="input-append">
         <input class="input-medium" id="txt_query_babies" type="text" data-type="number" autocomplete="off" placeholder="ระบุ HN เพื่อค้นหา">
-        <button class="btn btn-info" type="button" id="btn_do_search_babies" ref="tooltip" title="ค้นหา">
+        <button class="btn btn-info" type="button" id="btn_do_search_babies" rel="tooltip" title="ค้นหา">
             <i class="icon-search"></i>
         </button>
     </div>
