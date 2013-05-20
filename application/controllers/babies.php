@@ -67,59 +67,42 @@ class Babies extends CI_Controller
     /*
      * Search person
     *
-    * @internal param	string 	$query	The query for search
-    * @internal param	string	$filter	The filter type. 0 = CID, 1 = HN, 2 = First name and last name
+    * @internal param	string 	$hn	The query for search
     */
-    public function search_person()
+    public function search()
     {
-        $query = $this->input->post('query');
-        $filter = $this->input->post('filter');
+        $hn = $this->input->post('hn');
 
-        $filter = empty($filter) ? '0' : $filter;
-
-        if(empty($query))
+        if(empty($hn))
         {
-            $json = '{"success": false, "msg": "No query found"}';
+            $json = '{"success": false, "msg": "No hn found"}';
         }
         else
         {
-
-            if($filter == '0') //by cid
-            {
-                $rs = $this->person->search_person_by_cid($query);
-            }
-            else if($filter == '2')
-            {
-                //get hn by first name and last name
-                $name = explode(' ', $query); // [0] = first name, [1] = last name
-
-                $first_name = count($name) == 2 ? $name[0] : '';
-                $last_name = count($name) == 2 ? $name[1] : '';
-
-                $rs = $this->person->search_person_by_first_last_name($first_name, $last_name);
-
-            }
-            else
-            {
-                $rs = $this->person->search_person_by_hn($query);
-            }
+            $rs = $this->babies->search($hn);
 
             if($rs)
             {
-
                 $arr_result = array();
-
                 foreach($rs as $r)
                 {
+                    $person = $this->person->get_person_detail_with_hn($r['hn']);
                     $obj = new stdClass();
-                    $obj->id = get_first_object($r['_id']);
                     $obj->hn = $r['hn'];
-                    $obj->cid = $r['cid'];
-                    $obj->first_name = $r['first_name'];
-                    $obj->last_name = $r['last_name'];
-                    $obj->birthdate = $r['birthdate'];
-                    $obj->sex = $r['sex'] == '1' ? 'ชาย' : 'หญิง';
-                    $obj->age = count_age($r['birthdate']);
+                    $obj->cid = $person['cid'];
+                    $obj->id = get_first_object($r['_id']);
+                    $obj->first_name = $person['first_name'];
+                    $obj->last_name = $person['last_name'];
+                    $obj->sex = $person['sex'] == '1' ? 'ชาย' : 'หญิง';
+                    $obj->birthdate = $person['birthdate'];
+                    $obj->age = count_age($person['birthdate']);
+                    $obj->reg_date = $r['reg_date'];
+                    $obj->gravida = isset($r['gravida']) ? $r['gravida'] : '';
+
+                    if(isset($r['mother_hn']))
+                    {
+                        $obj->mother_detail = $this->person->get_person_detail_with_hn($r['mother_hn']);
+                    }
 
                     $arr_result[] = $obj;
                 }
@@ -129,7 +112,7 @@ class Babies extends CI_Controller
             }
             else
             {
-                $json = '{"success": false, "msg ": "ไม่พบรายการ"}';
+                $json = '{"success": false, "msg": "No result."}';
             }
 
         }
