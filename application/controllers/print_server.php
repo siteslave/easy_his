@@ -39,12 +39,28 @@ class Print_server extends CI_Controller {
         render_json($json);
     }
 
-    public function get_sticker($uid, $pwd) {
+    public function get_pcuname($pcucode) {
+        $rs = $this->pserv->get_owner_detail($pcucode);
+        if($rs) {
+            $obj = new stdClass();
+            $arr_result = array();
+            $obj->pcucode = $pcucode;
+            $obj->name = $rs[0]['hospname'];
+            $arr_result[] = $obj;
+
+            $json = '{ "success": true, "rows": '.json_encode($arr_result).' }';
+        } else {
+            $json = '{ "success": false, "msg": "No data result." }';
+        }
+        render_json($json);
+    }
+
+    public function get_sticker($pcucode, $date) {
         #$uid = $this->input->post('uid');
         #$pwd = $this->input->post('pwd');
-        $date = date('Ymd');
+        #$date = '20130510';
 
-        $owner = $this->pserv->get_owner($uid, $pwd);
+        $owner = $this->pserv->get_owner_by_pcucode($pcucode);
         if($owner != 'ERR') {
             $this->pserv->owner_id = $owner;
             $rs_serv = $this->pserv->get_sticker($date);

@@ -14,6 +14,7 @@ class Print_server_model extends CI_Model {
     public function get_owner($uid, $pwd) {
         $rs = $this->mongo_db
             ->where(array('username'=> $uid, 'password'=> $pwd))
+            ->limit(1)
             ->get('users');
 
         if($rs)
@@ -22,9 +23,22 @@ class Print_server_model extends CI_Model {
             return 'ERR';
     }
 
+    public function get_owner_by_pcucode($pcucode) {
+        $rs = $this->mongo_db
+            ->where('pcucode', $pcucode)
+            ->limit(1)
+            ->get('owners');
+
+        if($rs)
+            return get_first_object($rs[0]['_id']);
+        else
+            return null;
+    }
+
     public function get_pcucode($owner_id) {
         $rs = $this->mongo_db
             ->where('_id', new MongoId($owner_id))
+            ->limit(1)
             ->get('owners');
 
         if($rs)
@@ -36,6 +50,7 @@ class Print_server_model extends CI_Model {
     public function get_owner_detail($pcucode) {
         $rs = $this->mongo_db
             ->where('hospcode', $pcucode)
+            ->limit(1)
             ->get('ref_hospitals');
 
         return $rs;
@@ -43,8 +58,18 @@ class Print_server_model extends CI_Model {
 
     public function get_sticker($date) {
         $rs_visit = $this->mongo_db
-            ->select(array('_id', 'vn', 'hn', 'date_serv'))
-            ->where(array('date_serv'=> $date, 'owner_id'=> new MongoId($this->owner_id)))
+            ->select(array('_id', 'vn', 'hn', 'date_serv', 'time_serv'))
+            ->where(
+                array(
+                    'date_serv'=> $date,
+                    'owner_id'=> new MongoId($this->owner_id)
+                )
+            )
+            ->where_ne(
+                'prints', array(
+                    'sticker' => true
+                )
+            )
             ->get('visit');
         if($rs_visit) {
             $arr_result = array();
@@ -54,6 +79,7 @@ class Print_server_model extends CI_Model {
                 $obj->vn        = $r['vn'];
                 $obj->hn        = $r['hn'];
                 $obj->date_serv = $r['date_serv'];
+                $obj->time_serv = $r['time_serv'];
 
                 $rs_person = $this->mongo_db
                     ->select(array('title', 'first_name', 'last_name'))
