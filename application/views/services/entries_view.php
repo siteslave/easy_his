@@ -3,45 +3,18 @@
     <li><a href="<?php echo site_url('services'); ?>">การให้บริการ</a> <span class="divider">/</span></li>
     <li class="active"><?php echo $patient_name; ?> เพศ: <?php echo $sex == '1' ? 'ชาย' : 'หญิง'; ?> [HN: <?php echo $hn; ?>, CID: <?php echo $cid; ?>]</li>
 </ul>
-<!--
-<div class="page-header">
-    <h1>ข้อมูลการให้บริการ <small>บันทึกข้อมูลการให้บริการกับผู้ป่วย</small></h1>
-</div>
--->
-<!--<div class="alert alert-block alert-info fade in">
-    <a class="close" data-dismiss="alert" href="#">&times;</a>
-    <h4 class="alert-heading">คำแนะนำเพิ่มเติม</h4>
-    <p>การลงข้อมูลของคุณยังไม่ถูกต้องและไม่สมบูรณ์ กรุณาตรวจสอบการบันทึกข้อมูล เช่น การวินิจฉัยโรค การจ่ายยา หรือ การคัดกรองต่างๆ เป็นต้น</p>
-    <p>
-        <a class="btn btn-primary" href="#"><i class="icon-volume-up"></i> คำแนะนำ</a>
-    </p>
-</div>
--->
-<form action="#" class="form-actions">
+<div class="alert alert-info">
     <a href="<?php echo site_url('accidents/register/' . $vn . '/' . $hn); ?>" class="btn btn-danger"><i class="icon-th-list"></i> ข้อมูลอุบัติเหตุ</a>
     <a href="<?php echo site_url('appoints/register/' . $vn . '/' . $hn); ?>" class="btn btn-warning"><i class="icon-calendar"></i> ลงทะเบียนนัด</a>
     <a href="#" class="btn btn-info" id="btn_labs"><i class="icon-tasks"></i> สั่ง/ลงผล LAB</a>
-    <!--
+
     <div class="btn-group">
-        <button class="btn btn-info"><i class="icon-tasks"></i> LAB</button>
-        <button class="btn btn-info dropdown-toggle" data-toggle="dropdown">
+        <button class="btn btn-success" type="button"><i class="icon-th-large"></i> งานส่งเสริม</button>
+        <button class="btn btn-success dropdown-toggle" data-toggle="dropdown">
             <span class="caret"></span>
         </button>
         <ul class="dropdown-menu">
-            <li>
-                <a href="#"><i class="icon-share-alt"></i> สั่ง LAB</a>
-                <a href="#"><i class="icon-edit"></i> ลงผล LAB</a>
-            </li>
-        </ul>
-    </div>
--->
-    <div class="btn-group">
-        <button class="btn btn-primary" type="button"><i class="icon-th-large"></i> งานส่งเสริม</button>
-        <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-            <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu">
-        	<li><a href="javascript:void(0);" data-name="btn_fp"><i class="icon-tags"></i> วางแผนครอบครัว (Family Planing)</a></li>
+            <li><a href="javascript:void(0);" data-name="btn_fp"><i class="icon-tags"></i> วางแผนครอบครัว (Family Planing)</a></li>
             <li><a href="javascript:void(0);" data-name="btn_nutri"><i class="icon-text-height"></i> บันทึกโภชนาการ (Nutrition)</a></li>
             <li><a href="javascript:void(0);" data-name="btn_epi"><i class="icon-user"></i> บันทึกข้อมูลการรับวัคซีน (EPI)</a></li>
             <li><a href="javascript:void(0);" data-name="btn_anc"><i class="icon-eye-open"></i> บันทึกข้อมูลการฝากครรภ์ (ANC)</a></li>
@@ -59,18 +32,13 @@
             </li>
         </ul>
     </div>
-    <div class="btn-group">
-        <button class="btn btn-success" type="button"><i class="icon-th-large"></i> งานบริการอื่นๆ</button>
-        <button class="btn btn-success dropdown-toggle" data-toggle="dropdown">
-            <span class="caret"></span>
+
+    <div class="pull-right">
+        <button type="button" class="btn btn-success">
+            <i class="icon-time"></i> ประวัติ (EMR)
         </button>
-        <ul class="dropdown-menu">
-            <li><a href="javascript:void(0);" data-name="btn_surveil"><i class="icon-bell-alt"></i> บันทึกข้อมูล 506</a></li>
-            <li><a href="javascript:void(0);"><i class="icon-leaf"></i> แพทย์แผนไทย</a></li>
-            <li><a href="javascript:void(0);"><i class="icon-share"></i> ส่งต่อ (Refer)</a></li>
-        </ul>
     </div>
-</form>
+</div>
 
 <input type="hidden" id="vn" value="<?php echo $vn; ?>">
 <input type="hidden" id="hn" value="<?php echo $hn; ?>">
@@ -81,8 +49,11 @@
         <li class="active"><a href="#tab_screening" data-toggle="tab"><i class="icon-th-list"></i> ข้อมูลคัดกรอง</a></li>
         <li><a href="#tab_diagnosis" data-toggle="tab"><i class="icon-check"></i> วินิจฉัยโรค</a></li>
         <li><a href="#tab_procedure" data-toggle="tab"><i class="icon-eye-close"></i> หัตถการ</a></li>
+        <li><a href="#tab_dental" data-toggle="tab"><i class="icon-eye-close"></i> ทันตกรรม</a></li>
         <li><a href="#tab_drug" data-toggle="tab"><i class="icon-filter"></i> จ่ายยา</a></li>
         <li><a href="#tab_income" data-toggle="tab"><i class="icon-shopping-cart"></i> ค่าใช้จ่าย</a></li>
+        <li><a href="#tab_appoint" data-toggle="tab"><i class="icon-calendar"></i> ลงทะเบียนนัด</a></li>
+        <li><a href="#tab_refer" data-toggle="tab"><i class="icon-share-alt"></i> ส่งต่อ</a></li>
     </ul>
     <div class="tab-content">
         <div class="tab-pane active" id="tab_screening">
@@ -543,6 +514,9 @@
             <button class="btn btn-success pull-right" id="btn_proced_new"><i class="icon-plus"></i> เพิ่มรายการ</button>
 
         </div>
+        <div class="tab-pane" id="tab_dental">
+            xxx
+        </div>
         <div class="tab-pane" id="tab_drug">
             <table class="table table-hover" id="tbl_drug_list">
                 <thead>
@@ -608,7 +582,7 @@
 <div class="modal hide fade" id="modal_screening_allergy">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>ข้อมูลการแพ้ยา</h3>
+        <h4>ข้อมูลการแพ้ยา</h4>
     </div>
     <div class="modal-body">
         <form action="#">
@@ -708,7 +682,7 @@
 <div class="modal hide fade" id="mdl_diag_new">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>เพิ่มรายการวินิจฉัยโรค</h3>
+        <h4>เพิ่มรายการวินิจฉัยโรค</h4>
     </div>
     <div class="modal-body">
         <form class="form-horizontal">
@@ -754,7 +728,7 @@
 <div class="modal hide fade" id="mdl_proced_new">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>เพิ่มข้อมูลการให้หัตถการ</h3>
+        <h4>เพิ่มข้อมูลการให้หัตถการ</h4>
     </div>
     <div class="modal-body">
         <form class="form-horizontal">
@@ -837,7 +811,7 @@
 <div class="modal hide fade" id="mdl_drug_new">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>เพิ่มรายการยา</h3>
+        <h4>เพิ่มรายการยา</h4>
     </div>
     <div class="modal-body">
         <form class="form-horizontal">
@@ -900,7 +874,7 @@
 <div class="modal hide fade" id="mdl_drug_search">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>เพิ่มรายการยา</h3>
+        <h4>เพิ่มรายการยา</h4>
     </div>
     <div class="modal-body">
         <blockquote>ค้นหารายการยาที่ต้องการ โดยพิมพ์ชื่อยา เพื่อค้นหา</blockquote>
@@ -936,7 +910,7 @@
 <div class="modal hide fade" id="mdl_drug_usage_search">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>เพิ่มรายการยา</h3>
+        <h4>เพิ่มรายการยา</h4>
     </div>
     <div class="modal-body">
         <blockquote>ค้นหาวิธีการใช้ยา โดยพิมพ์ข้อความ หรือ รหัสการใช้ยา เพื่อค้นหา</blockquote>
@@ -974,7 +948,7 @@
 <div class="modal hide fade" id="mdl_charge_new">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>เพิ่มรายการค่าใช้จ่าย</h3>
+        <h4>เพิ่มรายการค่าใช้จ่าย</h4>
     </div>
     <div class="modal-body">
         <form class="form-horizontal">
@@ -1019,7 +993,7 @@
 <div class="modal hide fade" id="mdl_fp">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>เพิ่มข้อมูลการวางแผนครอบครัว</h3>
+        <h4>เพิ่มข้อมูลการวางแผนครอบครัว</h4>
     </div>
     <div class="modal-body">
     
@@ -1092,7 +1066,7 @@
 <div class="modal hide fade" id="mdl_epi">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>เลือกข้อมูลวัคซีน</h3>
+        <h4>เลือกข้อมูลวัคซีน</h4>
     </div>
     <div class="modal-body">
 
@@ -1161,7 +1135,7 @@
 <div class="modal hide fade" id="mdl_nutri">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>ข้อมูลระดับโภชนาการ</h3>
+        <h4>ข้อมูลระดับโภชนาการ</h4>
     </div>
     <div class="modal-body">
 
@@ -1263,7 +1237,7 @@
 <div class="modal hide fade" id="mdl_anc">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>ข้อมูลการฝากครรภ์</h3>
+        <h4>ข้อมูลการฝากครรภ์</h4>
     </div>
     <div class="modal-body">
         <div class="tabbable">
@@ -1371,7 +1345,7 @@
 <div class="modal hide fade" id="mdl_postnatal">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>ข้อมูลการดูแลมารดาหลังคลอด (Postnatal)</h3>
+        <h4>ข้อมูลการดูแลมารดาหลังคลอด (Postnatal)</h4>
     </div>
     <div class="modal-body">
 
@@ -1526,7 +1500,7 @@
 <div class="modal hide fade" id="mdl_babies_care">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>ข้อมูลการตรวจหลังคลอด เด็ก</h3>
+        <h4>ข้อมูลการตรวจหลังคลอด เด็ก</h4>
     </div>
     <div class="modal-body">
         <div class="tabbable">
@@ -1604,7 +1578,7 @@
 <div class="modal hide fade" id="mdl_special_pp">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>การให้บริการส่งเสริมสุขภาพป้องกันโรคเฉพาะ (Special PP)</h3>
+        <h4>การให้บริการส่งเสริมสุขภาพป้องกันโรคเฉพาะ (Special PP)</h4>
     </div>
     <div class="modal-body">
         <div class="tabbable">
@@ -1683,7 +1657,7 @@
 <div class="modal hide fade" id="mdl_comms">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>การให้บริการในชุมชน (Community Service)</h3>
+        <h4>การให้บริการในชุมชน (Community Service)</h4>
     </div>
     <div class="modal-body">
         <div class="tabbable">
@@ -1751,7 +1725,7 @@
 <div class="modal hide fade" id="mdl_icf">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>ประเมินภาวะสุขภาพผู้พิการ (ICF)</h3>
+        <h4>ประเมินภาวะสุขภาพผู้พิการ (ICF)</h4>
     </div>
     <div class="modal-body">
         <div class="tabbable">
@@ -1849,7 +1823,7 @@
 <div class="modal hide fade" id="mdl_dental">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>ประเมินสุขภาพฟัน</h3>
+        <h4>ประเมินสุขภาพฟัน</h4>
     </div>
     <div class="modal-body">
         <div class="tabbable">
@@ -2151,7 +2125,7 @@
 <div class="modal hide fade" id="mdl_lab_order">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>สั่ง LAB</h3>
+        <h4>สั่ง LAB</h4>
     </div>
     <div class="modal-body">
         <div class="tabbable">
