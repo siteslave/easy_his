@@ -66,6 +66,41 @@ if( ! function_exists('get_person_detail_with_cid')){
  * @param   string  $birthdate  The person birthdate in format yyyymmdd Exam. 19800819
  * @return  int The Age
  */
+
+/**
+ * function calage($pbday){
+3.$today = date(“d/m/Y”);
+4.list($bady , $bmonth , $byear) = explode(“/” , $pbday);
+5.list($tday , $tmonth , $tyear) = explode(“/” , $today);
+
+6. if($byear < 1970){
+7.  $yearad =1970 – $byear;
+8. $byear =1970;
+9.  }else{
+10.  $yearad = 0;}
+
+11.  $mbirth = mktime(0,0,0,$bmonth,$bday,$byear);
+12.  $mnow = mktime(0,0,0,$tmonth,$tday,$tyear);
+
+14.  $mage= ($mnow – $mbirth);
+15. $age = (date(“Y”,$mage)-1970 + $yearad).”ปี”.
+16.  (date(“m”, $mage)-1).” เดือน ” .
+17. (date(“d”, $mage)-1).” วัน” ; return($age);
+18. }
+19. $birthday = “07/08/1985″;
+20. print “วันเกิด  $birthday <BR>”;
+21. print “อายุของคุณคือ “.calage($birthday);
+22.?>
+ *
+ *
+ *
+ *
+ * 		$year = (int) substr($mongo_date, 0, 4) + 543;
+$month = substr($mongo_date, 4, 2);
+$day = substr($mongo_date, 6, 2);
+
+
+ */
 if(!function_exists('count_age')){
     function count_age($birthdate){
         if($birthdate || strlen($birthdate) == 8){
