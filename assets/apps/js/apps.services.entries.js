@@ -263,5 +263,4 @@ head.ready(function(){
             }
         }
     });
-
 });

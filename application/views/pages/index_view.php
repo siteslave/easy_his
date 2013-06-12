@@ -5,6 +5,6 @@
 <button type="button" class="btn btn-primary btn-large">
     รายละเอียดโครงการ
 </button>
-<button type="button" class="btn btn-large">
+<button type="button" class="btn btn-default btn-large">
     เกี่ยวกับโครงการ
 </button>

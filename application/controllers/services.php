@@ -112,9 +112,6 @@ class Services extends CI_Controller
             $data['icf_qualifiers']     = $this->basic->get_icf_qualifiers();
             $data['patient_name']       = $patient_name;
 
-            $data['providers'] = $this->basic->get_providers();
-            $data['clinics']   = $this->basic->get_clinic();
-
             $this->layout->view('services/entries_view', $data);
         }
 
@@ -703,19 +700,19 @@ class Services extends CI_Controller
             if($rs){
                 $json = '{"success": true}';
             }else{
-                $json = '{"success": false, "msg": "Can\'t update procedure, please check your data and try again."}';
+                $json = '{"success": false, "msg": "ไม่สามารถปรับปรุงรายการได้"}';
             }
         }else{
             //check duplicate
             $duplicated = $this->service->check_duplicate_opd_proced($data['vn'], $data['code']);
             if($duplicated){
-                $json = '{"success": false, "msg": "Duplicate proced code, please use another code."}';
+                $json = '{"success": false, "msg": "รายการนี้มีอยู่แล้วกรุณาตรวจสอบ"}';
             }else{
                 $rs = $this->service->save_proced_opd($data);
                 if($rs){
                     $json = '{"success": true}';
                 }else{
-                    $json = '{"success": false, "msg": "Can\'t save procedure, please check your data and try again."}';
+                    $json = '{"success": false, "msg": "ไม่สามารถบันทึกรายการได้"}';
                 }
             }
         }
@@ -723,11 +720,12 @@ class Services extends CI_Controller
         render_json($json);
     }
 
+
     public function get_service_proced_opd(){
         $vn = $this->input->post('vn');
 
         if(empty($vn)){
-            $json = '{"success": false, "msg": "No vn number found."}';
+            $json = '{"success": false, "msg": "กรุณาระบุเลขที่รับบริการ (VN)"}';
         }else{
             $rs = $this->service->get_service_proced_opd($vn);
             if($rs){
@@ -744,14 +742,14 @@ class Services extends CI_Controller
                     $obj->clinic_name = get_clinic_name($obj->clinic_id);
                     $obj->provider_name = get_provider_name_by_id($obj->provider_id);
 
-                    array_push($arr_result, $obj);
+                    $arr_result[] = $obj;
                 }
 
                 $rows = json_encode($arr_result);
 
                 $json = '{"success": true, "rows": '.$rows.'}';
             }else{
-                $json = '{"success": false, "msg": "Can\'t save procedure, please check your data and try again."}';
+                $json = '{"success": false, "msg": "ไม่พบข้อมูล"}';
             }
         }
 
@@ -806,42 +804,56 @@ class Services extends CI_Controller
         {
             $json = '{"success": false, "msg": "ผู้ป่วยแพ้ยานี้ ไม่สามารถสั่งได้ กรุณาตรวจสอบ"}';
         }
-        else if(!$this->drug->check_order_qty($data['drug_id'], $data['qty']))
-        {
-            $json = '{"success": false, "msg": "จำนวนยาในสต๊อกไม่พอจ่าย กรุณาตรวจสอบ"}';
-        }
         else if($data['isupdate'] == '1')
         {
-            //do update
-            $rs = $this->service->update_drug_opd($data);
-            if($rs)
-            {
-                $json = '{"success": true}';
-            }
-            else
-            {
-                $json = '{"success": false, "msg": "Can\'t update data"}';
-            }
-        }
-        else
-        {
 
-            //check drug duplicate
-            $duplicated = $this->service->check_drug_duplicate($data['vn'], $data['drug_id']);
-            
-            if(!$duplicated)
-            {
-                //do save
-                $data['provider_id'] = $this->provider_id;
-                $rs = $this->service->save_drug_opd($data);
-
+            //check qty
+            //$qty_overload = $this->drug->check_order_qty($data['drug_id'], $data['qty']);
+            //if(!$qty_overload)
+            //{
+            //    $json = '{"success": false, "msg": "จำนวนยาในสต๊อกไม่พอจ่าย กรุณาตรวจสอบ"}';
+            //}
+            //else
+            //{
+                //do update
+                $rs = $this->service->update_drug_opd($data);
                 if($rs)
                 {
                     $json = '{"success": true}';
                 }
                 else
                 {
-                    $json = '{"success": false, "msg": "Can\'t save data"}';
+                    $json = '{"success": false, "msg": "ไม่สามารถปรับปรุงข้อมูลได้"}';
+                }
+           // }
+
+        }
+        else
+        {
+            //check drug duplicate
+            $duplicated = $this->service->check_drug_duplicate($data['vn'], $data['drug_id']);
+            
+            if(!$duplicated)
+            {
+                //check qty
+                $qty_overload = $this->drug->check_order_qty($data['drug_id'], $data['qty']);
+                if(!$qty_overload)
+                {
+                    $json = '{"success": false, "msg": "จำนวนยาในสต๊อกไม่พอจ่าย กรุณาตรวจสอบ"}';
+                }
+                else
+                {
+                    $data['provider_id'] = $this->provider_id;
+                    $rs = $this->service->save_drug_opd($data);
+
+                    if($rs)
+                    {
+                        $json = '{"success": true}';
+                    }
+                    else
+                    {
+                        $json = '{"success": false, "msg": "Can\'t save data"}';
+                    }
                 }
             }
             else
@@ -1590,9 +1602,7 @@ class Services extends CI_Controller
         {
             show_error('Not ajax.', 404);
         }
-
     }
-
 }
 
 /* End of file services.php */

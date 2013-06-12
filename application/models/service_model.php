@@ -416,9 +416,9 @@ class Service_model extends CI_Model
                 'code'          => $data['code'],
                 'price'         => (float) $data['price'],
                 'start_time'    => (string) $data['start_time'],
-                'end_time'    => (string) $data['end_time'],
-                'provider_id'      => new MongoId($data['provider_id']),
-                'clinic_id'      => new MongoId($data['clinic_id']),
+                'end_time'      => (string) $data['end_time'],
+                'provider_id'   => new MongoId($data['provider_id']),
+                'clinic_id'     => new MongoId($data['clinic_id']),
                 'vn'            => (string) $data['vn'],
                 'last_update'   => date('Y-m-d H:i:s')
             ));
@@ -441,6 +441,15 @@ class Service_model extends CI_Model
         return $rs;
     }
 
+    public function get_service_proced_opd_detail($vn, $code)
+    {
+        $rs = $this->mongo_db
+            ->where(array('vn' => (string) $vn, 'code' => (string) $code))
+            ->limit(1)
+            ->get('procedures_opd');
+        return $rs ? $rs[0] : NULL;
+    }
+
     public function remove_proced_opd($vn, $code){
         $rs = $this->mongo_db
             ->where(array('vn' => (string) $vn, 'code' => (string) $code))
@@ -449,13 +458,17 @@ class Service_model extends CI_Model
     }
 
     public function update_opd_proced($data){
+        $this->mongo_db->add_index('procedures_opd', array('vn' => -1));
+        $this->mongo_db->add_index('procedures_opd', array('code' => -1));
+
         $rs = $this->mongo_db
-            ->where(array('vn' =>$data['vn'], 'code' => $data['code']))
+            ->where(array('vn' => (string) $data['vn'], 'code' => (string) $data['code']))
             ->set(array(
+                'price'         => (float) $data['price'],
                 'start_time'    => (string) $data['start_time'],
-                'end_time'    => (string) $data['end_time'],
-                'provider_id'      => new MongoId($data['provider_id']),
-                'clinic_id'      => new MongoId($data['clinic_id']),
+                'end_time'      => (string) $data['end_time'],
+                'provider_id'   => new MongoId($data['provider_id']),
+                'clinic_id'     => new MongoId($data['clinic_id']),
                 'last_update'   => date('Y-m-d H:i:s')
             ))
             ->update('procedures_opd');
@@ -496,7 +509,7 @@ class Service_model extends CI_Model
      */
     public function update_drug_opd($data){
         $rs = $this->mongo_db
-            ->where(array('vn' => $data['vn'], 'drug_id' => new MongoId($data['drug_id'])))
+            ->where(array('_id' => new MongoId($data['id'])))
             ->set(array(
                 'qty'           => (float) $data['qty'],
                 'price'         => (float) $data['price'],
@@ -561,6 +574,15 @@ class Service_model extends CI_Model
         return $rs;
     }
 
+    public function get_drug_detail($id)
+    {
+        $rs = $this->mongo_db
+            ->where(array('_id' => new MongoId($id)))
+            ->limit(1)
+            ->get('drugs_opd');
+        return $rs ? $rs[0] : NULL;
+    }
+
     ####################### Charge modules #######################
 
     /*
@@ -596,6 +618,15 @@ class Service_model extends CI_Model
             ))
             ->update('charge_opd');
         return $rs;
+    }
+
+    public function  get_charge_opd($id){
+        $rs = $this->mongo_db
+            ->where(array('_id' => new MongoId($id)))
+            ->limit(1)
+            ->get('charge_opd');
+
+        return $rs ? $rs[0] : NULL;
     }
 
     /*

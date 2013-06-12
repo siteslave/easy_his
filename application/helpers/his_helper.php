@@ -32,7 +32,7 @@ if(!function_exists('to_string_date')){
         }else{
             $d = explode('/', $date);
             // $d[0] = d, $d[1] = m, $d[2] = y
-            $new_date = $d[2] . $d[1] . $d[0];
+            $new_date = (int)$d[2] - 543 . $d[1] . $d[0];
             return $new_date;
         }
     }

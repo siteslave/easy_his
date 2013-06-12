@@ -1,12 +1,11 @@
 <ul class="breadcrumb">
-    <li><a href="<?php echo site_url(); ?>">หน้าหลัก</a> <span class="divider">/</span></li>
-    <li><a href="<?php echo site_url('services'); ?>">การให้บริการ</a> <span class="divider">/</span></li>
+    <li><a href="<?php echo site_url(); ?>">หน้าหลัก</a></li>
+    <li><a href="<?php echo site_url('services'); ?>">การให้บริการ</a></li>
     <li class="active"><?php echo $patient_name; ?> เพศ: <?php echo $sex == '1' ? 'ชาย' : 'หญิง'; ?> [HN: <?php echo $hn; ?>, CID: <?php echo $cid; ?>]</li>
 </ul>
-<div class="alert alert-info">
-    <a href="<?php echo site_url('accidents/register/' . $vn . '/' . $hn); ?>" class="btn btn-danger"><i class="icon-th-list"></i> ข้อมูลอุบัติเหตุ</a>
-    <a href="<?php echo site_url('appoints/register/' . $vn . '/' . $hn); ?>" class="btn btn-warning"><i class="icon-calendar"></i> ลงทะเบียนนัด</a>
-    <a href="#" class="btn btn-info" id="btn_labs"><i class="icon-tasks"></i> สั่ง/ลงผล LAB</a>
+<div class="alert alert-success">
+    <a href="#" class="btn btn-danger" rel="tooltip" title="บันทึกข้อมูลอุบัติเหตุ"><i class="icon-truck"></i> ข้อมูลอุบัติเหตุ</a>
+    <a href="#" class="btn btn-warning" id="btn_labs"><i class="icon-tasks"></i> สั่ง/ลงผล LAB</a>
 
     <div class="btn-group">
         <button class="btn btn-success" type="button"><i class="icon-th-large"></i> งานส่งเสริม</button>
@@ -32,6 +31,26 @@
             </li>
         </ul>
     </div>
+    <div class="btn-group">
+        <button class="btn btn-primary" type="button"><i class="icon-check"></i> งานคัดกรอง</button>
+        <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li><a href="javascript:void(0);" data-name="btn_chronic_fu"><i class="icon-tags"></i> คัดกรองความเสี่ยง (เบาหวาน, ความดัน)</a></li>
+            <li><a href="javascript:void(0);" data-name="btn_chronic_fu"><i class="icon-leaf"></i> คัดกรองโรคซึมเศร้า</a></li>
+            <li><a href="javascript:void(0);" data-name="btn_chronic_fu"><i class="icon-fire"></i> คัดกรองมะเร็งปากมดลูก</a></li>
+        </ul>
+    </div>
+    <div class="btn-group">
+        <button class="btn btn-default" type="button"><i class="icon-briefcase"></i> กิจกรรมอื่นๆ</button>
+        <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li><a href="javascript:void(0);" data-name="btn_chronic_fu"><i class="icon-tags"></i> ติดตามดูแลผู้ป่วยโรคเรื้อรัง</a></li>
+        </ul>
+    </div>
 
     <div class="pull-right">
         <button type="button" class="btn btn-success">
@@ -53,415 +72,364 @@
         <li><a href="#tab_drug" data-toggle="tab"><i class="icon-filter"></i> จ่ายยา</a></li>
         <li><a href="#tab_income" data-toggle="tab"><i class="icon-shopping-cart"></i> ค่าใช้จ่าย</a></li>
         <li><a href="#tab_appoint" data-toggle="tab"><i class="icon-calendar"></i> ลงทะเบียนนัด</a></li>
-        <li><a href="#tab_refer" data-toggle="tab"><i class="icon-share-alt"></i> ส่งต่อ</a></li>
+        <li><a href="#tab_refer" data-toggle="tab"><i class="icon-share"></i> ส่งต่อ</a></li>
     </ul>
     <div class="tab-content">
         <div class="tab-pane active" id="tab_screening">
-            <div class="row-fluid">
-                <div class="span2">
-                    <div class="control-group">
-                        <label class="control-label" for="txt_screening_weight">น้ำหนัก</label>
-                        <div class="controls">
-                            <div class="input-append">
-                                <input data-type="number" class="input-mini" id="txt_screening_weight" type="text">
-                                <span class="add-on">กก.</span>
-                            </div>
-                        </div>
-                    </div>
+            <blockquote>บันทึกข้อมูลการให้บริการผู้ป่วย <p class="text-warning">กรุณาบันทึกข้อมูลให้ถูกต้องและสมบูรณ์เพื่อป้องกันข้อมูลผิดพลาดเวลาส่งออก</p></blockquote>
+            <div class="row">
+                <div class="col-lg-2">
+                    <select id="sl_typeout" style="width: 150px;" title="ประเภทที่ตั้งของที่อยู่ผู้รับบริการ" rel="tooltip">
+                        <option value="1">[1] ในเขต</option>
+                        <option value="2">[2] นอกเขต</option>
+                    </select>
                 </div>
-                <div class="span2">
-                    <div class="control-group">
-                        <label class="control-label" for="txt_screening_height">ส่วนสูง</label>
-                        <div class="controls">
-                            <div class="input-append">
-                                <input class="input-mini" data-type="number" id="txt_screening_height" type="text">
-                                <span class="add-on">ซม.</span>
-                            </div>
-                        </div>
-                    </div>
+                <div class="col-lg-2">
+                    <select id="sl_typeout" style="width: 160px;" title="ประเภทเวลาการมารับบริการ" rel="tooltip">
+                        <option value="1">[1] ในเวลาราชการ</option>
+                        <option value="2">[2] นอกเวลาราชการ</option>
+                    </select>
                 </div>
-                <div class="span2">
-                    <div class="control-group">
-                        <label class="control-label" for="txt_screening_body_tmp">อุณหภูมิ</label>
-                        <div class="controls">
-                            <div class="input-append">
-                                <input class="input-mini" data-type="number" id="txt_screening_body_tmp" type="text">
-                                <span class="add-on">C.</span>
-                            </div>
-                        </div>
-                    </div>
+                <div class="col-lg-4">
+                    <select id="sl_typeout" style="width: 250px;" title="ระบุสถานะปัจจุบันของผู้มารับบริการ" rel="tooltip">
+                        <option value="1">[1] จำหน่ายกลับบ้าน</option>
+                        <option value="2">[2] รับไว้รักษาต่อในแผนกผู้ป่วยใน</option>
+                        <option value="3">[3] ส่งต่อไปสถานพยาบาลอื่น</option>
+                        <option value="4">[4] เสียชีวิต</option>
+                        <option value="5">[5] เสียชีวิตก่อนมาถึงสถานพยาบาล</option>
+                        <option value="6">[6] เสียชีวิตระหว่างส่งต่อไปยังสถานบริการอื่น</option>
+                        <option value="7">[7] ปฏิเสธการรักษา</option>
+                        <option value="8">[8] หนีกลับ</option>
+                    </select>
                 </div>
-                <div class="span2">
-                    <div class="control-group">
-                        <label class="control-label" for="txt_screening_waist">รอบเอว</label>
-                        <div class="controls">
-                            <div class="input-append">
-                                <input class="input-mini" data-type="number" id="txt_screening_waist" type="text">
-                                <span class="add-on">ซม.</span>
-                            </div>
-                        </div>
+                <div class="col-lg-4">
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default"><i class="icon-edit"></i> แก้ไขส่งตรวจ</button>
+                        <button type="button" class="btn btn-danger"><i class="icon-trash"></i> ลบส่งตรวจ</button>
                     </div>
                 </div>
             </div>
-            <div class="row-fluid">
-                <div class="span2">
-                    <div class="control-group">
-                        <label class="control-label" for="txt_screening_pluse">ชีพจร</label>
-                        <div class="controls">
-                            <div class="input-append">
-                                <input class="input-mini" data-type="number" id="txt_screening_pluse" type="text">
-                                <span class="add-on">/m</span>
-                            </div>
-                        </div>
+            <br>
+            <legend><i class="icon-eye-close"></i> คัดกรองผู้ป่วย</legend>
+            <div class="row">
+                <div class="col-lg-2">
+                    <label for="txt_screening_weight">น้ำหนัก</label>
+                    <div class="input-group" style="width: 100px;">
+                        <input data-type="number" id="txt_screening_weight" type="text">
+                        <span class="input-group-addon">กก.</span>
                     </div>
                 </div>
-                <div class="span2">
-                    <div class="control-group">
-                        <label class="control-label" for="txt_screening_breathe">หายใจ</label>
-                        <div class="controls">
-                            <div class="input-append">
-                                <input class="input-mini" data-type="number" id="txt_screening_breathe" type="text">
-                                <span class="add-on">/m</span>
-                            </div>
-                        </div>
+                <div class="col-lg-2">
+                    <label for="txt_screening_height">ส่วนสูง</label>
+                    <div class="input-group" style="width: 100px;">
+                        <input data-type="number" id="txt_screening_height" type="text">
+                        <span class="input-group-addon">ซม.</span>
                     </div>
                 </div>
-                <div class="span2">
-                    <div class="control-group">
-                        <label class="control-label" for="txt_screening_sbp">ความดัน SBP</label>
-                        <div class="controls">
-                            <div class="input-append">
-                                <input class="input-mini" data-type="number" id="txt_screening_sbp" type="text">
-                                <span class="add-on">มม.ป</span>
-                            </div>
-                        </div>
+                <div class="col-lg-2">
+                    <label for="txt_screening_body_tmp">อุณหภูมิ</label>
+                    <div class="input-group" style="width: 100px;">
+                        <input data-type="number" id="txt_screening_body_tmp" type="text">
+                        <span class="input-group-addon">C.</span>
                     </div>
                 </div>
-                <div class="span2">
-                    <div class="control-group">
-                        <label class="control-label" for="txt_screening_dbp">ความดัน DBP</label>
-                        <div class="controls">
-                            <div class="input-append">
-                                <input class="input-mini" data-type="number" id="txt_screening_dbp" type="text">
-                                <span class="add-on">มม.ป</span>
-                            </div>
-                        </div>
+                <div class="col-lg-2">
+                    <label for="txt_screening_waist">รอบเอว</label>
+                    <div class="input-group" style="width: 100px;">
+                        <input data-type="number" id="txt_screening_waist" type="text">
+                        <span class="input-group-addon">ซม.</span>
                     </div>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-lg-2">
+                    <label for="txt_screening_pluse">ชีพจร</label>
+                    <div class="input-group" style="width: 100px;">
+                        <input data-type="number" id="txt_screening_pluse" type="text">
+                        <span class="input-group-addon">m.</span>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <label for="txt_screening_breathe">หายใจ</label>
+                    <div class="input-group" style="width: 100px;">
+                        <input data-type="number" id="txt_screening_breathe" type="text">
+                        <span class="input-group-addon">m.</span>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <label for="txt_screening_sbp">ความดัน SBP</label>
+                    <div class="input-group" style="width: 100px;">
+                        <input data-type="number" id="txt_screening_sbp" type="text">
+                        <span class="input-group-addon">มป.</span>
+                    </div>
+                </div>
+                <div class="col-lg-2">
+                    <label for="txt_screening_dbp">ความดัน DBP</label>
+                    <div class="input-group" style="width: 100px;">
+                        <input data-type="number" id="txt_screening_dbp" type="text">
+                        <span class="input-group-addon">มป.</span>
+                    </div>
+                </div>
+            </div>
+            <br>
             <!-- tab cc -->
-            <div class="row-fluid">
-                <div class="tabbable">
-                    <ul class="nav nav-tabs">
-                        <li class="active">
-                            <a href="#tab_screening_cc" data-toggle="tab"><i class="icon-th-list"></i> อาการแรกรับ (CC)</a>
-                        </li>
-                        <li>
-                            <a href="#tab_screening_pe" data-toggle="tab"><i class="icon-eye-close"></i> PE</a>
-                        </li>
-                        <li>
-                            <a href="#tab_screening_ill_history" data-toggle="tab"><i class="icon-time"></i> เจ็บป่วยในอดีต</a>
-                        </li>
-                        <li>
-                            <a href="#tab_screening_allergy" data-toggle="tab"><i class="icon-warning-sign"></i> แพ้ยา</a>
-                        </li>
-                        <li>
-                            <a href="#tab_screening_screen" data-toggle="tab"><i class="icon-list"></i> คัดกรอง</a>
-                        </li>
+            <div class="tabbable">
+            <ul class="nav nav-tabs">
+                <li class="active">
+                    <a href="#tab_screening_cc" data-toggle="tab"><i class="icon-th-list"></i> อาการแรกรับ (CC)</a>
+                </li>
+                <li>
+                    <a href="#tab_screening_pe" data-toggle="tab"><i class="icon-eye-close"></i> PE</a>
+                </li>
+                <li>
+                    <a href="#tab_screening_ill_history" data-toggle="tab"><i class="icon-time"></i> เจ็บป่วยในอดีต</a>
+                </li>
+                <li>
+                    <a href="#tab_screening_allergy" data-toggle="tab"><i class="icon-warning-sign"></i> แพ้ยา</a>
+                </li>
+                <li>
+                    <a href="#tab_screening_screen" data-toggle="tab"><i class="icon-list"></i> คัดกรอง</a>
+                </li>
 
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                <i class="icon-briefcase"></i> อื่นๆ
-                                <b class="caret"></b>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li>
-                                    <a href="#tab_screening_lmp" data-toggle="tab"><i class="icon-calendar"></i> ประจำเดือน (LMP)</a>
-                                </li>
-                                <li>
-                                    <a href="#tab_screening_consult" data-toggle="tab"><i class="icon-bullhorn"></i> การให้คำแนะนำ</a>
-                                </li>
-                            </ul>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="icon-briefcase"></i> อื่นๆ
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="#tab_screening_lmp" data-toggle="tab"><i class="icon-calendar"></i> ประจำเดือน (LMP)</a>
+                        </li>
+                        <li>
+                            <a href="#tab_screening_consult" data-toggle="tab"><i class="icon-bullhorn"></i> การให้คำแนะนำ</a>
                         </li>
                     </ul>
-                    <div class="tab-content">
-                        <div class="tab-pane active" id="tab_screening_cc">
-                            <blockquote>บันทึกข้อมูลอาการสำคัญ (Chief complaint)</blockquote>
-                            <div class="control-group">
-                                <div class="controls">
-                                    <textarea class="input-xxlarge" rows="2" id="txt_screening_cc"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tab-pane" id="tab_screening_pe">
-                            <blockquote>บันทึกข้อมูล Physical examination</blockquote>
-                            <div class="control-group">
-                                <div class="controls">
-                                    <textarea class="input-xxlarge" rows="2" id="txt_screening_pe"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tab-pane" id="tab_screening_ill_history">
-                            <blockquote>บันทึกข้อมูลโรคประจำตัว</blockquote>
-                            <div class="control-group">
-                                <div class="controls">
-                                    <label class="radio">
-                                        <input type="radio" name="rd_ill_history" id="rd_ill_history1" checked="checked" value="0"> ปฏิเสธโรคประจำตัวและการผ่าตัด
-                                    </label>
-                                </div>
-                            </div>
-                            <div class="control-group">
-                                <div class="controls">
-                                    <label class="radio">
-                                        <input type="radio" name="rd_ill_history" id="rd_ill_history2" value="1"> มีโรคประจำตัว
-                                    </label>
-                                    <input type="text" class="input-xxlarge" id="txt_ill_history_ill_detail">
-                                </div>
-                            </div>
-                            <div class="control-group">
-                                <div class="controls">
-                                    <label class="checkbox">
-                                        <input type="checkbox" id="chk_operate"> ผ่าตัด
-                                    </label>
-                                    <input type="text" class="input-xxlarge" id="txt_ill_history_operate_detail">
-                                </div>
-                            </div>
-                            <div class="control-group">
-                                <div class="controls">
-                                    <label class="control-label" for="txt_operate_year">ปีที่ผ่าตัด</label>
-                                    <input type="text" data-type="year" class="input-mini" data-type="year" id="txt_operate_year">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tab-pane" id="tab_screening_allergy">
-                            <blockquote>บันทึกข้อมูลการแพ้ยา (Drug allergy)</blockquote>
-                            <div class="row-fluid">
-                                <div class="span12">
-                                    <table class="table table-striped table-hover" id="tbl_screening_allergy_list">
-                                        <thead>
-                                        <tr>
-                                            <th>วันที่</th>
-                                            <th>ชื่อยา</th>
-                                            <th>อาการ</th>
-                                            <th>ความรุนแรง</th>
-                                            <th>หน่ายงานที่ให้ข้อมูล</th>
-                                            <th>ผู้บันทึก</th>
-                                            <th>#</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr>
-                                            <td>...</td>
-                                            <td>...</td>
-                                            <td>...</td>
-                                            <td>...</td>
-                                            <td>...</td>
-                                            <td>...</td>
-                                            <td>...</td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                    <button class="btn pull-right" id="btn_screening_add_drgu_allergy">
-                                        <i class="icon-plus"></i> เพิ่มรายการ
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tab-pane" id="tab_screening_screen">
-                            <blockquote>บันทึกข้อมูลการคัดกรอง</blockquote>
-                            <div class="row-fluid">
-                                <div class="span4">
-                                    <form action="#">
-                                        <legend>สูบบุหรี่/ดื่มเหล้า</legend>
-                                        <div class="control-group">
-                                            <div class="controls">
-                                                <label for="sl_screening_smoking">สูบบุหรี่</label>
-                                                <select id="sl_screening_smoking">
-                                                    <?php foreach($smokings as $t) echo '<option value="'.$t->id.'">'.$t->name.'</option>'; ?>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="control-group">
-                                            <div class="controls">
-                                                <label for="sl_screening_drinking">ดื่มสุรา</label>
-                                                <select id="sl_screening_drinking">
-                                                    <?php foreach($drinkings as $t) echo '<option value="'.$t->id.'">'.$t->name.'</option>'; ?>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="span4">
-                                    <form action="#">
-                                        <legend>ประเมินสุขภาพจิต</legend>
-                                        <div class="control-group">
-                                            <div class="controls">
-                                                <label class="checkbox" for="chk_screening_screen_mind_strain">
-                                                    <input type="checkbox" id="chk_screening_screen_mind_strain"> เครียด/วิตกกังวล
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="control-group">
-                                            <div class="controls">
-                                                <label class="checkbox" for="chk_screening_screen_mind_work">
-                                                    <input type="checkbox" id="chk_screening_screen_mind_work"> ปัญหาการเงิน/การทำงาน/เพื่อนร่วมงาน
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="control-group">
-                                            <div class="controls">
-                                                <label class="checkbox" for="chk_screening_screen_mind_family">
-                                                    <input type="checkbox" id="chk_screening_screen_mind_family"> ปัญหาครอบครัว
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="control-group">
-                                            <div class="controls">
-                                                <label class="checkbox" for="chk_screening_screen_mind_other">
-                                                    <input type="checkbox" id="chk_screening_screen_mind_other"> อื่นๆ
-                                                </label>
-                                                <input type="text" class="input-xlarge" id="txt_screening_screen_mind_other_detail">
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="span4">
-                                    <form action="#">
-                                        <legend>ภาวะเสี่ยง</legend>
-                                        <div class="control-group">
-                                            <div class="controls">
-                                                <label class="checkbox" for="chk_screening_screen_risk_ht">
-                                                    <input type="checkbox" id="chk_screening_screen_risk_ht"> เสี่ยงต่อการเป็นความดันโลหิตสูง
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="control-group">
-                                            <div class="controls">
-                                                <label class="checkbox" for="chk_screening_screen_risk_dm">
-                                                    <input type="checkbox" id="chk_screening_screen_risk_dm"> เสี่ยงต่อการเป็นเบาหวาน
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="control-group">
-                                            <div class="controls">
-                                                <label class="checkbox" for="chk_screening_screen_risk_stoke">
-                                                    <input type="checkbox" id="chk_screening_screen_risk_stoke"> เสี่ยงต่อการเป็นโรคหัวใจ
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="control-group">
-                                            <div class="controls">
-                                                <label class="checkbox" for="chk_screening_screen_risk_other">
-                                                    <input type="checkbox" id="chk_screening_screen_risk_other"> อื่นๆ
-                                                </label>
-                                                <textarea class="input-xlarge" id="txt_screening_screen_risk_other_detail" rows="3"></textarea>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="tab-pane" id="tab_screening_lmp">
-                            <blockquote>บันทึกข้อมูลการมีประจำเดือน (LMP)</blockquote>
-                            <form action="#">
-                                <div class="control-group">
-                                    <div class="controls">
-                                        <label class="control" for="sl_screening_lamp">การมาของประจำเดือน (LMP)</label>
-                                        <select id="sl_screening_lamp">
-                                            <option value="">-- ไม่ระบุ --</option>
-                                            <option value="0">ประจำเดือนไม่มา</option>
-                                            <option value="1">ประจำเดือนมาปกติ (มีประจำเดือน)</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="control-group">
-                                    <label class="control-label" for="txt_screening_lmp_start">วันที่ประจำเดือนมา</label>
-                                    <div class="controls">
-                                        <div class="input-append date" data-name="datepicker">
-                                            <input class="input-small" id="txt_screening_lmp_start" size="16" type="text" disabled>
-                                            <span class="add-on"><i class="icon-th"></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="control-group">
-                                    <label class="control-label" for="txt_screening_lmp_finished">วันที่ประจำเดือนไม่มา</label>
-                                    <div class="controls">
-                                        <div class="input-append date" data-name="datepicker">
-                                            <input class="input-small" id="txt_screening_lmp_finished" size="16" type="text" disabled>
-                                            <span class="add-on"><i class="icon-th"></i></span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="tab-pane" id="tab_screening_consult">
-                            <blockquote>บันทึกข้อมูลการให้คำแนะนำ</blockquote>
-                            <form action="#">
-                                <legend>ข้อมูลการให้คำแนะนำ</legend>
-                                <div class="control-group">
-                                    <div class="controls">
-                                        <label class="checkbox" for="chk_screening_consult_drug">
-                                            <input type="checkbox" id="chk_screening_consult_drug"> แนะนำในการใช้ยา
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="control-group">
-                                    <div class="controls">
-                                        <label class="checkbox" for="chk_screening_consult_activity">
-                                            <input type="checkbox" id="chk_screening_consult_activity"> แนะนำการปฏิบัติตัวให้เหมาะสมกับโรค
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="control-group">
-                                    <div class="controls">
-                                        <label class="checkbox" for="chk_screening_consult_food">
-                                            <input type="checkbox" id="chk_screening_consult_food"> แนะนำการรับประทานอาหาร
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="control-group">
-                                    <div class="controls">
-                                        <label class="checkbox" for="chk_screening_consult_appoint">
-                                            <input type="checkbox" id="chk_screening_consult_appoint"> แนะนำการมาตรวจตามนัดหมาย
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="control-group">
-                                    <div class="controls">
-                                        <label class="checkbox" for="chk_screening_consult_exercise">
-                                            <input type="checkbox" id="chk_screening_consult_exercise"> แนะนำการออกกำลังกาย
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="control-group">
-                                    <div class="controls">
-                                        <label class="checkbox" for="chk_screening_consult_complication">
-                                            <input type="checkbox" id="chk_screening_consult_complication"> แนะนำการป้องกันภาวะแทรกซ้อน
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="control-group">
-                                    <div class="controls">
-                                        <label class="checkbox" for="chk_screening_consult_other_detail">
-                                            <input type="checkbox" id="chk_screening_consult_other"> อื่นๆ
-                                        </label>
-                                        <textarea class="input-xlarge" id="chk_screening_consult_other_detail" rows="3"></textarea>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
+                </li>
+            </ul>
+            <div class="tab-content">
+            <div class="tab-pane active" id="tab_screening_cc">
+                <blockquote>บันทึกข้อมูลอาการสำคัญ (Chief complaint)</blockquote>
+                <textarea rows="3" id="txt_screening_cc" placeholder="บันทึกข้อมูลอาการสำคัญ (Chief complaint)"
+                          rel="tooltip" title="บันทึกข้อมูลอาการสำคัญ (Chief complaint)"></textarea>
+            </div>
+            <div class="tab-pane" id="tab_screening_pe">
+                <blockquote>บันทึกข้อมูล Physical examination</blockquote>
+                <textarea rows="3" id="txt_screening_pe" placeholder="บันทึกข้อมูล Physical examination"
+                          title="บันทึกข้อมูล Physical examination" rel="tooltip"></textarea>
+            </div>
+            <div class="tab-pane" id="tab_screening_ill_history">
+                <blockquote>ประวัติการเจ็บป่วยในอดีต</blockquote>
+                <div class="control-group">
+                    <div class="controls">
+                        <label class="radio">
+                            <input type="radio" name="rd_ill_history" id="rd_ill_history1" checked="checked" value="0"> ปฏิเสธโรคประจำตัวและการผ่าตัด
+                        </label>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="controls">
+                        <label class="radio">
+                            <input type="radio" name="rd_ill_history" id="rd_ill_history2" value="1"> มีโรคประจำตัว
+                        </label>
+                        <input type="text" id="txt_ill_history_ill_detail" rel="tooltip" title="ระบุโรคประจำตัว" placeholder="ระบุโรคประจำตัว">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="controls">
+                        <label class="checkbox">
+                            <input type="checkbox" id="chk_operate"> ผ่าตัด
+                        </label>
+                        <input type="text" rel="tooltip" placeholder="ระบุอาการที่ผ่าตัด" title="ระบุอาการที่ผ่าตัด" id="txt_ill_history_operate_detail">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="controls">
+                        <label for="txt_operate_year">ปีที่ผ่าตัด</label>
+                        <input type="text" rel="tooltip" title="ระบุปี พ.ศ" placeholder="yyyy" data-type="year" style="width: 100px;" data-type="year" id="txt_operate_year">
                     </div>
                 </div>
             </div>
+            <div class="tab-pane" id="tab_screening_allergy">
+                <blockquote>บันทึกข้อมูลการแพ้ยา (Drug allergy)</blockquote>
+                <div class="row-fluid">
+                    <div class="span12">
+                        <table class="table table-striped table-hover" id="tbl_screening_allergy_list">
+                            <thead>
+                            <tr>
+                                <th>วันที่</th>
+                                <th>ชื่อยา</th>
+                                <th>อาการ</th>
+                                <th>ความรุนแรง</th>
+                                <th>หน่ายงานที่ให้ข้อมูล</th>
+                                <th>ผู้บันทึก</th>
+                                <th>#</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>...</td>
+                                <td>...</td>
+                                <td>...</td>
+                                <td>...</td>
+                                <td>...</td>
+                                <td>...</td>
+                                <td>...</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <button class="btn btn-success pull-right" id="btn_screening_add_drgu_allergy">
+                            <i class="icon-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane" id="tab_screening_screen">
+                <br>
+                <div class="row">
+                    <div class="col col-lg-4">
+                        <form action="#">
+                            <legend><i class="icon-glass"></i> สูบบุหรี่/ดื่มเหล้า</legend>
+                            <label for="sl_screening_smoking">สูบบุหรี่</label>
+                            <select id="sl_screening_smoking" style="width: 200px;">
+                                <?php foreach($smokings as $t) echo '<option value="'.$t->id.'">'.$t->name.'</option>'; ?>
+                            </select>
+                            <label for="sl_screening_drinking">ดื่มสุรา</label>
+                            <select id="sl_screening_drinking" style="width: 200px;">
+                                <?php foreach($drinkings as $t) echo '<option value="'.$t->id.'">'.$t->name.'</option>'; ?>
+                            </select>
+                        </form>
+                    </div>
+                    <div class="col col-lg-4">
+                        <form action="#">
+                            <legend><i class="icon-rss"></i> ประเมินสุขภาพจิต</legend>
+                            <label class="checkbox" for="chk_screening_screen_mind_strain">
+                                <input type="checkbox" id="chk_screening_screen_mind_strain"> เครียด/วิตกกังวล
+                            </label>
+                            <label class="checkbox" for="chk_screening_screen_mind_work">
+                                <input type="checkbox" id="chk_screening_screen_mind_work"> ปัญหาการเงิน/การทำงาน/เพื่อนร่วมงาน
+                            </label>
+                            <label class="checkbox" for="chk_screening_screen_mind_family">
+                                <input type="checkbox" id="chk_screening_screen_mind_family"> ปัญหาครอบครัว
+                            </label>
+                            <label class="checkbox" for="chk_screening_screen_mind_other">
+                                <input type="checkbox" id="chk_screening_screen_mind_other"> อื่นๆ
+                            </label>
+                            <textarea rows="3" id="txt_screening_screen_mind_other_detail"></textarea>
+                        </form>
+                    </div>
+                    <div class="col col-lg-4">
+                        <form action="#">
+                            <legend><i class="icon-warning-sign"></i> ภาวะเสี่ยง</legend>
+                            <label class="checkbox" for="chk_screening_screen_risk_ht">
+                                <input type="checkbox" id="chk_screening_screen_risk_ht"> เสี่ยงต่อการเป็นความดันโลหิตสูง
+                            </label>
+                            <label class="checkbox" for="chk_screening_screen_risk_dm">
+                                <input type="checkbox" id="chk_screening_screen_risk_dm"> เสี่ยงต่อการเป็นเบาหวาน
+                            </label>
+                            <label class="checkbox" for="chk_screening_screen_risk_stoke">
+                                <input type="checkbox" id="chk_screening_screen_risk_stoke"> เสี่ยงต่อการเป็นโรคหัวใจ
+                            </label>
+                            <label class="checkbox" for="chk_screening_screen_risk_other">
+                                <input type="checkbox" id="chk_screening_screen_risk_other"> อื่นๆ
+                            </label>
+                            <textarea id="txt_screening_screen_risk_other_detail" rows="3"></textarea>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane" id="tab_screening_lmp">
+                <blockquote>บันทึกข้อมูลการมีประจำเดือน (LMP)</blockquote>
+                <form action="#">
+                    <div class="row">
+                        <div class="col col-lg-3">
+                            <label class="control" for="sl_screening_lamp">การมาของประจำเดือน (LMP)</label>
+                            <select id="sl_screening_lamp" style="width: 250px;">
+                                <option value="">-- ไม่ระบุ --</option>
+                                <option value="0">ประจำเดือนไม่มา</option>
+                                <option value="1">ประจำเดือนมาปกติ (มีประจำเดือน)</option>
+                            </select>
+                        </div>
+                        <div class="col col-lg-2">
+                            <label for="txt_screening_lmp_start">วันที่ประจำเดือนมา</label>
+                            <input id="txt_screening_lmp_start" style="width: 100px;" type="text" data-type="date"
+                                   title="ระบุวันที่ รูปแบบ พ.ศ เช่น 28/02/2556" rel="tooltip" placeholder="วว/ดด/ปปปป">
+                        </div>
+                        <div class="col col-lg-2">
+                            <label for="txt_screening_lmp_finished">วันที่ประจำเดือนไม่มา</label>
+                            <input id="txt_screening_lmp_finished" style="width: 100px;" type="text" data-type="date"
+                                   title="ระบุวันที่ รูปแบบ พ.ศ เช่น 28/02/2556" rel="tooltip" placeholder="วว/ดด/ปปปป">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="tab-pane" id="tab_screening_consult">
+                <blockquote>บันทึกข้อมูลการให้คำแนะนำ</blockquote>
+                <form action="#">
+                    <legend>ข้อมูลการให้คำแนะนำ</legend>
+                    <div class="control-group">
+                        <div class="controls">
+                            <label class="checkbox" for="chk_screening_consult_drug">
+                                <input type="checkbox" id="chk_screening_consult_drug"> แนะนำในการใช้ยา
+                            </label>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="controls">
+                            <label class="checkbox" for="chk_screening_consult_activity">
+                                <input type="checkbox" id="chk_screening_consult_activity"> แนะนำการปฏิบัติตัวให้เหมาะสมกับโรค
+                            </label>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="controls">
+                            <label class="checkbox" for="chk_screening_consult_food">
+                                <input type="checkbox" id="chk_screening_consult_food"> แนะนำการรับประทานอาหาร
+                            </label>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="controls">
+                            <label class="checkbox" for="chk_screening_consult_appoint">
+                                <input type="checkbox" id="chk_screening_consult_appoint"> แนะนำการมาตรวจตามนัดหมาย
+                            </label>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="controls">
+                            <label class="checkbox" for="chk_screening_consult_exercise">
+                                <input type="checkbox" id="chk_screening_consult_exercise"> แนะนำการออกกำลังกาย
+                            </label>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="controls">
+                            <label class="checkbox" for="chk_screening_consult_complication">
+                                <input type="checkbox" id="chk_screening_consult_complication"> แนะนำการป้องกันภาวะแทรกซ้อน
+                            </label>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="controls">
+                            <label class="checkbox" for="chk_screening_consult_other_detail">
+                                <input type="checkbox" id="chk_screening_consult_other"> อื่นๆ
+                            </label>
+                            <textarea class="input-xlarge" id="chk_screening_consult_other_detail" rows="3"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            </div>
+            </div>
             <!-- end tab cc -->
-
+<br>
             <button type="button" class="btn btn-success" id="btn_save_screening"><i class="icon-save"></i> บันทึกคัดกรอง</button>
         </div>
         <div class="tab-pane" id="tab_diagnosis">
-            <table class="table table-hover" id="tbl_diag_list">
+            <blockquote>บันทึกข้อมูลการวินิจฉัยโรค โดยบันทึกได้ทั้ง ICD10 WHO และ ICD10-TM</blockquote>
+            <table class="table table-striped" id="tbl_diag_list">
                 <thead>
                 <tr>
+                    <th>#</th>
                     <th>รหัส</th>
                     <th>รายการ</th>
                     <th>ประเภทการวินิจฉัย</th>
@@ -478,15 +446,18 @@
                     <td>...</td>
                     <td>...</td>
                     <td>...</td>
+                    <td>...</td>
                 </tr>
                 </tbody>
             </table>
-            <button class="btn btn-success pull-right" id="btn_diag_new"><i class="icon-plus"></i> เพิ่มรายการ</button>
+            <button class="btn btn-success" rel="tooltip" title="เพิ่มรายการ" id="btn_diag_new"><i class="icon-plus-sign"></i></button>
         </div>
         <div class="tab-pane" id="tab_procedure">
-            <table class="table table-hover tabble-striped" id="tbl_proced_list">
+            <blockquote>บันทึกข้อมูลการให้หัตถการ โดยสามารถบันทึกได้ทั้ง ICD9-CM และ ICD10-TM</blockquote>
+            <table class="table table-striped" id="tbl_proced_list">
                 <thead>
                 <tr>
+                    <th>#</th>
                     <th>แผนก</th>
                     <th>รหัส</th>
                     <th>รายการ</th>
@@ -494,7 +465,7 @@
                     <th>เวลาเริ่ม</th>
                     <th>เวลาสิ้นสุด</th>
                     <th>ผู้ทำหัถการ</th>
-                    <th>#</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -507,25 +478,28 @@
                     <td>...</td>
                     <td>...</td>
                     <td>...</td>
+                    <td>...</td>
                 </tr>
                 </tbody>
             </table>
 
-            <button class="btn btn-success pull-right" id="btn_proced_new"><i class="icon-plus"></i> เพิ่มรายการ</button>
+            <button class="btn btn-success" rel="tooltip" title="เพิ่มรายการ" id="btn_proced_new"><i class="icon-plus-sign"></i></button>
 
         </div>
         <div class="tab-pane" id="tab_dental">
             xxx
         </div>
         <div class="tab-pane" id="tab_drug">
-            <table class="table table-hover" id="tbl_drug_list">
+            <blockquote>ระบุรายการยาที่จ่ายให้กับผู้รับบริการ</blockquote>
+            <table class="table table-striped" id="tbl_drug_list">
                 <thead>
                 <tr>
+                    <th>#</th>
                     <th>รายการ</th>
                     <th>ราคา</th>
                     <th>จำนวน</th>
                     <th>วิธีใช้</th>
-                    <th>#</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -535,29 +509,31 @@
                     <td>...</td>
                     <td>...</td>
                     <td>...</td>
+                    <td>...</td>
                 </tr>
                 </tbody>
             </table>
-            <div class="btn-group pull-right">
-                <button type="button" class="btn btn-success" id="btn_drug_new"><i class="icon-plus-sign"></i> เพิ่ม</button>
-                <!--
-                <button type="button" class="btn"><i class="icon-th-list"></i> กำหนดสูตร</button>
-                <button type="button" class="btn"><i class="icon-refresh"></i> Remed.</button>
-                -->
-                <button type="button" class="btn btn-danger" id="btn_drug_remove_bill"><i class="icon-trash"></i> ลบใบสั่งยา</button>
+            <div class="btn-group">
+                <button type="button" class="btn btn-success" id="btn_drug_new" rel="tooltip" title="เพิ่มรายการ"><i class="icon-plus-sign"></i></button>
+                <button type="button" class="btn btn-default" rel="tooltip" title="กำหนดสูตรยา"><i class="icon-th-list"></i></button>
+                <button type="button" class="btn btn-default"rel="tooltip" title="Remed."><i class="icon-exchange"></i></button>
             </div>
+            <button type="button" class="btn btn-success" rel="tooltip" title="รีเฟรชรายการใหม่" id="btn_drug_refresh"><i class="icon-refresh"></i></button>
+            <button type="button" class="btn btn-danger" rel="tooltip" title="ลบใบสั่งยา" id="btn_drug_remove_bill"><i class="icon-trash"></i></button>
         </div>
         <!-- Charge item -->
         <div class="tab-pane" id="tab_income">
-            <table class="table table-hover" id="tbl_charge_list">
+            <blockquote>รายการค่าใช้จ่ายนอกเนือจากยา และ หัตถการ</blockquote>
+            <table class="table table-striped" id="tbl_charge_list">
                 <thead>
                 <tr>
+                    <th>#</th>
                     <th>รหัส</th>
                     <th>รายการ</th>
                     <th>ราคา</th>
                     <th>จำนวน</th>
                     <th>รวม (บาท)</th>
-                    <th>#</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
@@ -568,16 +544,124 @@
                     <td>...</td>
                     <td>...</td>
                     <td>...</td>
+                    <td>...</td>
                 </tr>
                 </tbody>
             </table>
-            <div class="btn-group pull-right">
-                <button type="button" class="btn btn-success" id="btn_charge_new"><i class="icon-plus-sign"></i> เพิ่มรายการ</button>
-            </div>
+            <button type="button" class="btn btn-success" title="เพิ่มรายการใหม่" rel="tooltip" id="btn_charge_new"><i class="icon-plus-sign"></i></button>
+            <button type="button" class="btn btn-default" title="รีเฟรชรายการใหม่" rel="tooltip" id="btn_charge_refresh"><i class="icon-refresh"></i></button>
         </div>
         <!-- end charge item -->
+        <div class="tab-pane" id="tab_appoint">
+            <blockquote>ลงบันทึกการนัดผู้ป่วย</blockquote>
+            <table class="table table-striped" id="tbl_appoint_list">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>วันที่</th>
+                    <th>เหตุผลการนัด</th>
+                    <th>การวินิจฉัย (รหัส Z)</th>
+                    <th>แผนกที่นัด</th>
+                    <th>แพทย์ผู้นัด (Provider)</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>...</td>
+                    <td>...</td>
+                    <td>...</td>
+                    <td>...</td>
+                    <td>...</td>
+                    <td>...</td>
+                    <td>...</td>
+                </tr>
+                </tbody>
+            </table>
+            <button type="button" class="btn btn-success" id="btn_appoint_new"
+                title="เพิ่มรายการนัด" rel="tooltip"><i class="icon-plus-sign"></i></button>
+            <button type="button" class="btn btn-default" id="btn_appoint_refresh"
+                title="รีเฟรชรายการใหม่" rel="tooltip"><i class="icon-refresh"></i></button>
+        </div>
+        <div class="tab-pane" id="tab_refer">
+            <blockquote>บันทึกข้อมูลการรับส่งต่อ</blockquote>
+            <ul class="nav nav-tabs">
+
+                <li class="active"><a href="#tab_refer_out" data-toggle="tab"><i class="icon-share-sign"></i> ส่งต่อ (Refer Out)</a></li>
+                <li><a href="#tab_refer_in" data-toggle="tab"><i class="icon-share"></i> รับส่งต่อ (Refer In)</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane" id="tab_refer_in">
+
+                </div>
+                <div class="tab-pane active" id="tab_refer_out">
+                    <table class="table table-striped" id="tbl_refer_out_list">
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>เลขที่ส่งต่อ</th>
+                            <th>วันที่ส่ง</th>
+                            <th>สถานที่ส่ง</th>
+                            <th>การวินิจฉัย</th>
+                            <th>แพทย์ผู้ส่งต่อ</th>
+                            <th>สถานะ</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>...</td>
+                            <td>...</td>
+                            <td>...</td>
+                            <td>...</td>
+                            <td>...</td>
+                            <td>...</td>
+                            <td>...</td>
+                            <td>...</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <button type="button" class="btn btn-success" id="btn_new_refer_out"
+                            title="บันทึกส่งต่อ" rel="tooltip"><i class="icon-plus-sign"></i></button>
+                    <button type="button" class="btn btn-default" id="btn_appoint_refresh"
+                            title="รีเฟรชรายการใหม่" rel="tooltip"><i class="icon-refresh"></i></button>
+                </div>
+            </div>
+
+
+        </div>
     </div>
 </div>
+
+<div class="modal fade" id="mdl_new_refer_out">
+    <div class="modal-dialog" style="width: 960px; left: 35%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title"><i class="icon-share"></i> บันทึกส่งต่อผู้ป่วย [<span id="spn_refer_out_vn"></span>]</h4>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-danger" data-dismiss="modal"><i class="icon-off"></i> ปิดหน้าต่าง</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="mdl_new_appointment">
+    <div class="modal-dialog" style="width: 960px; left: 35%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title"><i class="icon-calendar"></i> ลงทะเบียนนัดผู้ป่วย [<span id="spn_appoint_vn"></span>]</h4>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-danger" data-dismiss="modal"><i class="icon-off"></i> ปิดหน้าต่าง</a>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- new drug allergy -->
 <div class="modal hide fade" id="modal_screening_allergy">
     <div class="modal-header">
@@ -679,312 +763,65 @@
 <!-- end drug allergy -->
 
 <!-- new diagnosis -->
-<div class="modal hide fade" id="mdl_diag_new">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4>เพิ่มรายการวินิจฉัยโรค</h4>
-    </div>
-    <div class="modal-body">
-        <form class="form-horizontal">
-            <div class="control-group">
-                <label class="control-label" for="txt_diag_query">รหัสการวินิจฉัยโรค</label>
-                <div class="controls">
-                    <input type="text" class="input-mini uneditable-input" disabled="disabled" id="txt_diag_query_code">
-                    <input type="text" id="txt_diag_query" class="input-xxlarge" placeholder="พิมพ์รหัส หรือ ชื่อโรค">
-                </div>
+<div class="modal fade" id="mdl_diag_new">
+    <div class="modal-dialog" style="width: 960px; left: 35%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title"><i class="icon-check-sign"></i> เพิ่มรายการวินิจฉัยโรค</h4>
             </div>
-            <div class="control-group">
-                <label class="control-label" for="sl_diag_type">ประเภทการวินิจฉัย</label>
-                <div class="controls">
-                    <select id="sl_diag_type" class="input-xlarge">
-                        <option value="">--</option>
-                        <?php foreach($diag_types as $t) echo '<option value="'.$t->code.'">'.$t->name.'</option>'; ?>
-                    </select>
-                </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-danger" data-dismiss="modal"><i class="icon-off"></i> ปิดหน้าต่าง</a>
             </div>
-            <div class="control-group">
-                <label class="control-label" for="sl_diag_clinic">คลินิก</label>
-                <div class="controls">
-                    <select id="sl_diag_clinic" class="input-xlarge">
-                        <option value="">--</option>
-                        <?php
-                        foreach($clinics as $t) {
-                            echo '<option value="'.$t->id.'">'.$t->name.'</option>';
-                        }
-                        ?>
-                    </select>
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="modal-footer">
-        <a href="#" class="btn btn-success" id="btn_diag_do_save"><i class="icon-plus"></i> เพิ่มรายการ</a>
-        <a href="#" class="btn btn-danger" data-dismiss="modal"><i class="icon-off"></i> ปิดหน้าต่าง</a>
-
+        </div>
     </div>
 </div>
 <!-- end new diagnosis -->
-<!-- new procedures -->
-<div class="modal hide fade" id="mdl_proced_new">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4>เพิ่มข้อมูลการให้หัตถการ</h4>
-    </div>
-    <div class="modal-body">
-        <form class="form-horizontal">
-            <input type="hidden" id="txt_proced_isupdate">
-            <div class="control-group">
-                <label class="control-label" for="txt_proced_query">หัตถการ</label>
-                <div class="controls">
-                    <input type="text" class="input-small uneditable-input" disabled="disabled" id="txt_proced_query_code">
-                    <input type="text" id="txt_proced_query" class="input-xxlarge" placeholder="พิมพ์รหัส หรือ ชื่อหัตถการ">
-                </div>
+<div class="modal fade" id="mdl_proced_new">
+    <div class="modal-dialog" style="width: 960px; left: 35%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title"><i class="icon-briefcase"></i> เพิ่มข้อมูลการทำหัตถการ [<span id="spn_procedure_vn"></span>]</h4>
             </div>
-            <div class="row-fluid">
-                <div class="span3">
-                    <div class="control-group">
-                        <label class="control-label" for="txt_proced_price">ราคา</label>
-                        <div class="controls">
-                            <div class="input-append">
-                                <input class="input-mini" data-type="number" id="txt_proced_price" type="text">
-                                <span class="add-on">บาท</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="span3">
-                    <div class="control-group">
-                        <label class="control-label" for="txt_proced_start_time">เวลาเริ่ม</label>
-                        <div class="controls">
-                            <input type="text" id="txt_proced_start_time" class="input-mini" data-type="time">
-                        </div>
-                    </div>
-                </div>
-                <div class="span3">
-                    <div class="control-group">
-                        <label class="control-label" for="txt_proced_end_time">เวลาสิ้นสุด</label>
-                        <div class="controls">
-                            <input type="text" id="txt_proced_end_time" class="input-mini" data-type="time">
-                        </div>
-                    </div>
-                </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-danger" data-dismiss="modal"><i class="icon-off"></i> ปิดหน้าต่าง</a>
             </div>
-            <div class="control-group">
-                <label class="control-label" for="sl_proced_clinic">คลินิก</label>
-                <div class="controls">
-                    <select id="sl_proced_clinic" class="input-xlarge">
-                        <option value="">--</option>
-                        <?php
-                        foreach($clinics as $t) {
-                            echo '<option value="'.$t->id.'">'.$t->name.'</option>';
-                        }
-                        ?>
-                    </select>
-                </div>
-            </div>
-            <div class="control-group">
-                <label class="control-label" for="sl_proced_provider">ผู้ทำหัตถการ</label>
-                <div class="controls">
-                    <select id="sl_proced_provider" class="input-xlarge">
-                        <option value="">--</option>
-                        <?php
-                        foreach($providers as $prov) {
-                            echo '<option value="'.$prov->id.'">'.$prov->name.'</option>';
-                        }
-                        ?>
-                    </select>
-                </div>
-            </div>
-
-        </form>
-    </div>
-    <div class="modal-footer">
-        <a href="#" class="btn btn-success" id="btn_proced_do_save"><i class="icon-plus"></i> เพิ่มรายการ</a>
-        <a href="#" class="btn btn-danger" data-dismiss="modal"><i class="icon-off"></i> ปิดหน้าต่าง</a>
-
+        </div>
     </div>
 </div>
-<!-- end new procedures -->
-
 
 <!-- new drug -->
-<div class="modal hide fade" id="mdl_drug_new">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4>เพิ่มรายการยา</h4>
-    </div>
-    <div class="modal-body">
-        <form class="form-horizontal">
-            <input type="hidden" id="drug_isupdate" value="0">
-            <input type="hidden" id="service_drug_id" value="">
-            <div class="control-group">
-                <label class="control-label" for="txt_drug_name">ชื่อยา/เวชภัณฑ์</label>
-                <div class="controls">
-                    <div class="input-append">
-                        <input type="hidden" id="txt_drug_id">
-                        <input id="txt_drug_name" class="input-xlarge uneditable-input" disabled="disabled" type="text" placeholder="คลิกปุ่มค้นหา">
-                        <button class="btn btn-info" type="button" id="btn_drug_show_search">
-                            <i class="icon-search"></i>
-                        </button>
-                    </div>
-                </div>
+<div class="modal fade" id="mdl_drug_new">
+    <div class="modal-dialog" style="width: 960px; left: 35%">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title"><i class="icon-plus-sign"></i> เพิ่ม/แก้ไขรายการยา [<span id="spn_drug_vn"></span>]</h4>
             </div>
-
-            <div class="control-group">
-                <label class="control-label" for="txt_drug_name">วิธีการใช้ยา</label>
-                <div class="controls">
-                    <div class="input-append">
-                        <input type="hidden" id="txt_drug_usage_id">
-                        <input id="txt_drug_usage_name" class="input-xlarge uneditable-input" disabled="disabled" type="text" placeholder="คลิกปุ่มค้นหา">
-                        <button class="btn btn-info" type="button" id="btn_drug_usage_show_search">
-                            <i class="icon-search"></i>
-                        </button>
-                    </div>
-                </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-danger" data-dismiss="modal"><i class="icon-off"></i> ปิดหน้าต่าง</a>
             </div>
-
-            <div class="control-group">
-                <label class="control-label" for="txt_drug_name">จำนวน</label>
-                <div class="controls">
-                    <input id="txt_drug_qty" class="input-mini" type="text" data-type="number" value="1">
-                </div>
-            </div>
-
-            <div class="control-group">
-                <label class="control-label" for="txt_drug_name">ราคา</label>
-                <div class="controls">
-                    <div class="input-append">
-                        <input class="input-mini" id="txt_drug_price" type="text" data-type="number">
-                        <span class="add-on">บาท</span>
-                    </div>
-                </div>
-            </div>
-
-        </form>
-    </div>
-    <div class="modal-footer">
-        <a href="#" class="btn btn-success" id="btn_drug_do_save"><i class="icon-plus"></i> เพิ่มรายการ/ปรับปรุง</a>
-        <a href="#" class="btn btn-danger" data-dismiss="modal"><i class="icon-off"></i> ปิดหน้าต่าง</a>
-
+        </div>
     </div>
 </div>
 <!-- end new drug -->
-
-<!-- new drug -->
-<div class="modal hide fade" id="mdl_drug_search">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4>เพิ่มรายการยา</h4>
-    </div>
-    <div class="modal-body">
-        <blockquote>ค้นหารายการยาที่ต้องการ โดยพิมพ์ชื่อยา เพื่อค้นหา</blockquote>
-        <form class="form-actions form-inline">
-            <label for="txt_drug_search_name">ค้นหา</label>
-            <div class="input-append">
-                <input id="txt_drug_search_name" class="input-xlarge" type="text" placeholder="พิมพ์ชื่อยา...">
-                <button class="btn btn-info" type="button" id="bnt_drug_do_search">
-                    <i class="icon-search"></i>
-                </button>
-            </div>
-        </form>
-        <table class="table table-hover" id="tbl_drug_search_result">
-            <thead>
-                <tr>
-                    <th>รหัส</th>
-                    <th>ชื่อ</th>
-                    <th>ราคา</th>
-                    <th>หน่วย</th>
-                    <th>ความแรง</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-    </div>
-    <div class="modal-footer">
-        <a href="#" class="btn btn-danger" data-dismiss="modal"><i class="icon-off"></i> ปิดหน้าต่าง</a>
-
-    </div>
-</div>
-
-    <!-- search drug usage -->
-<div class="modal hide fade" id="mdl_drug_usage_search">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4>เพิ่มรายการยา</h4>
-    </div>
-    <div class="modal-body">
-        <blockquote>ค้นหาวิธีการใช้ยา โดยพิมพ์ข้อความ หรือ รหัสการใช้ยา เพื่อค้นหา</blockquote>
-        <form class="form-actions form-inline">
-            <label for="txt_drug_search_name">ค้นหา</label>
-            <div class="input-append">
-                <input id="txt_drug_usage_search_query" class="input-xlarge" type="text" placeholder="พิมพ์วิธีการใช้/รหัสการใช้ยา...">
-                <button class="btn btn-info" type="button" id="bnt_drug_usage_do_search">
-                    <i class="icon-search"></i>
-                </button>
-            </div>
-        </form>
-        <table class="table table-hover" id="tbl_drug_usage_search_result">
-            <thead>
-            <tr>
-                <th>alias</th>
-                <th>วิธีการใช้</th>
-                <th>name1</th>
-                <th>name2</th>
-                <th>name3</th>
-            </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-    </div>
-    <div class="modal-footer">
-        <a href="#" class="btn btn-danger" data-dismiss="modal"><i class="icon-off"></i> ปิดหน้าต่าง</a>
-
-    </div>
-</div>
-
-    <!-- end search drug usage -->
-
 <!-- new charge item -->
-<div class="modal hide fade" id="mdl_charge_new">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4>เพิ่มรายการค่าใช้จ่าย</h4>
-    </div>
-    <div class="modal-body">
-        <form class="form-horizontal">
-            <input type="hidden" id="charge_isupdate" value="0">
-            <input type="hidden" id="service_charge_id" value="">
-            <div class="control-group">
-                <label class="control-label" for="txt_charge_name">รายการค่าใช้จ่าย</label>
-                <div class="controls">
-                    <input type="text" class="input-small uneditable-input" disabled="disabled" id="txt_charge_code">
-                    <input id="txt_charge_name" class="input-xxlarge" type="text" placeholder="พิมพ์ชื่อรายการ">
-
-                </div>
+<div class="modal fade" id="mdl_charge_new">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title"><i class="icon-shopping-cart"></i> เพิ่มรายการค่าใช้จ่าย [<span id="spn_charge_vn"></span>]</h4>
             </div>
-            <div class="control-group">
-                <label class="control-label" for="txt_charge_qty">จำนวน</label>
-                <div class="controls">
-                    <input id="txt_charge_qty" class="input-mini" type="text" data-type="number" value="1">
-                </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-danger" data-dismiss="modal"><i class="icon-off"></i> ปิดหน้าต่าง</a>
             </div>
-
-            <div class="control-group">
-                <label class="control-label" for="txt_charge_price">ราคา</label>
-                <div class="controls">
-                    <div class="input-append">
-                        <input class="input-mini" id="txt_charge_price" type="text" data-type="number">
-                        <span class="add-on">บาท</span>
-                    </div>
-                </div>
-            </div>
-
-        </form>
-    </div>
-    <div class="modal-footer">
-        <a href="#" class="btn btn-success" id="btn_charge_do_save"><i class="icon-plus"></i> เพิ่มรายการ/ปรับปรุง</a>
-        <a href="#" class="btn btn-danger" data-dismiss="modal"><i class="icon-off"></i> ปิดหน้าต่าง</a>
-
+        </div>
     </div>
 </div>
 <!-- end new charge item -->
@@ -2280,12 +2117,12 @@
     </div>
 </div>
 
-
-<!-- <script type="text/javascript" src="{{ base_url }}assets/apps/js/apps.services.js"></script> -->
 <script type="text/javascript">
     head.js(
             '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.js',
             '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.allergy.js',
+            '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.appointment.js',
+            '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.refer.js',
             '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.diagnosis.js',
             '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.procedures.js',
             '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.drugs.js',

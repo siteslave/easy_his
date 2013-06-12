@@ -2,9 +2,6 @@
  * Main application script
  */
  
-var base_url = 'http://his.local/',
-    site_url = 'http://his.local/index.php/';
-        
 var app = {
     showLoginLoading: function(){
         $('#divLoading').css('display', 'inline');
@@ -200,7 +197,7 @@ var app = {
     },
 
     go_to_url: function(url){
-        location.href = site_url + url;
+        location.href = site_url + '/' + url;
     },
     /**
      * Ajax
@@ -217,7 +214,7 @@ var app = {
 
         try{
             $.ajax({
-                url: site_url + url,
+                url: site_url +  '/' + url,
                 type: 'POST',
                 dataType: 'json',
 
@@ -251,25 +248,21 @@ var app = {
 
     },
 
+    strip: function(msg, len)
+    {
+        if(msg.length > len)
+        {
+            return msg.substr(0, 50) + '...';
+        }
+        else
+        {
+            return msg;
+        }
+    },
     confirm: function(msg, cb){
-        bootbox.dialog(msg, [
-            {
-                'label': 'ใช่ (Yes)',
-                'class': 'btn-success',
-                'icon': 'icon-ok',
-                'callback': function(){
-                    cb(true);
-                }
-            },
-            {
-                'label': 'ไม่ (No)',
-                'class': 'btn-danger',
-                'icon': 'icon-off',
-                'callback': function(){
-                    cb(false);
-                }
-            }
-        ]);
+        if(confirm(msg))
+            cb(true);
+        cb(false);
     },
 
     alert: function(msg, title){
@@ -285,7 +278,7 @@ var app = {
         });
     },
     set_first_selected: function(obj){
-        $(obj).find('option').first().attr('selected', 'selected');
+        $(obj).find('option').first().prop('selected', 'selected');
     },
 
     trim: function(string){
@@ -345,19 +338,11 @@ app.set_runtime = function()
         language: 'th'
     });
 
-    $('.timepicker').timepicker({
-        minuteStep: 1,
-        secondStep: 5,
-        showInputs: false,
-        //template: 'modal',
-        //modalBackdrop: true,
-        //showSeconds: true,
-        showMeridian: false
-    });
-
     $('input[data-type="time"]').mask("99:99");
+    $('input[data-type="date"]').mask("99/99/9999");
     $('input[data-type="year"]').mask("9999");
     $('input[data-type="number"]').numeric();
+    $('select[disabled]').css('background-color', 'white');
     $('input[disabled]').css('background-color', 'white');
     $('textarea[disabled]').css('background-color', 'white');
 
@@ -424,6 +409,14 @@ head.ready(function(){
             }
         });
     };
+
+    app.load_page = function(obj, url, script)
+    {
+        obj.find('.modal-dialog > .modal-content > .modal-body').load(site_url + url, function(){
+            $.getScript(base_url + script);
+        });
+    };
+
     app.set_providers = function(){
         $('#sl_providers').empty();
         app.get_providers(function(err, data){

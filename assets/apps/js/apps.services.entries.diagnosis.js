@@ -3,14 +3,8 @@ head.ready(function(){
 
     diags.modal = {
         show_new: function(){
-            $('#mdl_diag_new').modal({
-                backdrop: 'static'
-            }).css({
-                    width: 960,
-                    'margin-left': function() {
-                        return -($(this).width() / 2);
-                    }
-                });
+            app.load_page($('#mdl_diag_new'), '/pages/diagnosis', 'assets/apps/js/pages/diagnosis.js');
+            $('#mdl_diag_new').modal({keyboard: false});
         },
         hide_new: function(){
             $('#mdl_diag_new').modal('hide');
@@ -19,17 +13,6 @@ head.ready(function(){
 
     //ajax
     diags.ajax = {
-        save_diag_opd: function(data, cb){
-
-            var url = 'services/save_diag_opd',
-                params = {
-                    data: data
-                };
-
-            app.ajax(url, params, function(err, data){
-                return err ? cb(err) : cb(null, data);
-            });
-        },
         get_diag: function(vn, cb){
 
             var url = 'services/get_service_diag_opd',
@@ -55,14 +38,6 @@ head.ready(function(){
         }
     };
 
-    diags.clear_form = function(){
-        app.set_first_selected($('#sl_diag_type'));
-        app.set_first_selected($('#sl_diag_clinic'));
-        $('#txt_diag_query').val('');
-        $('#txt_diag_isupdate').val('');
-        $('#txt_diag_query_code').val('');
-    };
-
     diags.get_diag = function(){
 
         var vn = $('#vn').val();
@@ -74,46 +49,49 @@ head.ready(function(){
                 app.alert(err);
                 $('#tbl_diag_list > tbody').append(
                     '<tr>' +
-                        '<td colspan="6">ไม่พบรายการ</td>' +
+                        '<td colspan="7">ไม่พบรายการ</td>' +
                         '</tr>'
                 );
             }else{
                 if(_.size(data.rows)){
+                    var i = 1;
                     _.each(data.rows, function(v){
                         if(v.diag_type == '1'){
                             $('#tbl_diag_list > tbody').append(
                                 '<tr>' +
+                                    '<td><strong>'+ i +'</strong></td>' +
                                     '<td><strong>'+ v.code +'</strong></td>' +
-                                    '<td><strong>'+ v.diag_name +'</strong></td>' +
+                                    '<td><strong>'+ app.strip(v.diag_name, 80) +'</strong></td>' +
                                     '<td><strong>'+ '[' + v.diag_type + '] ' +v.diag_type_name +'</strong></td>' +
                                     '<td><strong>'+ v.provider_name +'</strong></td>' +
                                     '<td><strong>'+ v.clinic_name +'</strong></td>' +
-                                    '<td><a href="javascript:void(0);" class="btn" data-name="btn_diag_remove" data-code="'+ v.code +'" title="ลบรายการ">' +
-                                    '<i class="icon-remove"></i>' +
+                                    '<td><a href="javascript:void(0);" class="btn btn-danger" data-name="btn_diag_remove" data-code="'+ v.code +'" title="ลบรายการ">' +
+                                    '<i class="icon-trash"></i>' +
                                     '</a></td>' +
                                     '</tr>'
                             );
                         }else{
                             $('#tbl_diag_list > tbody').append(
                                 '<tr>' +
+                                    '<td>'+ i +'</td>' +
                                     '<td>'+ v.code +'</td>' +
-                                    '<td>'+ v.diag_name +'</td>' +
+                                    '<td>'+ app.strip(v.diag_name, 80) +'</td>' +
                                     '<td>'+ '[' + v.diag_type + '] ' +v.diag_type_name +'</td>' +
                                     '<td>'+ v.provider_name +'</td>' +
                                     '<td>'+ v.clinic_name +'</td>' +
-                                    '<td><a href="javascript:void(0);" class="btn" data-name="btn_diag_remove" data-code="'+ v.code +'" title="ลบรายการ">' +
-                                    '<i class="icon-remove"></i>' +
+                                    '<td><a href="javascript:void(0);" class="btn btn-danger" data-name="btn_diag_remove" data-code="'+ v.code +'" title="ลบรายการ">' +
+                                    '<i class="icon-trash"></i>' +
                                     '</a></td>' +
                                     '</tr>'
                             );
                         }
 
-
+                        i++;
                     });
                 }else{
                     $('#tbl_diag_list > tbody').append(
                         '<tr>' +
-                            '<td colspan="6">ไม่พบรายการ</td>' +
+                            '<td colspan="7">ไม่พบรายการ</td>' +
                             '</tr>'
                     );
                 }
@@ -122,74 +100,7 @@ head.ready(function(){
     }
 
     $('#btn_diag_new').click(function(){
-        diags.clear_form();
         diags.modal.show_new();
-    });
-
-    $('#mdl_diag_new').on('hidden', function(){
-        diags.clear_form();
-    });
-
-    //save diag
-    $('#btn_diag_do_save').click(function(){
-        var items = {};
-        items.code = $('#txt_diag_query_code').val();
-        items.diag_type = $('#sl_diag_type').val();
-        items.clinic = $('#sl_diag_clinic').val();
-
-        items.vn = $('#vn').val();
-
-        if(!items.code){
-            app.alert('กรุณาระบุ รหัสการวินิจฉัยโรค');
-        }else if(!items.diag_type){
-            app.alert('กรุณาระบุ ประเภทการวินิจฉัยโรค');
-        }else if(!items.clinic){
-            app.alert('กรุณาระบุ คลินิกที่ให้บริการ');
-        }else{
-            //do save
-            diags.ajax.save_diag_opd(items, function(err){
-                if(err){
-                    app.alert(err);
-                }else{
-                    app.alert('บันทึกข้อมูลเสร็จเรียบร้อยแล้ว');
-                    diags.get_diag();
-                    diags.modal.hide_new();
-                }
-            });
-        }
-    });
-
-    $('#txt_diag_query').typeahead({
-        ajax: {
-            url: site_url + 'basic/search_icd_ajax',
-            timeout: 500,
-            displayField: 'name',
-            triggerLength: 3,
-            preDispatch: function(query){
-                return {
-                    query: query,
-                    csrf_token: csrf_token
-                }
-            },
-
-            preProcess: function(data){
-                if(data.success){
-                    return data.rows;
-                }else{
-                    return false;
-                }
-            }
-        },
-        updater: function(data){
-            var d = data.split('#');
-            var name = d[1],
-                code = d[0];
-
-            $('#txt_diag_query_code').val(code);
-            $('#txt_diag_query').val(name);
-
-            return name;
-        }
     });
 
     $('a[href="#tab_diagnosis"]').click(function(){

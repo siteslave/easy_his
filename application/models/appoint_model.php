@@ -16,7 +16,7 @@ class Appoint_model extends CI_Model {
      */
     public $owner_id;
     public $user_id;
-    public $provider_id;
+    //public $provider_id;
     //-----------------------------------------------------------------------------------------------------------------
     public function get_list_with_clinic($data, $start, $limit)
     {
@@ -159,7 +159,7 @@ class Appoint_model extends CI_Model {
                 'aptype_id'     => new MongoId($data['type']),
                 'apclinic_id'   => new MongoId($data['clinic']),
                 'apdiag'        => $data['diag'],
-                'provider_id'   => new MongoId($this->provider_id),
+                'provider_id'   => new MongoId($data['provider']),
                 'user_id'       => new MongoId($this->user_id),
                 'owner_id'      => new MongoId($this->owner_id),
                 'visit_status'  => '2',
@@ -231,6 +231,7 @@ class Appoint_model extends CI_Model {
             ->where(array('_id' => new MongoId($data['id'])))
             ->set(array(
                 'apclinic_id'   => new MongoId($data['clinic']),
+                'provider_id'   => new MongoId($data['provider']),
                 'aptime'        => $data['time'],
                 'apdiag'        => $data['diag'],
                 'last_update'   => date('Y-m-d H:i:s')
@@ -256,11 +257,30 @@ class Appoint_model extends CI_Model {
 
     public function check_visit_exist($id)
     {
+        $this->mongo_db->add_index('appoints', array('visit_status' => -1));
+
         $rs = $this->mongo_db
             ->where(array('_id' => new MongoId($id), 'visit_status' => '1'))
             ->count('appoints');
 
         return $rs > 0 ? TRUE : FALSE;
+    }
+
+    public function get_appoint($vn, $start, $limit)
+    {
+        $this->mongo_db->add_index('appoints', array('apclinic_id' => -1));
+        $this->mongo_db->add_index('appoints', array('owner_id' => -1));
+        $this->mongo_db->add_index('appoints', array('apdate' => -1));
+
+        $rs = $this->mongo_db
+            ->where(array(
+                'vn'  => (string) $vn
+            ))
+            ->offset($start)
+            ->limit($limit)
+            ->get('appoints');
+
+        return $rs;
     }
 }
 

@@ -43,7 +43,6 @@ class Appoints extends CI_Controller
         $this->load->model('Service_model', 'service');
         $this->load->model('Basic_model', 'basic');
         $this->load->model('Person_model', 'person');
-
     }
     //------------------------------------------------------------------------------------------------------------------
     /*
@@ -128,29 +127,45 @@ class Appoints extends CI_Controller
                 $is_owner = $this->service->check_owner($data['vn'], $this->owner_id);
                 if($is_owner)
                 {
-                    $duplicated = $this->appoint->check_duplicate(to_string_date($data['date']), $data['type']);
-
-                    if($duplicated)
+                    if($data['isupdate'])
                     {
-                        $json = '{"success": false, "msg": "ข้อมูลซ้ำ กรุณาเลือกแผลกและประเภทการนัดใหม่"}';
-                    }
-                    else
-                    {
-                        $this->appoint->provider_id = $this->provider_id;
-                        $this->appoint->user_id     = $this->user_id;
-                        $this->appoint->owner_id    = $this->owner_id;
-
-                        $rs = $this->appoint->do_register($data);
-
+                        $rs = $this->appoint->update($data);
                         if($rs)
                         {
                             $json = '{"success": true}';
                         }
                         else
                         {
-                            $json = '{"success": false, "msg": "Can\'t save appointment."}';
+                            $json = '{"success": false, "msg": "ไม่สามารถปรับปุงข้อมูลการนัดได้"}';
                         }
                     }
+                    else
+                    {
+                        $duplicated = $this->appoint->check_duplicate(to_string_date($data['date']), $data['type']);
+
+                        if($duplicated)
+                        {
+                            $json = '{"success": false, "msg": "ข้อมูลซ้ำ กรุณาเลือกแผลกและประเภทการนัดใหม่"}';
+                        }
+                        else
+                        {
+                            //$this->appoint->provider_id = $this->provider_id;
+                            $this->appoint->user_id     = $this->user_id;
+                            $this->appoint->owner_id    = $this->owner_id;
+
+                            $rs = $this->appoint->do_register($data);
+
+                            if($rs)
+                            {
+                                $json = '{"success": true}';
+                            }
+                            else
+                            {
+                                $json = '{"success": false, "msg": "ไม่สามารถบันทึกข้อมูลการนัดได้"}';
+                            }
+                        }
+                    }
+
                 }
                 else
                 {
@@ -256,6 +271,7 @@ class Appoints extends CI_Controller
         }
 
     }
+
     public function get_total_without_clinic()
     {
         $is_ajax = $this->input->is_ajax_request();
@@ -510,6 +526,65 @@ class Appoints extends CI_Controller
         {
             show_error('Not ajax.', 404);
         }
+    }
+
+    public function get_appoint()
+    {
+
+        $is_ajax = $this->input->is_ajax_request();
+
+        if($is_ajax)
+        {
+            $vn   = $this->input->post('vn');
+            $start  = $this->input->post('start');
+            $stop   = $this->input->post('stop');
+
+            $start  = empty($start) ? 0 : $start;
+            $stop   = empty($stop) ? 25 : $stop;
+
+            $limit  = (int) $stop - (int) $start;
+
+            $rs = $this->appoint->get_appoint($vn, $start, $limit);
+
+            if($rs)
+            {
+                $arr_result = array();
+
+                foreach($rs as $r)
+                {
+                    $obj = new stdClass();
+
+                    $obj->clinic_name   = get_clinic_name(get_first_object($r['apclinic_id']));
+                    $obj->clinic_id     = get_first_object($r['apclinic_id']);
+                    $obj->aptype_id     = get_first_object($r['aptype_id']);
+                    $obj->provider_name = get_provider_name_by_id($r['provider_id']);
+                    $obj->apdate_thai   = from_mongo_to_thai_date($r['apdate']);
+                    $obj->apdate_js     = to_js_date($r['apdate']);
+                    $obj->aptime        = $r['aptime'];
+                    $obj->aptype_name   = get_appoint_type_name($r['aptype_id']);
+                    $obj->diag          = $r['apdiag'] . ' : ' . get_diag_name($r['apdiag']);
+                    $obj->id            = get_first_object($r['_id']);
+                    $obj->vn            = $r['vn'];
+                    $obj->hn            = $r['hn'];
+
+                    $arr_result[] = $obj;
+                }
+
+                $rows = json_encode($arr_result);
+                $json = '{"success": true, "rows": '.$rows.'}';
+            }
+            else
+            {
+                $json = '{"success": false, "msg": "No record found."}';
+            }
+
+            render_json($json);
+        }
+        else
+        {
+            show_error('Not ajax.', 404);
+        }
+
     }
 }
 
