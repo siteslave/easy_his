@@ -90,12 +90,7 @@ head.ready(function(){
         show_register: function(){
             $('#modal_new_item').modal({
                 backdrop: 'static'
-            }).css({
-                    width: 760,
-                    'margin-left': function() {
-                        return -($(this).width() / 2);
-                    }
-                });
+            });
         },
         hide_register: function(){
             $('#modal_new_item').modal('hide');
@@ -112,6 +107,7 @@ head.ready(function(){
         $('#txt_reg_name').val('');
         $('#txt_reg_price').val('');
         $('#txt_reg_cost').val('');
+        $('#txt_reg_qty').val('');
         $('#txt_id').val('');
     };
 
@@ -120,10 +116,15 @@ head.ready(function(){
 
         items.price = $('#txt_reg_price').val();
         items.id = $('#txt_id').val();
+        items.qty = $('#txt_reg_qty').val();
 
        if(!items.price)
         {
             app.alert('กรุณาระบุราคา');
+        }
+        else if(!items.qty)
+        {
+            app.alert('กรุณาระบุจำนวนคงเหลือ');
         }
         else
         {
@@ -156,16 +157,18 @@ head.ready(function(){
             if(err){
                 app.alert(err);
             }else{
-                $('#main_paging > ul').paging(data.total, {
+                $('#main_paging').paging(data.total, {
                     format: " < . (qq -) nnncnnn (- pp) . >",
                     perpage: app.record_per_page,
                     lapping: 1,
-                    page: 1,
+                    page: app.get_cookie('income_index_paging'),
                     onSelect: function(page){
+                        app.set_cookie('income_index_paging', page);
+
                         income.ajax.get_list(this.slice[0], this.slice[1], function(err, data){
                             if(err){
                                 app.alert(err);
-                                $('#tbl_list > tbody').append('<tr><td colspan="7">ไม่พบข้อมูล</td></td></tr>');
+                                $('#tbl_list > tbody').append('<tr><td colspan="8">ไม่พบข้อมูล</td></td></tr>');
                             }else{
                                 income.set_list(data);
                             }
@@ -242,16 +245,18 @@ head.ready(function(){
             if(err){
                 app.alert(err);
             }else{
-                $('#main_paging > ul').paging(data.total, {
+                $('#main_paging').paging(data.total, {
                     format: " < . (qq -) nnncnnn (- pp) . >",
                     perpage: app.record_per_page,
                     lapping: 1,
-                    page: 1,
+                    page: app.get_cookie('income_index_filter_paging'),
                     onSelect: function(page){
+                        app.set_cookie('income_index_filter_paging', page);
+
                         income.ajax.get_filter_list(inc, this.slice[0], this.slice[1], function(err, data){
                             if(err){
                                 app.alert(err);
-                                $('#tbl_list > tbody').append('<tr><td colspan="7">ไม่พบข้อมูล</td></td></tr>');
+                                $('#tbl_list > tbody').append('<tr><td colspan="8">ไม่พบข้อมูล</td></td></tr>');
                             }else{
                                 income.set_list(data);
                             }
@@ -323,26 +328,25 @@ head.ready(function(){
 
         if(!data.rows)
         {
-            $('#tbl_list > tbody').append('<tr><td colspan="7">ไม่พบข้อมูล</td></td></tr>');
+            $('#tbl_list > tbody').append('<tr><td colspan="8">ไม่พบข้อมูล</td></td></tr>');
         }
         else
         {
             _.each(data.rows, function(v)
             {
-                var name = v.name.length > 60 ? v.name.substr(0, 60) + '...' : v.name;
-                var income_name = v.income_name.length > 60 ? v.income_name.substr(0, 40) + '...' : v.income_name;
 
                 $('#tbl_list > tbody').append(
                     '<tr>' +
                         '<td>'+ v.code +'</td>' +
-                        '<td>'+ name +'</td>' +
-                        '<td>'+ income_name +'</td>' +
+                        '<td>'+ app.strip(v.name, 60) +'</td>' +
+                        '<td>'+ app.strip(v.income_name, 40) +'</td>' +
                         '<td>'+ app.add_commars(v.cost) +'</td>' +
                         '<td>'+ app.add_commars(v.price) +'</td>' +
                         '<td>'+ v.unit +'</td>' +
+                        '<td>'+ app.add_commars_with_out_decimal(v.qty) +'</td>' +
                         '<td><div class="btn-group">' +
-                        '<a href="javascript:void(0);" data-name="btn_edit" class="btn" data-id="'+ v.id +'" title="แก้ไขข้อมูล" ' +
-                        'data-vname="'+ v.name +'" data-price="'+ v.price +'" data-cost="'+ v.cost +'" data-price="'+ v.price +'">' +
+                        '<a href="javascript:void(0);" data-name="btn_edit" class="btn btn-success btn-small" data-id="'+ v.id +'" title="แก้ไขข้อมูล" ' +
+                        'data-vname="'+ v.name +'" data-price="'+ v.price +'" data-qty="'+ v.qty +'" data-cost="'+ v.cost +'" data-price="'+ v.price +'">' +
                         '<i class="icon-edit"></i></a>' +
                         '</div></td>' +
                         '</tr>'
@@ -355,11 +359,13 @@ head.ready(function(){
         var id = $(this).data('id'),
             name = $(this).data('vname'),
             price = $(this).data('price'),
-            cost = $(this).data('cost');
+            cost = $(this).data('cost'),
+            qty = $(this).data('qty');
 
         $('#txt_reg_name').val(name);
         $('#txt_reg_price').val(price);
         $('#txt_reg_cost').val(cost);
+        $('#txt_reg_qty').val(qty);
         $('#txt_id').val(id);
 
         income.modal.show_register();
@@ -374,7 +380,7 @@ head.ready(function(){
         var inc = $('#sl_incomes').val();
         if(!inc)
         {
-            app.alert('กรุณาระบุกลุ่มค่าใช้จ่าย');
+            income.get_list();
         }
         else
         {

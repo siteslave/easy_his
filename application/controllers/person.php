@@ -57,7 +57,7 @@ class Person extends CI_Controller
 
     public function register($house_id=''){
         if(empty($house_id)){
-            show_error('No house id found.', 505);
+            show_error('House id not found.', 404);
         }else{
             $educations     = $this->basic->get_education();
             $titles         = $this->basic->get_title();
@@ -329,7 +329,18 @@ class Person extends CI_Controller
         }else{
             $person_exist = $this->person->check_person_exist($data['cid']);
             if($person_exist){
-                $json = '{"success": false, "msg": "CID duplicate."}';
+                //$json = '{"success": false, "msg": "CID duplicate."}';
+                //check owner
+                $is_owner = $this->person->check_owner_with_cid($data['cid']);
+                if($is_owner)
+                {
+                    $json = '{"success": false, "msg": "เลขบัตรประชาชนซ้ำ (กรุณาตรวจสอบ)"}';
+                }
+                else
+                {
+                    $this->person->save_person_typearea_with_cid($data['cid'], $data['typearea']);
+                    $json = '{"success": true}';
+                }
             }else{
                 $data['hn'] = generate_serial('HN');
 
@@ -360,46 +371,32 @@ class Person extends CI_Controller
 
         if(empty($data)){
 
-            $success = FALSE;
-            $msg = "No data found";
+            $json = '{"success": false, "msg": "ไม่พบข้อมูลที่ต้องการบันทึก"}';
 
         }else{
 
             if($data['old_cid'] == $data['cid']){
 
-                $result = $this->do_update_person($data);
+                $rs = $this->do_update_person($data);
 
-                if($result){
-                    $success = TRUE;
-                }else{
-                    $success = FALSE;
-                    $msg = "Database model error.";
-                }
+                $json = $rs ? '{"success": tru}' : '{"success": false, "msg": "ไม่สามารถปรับปรุงข้อมูลได้"}';
 
             }else{
                 //check cid
                 $person_exist = $this->person->check_person_exist($data['cid']);
 
                 if($person_exist){
-                    $success = FALSE;
-                    $msg = "CID duplicate.";
+                    $json = '{"success": false, "msg": "เลขบัตรประชาชนซ้ำ"}';
                 }else{
-                    $result = $this->do_update_person($data);
-                    if($result){
-                        $this->person->update_person_typearea($data['hn'], $data['typearea'], $this->owner_id);
-                        $success = TRUE;
+                    $rs = $this->do_update_person($data);
+                    if($rs){
+                        $this->person->update_person_typearea($data['hn'], $data['typearea']);
+                        $json = '{"success": true}';
                     }else{
-                        $success = FALSE;
-                        $msg = "Update failed, please check your data/parameters";
+                        $json = '{"success": false, "msg": "ไม่สามารถปรับปรุงรายการได้"}';
                     }
                 }
             }
-        }
-
-        if($success){
-            $json = '{"success": true}';
-        }else{
-            $json = '{"success": false, "msg": "'.$msg.'"}';
         }
 
         render_json($json);
@@ -643,31 +640,32 @@ class Person extends CI_Controller
         $data = $this->input->post('data');
 
         if(empty($data)){
-            $json = '{"success": false, "msg": "No data for save."}';
+            $json = '{"success": false, "msg": "ไม่พบข้อมูลที่ต้องการบันทึก"}';
         }else{
 
             //if is update
-            if($data['isupdate']){
+            if(!empty($data['isupdate'])){
                 //do update
                 $result = $this->person->update_drug_allergy($data);
 
                 if($result){
-                    $json = '{"success": true, "msg": "updated"}';
+                    $json = '{"success": true}';
                 }else{
-                    $json = '{"success": false, "msg": "Database error, please check your data."}';
+                    $json = '{"success": false, "msg": "ไม่สามารถปรับปรุงรายการได้"}';
                 }
 
             }else{
                 //check drug duplicate
                 $duplicated = $this->person->check_drug_allergy_duplicate($data['hn'], $data['drug_id']);
                 if($duplicated){
-                    $json = '{"success": false, "msg": "Drug duplicated, please check drug"}';
+                    $json = '{"success": false, "msg": "รายการยาซ้ำ กรุณาตรวจสอบ"}';
                 }else{
                     $result = $this->person->save_drug_allergy($data);
+
                     if($result){
-                        $json = '{"success": true, "msg": "inserted"}';
+                        $json = '{"success": true}';
                     }else{
-                        $json = '{"success": false, "msg": "Database error, please check your data."}';
+                        $json = '{"success": false, "msg": "ไม่สามารถบันทึกรายการได้"}';
                     }
                 }
             }
@@ -681,9 +679,6 @@ class Person extends CI_Controller
         if(empty($hn)){
             $json = '{"success": false, "msg": "No person id found."}';
         }else{
-
-            $this->basic->owner_id = $this->owner_id;
-
             $result = $this->person->get_drug_allergy_list($hn);
 
             if($result){
@@ -694,7 +689,8 @@ class Person extends CI_Controller
                     foreach($result[0]['allergies'] as $r){
                         $obj = new stdClass();
                         $obj->drug_id           = get_first_object($r['drug_id']);
-                        $obj->drug_detail       = $this->basic->get_drug_detail($obj->drug_id);
+                        $obj->drug_name         = get_drug_name($obj->drug_id);
+                        //$obj->drug_detail       = $this->basic->get_drug_detail($obj->drug_id);
                         $obj->record_date       = to_js_date($r['record_date']);
                         $obj->diag_type_id      = get_first_object($r['diag_type_id']);
                         $obj->diag_type_name    = get_drug_allergy_diag_type_name($obj->diag_type_id);
@@ -706,6 +702,7 @@ class Person extends CI_Controller
                         $obj->informant_name    = get_informant_name($r['informant_id']);
                         $obj->hospcode          = $r['hospcode'];
                         $obj->hospname          = get_hospital_name($obj->hospcode);
+                        $obj->user_fullname     = get_user_fullname(get_first_object($r['user_id']));
 
                         $arr_result[] = $obj;
                     }
@@ -713,11 +710,11 @@ class Person extends CI_Controller
                     $rows = json_encode($arr_result);
                     $json = '{"success": true, "rows": '.$rows.'}';
                 }else{
-                    $json = '{"success": false, "msg": "No result found"}';
+                    $json = '{"success": false, "msg": "ไม่พบข้อมูล"}';
                 }
 
             }else{
-                $json = '{"success": false, "msg": "No result found."';
+                $json = '{"success": false, "msg": "ไม่พบข้อมูล"';
             }
         }
 
@@ -888,16 +885,16 @@ class Person extends CI_Controller
                 if(isset($rs[0]['chronics'])){
                     foreach($rs[0]['chronics'] as $r){
                         $obj = new stdClass();
-                        $obj->diag_date = to_js_date($r['diag_date']);
+                        $obj->diag_date             = from_mongo_to_thai_date($r['diag_date']);
                         $obj->chronic               = $r['chronic'];
                         $obj->chronic_name          = get_diag_name($obj->chronic);
-                        $obj->discharge_date        = to_js_date($r['discharge_date']);
+                        $obj->discharge_date        = from_mongo_to_thai_date($r['discharge_date']);
                         $obj->discharge_type        = get_first_object($r['discharge_type']);
                         $obj->discharge_type_name   = get_chronic_discharge_type_name($obj->discharge_type);
-                        $obj->hosp_dx_code = $r['hosp_dx'];
-                        $obj->hosp_rx_code = $r['hosp_rx'];
-                        $obj->hosp_dx_name = get_hospital_name($obj->hosp_dx_code);
-                        $obj->hosp_rx_name = get_hospital_name($obj->hosp_rx_code);
+                        $obj->hosp_dx_code          = $r['hosp_dx'];
+                        $obj->hosp_rx_code          = $r['hosp_rx'];
+                        $obj->hosp_dx_name          = get_hospital_name($obj->hosp_dx_code);
+                        $obj->hosp_rx_name          = get_hospital_name($obj->hosp_rx_code);
 
                         $arr_result[] = $obj;
                     }
@@ -974,7 +971,6 @@ class Person extends CI_Controller
         render_json($json);
 
     }
-
     //------------------------------------------------------------------------------------------------------------------
     /*
      * Search person
@@ -1032,6 +1028,89 @@ class Person extends CI_Controller
                     $obj->sex           = $r['sex'] == '1' ? 'ชาย' : 'หญิง';
                     $obj->age           = count_age($r['birthdate']);
                     $obj->typearea      = $this->person->get_typearea($r['hn']);
+
+                    $arr_result[] = $obj;
+                }
+
+                $rows = json_encode($arr_result);
+                $json = '{"success": true, "rows": '.$rows.'}';
+            }
+            else
+            {
+                $json = '{"success": false, "msg ": "ไม่พบรายการ"}';
+            }
+
+        }
+
+        render_json($json);
+    }
+
+
+    public function search2()
+    {
+        $query = $this->input->post('query');
+
+        if(is_numeric($query))
+        {
+            $str = (string)($query);
+            if(strlen($str) == 13) //CID
+            {
+                $filter = 0;
+            }
+            else
+            {
+                $filter = 1;
+            }
+        }
+        else
+        {
+            $filter = 2;
+        }
+
+        if(empty($query))
+        {
+            $json = '{"success": false, "msg": "No query found"}';
+        }
+        else
+        {
+
+            if($filter == '0') //by cid
+            {
+                $rs = $this->person->search_person_by_cid($query);
+            }
+            else if($filter == '2')
+            {
+                //get hn by first name and last name
+                $name = explode(' ', $query); // [0] = first name, [1] = last name
+
+                $first_name = count($name) == 2 ? $name[0] : '';
+                $last_name = count($name) == 2 ? $name[1] : '';
+
+                $rs = $this->person->search_person_by_first_last_name($first_name, $last_name);
+            }
+            else
+            {
+                $rs = $this->person->search_person_by_hn($query);
+            }
+
+            if($rs)
+            {
+
+                $arr_result = array();
+
+                foreach($rs as $r)
+                {
+                    $obj = new stdClass();
+                    $obj->id            = get_first_object($r['_id']);
+                    $obj->hn            = $r['hn'];
+                    $obj->cid           = $r['cid'];
+                    $obj->first_name    = $r['first_name'];
+                    $obj->last_name     = $r['last_name'];
+                    $obj->birthdate     = $r['birthdate'];
+                    $obj->sex           = $r['sex'] == '1' ? 'ชาย' : 'หญิง';
+                    $obj->age           = count_age($r['birthdate']);
+                    $obj->typearea      = $this->person->get_typearea($r['hn']);
+                    $obj->address       = get_address($obj->hn);
 
                     $arr_result[] = $obj;
                 }

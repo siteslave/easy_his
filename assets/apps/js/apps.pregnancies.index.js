@@ -140,9 +140,6 @@ head.ready(function(){
                 });
             }
         }
-
-
-
     };
 
     preg.modal = {
@@ -150,34 +147,29 @@ head.ready(function(){
         {
             $('#mdl_search_person').modal({
                 backdrop: 'static'
-            }).css({
-                    width: 960,
-                    'margin-left': function() {
-                        return -($(this).width() / 2);
-                    }
-                });
+            });
         },
         show_labor: function()
         {
             $('#mdl_labor').modal({
                 backdrop: 'static'
-            }).css({
-                    width: 960,
-                    'margin-left': function() {
-                        return -($(this).width() / 2);
-                    }
-                });
+            });
         },
         show_anc_info: function()
         {
             $('#mdl_anc_info').modal({
                 backdrop: 'static'
-            }).css({
-                    width: 960,
-                    'margin-left': function() {
-                        return -($(this).width() / 2);
-                    }
-                });
+            });
+        },
+        show_service_anc: function(hn)
+        {
+            app.load_page($('#mdl_anc'), '/pages/service_anc/' + hn , 'assets/apps/js/pages/service_anc.js');
+            $('#mdl_anc').modal({keyboard: false});
+        },
+        show_mother_care: function(hn, vn)
+        {
+            app.load_page($('#mdl_postnatal'), '/pages/postnatal/' + hn + '/' + vn , 'assets/apps/js/pages/postnatal.js');
+            $('#mdl_postnatal').modal({keyboard: false});
         },
         hide_register: function()
         {
@@ -216,18 +208,35 @@ head.ready(function(){
                         '<td>'+ v.preg_status +'</td>' +
                         '<td>' +
                         '<div class="btn-group">' +
-                        '<a href="javascript:void(0);" class="btn" data-fullname="'+ v.first_name + ' ' + v.last_name +'" ' +
+                        '<button type="button" class="btn btn-success dropdown-toggle btn-small" data-toggle="dropdown">' +
+                        '<i class="icon-th-list"></i> <span class="caret"></span>' +
+                        '</button>' +
+                        '<ul class="dropdown-menu">' +
+                        '<li>' +
+                        '<a href="javascript:void(0);" data-fullname="'+ v.first_name + ' ' + v.last_name +'" ' +
                         'data-birthdate="'+app.mongo_to_thai_date(v.birthdate)+'" data-age="'+ v.age+'" data-hn="'+ v.hn+'" ' +
                         'data-anc_code="'+ v.anc_code+'" data-gravida="'+ v.gravida +'" data-name="labor" data-hn="' + v.hn + '" ' +
-                        'data-cid="' + v.cid +'" title="ข้อมูลการคลอด"><i class="icon-check"></i></a>' +
-                        '<a href="javascript:void(0);" class="btn" data-fullname="'+ v.first_name + ' ' + v.last_name +'" ' +
+                        'data-cid="' + v.cid +'"><i class="icon-check"></i> ข้อมูลการคลอด</a>' +
+                        '</li>' +
+                        '<li>' +
+                        '<a href="javascript:void(0);" data-fullname="'+ v.first_name + ' ' + v.last_name +'" ' +
                         'data-birthdate="'+app.mongo_to_thai_date(v.birthdate)+'" data-age="'+ v.age+'" data-hn="'+ v.hn+'" ' +
                         'data-anc_code="'+ v.anc_code+'" data-gravida="'+ v.gravida +'" data-name="anc_info" data-hn="' + v.hn + '" ' +
-                        'data-cid="' + v.cid +'" title="ข้อมูลการฝากครรภ์"><i class="icon-book"></i></a>' +
+                        'data-cid="' + v.cid +'"><i class="icon-book"></i> ข้อมูลการฝากครรภ์</a>' +
+                        '</li>' +
+                        '<li>' +
+                        '<a href="javascript:void(0);" data-name="btn_service_anc" data-hn="'+ v.hn +'"><i class="icon-calendar"></i> ฝากครรภ์ (จากที่อื่น)</a>' +
+                        '</li>' +
+                        '<li>' +
+                        '<a href="javascript:void(0);" data-name="btn_mother_care" data-hn="'+ v.hn +'"><i class="icon-user-md"></i> เยี่ยมหลังคลอด</a>' +
+                        '</li>' +
+                        '</ul>' +
                         '</div>' +
                         '</td>' +
                         '</tr>'
                 );
+
+                $('[rel="tooltip"]').tooltip();
             });
         }else{
             $('#tbl_list > tbody').append(
@@ -235,6 +244,23 @@ head.ready(function(){
             );
         }
     };
+
+    $(document).on('click', 'a[data-name="btn_mother_care"]', function(e){
+        var hn = $(this).data('hn');
+
+        preg.modal.show_mother_care(hn, '');
+
+        e.preventDefault();
+    });
+
+    $(document).on('click', 'a[data-name="btn_service_anc"]', function(e){
+        var hn = $(this).data('hn');
+
+        preg.modal.show_service_anc(hn);
+
+        e.preventDefault();
+    });
+
     preg.get_list = function(){
         $('#main_paging').fadeIn('slow');
         $('#tbl_list > tbody').empty();
@@ -245,12 +271,14 @@ head.ready(function(){
                     '<tr><td colspan="10">ไม่พบรายการ</td></tr>'
                 );
             }else{
-                $('#main_paging > ul').paging(data.total, {
+                $('#main_paging').paging(data.total, {
                     format: " < . (qq -) nnncnnn (- pp) . >",
                     perpage: app.record_per_page,
                     lapping: 1,
-                    page: 1,
+                    page: app.get_cookie('preg_paging'),
                     onSelect: function(page){
+                        app.set_cookie('preg_paging', page);
+
                         preg.ajax.get_list(this.slice[0], this.slice[1], function(err, data){
                             if(err){
                                 app.alert(err);
@@ -371,7 +399,7 @@ head.ready(function(){
                         '<td>'+ app.mongo_to_thai_date(v.birthdate) +'</td>' +
                         '<td>'+ v.age +'</td>' +
                         '<td>'+ v.sex +'</td>' +
-                        '<td><a href="#" class="btn" data-hn="'+ v.hn + '" data-sex="'+ v.sex +'" ' +
+                        '<td><a href="#" class="btn btn-success btn-small" data-hn="'+ v.hn + '" data-sex="'+ v.sex +'" ' +
                         'data-name="btn_selected_person" data-typearea="'+ v.typearea +'">' +
                         '<i class="icon-ok"></i></a></td>' +
                         '</tr>');
@@ -567,6 +595,14 @@ head.ready(function(){
         {
             app.alert('กรุณาระบุประเภทของผู้ทำคลอด');
         }
+        else if(!$('#txt_labor_hospname').val())
+        {
+            app.alert('กรุณาระบุรหัสสถานพบาลที่ทำคลอด');
+        }
+        else if(!$('#txt_labor_bresult_icdname').val())
+        {
+            app.alert('กรุณาระบุรหัสการวินิจฉัยโรค');
+        }
         else
         {
             //do save
@@ -585,10 +621,13 @@ head.ready(function(){
         }
     });
 
+    $('#txt_labor_bresult_icdname').on('keyup', function(){
+        $('#txt_labor_bresult_icdcode').val('');
+    });
     //search diagnosis
-    $('#txt_labor_bresult_icdcode').typeahead({
+    $('#txt_labor_bresult_icdname').typeahead({
         ajax: {
-            url: site_url + 'basic/search_icd_ajax',
+            url: site_url + '/basic/search_icd_ajax',
             timeout: 500,
             displayField: 'name',
             triggerLength: 3,
@@ -613,16 +652,23 @@ head.ready(function(){
                 name = d[1];
 
             $('#txt_labor_bresult_icdcode').val(code);
-            $('#txt_labor_bresult_icdname').val(name);
 
-            return code;
+            return name;
         }
+    })
+
+    $('#txt_labor_hospcode').on('keyup', function(){
+        $('#txt_labor_hospname').val('');
     });
 
     //search hospital
-    $('#txt_labor_hospcode').typeahead({
+    $('#txt_labor_hospname').on('keyup', function(){
+        $('#txt_labor_hospcode').val('');
+    });
+
+    $('#txt_labor_hospname').typeahead({
         ajax: {
-            url: site_url + 'basic/search_hospital_ajax',
+            url: site_url + '/basic/search_hospital_ajax',
             timeout: 500,
             displayField: 'fullname',
             triggerLength: 3,
@@ -647,9 +693,8 @@ head.ready(function(){
                 name = d[0];
 
             $('#txt_labor_hospcode').val(code);
-            $('#txt_labor_hospname').val(name);
 
-            return code;
+            return name;
         }
     });
 
@@ -710,7 +755,7 @@ head.ready(function(){
                     var res = v.anc_result == '1' ? 'ปกติ' : v.anc_result == '2' ? 'ผิดปกติ' : 'ไม่ทราบ';
                     $('#tbl_anc_history > tbody').append(
                         '<tr>' +
-                            '<td>' + app.mongo_to_thai_date(v.date_serv) + '</td>' +
+                            '<td>' + app.clear_null(v.date_serv) + '</td>' +
                             '<td>' + app.clear_null(v.owner_name) + '</td>' +
                             //'<td>' + app.clear_null(data.gravida) + '</td>' +
                             '<td>' + app.clear_null(v.anc_no) + '</td>' +

@@ -81,6 +81,27 @@ class Basic_model extends CI_Model
         return $arr_result;
     }
 
+    public function search_drug_usage_by_alias_ajax($query)
+    {
+        $this->mongo_db->add_index('ref_drug_usages', array('alias_code' => -1));
+        $this->mongo_db->add_index('ref_drug_usages', array('name1' => -1));
+
+        $result = $this->mongo_db
+            ->like('alias_code', $query)
+            ->limit(50)
+            ->get('ref_drug_usages');
+
+        $arr_result = array();
+
+        foreach($result as $r){
+            $obj = new stdClass();
+            $obj->name = $r['alias_code'] . '#' . $r['name1'] . ' ' . $r['name2'] . ' ' . $r['name3'] . '#' . get_first_object($r['_id']);
+            $arr_result[] = $obj;
+        }
+
+        return $arr_result;
+    }
+
 
     public function search_drug_usage_by_name($query)
     {
@@ -1072,6 +1093,17 @@ class Basic_model extends CI_Model
 
     public function search_drug_ajax($query){
         $rs = $this->mongo_db
+            ->where(array(
+                'owners' => array(
+                    '$elemMatch' =>
+                    array(
+                        'owner_id' => new MongoId($this->owner_id)
+                    )
+                ),
+                /*'name' => array(
+                    '$regex' => new MongoRegex('/'.$query.'/i')
+                )*/
+            ))
             ->like('name', $query)
             ->limit(25)
             ->get('ref_drugs');
@@ -1080,8 +1112,9 @@ class Basic_model extends CI_Model
             $arr_result = array();
 
             foreach($rs as $r){
+                $price = isset($r['owners']) ? $r['owners'][0]['price'] : 0 ;
                 $obj = new stdClass();
-                $obj->name = $r['name'] . '#' . get_first_object($r['_id']);
+                $obj->name = $r['name'] . '#' . get_first_object($r['_id']) . '#' . $price;
 
                 $arr_result[] = $obj;
             }
@@ -1254,7 +1287,7 @@ class Basic_model extends CI_Model
     {
         $result = $this->mongo_db->where(array('_id' => new MongoId($vaccine_id)))->get('ref_epi_vaccines');
 
-        return count($result) > 0 ? $result[0]['eng_name'] : '-';
+        return count($result) > 0 ? $result[0]['th_name'] . ' ['.$result[0]['eng_name'] . ']' : '-';
     }
 
     public function get_fp_type_sex($code)

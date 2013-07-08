@@ -232,6 +232,25 @@ class Basic extends CI_Controller
         render_json($json);
     }
 
+    public function search_drug_usage_ajax(){
+        $query = $this->input->post('query');
+        if(empty($query)){
+            $json = '{"success": false, "msg": "No query found."}';
+        }else{
+
+            $rs = $this->basic->search_drug_usage_by_alias_ajax($query);
+
+            if($rs){
+                $rows = json_encode($rs);
+                $json = '{"success": true, "rows": '.$rows.'}';
+            }else{
+                $json = '{"success": false, "msg": "ไม่พบรายการ"}';
+            }
+        }
+
+        render_json($json);
+    }
+
     public function search_icd_ajax(){
         $query = $this->input->post('query');
         if(empty($query)){

@@ -42,13 +42,13 @@ class Drug_model extends CI_Model
         $rs = $this->mongo_db
             ->select(array('owners'))
             ->where(array(
-                '_id' => $id,
+                '_id' => new MongoId($id),
                 'owners' => array(
                     '$elemMatch' =>
                     array(
                         'owner_id' => new MongoId($this->owner_id)
                     )
-                )
+                ),
             ))
             ->limit(1)
             ->get('ref_drugs');

@@ -96,10 +96,35 @@ class Epis extends CI_Controller
                 $obj->age           = count_age($r['birthdate']);
                 $obj->reg_date      = isset($r['registers'][0]['reg_date']) ? $r['registers'][0]['reg_date'] : '';
 
+                $rs_history = $this->epi->get_history($r['hn']);
+
+                $arr_history = array();
+
+                if($rs_history)
+                {
+                    foreach($rs_history as $rh)
+                    {
+                        $objh = new stdClass();
+                        $objh->date_serv = from_mongo_to_thai_date($rh['date_serv']);
+                        $objh->vaccine_name = get_vaccine_name(get_first_object($rh['vaccine_id']));
+                        $objh->provider_name = get_provider_name_by_id(get_first_object($rh['provider_id']));
+                        $objh->lot = $rh['lot'];
+                        $objh->expire = from_mongo_to_thai_date($rh['expire']);
+                        $objh->hospname = get_hospital_name($rh['hospcode']);
+                        $objh->hospcode = $rh['hospcode'];
+                        $objh->id = get_first_object($rh['_id']);
+
+                        $arr_history[] = $objh;
+                    }
+                }
+
+                $obj->history = $arr_history;
+
                 $arr_result[] = $obj;
             }
 
             $rows = json_encode($arr_result);
+
             $json = '{"success": true, "rows": '.$rows.'}';
         }
         else
@@ -141,6 +166,30 @@ class Epis extends CI_Controller
                 $obj->birthdate = $r['birthdate'];
                 $obj->age       = count_age($r['birthdate']);
                 $obj->reg_date  = isset($r['registers'][0]['reg_date']) ? $r['registers'][0]['reg_date'] : '';
+
+                $rs_history = $this->epi->get_history($r['hn']);
+
+                $arr_history = array();
+
+                if($rs_history)
+                {
+                    foreach($rs_history as $rh)
+                    {
+                        $objh = new stdClass();
+                        $objh->date_serv = from_mongo_to_thai_date($rh['date_serv']);
+                        $objh->vaccine_name = get_vaccine_name(get_first_object($rh['vaccine_id']));
+                        $objh->provider_name = get_provider_name_by_id(get_first_object($rh['provider_id']));
+                        $objh->lot = $rh['lot'];
+                        $objh->expire = from_mongo_to_thai_date($rh['expire']);
+                        $objh->hospname = get_hospital_name($rh['hospcode']);
+                        $objh->hospcode = $rh['hospcode'];
+                        $objh->id = get_first_object($rh['_id']);
+
+                        $arr_history[] = $objh;
+                    }
+                }
+
+                $obj->history = $arr_history;
 
                 $arr_result[] = $obj;
             }
@@ -281,7 +330,7 @@ class Epis extends CI_Controller
     /**
      * Save epi service
      */
-    public function save_service()
+    public function save()
     {
         $data = $this->input->post('data');
 
@@ -291,18 +340,38 @@ class Epis extends CI_Controller
         }
         else
         {
-            //check duplicated
-            $duplicated = $this->epi->check_visit_duplicated($data['vn'], $data['vaccine_id']);
-
-            if($duplicated)
+            if(!empty($data['id']))
             {
-                $json = '{"success": false, "msg": "ข้อมูลซ้ำ [มีการให้วัคซีนนี้แล้วในครั้งนี้]"}';
+                //update
+                $rs = $this->epi->update($data);
+                $json = $rs ? '{"success": true, "id": "'.$data['id'].'"}' : '{"success": false, "msg": "ไม่สามารถบันทึกข้อมูลได้"}';
             }
             else
             {
-                $rs = $this->epi->save_service($data);
+                if(!empty($data['vn']))
+                {
+                    //save visit
+                    $duplicated = $this->epi->check_visit_duplicated($data['date_serv'], $data['vaccine_id']);
 
-                $json = $rs ? '{"success": true}' : '{"success": false, "msg": "ไม่สามารถบันทึกข้อมูลได้"}';
+                    if($duplicated)
+                    {
+                        $json = '{"success": false, "msg": "ข้อมูลซ้ำ [มีการให้วัคซีนนี้แล้วในครั้งนี้]"}';
+                    }
+                    else
+                    {
+                        $data['_id'] = new MongoId();
+                        $rs = $this->epi->save($data);
+
+                        $json = $rs ? '{"success": true, "id": "'.get_first_object($data['_id']).'"}' : '{"success": false, "msg": "ไม่สามารถบันทึกข้อมูลได้"}';
+                    }
+                }
+                else
+                {
+                    //save coverage
+                    $data['_id'] = new MongoId();
+                    $rs = $this->epi->save($data);
+                    $json = $rs ? '{"success": true, "id": "'.get_first_object($data['_id']).'"}' : '{"success": false, "msg": "ไม่สามารถบันทึกข้อมูลได้"}';
+                }
             }
 
         }
@@ -310,7 +379,7 @@ class Epis extends CI_Controller
         render_json($json);
     }
 
-    public function get_epi_visit_list()
+    public function get_visit_list()
     {
         $vn = $this->input->post('vn');
 
@@ -328,14 +397,17 @@ class Epis extends CI_Controller
                     $obj->id = get_first_object($r['_id']);
                     $obj->vaccine_name = get_vaccine_name(get_first_object($r['vaccine_id']));
                     $obj->provider_name = get_provider_name_by_id(get_first_object($r['provider_id']));
-                    array_push($arr_result, $obj);
+                    $obj->lot = $r['lot'];
+                    $obj->expire = from_mongo_to_thai_date($r['expire']);
+
+                    $arr_result[] = $obj;
                 }
                 $rows = json_encode($arr_result);
                 $json = '{"success": true, "rows": '.$rows.'}';
             }
             else
             {
-                $json = '{"success": false, "msg": "ไม่สามารถบันทึกข้อมูลได้"}';
+                $json = '{"success": false, "msg": "ไม่พบข้อมูลการฉีดวัคซีน"}';
             }
         }
         else
@@ -345,7 +417,7 @@ class Epis extends CI_Controller
 
         render_json($json);
     }
-    public function get_epi_visit_history()
+    public function history()
     {
         $hn = $this->input->post('hn');
 
@@ -360,24 +432,23 @@ class Epis extends CI_Controller
                 foreach($rs as $r)
                 {
                     $obj = new stdClass();
-
-                    $visit = $this->service->get_visit_info($r['vn']);
-                    $obj->clinic_name = get_clinic_name(get_first_object($visit['clinic']));
-                    $obj->date_serv = $visit['date_serv'];
-                    $obj->time_serv = $visit['time_serv'];
-
+                    $obj->date_serv = from_mongo_to_thai_date($r['date_serv']);
                     $obj->vaccine_name = get_vaccine_name(get_first_object($r['vaccine_id']));
                     $obj->provider_name = get_provider_name_by_id(get_first_object($r['provider_id']));
-                    $obj->owner_name = get_owner_name(get_first_object($r['owner_id']));
+                    $obj->lot = $r['lot'];
+                    $obj->expire = from_mongo_to_thai_date($r['expire']);
+                    $obj->hospname = get_hospital_name($r['hospcode']);
+                    $obj->hospcode = $r['hospcode'];
 
                     $arr_result[] = $obj;
                 }
+
                 $rows = json_encode($arr_result);
                 $json = '{"success": true, "rows": '.$rows.'}';
             }
             else
             {
-                $json = '{"success": false, "msg": "ไม่สามารถบันทึกข้อมูลได้"}';
+                $json = '{"success": false, "msg": "ไม่พบรายการ"}';
             }
         }
         else
@@ -388,17 +459,27 @@ class Epis extends CI_Controller
         render_json($json);
     }
 
-	public function remove()
+	public function remove_vaccine()
 	{
-        $hn = $this->input->post('hn');
-        if(empty($hn))
+        $id = $this->input->post('id');
+        if(empty($id))
         {
             $json = '{"success": false, "msg": "กรุณาระบุ ID ที่ต้องการลบ"}';
         }
         else
         {
-            $rs = $this->epi->remove($hn);
-            $json = $rs ? '{"success": true}' : '{"success": false, "msg": "ไม่สามารถลบรายการได้"}';
+            //check owner
+            $is_owner = $this->epi->check_owner($id);
+
+            if(!$is_owner)
+            {
+                $json = '{"success": false, "msg": "ไม่สามารถลบรายการได้"}';
+            }
+            else
+            {
+                $rs = $this->epi->remove_visit($id);
+                $json = $rs ? '{"success": true}' : '{"success": false, "msg": "ไม่สามารถลบรายการได้"}';
+            }
         }
 
         render_json($json);

@@ -99,6 +99,7 @@ class Diabetes extends CI_Controller
                 $obj->sex           = $r['sex'] == '1' ? 'ชาย' : 'หญิง';
                 $obj->birthdate     = $r['birthdate'];
                 $obj->age           = count_age($r['birthdate']);
+                $obj->reg_serial    = $r['registers'][0]['reg_serial'];
                 $obj->reg_date      = isset($r['registers'][0]['reg_date']) ? $r['registers'][0]['reg_date'] : '';
                 $obj->diag_type     = $this->basic->get_diabetes_type_name(get_first_object($r['registers'][0]['diag_type']));
                 $obj->diag_type_code= $r['registers'][0]['diag_type'];
@@ -148,9 +149,12 @@ class Diabetes extends CI_Controller
                 $obj->sex           = $r['sex'] == '1' ? 'ชาย' : 'หญิง';
                 $obj->birthdate     = $r['birthdate'];
                 $obj->age           = count_age($r['birthdate']);
+                $obj->reg_serial    = $r['registers'][0]['reg_serial'];
                 $obj->reg_date      = isset($r['registers'][0]['reg_date']) ? $r['registers'][0]['reg_date'] : '-';
                 $obj->diag_type     = $this->basic->get_diabetes_type_name(get_first_object($r['registers'][0]['diag_type']));
                 $obj->diag_type_code= $r['registers'][0]['diag_type'];
+                $obj->discharge_date= from_mongo_to_thai_date($r['registers'][0]['discharge_date']);
+                $obj->member_status = $r['registers'][0]['member_status'];
 
                 $arr_result[] = $obj;
             }
@@ -217,7 +221,7 @@ class Diabetes extends CI_Controller
                             $reg_serial     = $reg['reg_serial'];
                             $hosp_serial    = $reg['hosp_serial'];
                             $year           = $reg['reg_year'];
-                            $reg_date       = to_js_date($reg['reg_date']);
+                            $reg_date       = from_mongo_to_thai_date($reg['reg_date']);
                             $diag_type      = get_first_object($reg['diag_type']);
                             $doctor         = get_first_object($reg['doctor']);
                             $pre_register   = $reg['pre_regis'];
@@ -225,6 +229,8 @@ class Diabetes extends CI_Controller
                             $hypertension   = $reg['hypertension'];
                             $insulin        = $reg['insulin'];
                             $newcase        = $reg['newcase'];
+                            $discharge_date = from_mongo_to_thai_date($reg['discharge_date']);
+                            $member_status = $reg['member_status'];
                         }
                     }
 
@@ -239,6 +245,8 @@ class Diabetes extends CI_Controller
                     $obj->hypertension  = $hypertension;
                     $obj->insulin       = $insulin;
                     $obj->newcase       = $newcase;
+                    $obj->discharge_date= $discharge_date;
+                    $obj->member_status = $member_status;
 
                     $rows = json_encode($obj);
                     $json = '{"success": true, "rows": '.$rows.'}';
@@ -336,59 +344,6 @@ class Diabetes extends CI_Controller
             
             return $arr_result;
         }
-    }
-
-    public function search_person_ajax(){
-        $query = $this->input->post('query');
-
-        if(!empty($query))
-        {
-            if(is_numeric($query))
-            {
-                if(strlen($query) == 13)
-                {
-                    $rs = $this->person->search_person_ajax_by_cid($query);
-                }
-                else
-                {
-                    $rs = $this->person->search_person_ajax_by_hn($query);
-                }
-            }
-            else
-            {
-                //search by name
-                $fullname = explode(' ', $query);
-                $first_name = $fullname[0];
-                $last_name = isset($fullname[1]) ? $fullname[1] : ' ';
-
-                $rs = $this->person->search_person_ajax_by_name($first_name, $last_name);
-            }
-
-            if($rs)
-            {
-                $arr_result = array();
-                foreach ($rs as $r)
-                {
-                    $obj = new stdClass();
-                    $obj->name = $r['hn'] . '#' . $r['first_name'] . ' ' . $r['last_name'];
-
-                    $arr_result[] = $obj;
-                }
-                $rows = json_encode($arr_result);
-                $json = '{"success": true, "rows": '.$rows.'}';
-
-            }
-            else
-            {
-                $json = '{"success": false, "msg": "No data."}';
-            }
-        }
-        else
-        {
-            $json = '{"success": false, "msg": "Query empty."}';
-        }
-
-        render_json($json);
     }
 
     public function search_person()

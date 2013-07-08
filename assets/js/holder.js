@@ -89,15 +89,15 @@ function render(mode, el, holder, src) {
 	if (mode == "image") {
 		el.setAttribute("data-src", src);
 		el.setAttribute("alt", text ? text : theme.text ? theme.text + " [" + dimensions_caption + "]" : dimensions_caption);
-		
+
 		if(fallback || !holder.auto){
 		    el.style.width = dimensions.width + "px";
 		    el.style.height = dimensions.height + "px";
 		}
-	
+
 		if (fallback) {
 			el.style.backgroundColor = theme.background;
-			
+
 		}
 		else{
 			el.setAttribute("src", draw(ctx, dimensions, theme, ratio));
@@ -127,10 +127,10 @@ function fluid(el, holder, src) {
 	fluid.style.width = holder.dimensions.width + (holder.dimensions.width.indexOf("%")>0?"":"px");
 	fluid.style.height = holder.dimensions.height + (holder.dimensions.height.indexOf("%")>0?"":"px");
 	fluid.id = el.id;
-	
+
 	el.style.width=0;
 	el.style.height=0;
-	
+
 	if (theme.text) {
 		fluid.appendChild(document.createTextNode(theme.text))
 	} else {
@@ -140,7 +140,7 @@ function fluid(el, holder, src) {
 	}
 
 	el.parentNode.insertBefore(fluid, el.nextSibling)
-	
+
 	if(window.jQuery){
 	    jQuery(function($){
 		$(el).on("load", function(){
@@ -312,7 +312,7 @@ app.add_image = function (src, el) {
 
 app.run = function (o) {
 	var options = extend(settings, o), images = [];
-	    
+
 	if(options.images instanceof window.NodeList){
 	    imageNodes = options.images;
 	}
@@ -322,7 +322,7 @@ app.run = function (o) {
 	else{
 	    imageNodes = selector(options.images);
 	}
-	
+
 	if(options.elements instanceof window.NodeList){
 	    bgnodes = options.bgnodes;
 	}
@@ -332,13 +332,13 @@ app.run = function (o) {
 	else{
 	    bgnodes = selector(options.bgnodes);
 	}
-	
+
 	preempted = true;
-	   
+
 	for (i = 0, l = imageNodes.length; i < l; i++) images.push(imageNodes[i]);
-	
+
 	var holdercss = document.getElementById("holderjs-style");
-	
+
 	if(!holdercss){
 	    holdercss = document.createElement("style");
 	    holdercss.setAttribute("id", "holderjs-style");
@@ -352,7 +352,7 @@ app.run = function (o) {
 	else{
 	    holdercss.textContent+= options.stylesheet;
 	}
-	
+
 	var cssregex = new RegExp(options.domain + "\/(.*?)\"?\\)");
 
 	for (var l = bgnodes.length, i = 0; i < l; i++) {

@@ -6,12 +6,7 @@ head.ready(function(){
         show_register: function(){
             $('#mdl_dental').modal({
                 backdrop: 'static'
-            }).css({
-                    width: 960,
-                    'margin-left': function() {
-                        return -($(this).width() / 2);
-                    }
-                });
+            });
         }
     };
 
@@ -148,6 +143,7 @@ head.ready(function(){
         $('#sl_dental_gum').val(data.rows.gum);
         $('#sl_dental_schooltype').val(data.rows.schooltype);
         $('#txt_dental_school_class').val(data.rows.school_class);
+        $('#sl_dental_providers').val(data.rows.provider_id);
     };
 
     dental.clear_form = function()
@@ -174,6 +170,7 @@ head.ready(function(){
         $('#txt_dental_prosthesis_prost').val('');
         app.set_first_selected($('#sl_dental_gum'));
         app.set_first_selected($('#sl_dental_schooltype'));
+        app.set_first_selected($('#sl_dental_providers'));
         $('#txt_dental_school_class').val('');
     }
 
@@ -204,6 +201,7 @@ head.ready(function(){
         data.gum                = $('#sl_dental_gum').val();
         data.schooltype         = $('#sl_dental_schooltype').val();
         data.school_class       = $('#txt_dental_school_class').val();
+        data.provider_id        = $('#sl_dental_providers').val();
 
         if(!data.denttype)
         {
@@ -212,6 +210,10 @@ head.ready(function(){
         else if(!data.pteeth)
         {
             app.alert('กรุณาระบุจำนวนฟันแท้ที่มีอยู่');
+        }
+        else if(!data.provider_id)
+        {
+            app.alert('กรุณาระบุ Provider');
         }
         else if(!data.pcaries)
         {

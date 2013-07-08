@@ -180,36 +180,6 @@ class Pregnancies extends CI_Controller
 
     //------------------------------------------------------------------------------------------------------------------
     /**
-     * Service module
-     */
-
-    public function anc_service_save()
-    {
-        $data = $this->input->post('data');
-
-        if(empty($data))
-        {
-            $json = '{"success": false, "msg": "ไม่พบข้อมูลสำหรับบันทึก"}';
-        }
-        else
-        {
-            $rs = $this->preg->sevice_save($data);
-
-            if($rs)
-            {
-                $json = '{"success": true}';
-            }
-            else
-            {
-                $json = '{"success": false, "msg": "ไม่สามารถบันทึกข้อมูลได้"}';
-            }
-        }
-
-        render_json($json);
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    /**
      * Get Pregnancies list
      */
     public function anc_get_detail()
@@ -248,6 +218,32 @@ class Pregnancies extends CI_Controller
 
         render_json($json);
     }
+    /*
+
+    public function anc_service_save()
+    {
+        $data = $this->input->post('data');
+
+        if(empty($data))
+        {
+            $json = '{"success": false, "msg": "ไม่พบข้อมูลสำหรับบันทึก"}';
+        }
+        else
+        {
+            $rs = $this->preg->sevice_save($data);
+            if($rs)
+            {
+                $json = '{"success": true}';
+            }
+            else
+            {
+                $json = '{"success": false, "msg": "ไม่สามารถบันทึกข้อมูลได้"}';
+            }
+        }
+
+        render_json($json);
+    }
+     */
     //------------------------------------------------------------------------------------------------------------------
     /**
      * Save Pregnancies service
@@ -262,31 +258,31 @@ class Pregnancies extends CI_Controller
         }
         else
         {
-            //check duplicated
-            $duplicated = $this->preg->anc_check_visit_duplicated($data['hn'], $data['vn'], $data['gravida']);
-
-            if($duplicated)
+            if(!empty($data['id']))
             {
-                //$json = '{"success": false, "msg": "ข้อมูลซ้ำ"}';
-                //do update
+                //update
                 $rs = $this->preg->anc_update_service($data);
+                $json = $rs ? '{"success": true, "id": "'.$data['id'].'"}' : '{"success": false, "msg": "ไม่สามารถบันทึกข้อมูลได้"}';
             }
             else
             {
-                $rs = $this->preg->anc_save_service($data);
-            }
+                //check duplicated
+                $duplicated = $this->preg->anc_check_visit_duplicated($data['hn'], $data['date_serv'], $data['gravida']);
 
-            if($rs)
-            {
-                $json = '{"success": true}';
-            }
-            else
-            {
-                $json = '{"success": false, "msg": "ไม่สามารถบันทึกข้อมูลได้"}';
-            }
+                if($duplicated)
+                {
+                    //$rs = $this->preg->anc_update_service($data);
+                    $json = '{"success": false, "msg": "รายการซ้ำ มีการให้บริการแล้วในวันนี้"}';
+                }
+                else
+                {
+                    $data['id'] = new MongoId();
+                    $rs = $this->preg->anc_save_service($data);
 
+                    $json = $rs ? '{"success": true, "id": "'.$data['id'].'"}' : '{"success": false, "msg": "ไม่สามารถบันทึกข้อมูลได้"}';
+                }
+            }
         }
-
         render_json($json);
     }
     public function anc_get_history()
@@ -297,7 +293,7 @@ class Pregnancies extends CI_Controller
         if(!empty($hn))
         {
             $rs = $this->preg->anc_get_history($hn, $gravida);
-            $gravida = $rs[0]['gravida'];
+            //$gravida = $rs[0]['gravida'];
 
             if($rs)
             {
@@ -308,10 +304,12 @@ class Pregnancies extends CI_Controller
                     foreach($rs[0]['anc'] as $r)
                     {
                         $obj = new stdClass();
-                        $visit = $this->service->get_visit_info($r['vn']);
-                        $obj->clinic_name = get_clinic_name(get_first_object($visit['clinic']));
-                        $obj->date_serv = $visit['date_serv'];
-                        $obj->time_serv = $visit['time_serv'];
+                        //$visit = $this->service->get_visit_info($r['vn']);
+                        //$obj->clinic_name = get_clinic_name(get_first_object($visit['clinic']));
+                        $obj->date_serv = from_mongo_to_thai_date($r['date_serv']);
+                        //$obj->time_serv = $visit['time_serv'];
+                        $obj->hn = $rs[0]['hn'];
+                        $obj->id = get_first_object($r['_id']);
                         $obj->anc_no = $r['anc_no'];
                         $obj->ga = $r['ga'];
                         $obj->anc_result = $r['anc_result'];
@@ -444,33 +442,61 @@ class Pregnancies extends CI_Controller
         }
         else
         {
-            //check duplicated
-            $duplicated = $this->preg->postnatal_check_visit_duplicated($data['hn'], $data['vn'], $data['gravida']);
-
-            if($duplicated)
+            if(!empty($data['id']))
             {
-                //$json = '{"success": false, "msg": "ข้อมูลซ้ำ"}';
-                //do update
+                //update
                 $rs = $this->preg->postnatal_update_service($data);
+                $json = $rs ? '{"success": true, "id": "'.$data['id'].'"}' : '{"success": false, "msg": "ไม่สามารถบันทึกข้อมูลได้"}';
             }
             else
             {
-                $rs = $this->preg->postnatal_save_service($data);
-            }
+                //check duplicated
+                $duplicated = $this->preg->postnatal_check_visit_duplicated($data['hn'], $data['vn'], $data['gravida']);
 
-            if($rs)
-            {
-                $json = '{"success": true}';
-            }
-            else
-            {
-                $json = '{"success": false, "msg": "ไม่สามารถบันทึกข้อมูลได้"}';
-            }
+                if($duplicated)
+                {
+                    $json = '{"success": false, "msg": "ข้อมูลซ้ำ"}';
+                }
+                else
+                {
+                    $data['id'] = new MongoId();
 
+                    $rs = $this->preg->postnatal_save_service($data);
+                    $json = $rs ? '{"success": true, "id": "'.get_first_object($data['id']).'"}' : '{"success": false, "msg": "ไม่สามารถบันทึกข้อมูลได้"}';
+                }
+            }
         }
 
         render_json($json);
     }
+
+    public function postnatal_remove_service()
+    {
+        $hn = $this->input->post('hn');
+        $id = $this->input->post('id');
+
+        if(!empty($id) && !empty($hn))
+        {
+            //check owner
+            $is_owner = $this->preg->postnatal_check_visit_owner($id);
+            if($is_owner)
+            {
+                $rs = $this->preg->postnatal_remove_visit($hn, $id);
+                $json = $rs ? '{"success": true}' : '{"success": false, "msg": "ไม่สามารถลบรายการได้"}';
+            }
+            else
+            {
+                $json = '{"success": false, "msg": "รายการนี้ไม่ใช่ของคุณ ไม่สามารถลบได้"}';
+            }
+        }
+        else
+        {
+            $json = '{"success": false, "msg": "กรุณาระบุ HN และ ID ที่ต้องการลบ"}';
+        }
+
+        render_json($json);
+    }
+
     public function postnatal_get_history()
     {
         $hn = $this->input->post('hn');
@@ -489,10 +515,10 @@ class Pregnancies extends CI_Controller
                     foreach($rs[0]['postnatal'] as $r)
                     {
                         $obj = new stdClass();
-                        $visit = $this->service->get_visit_info($r['vn']);
-                        $obj->clinic_name = get_clinic_name(get_first_object($visit['clinic']));
-                        $obj->date_serv = $visit['date_serv'];
-                        $obj->time_serv = $visit['time_serv'];
+                        //$visit = $this->service->get_visit_info($r['vn']);
+                        //$obj->clinic_name = get_clinic_name(get_first_object($visit['clinic']));
+                        $obj->date_serv = from_mongo_to_thai_date($r['date_serv']);
+                        //$obj->time_serv = $visit['time_serv'];
 
                         $obj->ppresult = $r['ppresult'];
                         $obj->sugar = $r['sugar'];
@@ -501,9 +527,11 @@ class Pregnancies extends CI_Controller
                         $obj->amniotic_fluid = $r['amniotic_fluid'];
                         $obj->uterus = $r['uterus'];
                         $obj->tits = $r['tits'];
+                        $obj->hospname = '[' . $r['hospcode'] . '] ' . get_hospital_name($r['hospcode']);
+                        $obj->id = get_first_object($r['_id']);
 
                         $obj->provider_name = get_provider_name_by_id(get_first_object($r['provider_id']));
-                        $obj->owner_name = get_owner_name(get_first_object($r['owner_id']));
+                        //$obj->owner_name = get_owner_name(get_first_object($r['owner_id']));
 
                         $arr_result[] = $obj;
                     }
@@ -600,17 +628,17 @@ class Pregnancies extends CI_Controller
             if($rs)
             {
                 $obj = new stdClass();
-                $obj->lmp = to_js_date($rs['prenatal']['lmp']);
-                $obj->edc = to_js_date($rs['prenatal']['edc']);
+                $obj->lmp = from_mongo_to_thai_date($rs['prenatal']['lmp']);
+                $obj->edc = from_mongo_to_thai_date($rs['prenatal']['edc']);
                 $obj->preg_status = $rs['preg_status'];
                 $obj->vdrl = $rs['prenatal']['vdrl'];
                 $obj->hb = $rs['prenatal']['hb'];
                 $obj->hiv = $rs['prenatal']['hiv'];
-                $obj->hct_date = to_js_date($rs['prenatal']['hct_date']);
+                $obj->hct_date = from_mongo_to_thai_date($rs['prenatal']['hct_date']);
                 $obj->hct = $rs['prenatal']['hct'];
                 $obj->thalassemia = $rs['prenatal']['thalassemia'];
                 $obj->do_export = $rs['prenatal']['do_export'];
-                $obj->do_export_date = to_js_date($rs['prenatal']['do_export_date']);
+                $obj->do_export_date = from_mongo_to_thai_date($rs['prenatal']['do_export_date']);
 
 
                 $rows = json_encode($obj);
@@ -708,6 +736,33 @@ class Pregnancies extends CI_Controller
             else
             {
                 $json = '{"success": false, "msg": "No result."}';
+            }
+        }
+
+        render_json($json);
+    }
+
+    public function anc_remove_visit()
+    {
+        $hn = $this->input->post('hn');
+        $id = $this->input->post('id');
+
+        if(empty($hn) || empty($id))
+        {
+            $json = '{"success": false, "msg": "กรุณาระบุ HN หรือ ID ที่ต้องการลบ"}';
+        }
+        else
+        {
+            $is_owner = $this->preg->check_anc_visit_owner($id);
+            if($is_owner)
+            {
+                $rs = $this->preg->anc_remove_visit($hn, $id);
+
+                $json = $rs ? '{"success": true}' : '{"success": false, "msg": "ไม่สามารถลบรายการได้"}';
+            }
+            else
+            {
+                $json = '{"success": false, "msg": "ข้อมูลนี้ไม่ใช่ของคุณ ไม่สามารถลบรายการได้"}';
             }
         }
 

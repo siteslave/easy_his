@@ -5,7 +5,10 @@ head.ready(function(){
     entries.vn = $('#vn').val();
 
     entries.modal = {
-
+        show_edit: function(hn, vn) {
+            app.load_page($('#mdl_new_service'), '/pages/register_service/' + hn + '/' + vn, 'assets/apps/js/pages/register_service.js');
+            $('#mdl_new_service').modal({keyboard: false});
+        }
     };
 
     entries.ajax = {
@@ -187,21 +190,21 @@ head.ready(function(){
             $('#txt_screening_dbp').val(data.rows.dbp);
 
             if(data.rows.ill_history == '1'){
-                $('#rd_ill_history2').attr('checked', 'checked');
-                $('#rd_ill_history1').removeAttr('checked');
+                $('#rd_ill_history2').prop('checked', 'checked');
+                $('#rd_ill_history1').removeProp('checked');
                 $('#txt_ill_history_ill_detail').val(data.rows.ill_history_ill_detail);
             }else{
-                $('#rd_ill_history2').removeAttr('checked');
-                $('#rd_ill_history1').attr('checked', 'checked');
+                $('#rd_ill_history2').removeProp('checked');
+                $('#rd_ill_history1').prop('checked', 'checked');
                 $('#txt_ill_history_ill_detail').val('');
             }
 
             if(data.rows.operate == '1'){
-                $('#chk_operate').attr('checked', 'checked');
+                $('#chk_operate').prop('checked', 'checked');
                 $('#txt_ill_history_operate_detail').val(data.rows.operate_detail);
                 $('#txt_operate_year').val(data.rows.operate_year);
             }else{
-                $('#chk_operate').removeAttr('checked');
+                $('#chk_operate').removeProp('checked');
                 $('#txt_ill_history_operate_detail').val('');
                 $('#txt_operate_year').val('');
             }
@@ -210,29 +213,29 @@ head.ready(function(){
             $('#sl_screening_smoking').val(data.rows.smoking);
             $('#sl_screening_drinking').val(data.rows.drinking);
 
-            data.rows.mind_strain == '1' ? $('#chk_screening_screen_mind_strain').attr('checked', 'checked') : $('#chk_screening_screen_mind_strain').removeAttr('checked');
-            data.rows.mind_work == '1' ? $('#chk_screening_screen_mind_work').attr('checked', 'checked') : $('#chk_screening_screen_mind_work').removeAttr('checked');
-            data.rows.mind_family == '1' ? $('#chk_screening_screen_mind_family').attr('checked', 'checked') : $('#chk_screening_screen_mind_family').removeAttr('checked');
+            data.rows.mind_strain == '1' ? $('#chk_screening_screen_mind_strain').prop('checked', 'checked') : $('#chk_screening_screen_mind_strain').removeProp('checked');
+            data.rows.mind_work == '1' ? $('#chk_screening_screen_mind_work').prop('checked', 'checked') : $('#chk_screening_screen_mind_work').removeProp('checked');
+            data.rows.mind_family == '1' ? $('#chk_screening_screen_mind_family').prop('checked', 'checked') : $('#chk_screening_screen_mind_family').removeProp('checked');
 
             if(data.rows.mind_other == '1'){
-                $('#chk_screening_screen_mind_other').attr('checked', 'checked')
+                $('#chk_screening_screen_mind_other').prop('checked', 'checked')
                 $('#txt_screening_screen_mind_other_detail').val(data.rows.mind_other_detail);
             }else{
                 $('#txt_screening_screen_mind_other_detail').val('');
-                $('#chk_screening_screen_mind_other').removeAttr('checked');
+                $('#chk_screening_screen_mind_other').removeProp('checked');
             }
             //risk
 
-            data.rows.risk_ht == '1' ? $('#chk_screening_screen_risk_ht').attr('checked', 'checked') : $('#chk_screening_screen_risk_ht').removeAttr('checked');
-            data.rows.risk_dm == '1' ? $('#chk_screening_screen_risk_dm').attr('checked', 'checked') : $('#chk_screening_screen_risk_dm').removeAttr('checked');
-            data.rows.risk_stoke == '1' ? $('#chk_screening_screen_risk_stoke').attr('checked', 'checked') : $('#chk_screening_screen_risk_stoke').removeAttr('checked');
+            data.rows.risk_ht == '1' ? $('#chk_screening_screen_risk_ht').prop('checked', 'checked') : $('#chk_screening_screen_risk_ht').removeProp('checked');
+            data.rows.risk_dm == '1' ? $('#chk_screening_screen_risk_dm').prop('checked', 'checked') : $('#chk_screening_screen_risk_dm').removeProp('checked');
+            data.rows.risk_stoke == '1' ? $('#chk_screening_screen_risk_stoke').prop('checked', 'checked') : $('#chk_screening_screen_risk_stoke').removeProp('checked');
 
             if(data.rows.risk_other == '1'){
-                $('#chk_screening_screen_risk_other').attr('checked', 'checked')
+                $('#chk_screening_screen_risk_other').prop('checked', 'checked')
                 $('#txt_screening_screen_risk_other_detail').val(data.rows.risk_other_detail);
             }else{
                 $('#txt_screening_screen_risk_other_detail').val('');
-                $('#chk_screening_screen_risk_other').removeAttr('checked');
+                $('#chk_screening_screen_risk_other').removeProp('checked');
             }
 
             $('#sl_screening_lamp').val(data.rows.lmp);
@@ -248,20 +251,26 @@ head.ready(function(){
                 $('#txt_screening_lmp_finished').val();
             }
 
-            data.rows.consult_drug == '1' ? $('#chk_screening_consult_drug').attr('checked', 'checked') : $('#chk_screening_consult_drug').removeAttr('checked');
-            data.rows.consult_activity == '1' ? $('#chk_screening_consult_activity').attr('checked', 'checked') : $('#chk_screening_consult_activity').removeAttr('checked');
-            data.rows.consult_food == '1' ? $('#chk_screening_consult_food').attr('checked', 'checked') : $('#chk_screening_consult_food').removeAttr('checked');
-            data.rows.consult_appoint == '1' ? $('#chk_screening_consult_appoint').attr('checked', 'checked') : $('#chk_screening_consult_appoint').removeAttr('checked');
-            data.rows.consult_exercise == '1' ? $('#chk_screening_consult_exercise').attr('checked', 'checked') : $('#chk_screening_consult_exercise').removeAttr('checked');
-            data.rows.consult_complication == '1' ? $('#chk_screening_consult_complication').attr('checked', 'checked') : $('#chk_screening_consult_complication').removeAttr('checked');
+            data.rows.consult_drug == '1' ? $('#chk_screening_consult_drug').prop('checked', 'checked') : $('#chk_screening_consult_drug').removeProp('checked');
+            data.rows.consult_activity == '1' ? $('#chk_screening_consult_activity').prop('checked', 'checked') : $('#chk_screening_consult_activity').removeProp('checked');
+            data.rows.consult_food == '1' ? $('#chk_screening_consult_food').prop('checked', 'checked') : $('#chk_screening_consult_food').removeProp('checked');
+            data.rows.consult_appoint == '1' ? $('#chk_screening_consult_appoint').prop('checked', 'checked') : $('#chk_screening_consult_appoint').removeProp('checked');
+            data.rows.consult_exercise == '1' ? $('#chk_screening_consult_exercise').prop('checked', 'checked') : $('#chk_screening_consult_exercise').removeProp('checked');
+            data.rows.consult_complication == '1' ? $('#chk_screening_consult_complication').prop('checked', 'checked') : $('#chk_screening_consult_complication').removeProp('checked');
             if(data.rows.consult_other == '1'){
-                $('#chk_screening_consult_other').attr('checked', 'checked');
+                $('#chk_screening_consult_other').prop('checked', 'checked');
                 $('#chk_screening_consult_other_detail').val(data.rows.consult_other_detail);
             }else{
-                $('#chk_screening_consult_other').removeAttr('checked');
+                $('#chk_screening_consult_other').removeProp('checked');
                 $('#chk_screening_consult_other_detail').val('');
             }
         }
     });
 
+    $('#btn_edit_service').on('click', function() {
+        var hn = $('#hn').val(),
+            vn = $('#vn').val();
+
+        entries.modal.show_edit(hn, vn);
+    });
 });

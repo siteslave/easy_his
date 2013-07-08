@@ -5,7 +5,7 @@
  * @copyright   Copyright 2013, Mr.Satit Rianpit
  * @since       Version 1.0
  */
-head.ready(function(){
+head.ready(function() {
     // DM name space with object.
     var ht = {};
     ht.update = {};
@@ -125,12 +125,7 @@ head.ready(function(){
         {
             $('#mdlNewRegister').modal({
                 backdrop: 'static'
-            }).css({
-                    width: 780,
-                    'margin-left': function() {
-                        return -($(this).width() / 2);
-                    }
-                });
+            });
         },
         hide_register: function()
         {
@@ -161,8 +156,10 @@ head.ready(function(){
                         '<td>' + v.diag_type + '</td>' +
                         '<td>' +
                         '<div class="btn-group">' +
-                        '<a href="javascript:void(0);" class="btn btn-danger" data-name="remove" data-hn="' + v.hn + '"><i class="icon-trash"></i></a>' +
-                        '<a href="javascript:void(0);" class="btn" data-name="edit" data-hn="' + v.hn + '"><i class="icon-edit"></i></a>' +
+                        '<a href="javascript:void(0);" class="btn btn-success btn-small" data-name="edit" title="แก้ไข" ' +
+                        'data-hn="' + v.hn + '"><i class="icon-edit"></i></a>' +
+                        '<a href="javascript:void(0);" class="btn btn-danger btn-small" data-name="remove" title="ลบรายการ" ' +
+                        'data-hn="' + v.hn + '"><i class="icon-trash"></i></a>' +
                         '</div>' +
                         '</td>' +
                         '</tr>'
@@ -180,12 +177,13 @@ head.ready(function(){
             if(err){
                 app.alert(err);
             }else{
-                $('#main_paging > ul').paging(data.total, {
+                $('#main_paging').paging(data.total, {
                     format: " < . (qq -) nnncnnn (- pp) . >",
                     perpage: app.record_per_page,
                     lapping: 1,
-                    page: 1,
+                    page: app.get_cookie('ht_current_page'),
                     onSelect: function(page){
+                        app.set_cookie('ht_current_page', page);
                         ht.ajax.get_list(this.slice[0], this.slice[1], function(err, data){
                             $('#tbl_list > tbody').empty();
                             if(err){
@@ -262,8 +260,6 @@ head.ready(function(){
     $('#btn_register').click(function(){
         ht.clear_register_form();
         $('div[data-name="blog_search"]').show();
-        $('#lblRegis').html('ลงทะเบียน');
-        $('#lblRegis').attr('title', 'add');
         ht.modal.show_register();
     });
 
@@ -289,6 +285,8 @@ head.ready(function(){
         v.hypertension == "1" ? $('#ch_hypertension').prop('checked', true) : $('#ch_hypertension').removeProp('checked');
         v.insulin == "1" ? $('#ch_insulin').prop('checked', true) : $('#ch_insulin').removeProp('checked');
         v.newcase == "1" ? $('#ch_newcase').prop('checked', true) : $('#ch_newcase').removeProp('checked');
+        $('#sl_member_status').val(v.member_status);
+        $('#txt_discharge_date').val(v.discharge_date);
 
         $('#tboRegHosNumber').focus();
 
@@ -340,7 +338,12 @@ head.ready(function(){
     $('#btn_filter_by_village').click(function(){
         var village_id = $('#sl_village').val();
 
-        ht.get_list_by_village(village_id);
+        if (!village_id) {
+            ht.get_list();
+        }
+        else {
+            ht.get_list_by_village(village_id);
+        }
     });
 
     ht.get_list_by_village = function(village_id)
@@ -350,12 +353,13 @@ head.ready(function(){
             if(err){
                 app.alert(err);
             }else{
-                $('#main_paging > ul').paging(data.total, {
+                $('#main_paging').paging(data.total, {
                     format: " < . (qq -) nnncnnn (- pp) . >",
                     perpage: app.record_per_page,
                     lapping: 1,
-                    page: 1,
+                    page: app.get_cookie('ht_village_current_page'),
                     onSelect: function(page){
+                        app.set_cookie('ht_village_current_page', page);
                         ht.ajax.get_list_by_village(village_id, this.slice[0], this.slice[1], function(err, data){
                             $('#tbl_list > tbody').empty();
                             if(err){
@@ -452,6 +456,8 @@ head.ready(function(){
         $('#txt_search_person').val('');
         $('#txt_search_person').removeProp('disabled');
         $('#btn_search_person').removeProp('disabled');
+        $('#txt_discharge_date').val('');
+        app.set_first_selected($('#sl_member_status'));
     };
 
     $(document).on('click', 'a[data-name="remove"]', function() {
@@ -488,6 +494,8 @@ head.ready(function(){
         items.newcase       = $('#ch_newcase').is(":checked") ? '1' : '0';
         items.hosp_serial   = $('#tboRegHosNumber').val();
         items.is_update     = $('#txt_isupdate').val();
+        items.discharge_date = $('#txt_discharge_date').val();
+        items.member_status = $('#sl_member_status').val();
 
         if(!items.hn) {
             app.alert('กรุณาเลือกบุคคลที่ต้องการลงทะเบียนด้วย !');
@@ -572,7 +580,7 @@ head.ready(function(){
 
     $('#txt_search_person').typeahead({
         ajax: {
-            url: site_url + 'hypertension/search_person_ajax',
+            url: site_url + '/person/search_person_ajax',
             timeout: 500,
             displayField: 'name',
             triggerLength: 3,
@@ -602,7 +610,7 @@ head.ready(function(){
 
     $('#txt_query').typeahead({
         ajax: {
-            url: site_url + 'hypertension/search_person_ajax',
+            url: site_url + '/person/search_person_ajax',
             timeout: 500,
             displayField: 'name',
             triggerLength: 3,

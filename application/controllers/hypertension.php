@@ -11,7 +11,6 @@
 
 class Hypertension extends CI_Controller
 {
-    //------------------------------------------------------------------------------------------------------------------
     /*
      * Global parameter
      */
@@ -19,7 +18,7 @@ class Hypertension extends CI_Controller
     protected $owner_id;
     protected $provider_id;
     protected $clinic_code;
-    //------------------------------------------------------------------------------------------------------------------
+    
     /*
      * Construction function
      */
@@ -51,7 +50,7 @@ class Hypertension extends CI_Controller
         
         $this->person->owner_id     = $this->owner_id;
         $this->person->clinic_code  = $this->clinic_code;
-        $this->person->user_id  = $this->user_id;
+        $this->person->user_id      = $this->user_id;
 
         $this->ht->clinic_code      = $this->clinic_code;
         $this->ht->owner_id         = $this->owner_id;
@@ -101,7 +100,9 @@ class Hypertension extends CI_Controller
                 $obj->reg_date      = isset($r['registers'][0]['reg_date']) ? $r['registers'][0]['reg_date'] : '';
                 $obj->diag_type     = $this->basic->get_diabetes_type_name(get_first_object($r['registers'][0]['diag_type']));
                 $obj->diag_type_code= $r['registers'][0]['diag_type'];
-
+                $obj->discharge_date= from_mongo_to_thai_date($r['registers'][0]['discharge_date']);
+                $obj->member_status = $r['registers'][0]['member_status'];
+                
                 $arr_result[] = $obj;
             }
 
@@ -150,6 +151,8 @@ class Hypertension extends CI_Controller
                 $obj->reg_date      = isset($r['registers'][0]['reg_date']) ? $r['registers'][0]['reg_date'] : '-';
                 $obj->diag_type     = $this->basic->get_diabetes_type_name(get_first_object($r['registers'][0]['diag_type']));
                 $obj->diag_type_code= $r['registers'][0]['diag_type'];
+                $obj->discharge_date= from_mongo_to_thai_date($r['registers'][0]['discharge_date']);
+                $obj->member_status = $r['registers'][0]['member_status'];
 
                 $arr_result[] = $obj;
             }
@@ -230,20 +233,24 @@ class Hypertension extends CI_Controller
                             $hypertension   = $reg['hypertension'];
                             $insulin        = $reg['insulin'];
                             $newcase        = $reg['newcase'];
+                            $discharge_date = from_mongo_to_thai_date($reg['discharge_date']);
+                            $member_status   = $reg['member_status'];
                         }
                     }
 
-                    $obj->reg_serial    = $reg_serial;
-                    $obj->hosp_serial   = $hosp_serial;
-                    $obj->year          = $year;
-                    $obj->reg_date      = $reg_date;
-                    $obj->diag_type     = $diag_type;
-                    $obj->doctor        = $doctor;
-                    $obj->pre_register  = $pre_register;
-                    $obj->pregnancy     = $pregnancy;
-                    $obj->hypertension  = $hypertension;
-                    $obj->insulin       = $insulin;
-                    $obj->newcase       = $newcase;
+                    $obj->reg_serial    = isset($reg_serial) ? $reg_serial : '';
+                    $obj->hosp_serial   = isset($hosp_serial) ? $hosp_serial : '';
+                    $obj->year          = isset($year) ? $year : '';
+                    $obj->reg_date      = isset($reg_date) ? $reg_date : '';
+                    $obj->diag_type     = isset($diag_type) ? $diag_type : '';
+                    $obj->doctor        = isset($doctor) ? $doctor : '';
+                    $obj->pre_register  = isset($pre_register) ? $pre_register : '';
+                    $obj->pregnancy     = isset($pregnancy) ? $pregnancy : '';
+                    $obj->hypertension  = isset($hypertension) ? $hypertension : '';
+                    $obj->insulin       = isset($insulin) ? $insulin : '';
+                    $obj->newcase       = isset($newcase) ? $newcase : '';
+                    $obj->member_status = isset($member_status) ? $member_status : '';
+                    $obj->discharge_date = isset($discharge_date) ? $discharge_date : '';
 
                     $rows = json_encode($obj);
                     $json = '{"success": true, "rows": '.$rows.'}';
@@ -252,8 +259,6 @@ class Hypertension extends CI_Controller
                 {
                     $json = '{ "success": false, "msg": "ไม่พบรายการ00" }';
                 }
-
-
             }
             else
             {

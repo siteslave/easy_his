@@ -94,6 +94,18 @@ if(!function_exists('get_owner_name')){
         return $pcucode ? get_hospital_name($pcucode) : '-';
     }
 }
+if(!function_exists('get_owner_pcucode')){
+    function get_owner_pcucode($id){
+        $ci =& get_instance();
+
+        $ci->load->model('Basic_model', 'basic');
+
+        $pcucode = $ci->basic->get_owner_pcucode($id);
+
+
+        return $pcucode ? $pcucode : '-';
+    }
+}
 
 if(!function_exists('get_strength_name')){
     function get_strength_name($code){

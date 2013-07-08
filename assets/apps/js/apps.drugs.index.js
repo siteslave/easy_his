@@ -5,11 +5,6 @@ head.ready(function(){
         show_register: function(){
             $('#mdl_register').modal({
                 backdrop: 'static'
-            }).css({
-                width: 960,
-                'margin-left': function() {
-                    return -($(this).width() / 2);
-                }
             });
         },
         hide_register: function(){
@@ -100,12 +95,14 @@ head.ready(function(){
             if(err){
                 app.alert(err);
             }else{
-                $('#main_paging > ul').paging(data.total, {
+                $('#main_paging').paging(data.total, {
                     format: " < . (qq -) nnncnnn (- pp) . >",
                     perpage: app.record_per_page,
                     lapping: 1,
-                    page: 1,
+                    page: app.get_cookie('drug_index_paging'),
                     onSelect: function(page){
+                        app.set_cookie('drug_index_paging', page);
+
                         drugs.ajax.get_list(this.slice[0], this.slice[1], function(err, data){
                             $('#tbl_list > tbody').empty();
                             if(err){
@@ -184,12 +181,14 @@ head.ready(function(){
             if(err){
                 app.alert(err);
             }else{
-                $('#main_paging > ul').paging(data.total, {
+                $('#main_paging').paging(data.total, {
                     format: " < . (qq -) nnncnnn (- pp) . >",
                     perpage: app.record_per_page,
                     lapping: 1,
-                    page: 1,
+                    page: app.get_cookie('drug_index_search_paging'),
                     onSelect: function(page){
+                        app.set_cookie('drug_index_search_paging', page);
+
                         drugs.ajax.search(query, this.slice[0], this.slice[1], function(err, data){
                             $('#tbl_list > tbody').empty();
                             if(err){
@@ -284,9 +283,9 @@ head.ready(function(){
                         '<td>'+ app.add_commars(v.price) +'</td>' +
                         '<td>'+ app.add_commars(v.qty) +'</td>' +
                         '<td>' +
-                        '<a href="javascript:void(0);" data-name="btn_edit" class="btn" data-id="'+ v.id +'" ' +
+                        '<a href="javascript:void(0);" data-name="btn_edit" class="btn btn-default" data-id="'+ v.id +'" ' +
                         'data-vname="'+ v.name +'" data-did="'+ v.did +'" data-cost="'+ v.cost +'" data-price="'+ v.price +'" ' +
-                        'data-qty="'+ v.qty +'">' +
+                        'data-qty="'+ v.qty +'" title="แก้ไข">' +
                         '<i class="icon-edit"></i></a>' +
                         '</td>' +
                         '</tr>'

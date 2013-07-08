@@ -52,7 +52,7 @@ $autoload['packages'] = array();
 |	$autoload['libraries'] = array('database', 'session', 'xmlrpc');
 */
 
-$autoload['libraries'] = array('session', 'mongo_db', 'layout');
+$autoload['libraries'] = array('session', 'mongo_db', 'layout', 'form_validation');
 
 
 /*
@@ -64,7 +64,7 @@ $autoload['libraries'] = array('session', 'mongo_db', 'layout');
 |	$autoload['helper'] = array('url', 'file');
 */
 
-$autoload['helper'] = array('url', 'his', 'basic');
+$autoload['helper'] = array('url', 'his', 'basic', 'form');
 
 
 /*

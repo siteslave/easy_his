@@ -54,8 +54,8 @@ class Setting_model extends CI_Model
                             'provider_type_id'   => new MongoId($data['provider_type_id']),
                             'start_date'         => to_string_date($data['start_date']),
                             'out_date'           => to_string_date($data['out_date']),
-                            'move_from_hospital' => $data['move_from_hospital'],
-                            'move_to_hospital'   => $data['move_to_hospital']
+                            'move_from_hospital' => (string) $data['move_from_hospital'],
+                            'move_to_hospital'   => (string) $data['move_to_hospital']
                         ));
         return $result;
     }

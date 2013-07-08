@@ -19,6 +19,7 @@ class Service_model extends CI_Model
 
     public function search_person_by_name($query)
     {
+        $this->mongo_db->add_index('person', array('first_name' => -1));
         $rs = $this->mongo_db
             ->select(array('first_name', 'last_name', 'cid', 'hn', 'sex', 'birthdate'))
             ->like('first_name', $query)
@@ -28,6 +29,7 @@ class Service_model extends CI_Model
     }
     public function search_person_by_cid($query)
     {
+        $this->mongo_db->add_index('person', array('cid' => -1));
         $rs = $this->mongo_db
             ->select(array('first_name', 'last_name', 'cid', 'hn', 'sex', 'birthdate'))
             ->where('cid', $query)
@@ -37,6 +39,7 @@ class Service_model extends CI_Model
     }
     public function search_person_by_hn($query)
     {
+        $this->mongo_db->add_index('person', array('hn' => -1));
         $rs = $this->mongo_db
             ->select(array('first_name', 'last_name', 'cid', 'hn', 'sex', 'birthdate'))
             ->where('hn', $query)
@@ -47,6 +50,7 @@ class Service_model extends CI_Model
 
     public function get_person_detail($hn)
     {
+        $this->mongo_db->add_index('person', array('hn' => -1));
         $rs = $this->mongo_db
             ->select(array('first_name', 'last_name', 'cid', 'hn', 'sex', 'birthdate', 'house_code'))
             ->where('hn', $hn)
@@ -89,16 +93,43 @@ class Service_model extends CI_Model
 
         return $rs;
     }
-
     public function do_update($data)
     {
+        $rs = $this->mongo_db
+            ->where(array('vn' => (string) $data['vn']))
+            ->set(array(
+                'time_serv'     => $data['time_serv'],
+                'clinic'        => new MongoId($data['clinic']),
+                'doctor_room'   => new MongoId($data['doctor_room']),
+                'patient_type'  => $data['patient_type'],
+                'location'      => $data['location'],
+                'type_in'       => $data['type_in'],
+                'service_place' => $data['service_place'],
+                'screenings'    => array(
+                    'cc' => $data['cc']
+                ),
+                'insurances'    => array(
+                    'id'            => $data['insc_id'],
+                    'code'          => $data['insc_code'],
+                    'start_date'    => to_string_date($data['insc_start_date']),
+                    'expire_date'   => to_string_date($data['insc_expire_date']),
+                    'hosp_main'     => $data['insc_hosp_main'],
+                    'hosp_sub'      => $data['insc_hosp_sub']
+                ),
+                'user_id'       => new MongoId($this->user_id),
+                'last_update'   => date('Y-m-d H:i:s')
+            ))
+            ->update('visit');
 
+        return $rs;
     }
 
     public function get_list($date, $doctor_room, $start, $limit)
     {
         if(empty($doctor_room))
         {
+            $this->mongo_db->add_index('visit', array('date_serv' => -1));
+            $this->mongo_db->add_index('visit', array('owner_id' => -1));
             $rs = $this->mongo_db
                 ->where(array(
                     'date_serv' => $date,
@@ -110,6 +141,9 @@ class Service_model extends CI_Model
         }
         else
         {
+            $this->mongo_db->add_index('visit', array('date_serv' => -1));
+            $this->mongo_db->add_index('visit', array('owner_id' => -1));
+            $this->mongo_db->add_index('visit', array('doctor_room' => -1));
             $rs = $this->mongo_db
                 ->where(array(
                     'date_serv' => $date,
@@ -125,6 +159,8 @@ class Service_model extends CI_Model
     }
     public function get_list_search($hn, $start, $limit)
     {
+        $this->mongo_db->add_index('visit', array('hn' => -1));
+        $this->mongo_db->add_index('visit', array('owner_id' => -1));
         $rs = $this->mongo_db
             ->where(array('hn' => (string) $hn, 'owner_id' => new MongoId($this->owner_id)))
             ->offset($start)
@@ -138,6 +174,8 @@ class Service_model extends CI_Model
     {
         if(empty($doctor_room))
         {
+            $this->mongo_db->add_index('visit', array('date_serv' => -1));
+            $this->mongo_db->add_index('visit', array('owner_id' => -1));
             $rs = $this->mongo_db
                 ->where(array(
                     'date_serv' => $date,
@@ -147,6 +185,9 @@ class Service_model extends CI_Model
         }
         else
         {
+            $this->mongo_db->add_index('visit', array('date_serv' => -1));
+            $this->mongo_db->add_index('visit', array('owner_id' => -1));
+            $this->mongo_db->add_index('visit', array('doctor_room' => -1));
             $rs = $this->mongo_db
                 ->where(array(
                     'date_serv' => $date,
@@ -162,6 +203,8 @@ class Service_model extends CI_Model
 
     public function get_list_search_total($hn)
     {
+        $this->mongo_db->add_index('visit', array('hn' => -1));
+        $this->mongo_db->add_index('visit', array('owner_id' => -1));
         $rs = $this->mongo_db
             ->where(array('hn' => (string) $hn, 'owner_id' => new MongoId($this->owner_id)))
             ->count('visit');
@@ -172,6 +215,7 @@ class Service_model extends CI_Model
 
     public function get_service_screening($vn)
     {
+        $this->mongo_db->add_index('visit', array('vn' => -1));
         $result = $this->mongo_db
             ->select(array('screenings'))
             ->where(array('vn' => (string) $vn))
@@ -182,6 +226,7 @@ class Service_model extends CI_Model
 
     public function get_person_id($vn)
     {
+        $this->mongo_db->add_index('visit', array('vn' => -1));
         $result = $this->mongo_db
             ->select(array('person_id'))
             ->where(array('vn' => $vn))
@@ -191,6 +236,7 @@ class Service_model extends CI_Model
     }
     public function get_person_hn($vn)
     {
+        $this->mongo_db->add_index('visit', array('vn' => -1));
         $result = $this->mongo_db
             ->select(array('hn'))
             ->where(array('vn' => $vn))
@@ -201,6 +247,8 @@ class Service_model extends CI_Model
 
     public function check_visit_exist($vn)
     {
+        $this->mongo_db->add_index('visit', array('vn' => -1));
+        $this->mongo_db->add_index('visit', array('owner_id' => -1));
         $rs = $this->mongo_db
             ->where(array('vn' => $vn, 'owner_id' => new MongoId($this->owner_id)))
             ->count('visit');
@@ -210,6 +258,7 @@ class Service_model extends CI_Model
 
     public function save_screening($data)
     {
+        $this->mongo_db->add_index('visit', array('vn' => -1));
         $rs = $this->mongo_db
             ->where('vn', $data['vn'])
             ->set(array(
@@ -263,6 +312,7 @@ class Service_model extends CI_Model
     }
 
     public function get_screening($vn){
+        $this->mongo_db->add_index('visit', array('vn' => -1));
         $rs = $this->mongo_db
             ->select(array('screenings'))
             ->where('vn', $vn)
@@ -362,6 +412,8 @@ class Service_model extends CI_Model
     }
 
     public function check_principle_opd_exist($vn){
+        $this->mongo_db->add_index('diagnosis_opd', array('vn' => -1));
+        $this->mongo_db->add_index('diagnosis_opd', array('diag_type' => -1));
         $rs = $this->mongo_db
             ->where(array('vn' => (string) $vn, 'diag_type' => '1'))
             ->count('diagnosis_opd');
@@ -370,6 +422,8 @@ class Service_model extends CI_Model
     }
 
     public function check_diag_opd_exist($vn, $diag_code){
+        $this->mongo_db->add_index('diagnosis_opd', array('vn' => -1));
+        $this->mongo_db->add_index('diagnosis_opd', array('code' => -1));
         $rs = $this->mongo_db
             ->where(array('vn' => (string) $vn, 'code' => $diag_code))
             ->count('diagnosis_opd');
@@ -393,6 +447,7 @@ class Service_model extends CI_Model
     }
 
     public function get_service_diag_opd($vn){
+        $this->mongo_db->add_index('diagnosis_opd', array('vn' => -1));
         $rs = $this->mongo_db
             ->order_by(array('diag_type' => 'ASC'))
             ->where('vn', (string) $vn)
@@ -401,6 +456,8 @@ class Service_model extends CI_Model
     }
 
     public function remove_diag_opd($vn, $diag_code){
+        $this->mongo_db->add_index('diagnosis_opd', array('vn' => -1));
+        $this->mongo_db->add_index('diagnosis_opd', array('code' => -1));
         $rs = $this->mongo_db
             ->where(array('vn' => (string) $vn, 'code' => $diag_code))
             ->delete('diagnosis_opd');
@@ -416,9 +473,9 @@ class Service_model extends CI_Model
                 'code'          => $data['code'],
                 'price'         => (float) $data['price'],
                 'start_time'    => (string) $data['start_time'],
-                'end_time'    => (string) $data['end_time'],
-                'provider_id'      => new MongoId($data['provider_id']),
-                'clinic_id'      => new MongoId($data['clinic_id']),
+                'end_time'      => (string) $data['end_time'],
+                'provider_id'   => new MongoId($data['provider_id']),
+                'clinic_id'     => new MongoId($data['clinic_id']),
                 'vn'            => (string) $data['vn'],
                 'last_update'   => date('Y-m-d H:i:s')
             ));
@@ -427,6 +484,8 @@ class Service_model extends CI_Model
 
 
     public function check_duplicate_opd_proced($vn, $code){
+        $this->mongo_db->add_index('procedures_opd', array('vn' => -1));
+        $this->mongo_db->add_index('procedures_opd', array('code' => -1));
         $rs = $this->mongo_db
             ->where(array('vn' => $vn, 'code' => $code))
             ->count('procedures_opd');
@@ -435,13 +494,27 @@ class Service_model extends CI_Model
     }
 
     public function get_service_proced_opd($vn){
+        $this->mongo_db->add_index('procedures_opd', array('vn' => -1));
         $rs = $this->mongo_db
             ->where(array('vn' => (string) $vn))
             ->get('procedures_opd');
         return $rs;
     }
 
+    public function get_service_proced_opd_detail($vn, $code)
+    {
+        $this->mongo_db->add_index('procedures_opd', array('vn' => -1));
+        $this->mongo_db->add_index('procedures_opd', array('code' => -1));
+        $rs = $this->mongo_db
+            ->where(array('vn' => (string) $vn, 'code' => (string) $code))
+            ->limit(1)
+            ->get('procedures_opd');
+        return $rs ? $rs[0] : NULL;
+    }
+
     public function remove_proced_opd($vn, $code){
+        $this->mongo_db->add_index('procedures_opd', array('vn' => -1));
+        $this->mongo_db->add_index('procedures_opd', array('code' => -1));
         $rs = $this->mongo_db
             ->where(array('vn' => (string) $vn, 'code' => (string) $code))
             ->delete('procedures_opd');
@@ -449,13 +522,17 @@ class Service_model extends CI_Model
     }
 
     public function update_opd_proced($data){
+        $this->mongo_db->add_index('procedures_opd', array('vn' => -1));
+        $this->mongo_db->add_index('procedures_opd', array('code' => -1));
+
         $rs = $this->mongo_db
-            ->where(array('vn' =>$data['vn'], 'code' => $data['code']))
+            ->where(array('vn' => (string) $data['vn'], 'code' => (string) $data['code']))
             ->set(array(
+                'price'         => (float) $data['price'],
                 'start_time'    => (string) $data['start_time'],
-                'end_time'    => (string) $data['end_time'],
-                'provider_id'      => new MongoId($data['provider_id']),
-                'clinic_id'      => new MongoId($data['clinic_id']),
+                'end_time'      => (string) $data['end_time'],
+                'provider_id'   => new MongoId($data['provider_id']),
+                'clinic_id'     => new MongoId($data['clinic_id']),
                 'last_update'   => date('Y-m-d H:i:s')
             ))
             ->update('procedures_opd');
@@ -495,8 +572,9 @@ class Service_model extends CI_Model
      * @param   array   $data
      */
     public function update_drug_opd($data){
+
         $rs = $this->mongo_db
-            ->where(array('vn' => $data['vn'], 'drug_id' => new MongoId($data['drug_id'])))
+            ->where(array('_id' => new MongoId($data['id'])))
             ->set(array(
                 'qty'           => (float) $data['qty'],
                 'price'         => (float) $data['price'],
@@ -520,6 +598,7 @@ class Service_model extends CI_Model
     }
 
     public function remove_bill_drug_opd($vn){
+        $this->mongo_db->add_index('drug_opd', array('vn' => -1));
         $rs = $this->mongo_db
             ->where('vn', (string) $vn)
             ->delete_all('drugs_opd');
@@ -561,6 +640,15 @@ class Service_model extends CI_Model
         return $rs;
     }
 
+    public function get_drug_detail($id)
+    {
+        $rs = $this->mongo_db
+            ->where(array('_id' => new MongoId($id)))
+            ->limit(1)
+            ->get('drugs_opd');
+        return $rs ? $rs[0] : NULL;
+    }
+
     ####################### Charge modules #######################
 
     /*
@@ -587,6 +675,8 @@ class Service_model extends CI_Model
      * @param   array   $data
      */
     public function update_charge_opd($data){
+        $this->mongo_db->add_index('charge_opd', array('vn' => -1));
+        $this->mongo_db->add_index('charge_opd', array('charge_code' => -1));
         $rs = $this->mongo_db
             ->where(array('vn' => $data['vn'], 'charge_code' => $data['charge_code']))
             ->set(array(
@@ -596,6 +686,15 @@ class Service_model extends CI_Model
             ))
             ->update('charge_opd');
         return $rs;
+    }
+
+    public function  get_charge_opd($id){
+        $rs = $this->mongo_db
+            ->where(array('_id' => new MongoId($id)))
+            ->limit(1)
+            ->get('charge_opd');
+
+        return $rs ? $rs[0] : NULL;
     }
 
     /*
@@ -644,6 +743,7 @@ class Service_model extends CI_Model
     }
 
     public function get_person_id_from_visit($vn){
+        $this->mongo_db->add_index('visit', array('vn' => -1));
         $rs = $this->mongo_db
         ->select(array('person_id'))
         ->where('vn', $vn)
@@ -656,57 +756,7 @@ class Service_model extends CI_Model
             return NULL;
         }
     }
-    //------------------------------------------------------------------------------------------------------------------
-    /**
-     * Save visit fp
-     * 
-     * @param 	array 	$data
-     * @return 	boolean
-     */
-    public function save_fp($data)
-    {
-        $rs = $this->mongo_db
-            ->insert('visit_fp',
-                array(
-                    'provider_id'   => new MongoId($this->provider_id),
-                    'owner_id'      => new MongoId($this->owner_id),
-                    'vn'            => $data['vn'],
-                    'hn'            => $data['hn'],
-                    'fp_type'       => $data['fp_type'],
-                    'last_update'   => date('Y-m-d H:i:s')
-                )
-            );
-        return $rs;
-    }
 
-    //------------------------------------------------------------------------------------------------------------------
-    /**
-     * 
-     */
-    public function check_fp_duplicated($vn, $fp_type)
-    {
-        $rs = $this->mongo_db->where(array('vn' => (string) $vn, 'fp_type' => (string) $fp_type))->count('visit_fp');
-
-        return $rs > 0 ? TRUE : FALSE;
-    }
-
-    //------------------------------------------------------------------------------------------------------------------
-    /**
-     * Get FP list
-     * 
-     * 
-     */
-    public function get_fp_list($vn)
-    {
-        $rs = $this->mongo_db->where(array('vn' => $vn))->get('visit_fp');
-        return $rs;
-    }
-
-    public function get_fp_list_all($hn)
-    {
-        $rs = $this->mongo_db->where(array('hn' => (string) $hn))->get('visit_fp');
-        return $rs;
-    }
     //------------------------------------------------------------------------------------------------------------------
     /**
      * Get visit info.
@@ -716,37 +766,28 @@ class Service_model extends CI_Model
      */
     public function get_visit_info($vn)
     {
-        $rs = $this->mongo_db->select(array('clinic','date_serv', 'time_serv', 'service_place'))
+        $this->mongo_db->add_index('visit', array('vn' => -1));
+        /*
+    "insurances" : {
+        "id" : "73",
+        "code" : "736250000025",
+        "start_date" : "20130127",
+        "expire_date" : "20161231",
+        "hosp_main" : "10707",
+        "hosp_sub" : "10707"
+    },
+        "cc" : "-"
+    },
+         */
+        $rs = $this->mongo_db->select(array(
+            'clinic','date_serv', 'time_serv',
+            'service_place', 'owner_id',
+            'hn', 'vn', 'doctor_room', 'patient_type',
+            'location', 'type_in','screenings.cc',
+            'insurances'
+        ))
                             ->where('vn', (string) $vn)
                             ->get('visit');
-        return $rs ? $rs[0] : NULL;
-    }
-
-    public function save_nutrition($data)
-    {
-        $rs = $this->mongo_db
-            ->where('vn', $data['vn'])
-            ->set(
-                array(
-                    'nutritions.weight'         => $data['weight'],
-                    'nutritions.height'         => $data['height'],
-                    'nutritions.headcircum'     => $data['headcircum'],
-                    'nutritions.childdevelop'   => $data['childdevelop'],
-                    'nutritions.food'           => $data['food'],
-                    'nutritions.bottle'         => $data['bottle'],
-                    'nutritions.last_update'    => date('Y-m-d H:i:s')
-                )
-            )->update('visit');
-        return $rs;
-    }
-
-    public function get_nutrition($vn)
-    {
-        $rs = $this->mongo_db
-            ->where('vn', $vn)
-            ->select(array('nutritions'))
-            ->get('visit');
-
         return $rs ? $rs[0] : NULL;
     }
     
@@ -779,6 +820,9 @@ class Service_model extends CI_Model
 
     public function icf_check_duplicated($data)
     {
+        $this->mongo_db->add_index('visit_icf', array('vn' => -1));
+        $this->mongo_db->add_index('visit_icf', array('hn' => -1));
+        $this->mongo_db->add_index('visit_icf', array('icf' => -1));
         $rs = $this->mongo_db
             ->where(array(
                         'vn' => (string) $data['vn'],
@@ -797,6 +841,7 @@ class Service_model extends CI_Model
      */
     public function icf_get_list($vn)
     {
+        $this->mongo_db->add_index('visit_icf', array('vn' => -1));
         $rs = $this->mongo_db
             ->where(array('vn' => (string) $vn))
             ->get('visit_icf');
@@ -811,6 +856,7 @@ class Service_model extends CI_Model
      */
     public function icf_get_history($hn)
     {
+        $this->mongo_db->add_index('visit_icf', array('hn' => -1));
         $rs = $this->mongo_db
             ->where(array('hn' => (string) $hn))
             ->get('visit_icf');
@@ -833,29 +879,29 @@ class Service_model extends CI_Model
                 'vn'                => (string) $data['vn'],
                 'hn'                => (string) $data['hn'],
                 'denttype'          => (string) $data['denttype'],
-                'pteeth'            => $data['pteeth'],
-                'pcaries'           => $data['pcaries'],
-                'pfilling'          => $data['pfilling'],
-                'pextract'          => $data['pextract'],
-                'dteeth'            => $data['dteeth'],
-                'dcaries'           => $data['dcaries'],
-                'dfilling'          => $data['dfilling'],
-                'dextract'          => $data['dextract'],
-                'need_fluoride'     => $data['need_fluoride'],
-                'need_scaling'      => $data['need_scaling'],
-                'need_sealant'      => $data['need_sealant'],
-                'need_pfilling'     => $data['need_pfilling'],
-                'need_dfilling'     => $data['need_dfilling'],
-                'need_pextract'     => $data['need_pextract'],
-                'need_dextract'     => $data['need_dextract'],
-                'nprosthesis'       => $data['nprosthesis'],
-                'permanent_perma'   => $data['permanent_perma'],
-                'permanent_prost'   => $data['permanent_prost'],
-                'prosthesis_prost'  => $data['prosthesis_prost'],
-                'gum'               => $data['gum'],
-                'schooltype'        => $data['schooltype'],
-                'school_class'      => $data['school_class'],
-                'provider_id'       => new MongoId($this->provider_id),
+                'pteeth'            => (int) $data['pteeth'],
+                'pcaries'           => (int) $data['pcaries'],
+                'pfilling'          => (int) $data['pfilling'],
+                'pextract'          => (int) $data['pextract'],
+                'dteeth'            => (int) $data['dteeth'],
+                'dcaries'           => (int) $data['dcaries'],
+                'dfilling'          => (int) $data['dfilling'],
+                'dextract'          => (int) $data['dextract'],
+                'need_fluoride'     => (string) $data['need_fluoride'],
+                'need_scaling'      => (string) $data['need_scaling'],
+                'need_sealant'      => (int) $data['need_sealant'],
+                'need_pfilling'     => (int) $data['need_pfilling'],
+                'need_dfilling'     => (int) $data['need_dfilling'],
+                'need_pextract'     => (int) $data['need_pextract'],
+                'need_dextract'     => (int) $data['need_dextract'],
+                'nprosthesis'       => (string) $data['nprosthesis'],
+                'permanent_perma'   => (int) $data['permanent_perma'],
+                'permanent_prost'   => (int) $data['permanent_prost'],
+                'prosthesis_prost'  => (int) $data['prosthesis_prost'],
+                'gum'               => (string) $data['gum'],
+                'schooltype'        => (string) $data['schooltype'],
+                'school_class'      => (string) $data['school_class'],
+                'provider_id'       => new MongoId($data['provider_id']),
                 'user_id'           => new MongoId($this->user_id),
                 'owner_id'          => new MongoId($this->owner_id),
                 'last_update'       => date('Y-m-d H:i:s')
@@ -871,35 +917,36 @@ class Service_model extends CI_Model
      */
     public function dental_update($data)
     {
+        $this->mongo_db->add_index('visit_dentals', array('vn' => -1));
         $rs = $this->mongo_db
             ->where(array('vn' => (string) $data['vn']))
             ->set(array(
                 'vn'                => (string) $data['vn'],
                 'hn'                => (string) $data['hn'],
                 'denttype'          => (string) $data['denttype'],
-                'pteeth'            => $data['pteeth'],
-                'pcaries'           => $data['pcaries'],
-                'pfilling'          => $data['pfilling'],
-                'pextract'          => $data['pextract'],
-                'dteeth'            => $data['dteeth'],
-                'dcaries'           => $data['dcaries'],
-                'dfilling'          => $data['dfilling'],
-                'dextract'          => $data['dextract'],
-                'need_fluoride'     => $data['need_fluoride'],
-                'need_scaling'      => $data['need_scaling'],
-                'need_sealant'      => $data['need_sealant'],
-                'need_pfilling'     => $data['need_pfilling'],
-                'need_dfilling'     => $data['need_dfilling'],
-                'need_pextract'     => $data['need_pextract'],
-                'need_dextract'     => $data['need_dextract'],
-                'nprosthesis'       => $data['nprosthesis'],
-                'permanent_perma'   => $data['permanent_perma'],
-                'permanent_prost'   => $data['permanent_prost'],
-                'prosthesis_prost'  => $data['prosthesis_prost'],
-                'gum'               => $data['gum'],
+                'pteeth'            => (int) $data['pteeth'],
+                'pcaries'           => (int) $data['pcaries'],
+                'pfilling'          => (int) $data['pfilling'],
+                'pextract'          => (int) $data['pextract'],
+                'dteeth'            => (int) $data['dteeth'],
+                'dcaries'           => (int) $data['dcaries'],
+                'dfilling'          => (int) $data['dfilling'],
+                'dextract'          => (int) $data['dextract'],
+                'need_fluoride'     => (string) $data['need_fluoride'],
+                'need_scaling'      => (string) $data['need_scaling'],
+                'need_sealant'      => (int) $data['need_sealant'],
+                'need_pfilling'     => (int) $data['need_pfilling'],
+                'need_dfilling'     => (int) $data['need_dfilling'],
+                'need_pextract'     => (int) $data['need_pextract'],
+                'need_dextract'     => (int) $data['need_dextract'],
+                'nprosthesis'       => (string) $data['nprosthesis'],
+                'permanent_perma'   => (int) $data['permanent_perma'],
+                'permanent_prost'   => (int) $data['permanent_prost'],
+                'prosthesis_prost'  => (int) $data['prosthesis_prost'],
+                'gum'               => (string) $data['gum'],
                 'schooltype'        => (string) $data['schooltype'],
-                'school_class'      => $data['school_class'],
-                'provider_id'       => new MongoId($this->provider_id),
+                'school_class'      => (string) $data['school_class'],
+                'provider_id'       => new MongoId($data['provider_id']),
                 'user_id'           => new MongoId($this->user_id),
                 'last_update'       => date('Y-m-d H:i:s')
             ))
@@ -967,6 +1014,7 @@ class Service_model extends CI_Model
      */
     public function dental_history($hn)
     {
+        $this->mongo_db->add_index('visit_dentals', array('hn' => -1));
         $rs = $this->mongo_db
             ->where(array('hn' => (string) $hn))
             ->get('visit_dentals');
@@ -984,6 +1032,8 @@ class Service_model extends CI_Model
      */
     public function check_owner($vn, $owner_id)
     {
+        $this->mongo_db->add_index('visit', array('owner_id' => -1));
+        $this->mongo_db->add_index('visit', array('vn' => -1));
         $rs = $this->mongo_db
             ->where(array('owner_id' => new MongoId($owner_id), 'vn' => (string) $vn))
             ->count('visit');
@@ -992,6 +1042,9 @@ class Service_model extends CI_Model
 
     public function get_visit_pdx($vn)
     {
+        $this->mongo_db->add_index('diagnosis_opd', array('vn' => -1));
+        $this->mongo_db->add_index('diagnosis_opd', array('diag_type' => -1));
+
         $rs = $this->mongo_db
             ->select(array('code'))
             ->where(array('vn' => (string) $vn, 'diag_type' => '1'))
@@ -1002,6 +1055,8 @@ class Service_model extends CI_Model
 
     public function search_by_hn($hn)
     {
+        $this->mongo_db->add_index('visit', array('hn' => -1));
+        $this->mongo_db->add_index('visit', array('owner_id' => -1));
         $rs = $this->mongo_db
             ->where(array('hn' => (string) $hn, 'owner_id' => new MongoId($this->owner_id)))
             ->get('visit');
@@ -1010,6 +1065,8 @@ class Service_model extends CI_Model
     }
     public function search_by_vn($vn)
     {
+        $this->mongo_db->add_index('visit', array('vn' => -1));
+        $this->mongo_db->add_index('visit', array('onwer_id' => -1));
         $rs = $this->mongo_db
             ->where(array('vn' => (string) $vn, 'owner_id' => new MongoId($this->owner_id)))
             ->get('visit');

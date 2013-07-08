@@ -5,21 +5,11 @@ head.ready(function(){
         show_register: function(){
             $('#mdl_register').modal({
                 backdrop: 'static'
-            }).css({
-                width: 960,
-                'margin-left': function() {
-                    return -($(this).width() / 2);
-                }
             });
         },
         show_search_person: function(){
             $('#mdl_search_person').modal({
                 backdrop: 'static'
-            }).css({
-                width: 960,
-                'margin-left': function() {
-                    return -($(this).width() / 2);
-                }
             });
         },
         hide_search_person: function(){
@@ -114,6 +104,48 @@ head.ready(function(){
         }
     };
 
+
+    $('#txt_hn').typeahead({
+        ajax: {
+            url: site_url + '/person/search_person_ajax',
+            timeout: 500,
+            displayField: 'name',
+            triggerLength: 3,
+            preDispatch: function(query){
+                return {
+                    query: query,
+                    csrf_token: csrf_token
+                }
+            },
+
+            preProcess: function(data){
+                if(data.success){
+                    return data.rows;
+                }else{
+                    return false;
+                }
+            }
+        },
+        updater: function(data){
+            var d = data.split('#');
+            var code = d[0],
+                name = d[1],
+                birth = d[2];
+
+            $('#txt_fullname').val(name);
+            $('#txt_birthdate').val(app.to_thai_date(birth));
+            $('#txt_age').val(app.count_age(birth));
+
+            return code;
+        }
+    });
+
+    $('#txt_hn').on('keyup', function() {
+        $('#txt_fullname').val('');
+        $('#txt_birthdate').val('');
+        $('#txt_age').val('');
+    });
+
     $('#btn_refresh').on('click', function(){
         disb.get_list();
     });
@@ -125,12 +157,14 @@ head.ready(function(){
             if(err){
                 app.alert(err);
             }else{
-                $('#main_paging > ul').paging(data.total, {
+                $('#main_paging').paging(data.total, {
                     format: " < . (qq -) nnncnnn (- pp) . >",
                     perpage: app.record_per_page,
                     lapping: 1,
-                    page: 1,
+                    page: app.get_cookie('ds_paging'),
                     onSelect: function(page){
+                        app.set_cookie('ds_paging', page);
+
                         disb.ajax.get_list(this.slice[0], this.slice[1], function(err, data){
                             $('#tbl_list > tbody').empty();
                             if(err){
@@ -224,11 +258,11 @@ head.ready(function(){
                         '<td>'+ v.reg_date +'</td>' +
                         '<td>'+ v.disb_type +'</td>' +
                         '<td><div class="btn-group">' +
-                        '<a href="javascript:void(0);" data-name="btn_edit" class="btn" data-hn="'+ v.hn +'" ' +
-                        'data-cid="'+ v.cid +'" data-fullname="'+ v.first_name + ' ' + v.last_name +'" ' +
+                        '<a href="javascript:void(0);" data-name="btn_edit" class="btn btn-success btn-small" data-hn="'+ v.hn +'" ' +
+                        'data-cid="'+ v.cid +'" data-fullname="'+ v.first_name + ' ' + v.last_name +'" title="แก้ไข"' +
                         'data-age="'+ v.age +'" data-birthdate="'+ app.mongo_to_thai_date(v.birthdate) +'" data-id="'+ v.id +'">' +
                         '<i class="icon-edit"></i></a>' +
-                        '<a href="javascript:void(0);" data-name="btn_remove" class="btn" data-id="'+ v.id +'">' +
+                        '<a href="javascript:void(0);" data-name="btn_remove" class="btn btn-danger btn-small" title="ลบออกจากทะเบียน" data-id="'+ v.id +'">' +
                         '<i class="icon-trash"></i></a>' +
                         '</div></td>' +
                         '</tr>'
@@ -237,9 +271,9 @@ head.ready(function(){
         }
     };
     //search diagnosis
-    $('#txt_icdcode').typeahead({
+    $('#txt_icdname').typeahead({
         ajax: {
-            url: site_url + 'basic/search_icd_ajax',
+            url: site_url + '/basic/search_icd_ajax',
             timeout: 500,
             displayField: 'name',
             triggerLength: 3,
@@ -264,10 +298,13 @@ head.ready(function(){
                 name = d[1];
 
             $('#txt_icdcode').val(code);
-            $('#txt_icdname').val(name);
 
-            return code;
+            return name;
         }
+    });
+
+    $('#txt_icdname').on('keyup', function() {
+        $('#txt_icdcode').val('');
     });
 
     $('#btn_register').click(function(){
@@ -295,44 +332,48 @@ head.ready(function(){
     };
 
     $('#btn_save_disb').click(function(){
-        var data = {};
+        var items = {};
 
-        data.hn = $('#txt_hn').val();
-        data.did = $('#txt_did').val();
-        data.dtype = $('#sl_disb_types').val();
-        data.dcause = $('#sl_disp_cause').val();
-        data.diag_code = $('#txt_icdcode').val();
-        data.detect_date = $('#txt_detect_date').val();
-        data.disb_date = $('#txt_disab_date').val();
+        items.hn = $('#txt_hn').val();
+        items.did = $('#txt_did').val();
+        items.dtype = $('#sl_disb_types').val();
+        items.dcause = $('#sl_disp_cause').val();
+        items.diag_code = $('#txt_icdcode').val();
+        items.detect_date = $('#txt_detect_date').val();
+        items.disb_date = $('#txt_disab_date').val();
+        items.fullname = $('#txt_fullname').val();
         //data.id = $('#txt_update_id').val();
 
-        if(!data.hn)
+        if(!items.hn)
+        {
+            app.alert('กรุณาระบุ HN');
+        }else if(!items.fullname)
         {
             app.alert('กรุณาระบุ HN');
         }
-        else if(!data.dtype)
+        else if(!items.dtype)
         {
             app.alert('ประเภทความพิการ');
         }
-        else if(!data.dcause)
+        else if(!items.dcause)
         {
             app.alert('สาเหตุความพิการ');
         }
-        else if(!data.diag_code)
+        else if(!items.diag_code)
         {
             app.alert('กรุณาระบุรหัสโรคหรือการบาดเจ็บที่เป็นสาเหตุของความพิการ');
         }
-        else if(!data.detect_date)
+        else if(!items.detect_date)
         {
             app.alert('กรุณาระบุวันที่ตรวจพบความพิการ');
         }
-        else if(!data.disb_date)
+        else if(!items.disb_date)
         {
             app.alert('กรุณาระบุวันที่เริ่มมีความพิการ');
         }
         else
         {
-            disb.ajax.save(data, function(err){
+            disb.ajax.save(items, function(err){
                 if(err)
                 {
                     app.alert(err);
@@ -355,95 +396,6 @@ head.ready(function(){
     $('#mdl_search_person').on('hidden', function(){
         disb.modal.show_register();
     });
-
-    disb.set_search_person_result = function(data)
-    {
-        if(!data)
-        {
-            $('#tbl_search_person_result > tbody').append(
-                '<tr><td colspan="7">ไม่พบรายการ</td></tr>');
-        }
-        else
-        {
-            _.each(data.rows, function(v){
-                var t = typeof v.typearea == 'undefined' || 'null' ? '0' : '1';
-                $('#tbl_search_person_result > tbody').append(
-                    '<tr>' +
-                        '<td>'+ v.hn +'</td>' +
-                        '<td>'+ v.cid +'</td>' +
-                        '<td>'+ v.first_name + ' ' + v.last_name +'</td>' +
-                        '<td>'+ app.mongo_to_thai_date(v.birthdate) +'</td>' +
-                        '<td>'+ v.age +'</td>' +
-                        '<td>'+ v.sex +'</td>' +
-                        '<td><a href="#" class="btn" data-hn="'+ v.hn + '" data-cid="'+ v.cid +'" ' +
-                        'data-fullname="'+ v.first_name + ' ' + v.last_name +'" data-name="btn_selected_person" ' +
-                        'data-sex="'+ v.sex +'" data-age="'+ v.age +'" data-birthdate="'+ app.mongo_to_thai_date(v.birthdate) +'" data-owner="'+ t +'">' +
-                        '<i class="icon-ok"></i></a></td>' +
-                        '</tr>');
-            });
-        }
-    };
-
-    //search person
-    $('#btn_do_search_person').click(function(){
-        var query = $('#txt_search_query').val(),
-            filter = $('#txt_search_person_filter').val();
-
-        if(!query)
-        {
-            app.alert('กรุณาระบุคำค้นหา โดยระบุชื่อ-สกุล หรือ HN หรือ เลขบัตรประชาชน');
-        }
-        else
-        {
-            //do search
-            $('#tbl_search_person_result > tbody').empty();
-
-            disb.ajax.search_person(query, filter, function(err, data){
-
-                if(err)
-                {
-                    app.alert(err);
-                    $('#tbl_search_person_result > tbody').append(
-                        '<tr><td colspan="7">ไม่พบรายการ</td></tr>');
-                }
-                else
-                {
-                    disb.set_search_person_result(data);
-                }
-            });
-        }
-    });
-
-    $('a[data-name="btn_search_person_fillter"]').click(function(){
-        var filter = $(this).data('value');
-
-        $('#txt_search_person_filter').val(filter);
-    });
-
-    $(document).on('click', 'a[data-name="btn_selected_person"]', function(){
-
-        if($(this).data('owner') == '0')
-        {
-            app.alert('บุคคลนี้ไม่ใช่บุคคลในเขตรับผิดชอบ');
-        }
-        else
-        {
-            var hn = $(this).data('hn'),
-                cid = $(this).data('cid'),
-                fullname = $(this).data('fullname'),
-                age = $(this).data('age'),
-                birthdate = $(this).data('birthdate');
-
-            $('#txt_fullname').val(fullname);
-            $('#txt_hn').val(hn);
-            $('#txt_cid').val(cid);
-            $('#txt_age').val(age);
-            $('#txt_birthdate').val(birthdate);
-
-            disb.modal.hide_search_person();
-        }
-    });
-
 
     disb.get_detail = function(id)
     {

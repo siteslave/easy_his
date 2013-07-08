@@ -34,7 +34,8 @@ class Death_model extends CI_Model
                 'pdeath'        => $data['pdeath'],
                 'provider_id'   => $this->provider_id,
                 'user_id'       => $this->user_id,
-                'owner_id'      => new MongoId($this->owner_id)
+                'owner_id'      => new MongoId($this->owner_id),
+                'last_update'   => date('Y-m-d H:i:s')
             ));
 
         return $rs;
@@ -56,7 +57,7 @@ class Death_model extends CI_Model
                 'pdeath'        => $data['pdeath'],
                 'provider_id'   => $this->provider_id,
                 'user_id'       => $this->user_id,
-                'owner_id'      => new MongoId($this->owner_id)
+                'last_update'   => date('Y-m-d H:i:s')
             ))
             ->update('death');
 

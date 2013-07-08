@@ -276,7 +276,7 @@ class Babies extends CI_Controller
 
         //hn = hn of mother
 
-        if(!empty($hn) AND !empty($gravida))
+        if(!empty($hn) && !empty($gravida))
         {
             //get labor detail
             $rs_labors = $this->preg->labor_get_detail_by_gravida($hn, $gravida);
@@ -299,7 +299,7 @@ class Babies extends CI_Controller
         }
         else
         {
-            $json = '{"success": false, "msg": "กรุณาระบุ HN"}';
+            $json = '{"success": false, "msg": "กรุณาระบุเงื่อนไขในการค้นหา เช่น ระบุครรภ์ที่ หรือ HN"}';
         }
 
         render_json($json);
@@ -469,13 +469,14 @@ class Babies extends CI_Controller
         render_json($json);
     }
 
-    public function remove_cover()
+    public function remove_service()
     {
-        $data = $this->input->post('data');
+        $id = $this->input->post('id');
+        $hn = $this->input->post('hn');
 
-        if(!empty($data))
+        if(!empty($id) && !empty($hn))
         {
-            $rs = $this->babies->remove_cover($data['hn'], $data['gravida'], to_string_date($data['bcare']));
+            $rs = $this->babies->remove_service($hn, $id);
             $json = $rs ? '{"success": true}' : '{"success": false, "msg": "ไม่สามารถลบรายการได้"}';
         }
         else
@@ -492,27 +493,26 @@ class Babies extends CI_Controller
         $data = $this->input->post('data');
         if(!empty($data))
         {
-            //check duplicate
-            $is_duplicated = $this->babies->check_service_duplicate($data['vn'], $data['hn']);
-
-            if($is_duplicated)
+            if(!empty($data['id']))
             {
-                //update
                 $rs = $this->babies->update_service($data);
+                $json = $rs ? '{"success": true, "id": "'.$data['id'].'"}' : '{"success": false ,"msg": "ไม่สามารถบันทึกข้อมูลได้"}';
             }
             else
             {
-                //insert
-                $rs = $this->babies->save_service($data);
-            }
-
-            if($rs)
-            {
-                $json = '{"success": true}';
-            }
-            else
-            {
-                $json = '{"success": false ,"msg": "ไม่สามารถบันทึกข้อมูลได้"}';
+                //check duplicate
+                $is_duplicated = $this->babies->check_service_duplicate($data['date_serv'], $data['hn']);
+                if($is_duplicated)
+                {
+                    $json = '{"success": false, "msg": "มีการให้บริการในวันนี้แล้ว กรุณาตรวจสอบ"}';
+                }
+                else
+                {
+                    //insert
+                    $data['id'] = new MongoId();
+                    $rs = $this->babies->save_service($data);
+                    $json = $rs ? '{"success": true, "id": "'.get_first_object($data['id']).'"}' : '{"success": false ,"msg": "ไม่สามารถบันทึกข้อมูลได้"}';
+                }
             }
         }
         else
@@ -576,33 +576,23 @@ class Babies extends CI_Controller
             if($rs)
             {
                 $arr_result = array();
-
-                if(isset($rs[0]['cares']))
+                foreach($rs as $r)
                 {
-                    foreach($rs[0]['cares'] as $r)
-                    {
-                        $obj = new stdClass();
-                        $visit = $this->service->get_visit_info($r['vn']);
-                        $obj->clinic_name = get_clinic_name(get_first_object($visit['clinic']));
-                        $obj->date_serv = $visit['date_serv'];
-                        $obj->time_serv = $visit['time_serv'];
+                    $obj = new stdClass();
+                    $obj->result = get_bresult_name($r['result']);
+                    $obj->food = get_bfood_name($r['food']);
 
-                        $obj->bcareresult = get_bresult_name($r['bcareresult']);
-                        $obj->food = get_bfood_name($r['food']);
+                    $obj->provider_name = get_provider_name_by_id(get_first_object($r['provider_id']));
+                    $obj->hospname = get_hospital_name($r['hospcode']);
+                    $obj->hospcode = $r['hospcode'];
+                    $obj->date_serv = from_mongo_to_thai_date($r['date_serv']);
+                    $obj->id = get_first_object($r['_id']);
 
-                        $obj->provider_name = get_provider_name_by_id(get_first_object($r['provider_id']));
-                        $obj->owner_name = get_owner_name(get_first_object($r['owner_id']));
-
-                        $arr_result[] = $obj;
-                    }
-
-                    $rows = json_encode($arr_result);
-                    $json = '{"success": true, "rows": '.$rows.'}';
+                    $arr_result[] = $obj;
                 }
-                else
-                {
-                    $json = '{"success": false, "msg": "No result found"}';
-                }
+
+                $rows = json_encode($arr_result);
+                $json = '{"success": true, "rows": '.$rows.'}';
             }
             else
             {

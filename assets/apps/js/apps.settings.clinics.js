@@ -50,11 +50,11 @@ head.ready(function(){
                                 '<td>' + v.export_code + '</td> ' +
                                 '<td>' + v.name + '</td> ' +
                                 '<td><div class="btn-group">' +
-                                '<a href="javascript:void(0)" class="btn" data-name="btn_edit" ' +
+                                '<a href="javascript:void(0)" class="btn btn-success btn-small" data-name="btn_edit" ' +
                                 'data-export_code="'+ v.export_code +'" data-vname="'+ v.name +'" data-id="' + v.id + '"> ' +
                                 '<i class="icon-edit"></i></a>' +
-                                '<a href="javascript:void(0)" disabled="disabled" class="btn" data-name="btn_remove" data-id="' + v.id + '"> ' +
-                                '<i class="icon-trash"></i></a>' +
+                                /*'<a href="javascript:void(0)" disabled="disabled" class="btn btn-danger" data-name="btn_remove" data-id="' + v.id + '"> ' +
+                                '<i class="icon-trash"></i></a>' +*/
                                 '</div></td> ' +
                                 '</tr>'
                         );
@@ -82,11 +82,6 @@ head.ready(function(){
         show_new: function(){
             $('#modal_new').modal({
                 backdrop: 'static'
-            }).css({
-                width: 700,
-                'margin-left': function() {
-                    return -($(this).width() / 2);
-                }
             });
         }
     };

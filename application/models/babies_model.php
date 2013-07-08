@@ -162,45 +162,17 @@ class Babies_model extends CI_Model
     public function check_service_duplicate($vn, $hn)
     {
         $rs = $this->mongo_db
-            ->where(array('cares.vn' => (string) $vn, 'hn' => (string) $hn))
+            ->where(array('cares.date_serv' => (string) $vn, 'hn' => (string) $hn))
             ->count('babies');
         return $rs > 0 ? TRUE : FALSE;
     }
 
-    public function save_cover($data){
+    public function remove_service($hn, $id){
         $result = $this->mongo_db
-            ->where(array('hn' => (string) $data['hn'], 'gravida' => (string) $data['gravida']))
-            ->push('covers',
-                array(
-                    'bcare'         => to_string_date($data['bcare']),
-                    'bcplace'       => $data['bcplace'],
-                    'bcareresult'   => $data['bcareresult'],
-                    'food'          => $data['food'],
-                    'provider_id'   => new MongoId($data['provider_id']),
-                    'user_id'       => new MongoId($this->user_id),
-                    'owner_id'      => new MongoId($this->owner_id),
-                    'last_update'   => date('Y-m-d H:i:s')
-                )
-            )
+            ->where(array('hn' => (string) $hn))
+            ->pull('cares', array('_id' => new MongoId($id)))
             ->update('babies');
         return $result;
-    }
-
-    public function remove_cover($hn, $gravida, $bcare){
-        $result = $this->mongo_db
-            ->where(array('hn' => (string) $hn, 'gravida' => (string) $gravida))
-            ->pull('covers', array('owner_id' => new MongoId($this->owner_id), 'bcare' => $bcare))
-            ->update('babies');
-        return $result;
-    }
-
-    public function check_cover_duplicate($hn, $gravida, $bcare){
-        $result = $this->mongo_db
-            ->where(array('hn' => (string) $hn, 'gravida' => (string) $gravida))
-            ->where(array('covers.bcare' => $bcare))
-            ->count('babies');
-
-        return $result > 0 ? TRUE : FALSE;
     }
 
     public function save_service($data)
@@ -208,10 +180,13 @@ class Babies_model extends CI_Model
         $rs = $this->mongo_db
             ->where(array('hn' => (string) $data['hn']))
             ->push('cares', array(
+                '_id'           => $data['id'],
                 'vn'            => $data['vn'],
-                'bcareresult'   => $data['bcareresult'],
+                'result'        => $data['result'],
+                'date_serv'     => to_string_date($data['date_serv']),
+                'hospcode'      => (string) $data['hospcode'],
                 'food'          => $data['food'],
-                'provider_id'   => new MongoId($this->provider_id),
+                'provider_id'   => new MongoId($data['provider_id']),
                 'user_id'       => new MongoId($this->user_id),
                 'owner_id'      => new MongoId($this->owner_id),
                 'last_update'   => date('Y-m-d H:i:s')
@@ -223,24 +198,44 @@ class Babies_model extends CI_Model
     public function get_ppcare_history($hn)
     {
         $rs = $this->mongo_db
-            ->select(array('cares', 'covers'))
+            ->select(array('cares'))
             ->where(array('hn' => (string) $hn))
+            ->limit(1)
             ->get('babies');
 
-        return $rs;
+        return $rs ? $rs[0]['cares'] : NULL;
+    }
 
+    public function check_visit_owner($id)
+    {
+        $this->mongo_db->add_index('babies', array('cares.owner_id' => -1));
+        $this->mongo_db->add_index('babies', array('cares._id' => -1));
+
+        $rs = $this->mongo_db
+            ->where(array(
+                'cares' =>
+                array(
+                    '$elemMatch' =>
+                    array(
+                        'owner_id' => new MongoId($this->owner_id),
+                        '_id' => new MongoId($id)
+                    )
+                )
+            ))
+            ->count('babies');
+
+        return $rs > 0 ? TRUE : FALSE;
     }
 
     public function update_service($data)
     {
         $rs = $this->mongo_db
-            ->where(array('hn' => (string) $data['hn'], 'cares.vn' => (string) $data['vn']))
+            ->where(array('cares._id' => new MongoId($data['id'])))
             ->set(array(
-                'cares.$.bcareresult'  => $data['bcareresult'],
-                'cares.$.food'    => $data['food'],
-                //'provider_id'   => new MongoId($this->provider_id),
+                'cares.$.result'        => $data['result'],
+                'cares.$.food'          => $data['food'],
+                'cares.$.provider_id'           => new MongoId($data['provider_id']),
                 'cares.$.user_id'       => new MongoId($this->user_id),
-                //'owner_id'      => new MongoId($this->owner_id),
                 'cares.$.last_update'   => date('Y-m-d H:i:s')
             ))->update('babies');
 
@@ -253,14 +248,15 @@ class Babies_model extends CI_Model
      * @param   string  $data The data with vn and hn variables.
      * @return  array
      */
-    public function get_service_detail($data)
+    public function get_service_detail($hn, $vn)
     {
         $rs = $this->mongo_db
             ->select(array('cares'))
-            ->where(array('hn' => (string) $data['hn'], 'cares.vn' => (string) $data['vn']))
+            ->where(array('hn' => (string) $hn, 'cares.vn' => (string) $vn))
+            ->limit(1)
             ->get('babies');
 
-        return count($rs) > 0 ? $rs[0]['cares'] : NULL;
+        return count($rs) > 0 ? $rs[0]['cares'][0] : NULL;
     }
     //------------------------------------------------------------------------------------------------------------------
     /**
@@ -276,8 +272,9 @@ class Babies_model extends CI_Model
             ->where(array('hn' => (string) $hn))
             ->get('babies');
 
-        return count($rs) > 0 ? $rs : NULL;
+        return count($rs) > 0 ? $rs[0]['cares'] : NULL;
     }
+
     public function get_person_list_village($persons){
         $rs = $this->mongo_db
             ->where_in('hn', $persons)

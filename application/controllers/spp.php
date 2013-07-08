@@ -33,13 +33,16 @@ class Spp extends CI_Controller
             redirect(site_url('users/access_denied'));
         }
 
-        $this->owner_id = $this->session->userdata('owner_id');
         $this->user_id = $this->session->userdata('user_id');
         $this->provider_id = $this->session->userdata('provider_id');
 
         $this->load->model('Service_model', 'service');
         $this->load->model('Person_model', 'person');
         $this->load->model('Spp_model', 'spp');
+
+        $this->spp->owner_id = $this->owner_id;
+        $this->spp->provider_id = $this->provider_id;
+        $this->spp->user_id = $this->user_id;
 
         $this->load->helper(array('person'));
     }
@@ -52,29 +55,27 @@ class Spp extends CI_Controller
         $data = $this->input->post('data');
         if(!empty($data))
         {
-            //check duplicated
-            $is_duplicated = $this->spp->check_duplicated($data['hn'], $data['vn']);
-
-            $this->spp->owner_id = $this->owner_id;
-            $this->spp->provider_id = $this->provider_id;
-            $this->spp->user_id = $this->user_id;
-
-            if(!$is_duplicated)
-            {
-                $rs = $this->spp->save_service($data);
-            }
-            else
+            if(!empty($data['id']))
             {
                 $rs = $this->spp->update_service($data);
-            }
-
-            if($rs)
-            {
-                $json = '{"success": true}';
+                $json = $rs ? '{"success": true, "id": "'.$data['id'].'"}' : '{"success": false, "msg": "ไม่สามารถบันทึกได้"}';
             }
             else
             {
-                $json = '{"success": false, "msg": "ไม่สามารถบันทึกได้"}';
+                //check duplicated
+                $is_duplicated = $this->spp->check_duplicated($data['hn'], $data['vn'], $data['ppspecial']);
+
+                if($is_duplicated)
+                {
+                    $json = '{"success": false, "msg": "รายการนี้ช้ำ กรุณาตรวจสอบ (กิจกรรมซ้ำ)"}';
+                }
+                else
+                {
+                    $data['id'] = new MongoId();
+
+                    $rs = $this->spp->save_service($data);
+                    $json = $rs ? '{"success": true, "id": "'.get_first_object($data['id']).'"}' : '{"success": false, "msg": "ไม่สามารถบันทึกได้"}';
+                }
             }
         }
         else
@@ -122,28 +123,26 @@ class Spp extends CI_Controller
     /**
      * Get service history
      */
-    public function get_service_history()
+    public function get_history()
     {
         $hn = $this->input->post('hn');
 
         if(!empty($hn))
         {
-            $rs = $this->spp->get_service_history($hn);
+            $rs = $this->spp->get_history($hn);
             if($rs)
             {
                 foreach($rs as $r)
                 {
                     $obj = new stdClass();
-                    $visit = $this->service->get_visit_info($r['vn']);
-                    $obj->clinic_name = get_clinic_name(get_first_object($visit['clinic']));
-                    $obj->date_serv = $visit['date_serv'];
-                    $obj->time_serv = $visit['time_serv'];
-
                     $obj->ppspecial_name = get_pp_special_name($r['ppspecial']);
                     $obj->servplace_name = $r['servplace'] == '1' ? 'ในสถานบริการ' : 'นอกสถานบริการ';
 
                     $obj->provider_name = get_provider_name_by_id(get_first_object($r['provider_id']));
-                    $obj->owner_name = get_owner_name(get_first_object($r['owner_id']));
+                    $obj->hospcode = $r['hospcode'];
+                    $obj->hospname = get_hospital_name($r['hospcode']);
+                    $obj->date_serv = from_mongo_to_thai_date($r['date_serv']);
+                    $obj->id = get_first_object($r['_id']);
 
                     $arr_result[] = $obj;
                 }
@@ -160,6 +159,64 @@ class Spp extends CI_Controller
         else
         {
             $json = '{"success": false ,"msg": "ไม่พบ HN กรุณาระบุ"}';
+        }
+
+        render_json($json);
+    }
+
+    public function get_visit_history()
+    {
+        $hn = $this->input->post('hn');
+        $vn = $this->input->post('vn');
+
+        if(!empty($hn))
+        {
+            $rs = $this->spp->get_visit_history($hn, $vn);
+            if($rs)
+            {
+                foreach($rs as $r)
+                {
+                    $obj = new stdClass();
+                    $obj->ppspecial_name = get_pp_special_name($r['ppspecial']);
+                    $obj->servplace_name = $r['servplace'] == '1' ? 'ในสถานบริการ' : 'นอกสถานบริการ';
+
+                    $obj->provider_name = get_provider_name_by_id(get_first_object($r['provider_id']));
+                    $obj->hospcode = $r['hospcode'];
+                    $obj->hospname = get_hospital_name($r['hospcode']);
+                    $obj->date_serv = from_mongo_to_thai_date($r['date_serv']);
+                    $obj->id = get_first_object($r['_id']);
+
+                    $arr_result[] = $obj;
+                }
+
+                $rows = json_encode($arr_result);
+                $json = '{"success": true, "rows": '.$rows.'}';
+            }
+            else
+            {
+                $json = '{"success": false, "msg": "ไม่พบข้อมูล"}';
+            }
+
+        }
+        else
+        {
+            $json = '{"success": false ,"msg": "ไม่พบ HN กรุณาระบุ"}';
+        }
+
+        render_json($json);
+    }
+
+    public function remove_visit()
+    {
+        $id = $this->input->post('id');
+        if(!empty($id))
+        {
+            $rs = $this->spp->remove_visit($id);
+            $json = $rs ? '{"success": true}' : '{"success": false, "msg": "ไม่สามารถลบรายการได้"}';
+        }
+        else
+        {
+            $json = '{"success": false ,"msg": "ไม่พบ ID ที่ต้องการลบ"}';
         }
 
         render_json($json);

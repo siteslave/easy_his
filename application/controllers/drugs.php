@@ -196,7 +196,7 @@ class Drugs extends CI_Controller
         }
         else
         {
-            $rs = $this->drug->get_price_qty(new MongoId($id));
+            $rs = $this->drug->get_price_qty($id);
 
             $obj = new stdClass();
             $obj->price = $rs['price'];

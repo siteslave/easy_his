@@ -12,13 +12,6 @@ head.ready(function(){
     //------------------------------------------------------------------------------------------------------------------
     //ajax object
     epi.ajax = {
-        /**
-         * Get person list
-         *
-         * @param   start
-         * @param   stop
-         * @param   cb
-         */
         get_list: function(start, stop, cb){
             var url = 'epis/get_list',
                 params = {
@@ -103,6 +96,26 @@ head.ready(function(){
             app.ajax(url, params, function(err, data){
                 err ? cb(err) : cb(null, data);
             });
+        },
+        get_history: function(hn, cb){
+            var url = 'epis/history',
+                params = {
+                    hn: hn
+                };
+
+            app.ajax(url, params, function(err, data){
+                err ? cb(err) : cb(null, data);
+            });
+        },
+        remove_vaccine: function(id, cb){
+            var url = 'epis/remove_vaccine',
+                params = {
+                    id: id
+                };
+
+            app.ajax(url, params, function(err, data){
+                err ? cb(err) : cb(null, data);
+            });
         }
     };
 
@@ -111,16 +124,21 @@ head.ready(function(){
         {
             $('#mdl_search_person').modal({
                 backdrop: 'static'
-            }).css({
-                    width: 780,
-                    'margin-left': function() {
-                        return -($(this).width() / 2);
-                    }
-                });
+            });
         },
         hide_register: function()
         {
             $('#mdl_search_person').modal('hide');
+        },
+        show_new: function(hn)
+        {
+            app.load_page($('#mdl_vaccines'), '/pages/vaccines/' + hn, 'assets/apps/js/pages/vaccines.js');
+            $('#mdl_vaccines').modal({keyboard: false});
+        },
+        show_update: function(hn, id)
+        {
+            app.load_page($('#mdl_vaccines'), '/pages/update_vaccines/' + hn + '/' + id, 'assets/apps/js/pages/vaccines.js');
+            $('#mdl_vaccines').modal({keyboard: false});
         }
     };
     //------------------------------------------------------------------------------------------------------------------
@@ -133,6 +151,59 @@ head.ready(function(){
     epi.set_list = function(data){
         if(_.size(data.rows) > 0){
             _.each(data.rows, function(v){
+
+                var html = '<button type="button" class="btn btn-success btn-samll" data-name="btn_add_cover" ' +
+                    'data-hn="'+ v.hn +'"><i class="icon-plus-sign"></i> วัคซีนจากที่อื่น</button>';
+
+                if(_.size(v.history) > 0)
+                {
+                    html +=
+                        '<table style="width: 690px;">' +
+                        '<thead>' +
+                        '<tr>' +
+                        '<th>วันที่</th>' +
+                        '<th>ชื่อวัคซีน</th>' +
+                        '<th>สถานพยาบาล</th>' +
+                        '<th></th>' +
+                        '</tr>' +
+                        '</thead>' +
+                        '<tbody>';
+
+
+                    _.each(v.history, function(h){
+                        html += '<tr>' +
+                            '<td>'+ h.date_serv +'</td>' +
+                            '<td>'+ app.clear_null(h.vaccine_name) +'</td>' +
+                            '<td>['+ h.hospcode +'] ' + h.hospname + '</td>' +
+                            '<td><div class="btn-group">' +
+                            '<a href="#" data-hn="'+ v.hn +'" data-id="'+ h.id +'" data-name="btn_edit_vaccine" rel="tooltip" title="แก้ไขวัคซีน"' +
+                            'class="btn btn-success btn-small"><i class="icon-edit"></i></a>' +
+                            '<a href="#" class="btn btn-danger btn-small" data-id="'+ h.id +'" data-name="btn_remove_vaccine" rel="tooltip" title="ลบรายการวัคซีน">' +
+                            '<i class="icon-trash"></i></a>' +
+                            '</div></td>' +
+                            '</tr>'
+                    });
+
+                    html += '</tbody></table>';
+                }
+                else
+                {
+                    html += '<table style="width: 650px;">' +
+                        '<thead>' +
+                        '<tr>' +
+                        '<th>วันที่</th>' +
+                        '<th>ชื่อวัคซีน</th>' +
+                        '<th>สถานพยาบาล</th>' +
+                        '<th></th>' +
+                        '</tr>' +
+                        '</thead>' +
+                        '<tbody>' +
+                        '<tr>' +
+                        '<td colspan="4">ไม่พบรายการ</td>' +
+                        '</tr></tbody>' +
+                        '</table>';
+                }
+
                 $('#tbl_epi_list > tbody').append(
                     '<tr>' +
                         '<td>' + v.hn + '</td>' +
@@ -141,22 +212,29 @@ head.ready(function(){
                         '<td>' + v.first_name +' '+ v.last_name + '</td>' +
                         '<td>' + app.mongo_to_thai_date(v.birthdate) + '</td>' +
                         '<td>' + v.age + '</td>' +
-                        '<td>35%</td>' +
                         '<td>' +
-                        '<div class="progress progress-success"><div class="bar" style="width: 55%;" title="35%"></div></div>' +
+                        '<div class="progress"><div class=" progress-bar progress-bar-success" style="width: 55%;" title="55%"></div></div>' +
                         '</td>' +
                         '<td>' +
                         '<div class="btn-group">' +
-                        '<a href="javascript:void(0);" class="btn" title="ความครอบคลุม" data-name="edit" data-vname="' + v.name + '" data-id="' + v.id + '"><i class="icon-edit"></i></a>' +
-                        '<a href="javascript:void(0);" class="btn" data-name="remove" title="จำหน่ายรายการ" data-hn="' + v.hn + '"><i class="icon-trash"></i></a>' +
+                        '<a href="javascript:void(0);" class="btn btn-success btn-small" data-name="cover_history" ' +
+                        'data-title="ประวัติการรับวัคซีน" rel="tooltip" data-content="' + app.html_safe(html) + '" title="ดูประวัติการรับวัคซีน"><i class="icon-share"></i></a>' +
+                        '<a href="javascript:void(0);" rel="tooltip" class="btn btn-danger btn-small" data-name="remove" title="จำหน่ายรายการ" ' +
+                        'data-hn="' + v.hn + '"><i class="icon-trash"></i></a>' +
                         '</div>' +
                         '</td>' +
                         '</tr>'
                 );
+
+                $('a[data-name="cover_history"]').popover({
+                    html: true,placement: 'left'
+                });
+
+                app.set_runtime();
             });
         }else{
             $('#tbl_epi_list > tbody').append(
-                '<tr><td colspan="9">ไม่พบรายการ</td></tr>'
+                '<tr><td colspan="7">ไม่พบรายการ</td></tr>'
             );
         }
     };
@@ -169,12 +247,13 @@ head.ready(function(){
                     '<tr><td colspan="9">ไม่พบรายการ</td></tr>'
                 );
             }else{
-                $('#main_paging > ul').paging(data.total, {
+                $('#main_paging').paging(data.total, {
                     format: " < . (qq -) nnncnnn (- pp) . >",
                     perpage: app.record_per_page,
                     lapping: 1,
-                    page: 1,
+                    page: app.get_cookie('epi_curent_page'),
                     onSelect: function(page){
+                        app.set_cookie('epi_current_page', page);
                         epi.ajax.get_list(this.slice[0], this.slice[1], function(err, data){
                             $('#tbl_epi_list > tbody').empty();
                             if(err){
@@ -256,12 +335,13 @@ head.ready(function(){
                     '<tr><td colspan="9">ไม่พบรายการ</td></tr>'
                 );
             }else{
-                $('#main_paging > ul').paging(data.total, {
+                $('#main_paging').paging(data.total, {
                     format: " < . (qq -) nnncnnn (- pp) . >",
                     perpage: app.record_per_page,
                     lapping: 1,
-                    page: 1,
+                    page: app.get_cookie('epi_village_current_page'),
                     onSelect: function(page){
+                        app.set_cookie('epi_village_current_page', page);
                         epi.ajax.get_list_by_village(village_id, this.slice[0], this.slice[1], function(err, data){
                             $('#tbl_epi_list > tbody').empty();
                             if(err){
@@ -357,7 +437,7 @@ head.ready(function(){
                         '<td>'+ app.mongo_to_thai_date(v.birthdate) +'</td>' +
                         '<td>'+ v.age +'</td>' +
                         '<td>'+ v.sex +'</td>' +
-                        '<td><a href="#" class="btn" data-hn="'+ v.hn + '" data-name="btn_selected_person" data-typearea="'+ v.typearea +'">' +
+                        '<td><a href="#" class="btn btn-success btn-small" data-hn="'+ v.hn + '" data-name="btn_selected_person" data-typearea="'+ v.typearea +'">' +
                         '<i class="icon-ok"></i></a></td>' +
                         '</tr>');
             });
@@ -472,6 +552,90 @@ head.ready(function(){
     $('#btn_refresh').on('click', function(e){
         epi.get_list();
         e.preventDefault();
+    });
+
+    epi.get_history = function(hn, cb){
+        var html;
+        epi.ajax.get_history(hn, function(err, data){
+            if(err)
+            {
+                html = '<table style="width: 650px;">' +
+                    '<thead>' +
+                    '<tr>' +
+                    '<th>วันที่</th>' +
+                    '<th>ชื่อวัคซีน</th>' +
+                    '<th>สถานพยาบาล</th>' +
+                    '<th></th>' +
+                    '</tr>' +
+                    '</thead>' +
+                    '<tbody>' +
+                    '<tr>' +
+                    '<td colspan="4">ไม่พบรายการ</td>' +
+                    '</tr></tbody>' +
+                '</table>';
+            }
+            else
+            {
+                html = '<table style="width: 650px;">' +
+                    '<thead>' +
+                    '<tr>' +
+                    '<th>วันที่</th>' +
+                    '<th>ชื่อวัคซีน</th>' +
+                    '<th>สถานพยาบาล</th>' +
+                    '<th></th>' +
+                    '</tr>' +
+                    '</thead>' +
+                    '<tbody>';
+
+
+                _.each(data.rows, function(v){
+                    html += '<tr>' +
+                        '<td>'+ v.date_serv +'</td>' +
+                        '<td>'+ app.clear_null(v.vaccine_name) +'</td>' +
+                        '<td>['+ v.hospcode +'] ' + v.hospname + '</td>' +
+                        '<td><a href="#" class="btn btn-success btn-small"><i class="icon-edit"></i></a></td>' +
+                    '</tr>'
+                });
+
+
+
+                html += '</tbody></table>';
+            }
+
+            cb(html);
+        });
+    };
+
+    $(document).on('click', 'button[data-name="btn_add_cover"]', function(){
+        var hn = $(this).data('hn');
+        epi.modal.show_new(hn);
+    });
+
+    $(document).on('click', 'a[data-name="btn_edit_vaccine"]', function(){
+        var hn = $(this).data('hn'),
+            id = $(this).data('id');
+        epi.modal.show_update(hn, id);
+    });
+    $(document).on('click', 'a[data-name="btn_remove_vaccine"]', function(){
+        var id = $(this).data('id'),
+            obj = $(this).parent().parent().parent();
+
+        app.confirm('คุณต้องการลบรายการวัคซีนนี้ ใช่หรือไม่?', function(res){
+            if(res)
+            {
+                epi.ajax.remove_vaccine(id, function(err){
+                    if(err)
+                    {
+                        app.alert(err);
+                    }
+                    else
+                    {
+                        app.alert('ลบรายการวัคซีนนี้เสร็จเรียบร้อยแล้ว');
+                        obj.fadeOut('slow');
+                    }
+                });
+            }
+        });
     });
 
     epi.get_list();

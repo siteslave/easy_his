@@ -29,7 +29,7 @@ class Comms_model extends CI_Model {
                 'comservice'     => new mongoId($data['comservice']),
                 'user_id'       => new MongoId($this->user_id),
                 'owner_id'      => new MongoId($this->owner_id),
-                'provider_id'   => new MongoId($this->provider_id),
+                'provider_id'   => new MongoId($data['provider_id']),
                 'last_update'   => date('Y-m-d H:i:s')
             ));
 
@@ -50,6 +50,7 @@ class Comms_model extends CI_Model {
             ->set(array(
                 'comservice'     => new mongoId($data['comservice']),
                 'user_id'       => new MongoId($this->user_id),
+                'provider_id'   => new MongoId($data['provider_id']),
                 'last_update'   => date('Y-m-d H:i:s')
             ))->update('visit_communities');
         return $rs;
@@ -62,10 +63,18 @@ class Comms_model extends CI_Model {
      * @param   string  $vn
      * @return  boolean
      */
-    public function check_duplicated($hn, $vn)
+    public function check_duplicated($hn, $vn, $comms)
     {
+        $this->mongo_db->add_index('visit_communities', array('hn' => -1));
+        $this->mongo_db->add_index('visit_communities', array('vn' => -1));
+        $this->mongo_db->add_index('visit_communities', array('comservice' => -1));
+
         $rs = $this->mongo_db
-            ->where(array('hn' => (string) $hn, 'vn' => (string) $vn))
+            ->where(array(
+                'hn' => (string) $hn,
+                'vn' => (string) $vn,
+                'comservice' => new MongoId($comms)
+            ))
             ->count('visit_communities');
 
         return $rs > 0 ? TRUE : FALSE;
@@ -76,20 +85,34 @@ class Comms_model extends CI_Model {
      */
     public function get_service_detail($hn, $vn)
     {
+        $this->mongo_db->add_index('visit_communities', array('hn' => -1));
+        $this->mongo_db->add_index('visit_communities', array('vn' => -1));
+
         $rs = $this->mongo_db
             ->where(array('hn' => (string) $hn, 'vn' => (string) $vn))
             ->get('visit_communities');
-        return count($rs) > 0 ? $rs[0] : NULL;
+        return count($rs) > 0 ? $rs : NULL;
     }
+
     //------------------------------------------------------------------------------------------------------------------
     /**
      * Get service history
      */
     public function get_service_history($hn)
     {
+        $this->mongo_db->add_index('visit_communities', array('hn' => -1));
         $rs = $this->mongo_db
             ->where(array('hn' => (string) $hn))
             ->get('visit_communities');
+
+        return $rs;
+    }
+
+    public function remove_service($id)
+    {
+        $rs = $this->mongo_db
+            ->where(array('_id' => new MongoId($id)))
+            ->delete('visit_communities');
 
         return $rs;
     }

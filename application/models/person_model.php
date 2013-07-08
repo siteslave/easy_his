@@ -304,9 +304,9 @@ class Person_model extends CI_Model
             ->update('person');
         return $result;
     }
-    public function update_person_typearea($hn, $typearea, $owner_id){
+    public function update_person_typearea($hn, $typearea){
         $result = $this->mongo_db
-            ->where(array('hn' => (string) $hn, 'typearea.owner_id' => new MongoId($owner_id)))
+            ->where(array('hn' => (string) $hn, 'typearea.owner_id' => new MongoId($this->owner_id)))
             ->set(array(
                     'typearea.$.typearea'   => $typearea
                 )
@@ -314,6 +314,20 @@ class Person_model extends CI_Model
             ->update('person');
         return $result;
     }
+    public function save_person_typearea_with_cid($hn, $typearea){
+        $result = $this->mongo_db
+            ->where(array('hn' => (string) $hn))
+            ->push('typearea',
+                array(
+                    'typearea'      => $typearea,
+                    'owner_id'      => new MongoId($this->owner_id),
+                    'last_update'   => date('Y-m-d H:i:s')
+                )
+            )
+            ->update('person');
+        return $result;
+    }
+
     public function check_house_exist($house_id){
 
         $result = $this->mongo_db->where(array('_id' => new MongoId($house_id)))->count('houses');
@@ -465,6 +479,7 @@ class Person_model extends CI_Model
     }
 
     public function get_drug_allergy_list($hn){
+        $this->mongo_db->add_index('person', array('hn' => -1));
         $result = $this->mongo_db
             ->select(array('allergies'))
             ->where(array('hn' => (string) $hn))
@@ -474,15 +489,30 @@ class Person_model extends CI_Model
     }
 
     public function get_drug_allergy_detail($hn, $drug_id){
+        $this->mongo_db->add_index('person', array('hn' => -1));
+        $this->mongo_db->add_index('person', array('allergies.drug_id' => -1));
+
         $result = $this->mongo_db
             ->select(array('allergies'))
-            ->where(array('hn' => (string) $hn, 'allergies.drug_id' => new MongoId($drug_id)))
+            ->where(array(
+                'hn' => (string) $hn,
+                'allergies' =>
+                array(
+                    '$elemMatch' =>
+                    array(
+                        'drug_id' => new MongoId($drug_id)
+                    )
+                )
+            ))
             ->get('person');
 
-        return count($result) > 0 ? $result[0]['allergies'] : NULL;
+        return count($result) > 0 ? $result[0]['allergies'][0] : NULL;
     }
 
     public function update_drug_allergy($data){
+        $this->mongo_db->add_index('person', array('hn' => -1));
+        $this->mongo_db->add_index('person', array('allergies.drug_id' => -1));
+
         $result = $this->mongo_db
             ->where(array('hn' => (string) $data['hn'], 'allergies.drug_id' => new MongoId($data['drug_id'])))
             ->set(array(
@@ -501,6 +531,8 @@ class Person_model extends CI_Model
     }
 
     public function remove_drug_allergy($hn, $drug_id){
+        $this->mongo_db->add_index('person', array('hn' => -1));
+
         $result = $this->mongo_db
             ->where(array('hn' => (string) $hn))
             ->pull('allergies', array('drug_id' => new MongoId($drug_id)))
@@ -509,6 +541,8 @@ class Person_model extends CI_Model
     }
 
     public function save_chronic($data){
+        $this->mongo_db->add_index('person', array('hn' => -1));
+
         $result = $this->mongo_db
             ->where(array('hn' => (string) $data['hn']))
             ->push('chronics',
@@ -526,6 +560,9 @@ class Person_model extends CI_Model
     }
 
     public function update_chronic($data){
+        $this->mongo_db->add_index('person', array('hn' => -1));
+        $this->mongo_db->add_index('person', array('chronics.chronic' => -1));
+
         $result = $this->mongo_db
             ->where(array('hn' => (string) $data['hn'], 'chronics.chronic' => $data['chronic']))
             ->set(array(
@@ -543,8 +580,7 @@ class Person_model extends CI_Model
 
 
     public function remove_chronic($hn, $chronic){
-        //$this->mongo_db->pull('comments', array('comment_id'=>123))->update('blog_posts');
-
+        $this->mongo_db->add_index('person', array('hn' => -1));
         $result = $this->mongo_db
             ->where(array('hn' => (string) $hn))
             ->pull('chronics', array('chronic' =>$chronic))
@@ -552,6 +588,7 @@ class Person_model extends CI_Model
         return $result;
     }
     public function get_chronic_list($hn){
+        $this->mongo_db->add_index('person', array('hn' => -1));
         $result = $this->mongo_db
             ->select(array('chronics'))
             ->where(array('hn' => (string) $hn))
@@ -561,6 +598,7 @@ class Person_model extends CI_Model
     }
 
     public function check_chronic_duplicate($hn, $chronic){
+        $this->mongo_db->add_index('person', array('hn' => -1));
         $result = $this->mongo_db
             ->where(array('hn' => (string) $hn, 'chronics.chronic' => $chronic))
             ->count('person');
@@ -577,6 +615,8 @@ class Person_model extends CI_Model
      */
     public function do_register_clinic($hn, $clinic)
     {
+        $this->mongo_db->add_index('person', array('hn' => -1));
+
         $rs = $this->mongo_db
             ->where('hn', (string) $hn)
             ->push('registers', array(
@@ -591,6 +631,10 @@ class Person_model extends CI_Model
     }
 
     public function check_clinic_exist($hn, $clinic){
+        $this->mongo_db->add_index('person', array('hn' => -1));
+        $this->mongo_db->add_index('person', array('registers.clinic_code' => -1));
+        $this->mongo_db->add_index('person', array('registers.owner_id' => -1));
+
         $result = $this->mongo_db
             ->where(array(
                 'hn' => (string) $hn,
@@ -613,6 +657,7 @@ class Person_model extends CI_Model
     }
     
     public function get_person_detail_with_hn($hn){
+        $this->mongo_db->add_index('person', array('hn' => -1));
         $rs = $this->mongo_db
             ->select(array('hn', 'first_name', 'last_name', 'cid', 'birthdate', 'sex', 'mstatus'))
             ->where(array('hn' => (string) $hn))
@@ -623,6 +668,7 @@ class Person_model extends CI_Model
     }
 
     public function get_person_detail_with_cid($cid){
+        $this->mongo_db->add_index('person', array('cid' => -1));
         $rs = $this->mongo_db
             ->select(array('hn', 'first_name', 'last_name', 'cid', 'birthdate', 'sex', 'mstatus'))
             ->where('cid', $cid)
@@ -676,22 +722,6 @@ class Person_model extends CI_Model
 			return '000000000';
 		}
 	}
-	
-	public function get_all_person()
-	{
-		$rs = $this->mongo_db
-            ->get('person');
-		return $rs;
-	}
-	
-	public function set_hn($person_id, $hn)
-	{
-		$rs = $this->mongo_db
-				->where('_id', new MongoId($person_id))
-				->set(array('hn' => $hn))
-				->update('person');
-		return $rs;
-	}
 
     //------------------------------------------------------------------------------------------------------------------
     /**
@@ -703,6 +733,8 @@ class Person_model extends CI_Model
 
     public function search_person_by_first_last_name($first_name, $last_name)
     {
+        $this->mongo_db->add_index('person', array('first_name' => -1));
+        $this->mongo_db->add_index('person', array('last_name' => -1));
         $rs = $this->mongo_db
             ->where(array('first_name' => $first_name, 'last_name' => $last_name))
             ->get('person');
@@ -717,6 +749,7 @@ class Person_model extends CI_Model
      */
     public function search_person_by_cid($cid)
     {
+        $this->mongo_db->add_index('person', array('cid' => -1));
         $rs = $this->mongo_db
             ->where('cid', $cid)
             ->get('person');
@@ -730,6 +763,7 @@ class Person_model extends CI_Model
      */
     public function search_person_by_hn($hn)
     {
+        $this->mongo_db->add_index('person', array('hn' => -1));
         $rs = $this->mongo_db
             ->where(array('hn' => (string) $hn))
             ->get('person');
@@ -739,6 +773,7 @@ class Person_model extends CI_Model
 
     public function search_person_ajax_by_hn($query)
     {
+        $this->mongo_db->add_index('person', array('hn' => -1));
         $rs = $this->mongo_db
             ->select(array('hn', 'first_name', 'last_name', 'birthdate'))
             ->like('hn', (string) $query)
@@ -751,6 +786,7 @@ class Person_model extends CI_Model
 
     public function search_person_ajax_by_cid($query)
     {
+        $this->mongo_db->add_index('person', array('cid' => -1));
         $rs = $this->mongo_db
             ->select(array('hn', 'first_name', 'last_name', 'birthdate'))
             ->where(array('cid' =>(string) $query))
@@ -763,6 +799,8 @@ class Person_model extends CI_Model
 
     public function search_person_ajax_by_name($first_name, $last_name)
     {
+        $this->mongo_db->add_index('person', array('first_name' => -1));
+        $this->mongo_db->add_index('person', array('last_name' => -1));
         $rs = $this->mongo_db
             ->select(array('hn', 'first_name', 'last_name', 'birthdate'))
             ->where(array('first_name' => (string) $first_name, 'last_name' => (string) $last_name))
@@ -783,6 +821,8 @@ class Person_model extends CI_Model
     public function check_owner($hn)
     {
         $this->mongo_db->add_index('person', array('hn' => -1));
+        $this->mongo_db->add_index('person', array('typearea.typearea' => -1));
+        $this->mongo_db->add_index('person', array('typearea.owner_id' => -1));
 
         $rs = $this->mongo_db
             ->where(array(
@@ -798,8 +838,30 @@ class Person_model extends CI_Model
             ->count('person');
         return $rs > 0 ? TRUE : FALSE;
     }
+    public function check_owner_with_cid($cid)
+    {
+        $this->mongo_db->add_index('person', array('cid' => -1));
+        $this->mongo_db->add_index('person', array('typearea.typearea' => -1));
+        $this->mongo_db->add_index('person', array('typearea.owner_id' => -1));
+
+        $rs = $this->mongo_db
+            ->where(array(
+                'cid' => (string) $cid,
+                'typearea' =>
+                array(
+                    '$elemMatch' =>
+                    array(
+                        'typearea' => array('$in' => array('1', '3')),
+                        'owner_id' => new MongoId($this->owner_id)
+                    )
+                )))
+            ->count('person');
+        return $rs > 0 ? TRUE : FALSE;
+    }
 
     public function search_person_by_hn_with_owner($hn) {
+        $this->mongo_db->add_index('person', array('hn' => -1));
+        $this->mongo_db->add_index('person', array('typearea.owner_id' => -1));
         $rs = $this->mongo_db
             ->where(array(
             'hn' => (string)$hn,
@@ -811,6 +873,8 @@ class Person_model extends CI_Model
         return $rs;
     }
     public function search_person_by_cid_with_owner($cid) {
+        $this->mongo_db->add_index('person', array('cid' => -1));
+        $this->mongo_db->add_index('person', array('typearea.owner_id' => -1));
         $rs = $this->mongo_db
             ->where(array(
             'cid' => (string)$cid,
@@ -877,6 +941,7 @@ class Person_model extends CI_Model
 
     public function remove($hn)
     {
+        $this->mongo_db->add_index('person', array('hn' => -1));
         $rs = $this->mongo_db->where(array('hn' => (string) $hn))
             ->set(array('marked_delete' => 'Y'))
             ->update('person');
@@ -885,6 +950,7 @@ class Person_model extends CI_Model
 
     public function get_typearea($hn)
     {
+        $this->mongo_db->add_index('person', array('hn' => -1));
         $rs = $this->mongo_db
             ->select(array('typearea'))
             ->where(array('hn' => (string) $hn))
