@@ -41,6 +41,10 @@ class Comms extends CI_Controller
         $this->load->model('Person_model', 'person');
         $this->load->model('Comms_model', 'comms');
 
+        $this->comms->owner_id = $this->owner_id;
+        $this->comms->provider_id = $this->provider_id;
+        $this->comms->user_id = $this->user_id;
+
         $this->load->helper(array('person'));
     }
     //------------------------------------------------------------------------------------------------------------------
@@ -54,28 +58,17 @@ class Comms extends CI_Controller
         if(!empty($data))
         {
             //check duplicated
-            $is_duplicated = $this->comms->check_duplicated($data['hn'], $data['vn']);
+            $is_duplicated = $this->comms->check_duplicated($data['hn'], $data['vn'], $data['comservice']);
 
-            $this->comms->owner_id = $this->owner_id;
-            $this->comms->provider_id = $this->provider_id;
-            $this->comms->user_id = $this->user_id;
-
-            if(!$is_duplicated)
+            if($is_duplicated)
+            {
+                // $rs = $this->comms->save_service($data);
+                $json = '{"success": false, "msg": "รายการซ้ำ"}';
+            }
+            else
             {
                 $rs = $this->comms->save_service($data);
-            }
-            else
-            {
-                $rs = $this->comms->update_service($data);
-            }
-
-            if($rs)
-            {
-                $json = '{"success": true}';
-            }
-            else
-            {
-                $json = '{"success": false, "msg": "ไม่สามารถบันทึกได้"}';
+                $json = $rs ? '{"success": true}' : '{"success": false, "msg": "ไม่สามารถบันทึกได้"}';
             }
         }
         else
@@ -99,10 +92,18 @@ class Comms extends CI_Controller
             $rs = $this->comms->get_service_detail($data['hn'], $data['vn']);
             if($rs)
             {
-                $obj = new stdClass();
-                $obj->comservice = get_first_object($rs['comservice']);
+                $arr_result = array();
 
-                $rows = json_encode($obj);
+                foreach($rs as $r)
+                {
+                    $obj = new stdClass();
+                    $obj->comservice = get_community_service_name(get_first_object($r['comservice']));
+                    $obj->provider = get_provider_name_by_id(get_first_object($r['provider_id']));
+                    $obj->id = get_first_object($r['_id']);
+                    $arr_result[] = $obj;
+                }
+
+                $rows = json_encode($arr_result);
                 $json = '{"success": true, "rows": '. $rows .'}';
             }
             else
@@ -153,12 +154,21 @@ class Comms extends CI_Controller
             {
                 $json = '{"success": false, "msg": "ไม่พบข้อมูล"}';
             }
-
         }
         else
         {
             $json = '{"success": false ,"msg": "ไม่พบ HN กรุณาระบุ"}';
         }
+
+        render_json($json);
+    }
+
+    public function remove_service()
+    {
+        $id = $this->input->post('id');
+        $rs = $this->comms->remove_service($id);
+
+        $json = $rs ? '{"success": true}' : '{"success": false, "msg": "ไม่สามารถลบรายการได้"}';
 
         render_json($json);
     }

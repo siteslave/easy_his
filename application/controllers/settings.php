@@ -30,6 +30,9 @@ class Settings extends CI_Controller
         //models
         $this->load->model('Setting_model', 'setting');
         $this->load->model('Basic_model', 'basic');
+
+        $this->setting->owner_id = $this->owner_id;
+        $this->basic->owner_id = $this->owner_id;
     }
 
     public function providers()
@@ -47,9 +50,6 @@ class Settings extends CI_Controller
         if(empty($data)){
             $json = '{"success": false, "msg": "No data for save."}';
         }else{
-
-            $this->setting->owner_id = $this->owner_id;
-
             //check duplicate
             $duplicated = $this->setting->check_duplicate_provider($data['cid']);
 
@@ -72,8 +72,6 @@ class Settings extends CI_Controller
     public function do_update_providers(){
 
         $data = $this->input->post('data');
-
-        $this->setting->owner_id = $this->owner_id;
 
         if(empty($data)){
             $json = '{"success": false, "msg": "No data for save."}';
@@ -108,8 +106,6 @@ class Settings extends CI_Controller
     }
 
     public function get_provider_list(){
-        $this->setting->owner_id = $this->owner_id;
-
         $result = $this->setting->get_provider_list();
         if($result){
             $arr_result = array();
@@ -189,7 +185,6 @@ class Settings extends CI_Controller
     }
     public function get_clinic_list()
     {
-        $this->setting->owner_id = $this->owner_id;
         $rs = $this->setting->get_clinic_list();
         $arr_result = array();
         foreach($rs as $r)
@@ -218,8 +213,6 @@ class Settings extends CI_Controller
         }
         else
         {
-            $this->setting->owner_id = $this->owner_id;
-
             if($data['is_update'] == '1')
             {
                 $rs = $this->setting->update_clinics($data);
@@ -244,9 +237,6 @@ class Settings extends CI_Controller
 
         render_json($json);
     }
-
-
-
 }
 /* End of file settings.php */
 /* Location: ./controllers/settings.php */

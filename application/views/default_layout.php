@@ -30,6 +30,9 @@
         body {
             padding-top: 48px;
         }
+        .popover {
+            max-width: 690px;
+        }
 
     </style>
     <!--[if lt IE 9]>
@@ -43,13 +46,11 @@
             '<?php echo base_url(); ?>assets/js/bootstrap.min.js',
             '<?php echo base_url(); ?>assets/js/underscore.min.js',
             '<?php echo base_url(); ?>assets/js/taffy.js',
-            '<?php echo base_url(); ?>assets/js/bootstrap-datepicker.js',
-            '<?php echo base_url(); ?>assets/js/bootstrap-datepicker.th.js',
             '<?php echo base_url(); ?>assets/js/jquery.blockUI.js',
             '<?php echo base_url(); ?>assets/js/jquery.freeow.min.js',
             '<?php echo base_url(); ?>assets/js/jquery.maskedinput.min.js',
             '<?php echo base_url(); ?>assets/js/typeahead.js',
-            '<?php echo base_url(); ?>assets/js/spin.min.js',
+            '<?php echo base_url(); ?>assets/js/jquery.cookie.js',
             '<?php echo base_url(); ?>assets/js/jquery.paging.min.js',
             '<?php echo base_url(); ?>assets/js/jquery.numeric.js',
             '<?php echo base_url(); ?>assets/js/numeral.min.js',
@@ -85,12 +86,12 @@
               <ul class="dropdown-menu">
                 <li>
                   <a href="<?php echo site_url('services'); ?>">
-                    <i class="icon-th-list"></i> ผู้มารับบริการ (Service list)
+                    <i class="icon-th-list"></i> ผู้มารับบริการ
                   </a>
                 </li>
                 <li>
                   <a href="<?php echo site_url('appoints'); ?>">
-                    <i class="icon-calendar"></i> ทะเบียนนัด (Appointment)
+                    <i class="icon-calendar"></i> ทะเบียนนัด
                   </a>
                 </li>
                 <li>
@@ -115,7 +116,7 @@
               <ul class="dropdown-menu">
                   <li>
                       <a href="<?php echo site_url('epis'); ?>">
-                          <i class="icon-book"></i> ทะเบียนส่งเสริมป้องกันโรค (EPI)
+                          <i class="icon-book"></i> ทะเบียนส่งเสริมป้องกันโรค
                       </a>
                   </li>
                   <li>
@@ -131,29 +132,29 @@
                   <li class="divider"></li>
                   <li>
                       <a href="<?php echo site_url('diabetes'); ?>">
-                          <i class="icon-tags"></i> ทะเบียนผู้ป่วยเบาหวาน (DM)
+                          <i class="icon-tags"></i> ทะเบียนผู้ป่วยเบาหวาน
                       </a>
                   </li>
                   <li>
                       <a href="<?php echo site_url('hypertension'); ?>">
-                          <i class="icon-tags"></i> ทะเบียนผู้ป่วยความดัน (HT)
+                          <i class="icon-tags"></i> ทะเบียนผู้ป่วยความดัน
                       </a>
                   </li>
 
                   <li class="divider"></li>
                   <li>
                       <a href="<?php echo site_url('death'); ?>">
-                          <i class="icon-group"></i> ทะเบียนผู้เสียชีวิต (Death)
+                          <i class="icon-group"></i> ทะเบียนผู้เสียชีวิต
                       </a>
                   </li>
                   <li>
                       <a href="<?php echo site_url('disabilities'); ?>">
-                          <i class="icon-tags"></i> ทะเบียนผู้พิการ (Disability)
+                          <i class="icon-tags"></i> ทะเบียนผู้พิการ
                       </a>
                   </li>
                   <li>
                       <a href="<?php echo site_url('women'); ?>">
-                          <i class="icon-tags"></i> ทะเบียนหญิงวัยเจริญพันธุ์ (Women)
+                          <i class="icon-tags"></i> ทะเบียนหญิงวัยเจริญพันธุ์
                       </a>
                   </li>
               </ul>
@@ -168,8 +169,8 @@
                 <ul class="dropdown-menu">
                     <li>
                         <a href="<?php echo site_url('person'); ?>">
-                            <i class="icon-folder-close"></i>
-                            ข้อมูลประชากรในเขตรับผิดชอบ
+                            <i class="icon-home"></i>
+                            ประชากร/หมู่บ้าน/หลังคาเรือน
                         </a>
                     </li>
                 </ul>
@@ -184,32 +185,32 @@
                     <li>
                         <a href="<?php echo site_url('settings/providers'); ?>">
                             <i class="icon-user"></i>
-                            ข้อมูลผู้ให้บริการ (Providers)
+                            ข้อมูลผู้ให้บริการ
                         </a>
                     </li>
                     <li>
                         <a href="<?php echo site_url('drugs'); ?>">
                             <i class="icon-shopping-cart"></i>
-                            ข้อมูลเวชภัณฑ์ (Drugs)
+                            ข้อมูลเวชภัณฑ์
                         </a>
                     </li>
                     <li>
                         <a href="<?php echo site_url('incomes'); ?>">
                             <i class="icon-shopping-cart"></i>
-                            ข้อมูลค่าใช้จ่าย (Incomes)
+                            ข้อมูลค่าใช้จ่าย
                         </a>
                     </li>
                     <li class="divider"></li>
                     <li>
                         <a href="<?php echo site_url('settings/clinics'); ?>">
                             <i class="icon-th-list"></i>
-                            ข้อมูลแผนกให้บริการ (Clinics)
+                            ข้อมูลแผนกให้บริการ
                         </a>
                     </li>
                     <li>
                         <a href="<?php echo site_url('admin'); ?>">
                             <i class="icon-group"></i>
-                            ข้อมูลผู้ใช้งาน (Users)
+                            ข้อมูลผู้ใช้งาน
                         </a>
                     </li>
                 </ul>
@@ -232,13 +233,13 @@
                                                                            </a>
                     <ul class="dropdown-menu">
                     <li class="nav-header">USER PROFILES</li>
-                    <li>
+                    <li class="disabled">
                         <a href="#"><i class="icon-key"></i> เปลี่ยนรหัสผ่าน (Change password)</a>
                     </li>
-                    <li>
+                    <li class="disabled">
                         <a href="#"> <i class="icon-info-sign"></i> แก้ไขข้อมูลส่วนตัว (Edit profiles)</a>
                     </li>
-                    <li>
+                    <li class="disabled">
                         <a href="#" id="btn_idx_set_provider_clinic"> <i class="icon-user"></i> กำหนดแพทย์/คลินิก (Provider/Clinic)</a>
                     </li>
                     <li class="divider"></li>

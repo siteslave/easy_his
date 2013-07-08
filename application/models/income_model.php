@@ -11,7 +11,6 @@
 
 class Income_model extends CI_Model
 {
-
     public $owner_id;
     public $user_id;
 
@@ -23,7 +22,6 @@ class Income_model extends CI_Model
     public function get_incomes_list()
     {
         $rs = $this->mongo_db
-            ->where(array('active' => 'Y'))
             ->order_by(array('name' => 'DESC'))
             ->get('ref_incomes');
         return $rs;
@@ -85,11 +83,11 @@ class Income_model extends CI_Model
             ->where(array('_id' => new MongoId($data['id'])))
             ->push('owners',
                 array(
-                    'price'  => (float) $data['price'],
-                    //'qty'  => (float) $data['qty'],
-                    'owner_id'  => new MongoId($this->owner_id),
-                    'user_id'  => new MongoId($this->user_id),
-                    'last_update'  => date('Y-m-d H:i:s')
+                    'price'         => (float) $data['price'],
+                    'qty'           => (int) $data['qty'],
+                    'owner_id'      => new MongoId($this->owner_id),
+                    'user_id'       => new MongoId($this->user_id),
+                    'last_update'   => date('Y-m-d H:i:s')
                 )
             )
             ->update('ref_charge_items');
@@ -101,11 +99,11 @@ class Income_model extends CI_Model
         $rs = $this->mongo_db
             ->where(array(
                 '_id' => new MongoId($data['id']),
-                'owners.owner_id' => new MongoId($this->owner_id)))
+                'owners.owner_id'       => new MongoId($this->owner_id)))
             ->set(array(
-                'owners.$.price'  => (float) $data['price'],
-                //'owners.$.qty'  => (float) $data['qty'],
-                'owners.$.user_id'  => new MongoId($this->user_id),
+                'owners.$.price'        => (float) $data['price'],
+                'owners.$.qty'          => (int) $data['qty'],
+                'owners.$.user_id'      => new MongoId($this->user_id),
                 'owners.$.last_update'  => date('Y-m-d H:i:s')
             ))
             ->update('ref_charge_items');
@@ -121,30 +119,6 @@ class Income_model extends CI_Model
             ->get('ref_incomes');
 
         return count($rs) ? $rs[0]['name'] : '-';
-    }
-
-    public function remove_item($id)
-    {
-        $rs = $this->mongo_db
-            ->where(array('_id' => new MongoId($id)))
-            ->delete('ref_charge_items');
-
-        return $rs;
-    }
-
-    public function get_all()
-    {
-        $rs = $this->mongo_db->get('ref_charge_items');
-        return $rs;
-    }
-
-    public function set_code($id, $code)
-    {
-        $rs = $this->mongo_db
-            ->where('_id', new MongoId($id))
-            ->set(array('code' => (string) $code))
-            ->update('ref_charge_items');
-        return $rs;
     }
 
     public function get_price_qty($id)

@@ -1,12 +1,8 @@
     <ul class="breadcrumb">
-        <li><a href="<?php echo site_url(); ?>">หน้าหลัก</a> <span class="divider">/</span></li>
-        <li><a href="<?php echo site_url('settings'); ?>">ตั้งค่า</a> <span class="divider">/</span></li>
+        <li><a href="<?php echo site_url(); ?>">หน้าหลัก</a></li>
+        <li><a href="<?php echo site_url('settings'); ?>">ตั้งค่า</a></li>
         <li class="active">ข้อมูลผู้ให้บริการ (Providers)</li>
     </ul>
-    <div class="alert alert-info">
-        <strong>คำแนะนำ!</strong> เพิ่มข้อมูลผู้ให้บริการ เช่น แพทย์และทันตแพทย์, บุคลากรสาธารณสุขที่ทำหน้าที่ตรวจรักษา, อสม. อื่นๆ
-    </div>
-
     <div class="row-fluid">
         <table class="table table-striped table-hover" id="tbl_provider_list">
             <thead>
@@ -37,184 +33,120 @@
         </table>
 
         <button type="button" class="btn btn-success" id="btn_new_provider">
-            <i class="icon-plus-sign"></i> เพิ่มรายการ
+            <i class="icon-plus-sign"></i> เพิ่ม
         </button>
     </div>
 
     <!-- modal new house -->
-    <div class="modal hide fade" id="modal_new_provider">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h3>เพิ่มข้อมูลผู้ให้บริการ (Provider)</h3>
-        </div>
-        <div class="modal-body">
-            <div class="alert alert-info" id="alert_save_house">
-                <strong>คำแนะนำ!</strong> <span>กรุณากรอกข้อมูลให้ครบ</span>
-            </div>
-            <form action="#">
-                <input type="hidden" id="txt_search_for">
-                <input type="hidden" id="is_update">
-                <input type="hidden" id="txt_old_cid">
-                <input type="hidden" id="txt_provider_id">
-                <div class="row-fluid">
-                    <div class="span3">
-                        <div class="control-group">
-                            <label class="control-label" for="txt_regster_no">ทะเบียนวิชาชีพ</label>
-                            <div class="controls">
-                                <input type="text" id="txt_regster_no" class="input-medium">
+    <div class="modal fade" id="modal_new_provider">
+        <div class="modal-dialog" style="width: 960px; left: 35%">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title"><i class="icon-user-md"></i> เพิ่มข้อมูลผู้ให้บริการ (Provider)</h4>
+                </div>
+                <div class="modal-body">
+                    <form action="#">
+                        <input type="hidden" id="txt_search_for">
+                        <input type="hidden" id="is_update">
+                        <input type="hidden" id="txt_old_cid">
+                        <input type="hidden" id="txt_provider_id">
+                        <div class="row">
+                            <div class="col-lg-3">
+                                <label class="control-label" for="txt_regster_no">ทะเบียนวิชาชีพ</label>
+                                <input type="text" id="txt_regster_no">
                             </div>
-                        </div>
-                    </div>
-                    <div class="span3">
-                        <div class="control-group">
-                            <label class="control-label" for="txt_council">รหัสสภาวิชาชีพ</label>
-                            <div class="controls">
-                                <input type="text" id="txt_council" class="input-medium">
+                            <div class="col-lg-3">
+                                <label class="control-label" for="txt_council">รหัสสภาวิชาชีพ</label>
+                                <input type="text" id="txt_council">
                             </div>
-                        </div>
-                    </div>
-                    <div class="span3">
-                        <div class="control-group">
-                            <label class="control-label" for="txt_cid">เลขบัตรประชาชน</label>
-                            <div class="controls">
-                                <input type="text" id="txt_cid" class="input-medium">
+                            <div class="col-lg-3">
+                                <label class="control-label" for="txt_cid">เลขบัตรประชาชน</label>
+                                <input type="text" id="txt_cid">
                             </div>
-                        </div>
-                    </div>
-                    <div class="span2">
-                        <div class="control-group">
-                            <label class="control-label" for="sl_sex">เพศ</label>
-                            <div class="controls">
-                                <select  id="sl_sex" class="input-small">
+                            <div class="col-lg-2">
+                                <label class="control-label" for="sl_sex">เพศ</label>
+                                <select  id="sl_sex">
                                     <option value="1">ชาย</option>
                                     <option value="2">หญิง</option>
                                 </select>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="row-fluid">
-                    <div class="span2">
-                        <div class="control-group">
-                            <label class="control-label" for="sl_title">คำนำ</label>
-                            <div class="controls">
-                                <select  id="sl_title" class="input-small">
+                        <div class="row">
+                            <div class="col-lg-2">
+                                <label class="control-label" for="sl_title">คำนำ</label>
+                                <select  id="sl_title">
                                     <option value="">--</option>
-                                    <?php 
+                                    <?php
                                     foreach($titles as $t){
-                                    	echo '<option value="'.$t->id.'">' . $t->name . '</option>';
+                                        echo '<option value="'.$t->id.'">' . $t->name . '</option>';
                                     }
                                     ?>
                                 </select>
                             </div>
-                        </div>
-                    </div>
-                    <div class="span3">
-                        <div class="control-group">
-                            <label class="control-label" for="txt_first_name">ชื่อ</label>
-                            <div class="controls">
-                                <input type="text" id="txt_first_name" class="input-medium">
+                            <div class="col-lg-3">
+                                <label class="control-label" for="txt_first_name">ชื่อ</label>
+                                <input type="text" id="txt_first_name">
                             </div>
-                        </div>
-                    </div>
-                    <div class="span3">
-                        <div class="control-group">
-                            <label class="control-label" for="txt_last_name">สกุล</label>
-                            <div class="controls">
-                                <input type="text" id="txt_last_name" class="input-medium">
+                            <div class="col-lg-3">
+                                <label class="control-label" for="txt_last_name">สกุล</label>
+                                <input type="text" id="txt_last_name">
                             </div>
-                        </div>
-                    </div>
-                    <div class="span3">
-                        <div class="control-group">
-                            <label class="control-label" for="txt_birth_date">วันเกิด</label>
-                            <div class="controls">
-                                <div class="input-append date" data-name="datepicker">
-                                    <input class="input-small" id="txt_birth_date" type="text" disabled>
-                                    <span class="add-on"><i class="icon-th"></i></span>
-                                </div>
-                            </div>
-                        </div>
+                            <div class="col-lg-3">
+                                <label class="control-label" for="txt_birth_date">วันเกิด</label>
+                                <input id="txt_birth_date" type="text" data-type="date" placeholder="dd/mm/yyyy" title="วันเดือนปี เกิด" rel="tooltip">
 
-                    </div>
-                </div>
-                <div class="row-fluid">
-                    <div class="span5">
-                        <div class="control-group">
-                            <label class="control-label" for="sl_provider_type">ประเภทบุคลากร</label>
-                            <div class="controls">
-                                <select  id="sl_provider_type" class="input-xlarge">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-5">
+                                <label class="control-label" for="sl_provider_type">ประเภทบุคลากร</label>
+                                <select  id="sl_provider_type">
                                     <option value="">--</option>
-                                    <?php 
+                                    <?php
                                     foreach($provider_types as $t){
-                                    	echo '<option value="'.$t->code.'">' . $t->name . '</option>';
+                                        echo '<option value="'.$t->code.'">' . $t->name . '</option>';
                                     }
                                     ?>
                                 </select>
                             </div>
-                        </div>
-                    </div>
-                    <div class="span3">
-                        <div class="control-group">
-                            <label class="control-label" for="txt_start_date">เริ่มปฏิบัติงาน</label>
-                            <div class="controls">
-                                <div class="input-append date" data-name="datepicker">
-                                    <input class="input-small" id="txt_start_date" type="text" disabled>
-                                    <span class="add-on"><i class="icon-th"></i></span>
-                                </div>
+                            <div class="col-lg-2">
+                                <label class="control-label" for="txt_start_date">เริ่มปฏิบัติงาน</label>
+                                <input id="txt_start_date" type="text" data-type="date" title="ระบุวันที่ dd/mm/yyyy" rel="tooltip">
+                            </div>
+                            <div class="col-lg-2">
+                                <label class="control-label" for="txt_out_date">ออกจากงาน</label>
+                                <input id="txt_out_date" type="text" data-type="date" title="ระบุวันที่ dd/mm/yyyy" rel="tooltip">
                             </div>
                         </div>
-                    </div>
-                    <div class="span3">
-                        <div class="control-group">
-                            <label class="control-label" for="txt_out_date">ออกจากงาน</label>
-                            <div class="controls">
-                                <div class="input-append date" data-name="datepicker">
-                                    <input class="input-small" id="txt_out_date" type="text" disabled>
-                                    <span class="add-on"><i class="icon-th"></i></span>
-                                </div>
+                        <div class="row">
+                            <div class="col-lg-2">
+                                <label class="control-label" for="txt_move_from_hospital_code">รหัส</label>
+                                <input type="text" id="txt_move_from_hospital_code" placeholder="-*-" disabled>
+                            </div>
+                            <div class="col-lg-4">
+                                <label for="txt_move_from_hospital_name">สถานบริการที่ย้ายมา</label>
+                                <input id="txt_move_from_hospital_name" type="text" placeholder="พิมพ์ชื่อหรือรหัสสถานพยาบาล">
+                            </div>
+                            <div class="col-lg-2">
+                                <label class="control-label" for="txt_move_to_hospital_code">รหัส</label>
+                                <input type="text" id="txt_move_to_hospital_code" placeholder="-*-" disabled>
+                            </div>
+                            <div class="col-lg-4">
+                                <label for="txt_move_to_hospital_name">สถานบริการที่ย้ายไป</label>
+                                <input id="txt_move_to_hospital_name" type="text" placeholder="พิมพ์ชื่อหรือรหัสสถานพยาบาล">
                             </div>
                         </div>
-                    </div>
+
+
+
+                    </form>
                 </div>
-                <div class="row-fluid">
-                    <div class="span5">
-                        <div class="control-group">
-                            <label class="control-label" for="txt_move_from_hospital_name">สถานบริการที่ย้ายมา</label>
-                            <div class="controls">
-                                <div class="input-append">
-                                    <input class="input-medium" id="txt_move_from_hospital_name" disabled type="text">
-                                    <input type="hidden" id="txt_move_from_hospital_code">
-                                    <button class="btn" type="button" id="btn_search_hospital_from">
-                                        <i class="icon-search"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="span5">
-                        <div class="control-group">
-                            <label class="control-label" for="txt_move_to_hospital_name">สถานบริการที่ย้ายไป</label>
-                            <div class="controls">
-                                <div class="input-append">
-                                    <input class="input-medium" id="txt_move_to_hospital_name" disabled type="text">
-                                    <input type="hidden" id="txt_move_to_hospital_code" />
-                                    <button class="btn" type="button" id="btn_search_hospital_to">
-                                        <i class="icon-search"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" id="btn_do_save_provider"><i class="icon-save"></i> บันทึกข้อมูล</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="icon-off"></i> ปิดหน้าต่าง</button>
                 </div>
-
-
-
-            </form>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-success" id="btn_do_save_provider"><i class="icon-save"></i> บันทึกข้อมูล</button>
-            <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="icon-off"></i> ปิดหน้าต่าง</button>
+            </div>
         </div>
     </div>
 

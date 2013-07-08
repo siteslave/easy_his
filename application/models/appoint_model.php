@@ -282,5 +282,6 @@ class Appoint_model extends CI_Model {
 
         return $rs;
     }
+
 }
 

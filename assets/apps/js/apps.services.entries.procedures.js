@@ -113,6 +113,10 @@ head.ready(function(){
         procedures.get_list();
     });
 
+    $('#btn_proced_refresh').click(function(){
+        procedures.get_list();
+    });
+
     //remove proced
     $(document).on('click', 'a[data-name="btn_proced_remove"]', function(){
         var obj = $(this).parent().parent().parent(),

@@ -119,12 +119,7 @@ head.ready(function(){
         {
             $('#mdlNewRegister').modal({
                 backdrop: 'static'
-            }).css({
-                    width: 780,
-                    'margin-left': function() {
-                        return -($(this).width() / 2);
-                    }
-                });
+            });
         },
         hide_register: function()
         {
@@ -139,6 +134,7 @@ head.ready(function(){
             _.each(data.rows, function(v){
                 $('#tbl_list > tbody').append(
                     '<tr>' +
+                        '<td>' + v.reg_serial + '</td>' +
                         '<td>' + v.hn + '</td>' +
                         '<td>' + app.clear_null(v.cid) + '</td>' +
                         '<td>' + v.first_name +' '+ v.last_name + '</td>' +
@@ -149,16 +145,31 @@ head.ready(function(){
                         '<td>' + v.diag_type + '</td>' +
                         '<td>' +
                         '<div class="btn-group">' +
-                        '<a href="javascript:void(0);" class="btn btn-danger" data-name="remove" data-hn="' + v.hn + '"><i class="icon-trash"></i></a>' +
-                        '<a href="javascript:void(0);" class="btn" data-name="edit" data-hn="' + v.hn + '"><i class="icon-edit"></i></a>' +
-                        '</div>' +
+                        '<button type="button" class="btn btn-success dropdown-toggle btn-small" data-toggle="dropdown">' +
+                        '<i class="icon-th-list"></i> <span class="caret"></span>' +
+                        '</button>' +
+                        '<ul class="dropdown-menu">' +
+                        '<li>' +
+                        '<a href="javascript:void(0);" data-name="edit" title="แก้ไข" data-hn="' + v.hn + '"><i class="icon-edit"></i> แก้ไขข้อมูล</a>' +
+                        '</li>' +
+                        '<li>' +
+                        '<a href="javascript:void(0);" data-name="remove" title="ลบรายการ" data-hn="' + v.hn + '"><i class="icon-trash"></i> ลบรายการ</a>' +
+                        '</li>' +
+                        '<li>' +
+                        '<a href="javascript:void(0);" data-name="visit_ncdscreen_history" title="ประวัติคัดกรอง" data-hn="' + v.hn + '"><i class="icon-th-list"></i> ประวัติการคัดกรองความเสี่ยง</a>' +
+                        '</li>' +
+                        '<li>' +
+                        '<a href="javascript:void(0);" data-name="visit_ncdscreen_history" title="ประวัติคัดกรองภาวะแทรกซ้อน" ' +
+                        'data-hn="' + v.hn + '"><i class="icon-indent-right"></i> ประวัติการคัดกรองภาวะแทรกซ้อน</a>' +
+                        '</li>' +
+                        '</ul></div>' +
                         '</td>' +
                         '</tr>'
                 );
             });
         }else{
             $('#tbl_list > tbody').append(
-                '<tr><td colspan="8">ไม่พบรายการ</td></tr>'
+                '<tr><td colspan="10">ไม่พบรายการ</td></tr>'
             );
         }
     };
@@ -168,18 +179,20 @@ head.ready(function(){
             if(err){
                 app.alert(err);
             }else{
-                $('#main_paging > ul').paging(data.total, {
+                $('#main_paging').paging(data.total, {
                     format: " < . (qq -) nnncnnn (- pp) . >",
                     perpage: app.record_per_page,
                     lapping: 1,
-                    page: 1,
+                    page: app.get_cookie('dm_paging'),
                     onSelect: function(page){
+                        app.set_cookie('dm_paging', page);
+
                         dm.ajax.get_list(this.slice[0], this.slice[1], function(err, data){
                             $('#tbl_list > tbody').empty();
                             if(err){
                                 app.alert(err);
                                 $('#tbl_list > tbody').append(
-                                    '<tr><td colspan="8">ไม่พบรายการ</td></tr>'
+                                    '<tr><td colspan="10">ไม่พบรายการ</td></tr>'
                                 );
                             }else{
                                 dm.set_list(data);
@@ -271,12 +284,13 @@ head.ready(function(){
         $('#cboDiseaseType').val(v.diag_type);
         $('#cboDoctor').val(v.doctor);
         $('#ch_pre_register').prop('checked', true);
-
        //v.pre_register == "Y" ? $('#ch_pre_register').attr('checked', true) : $('#ch_pre_register').attr('checked', false);
         v.pregnancy == "1" ? $('#ch_pregnancy').prop('checked', true) : $('#ch_pregnancy').removeProp('checked');
         v.hypertension == "1" ? $('#ch_hypertension').prop('checked', true) : $('#ch_hypertension').removeProp('checked');
         v.insulin == "1" ? $('#ch_insulin').prop('checked', true) : $('#ch_insulin').removeProp('checked');
         v.newcase == "1" ? $('#ch_newcase').prop('checked', true) : $('#ch_newcase').removeProp('checked');
+        $('#sl_member_status').val(v.member_status);
+        $('#txt_discharge_date').val(v.discharge_date);
 
         $('#tboRegHosNumber').focus();
 
@@ -327,8 +341,15 @@ head.ready(function(){
 
     $('#btn_filter_by_village').click(function(){
         var village_id = $('#sl_village').val();
+        if(!village_id)
+        {
+            dm.get_list();
+        }
+        else
+        {
+            dm.get_list_by_village(village_id);
+        }
 
-        dm.get_list_by_village(village_id);
     });
 
     dm.get_list_by_village = function(village_id)
@@ -338,18 +359,20 @@ head.ready(function(){
             if(err){
                 app.alert(err);
             }else{
-                $('#main_paging > ul').paging(data.total, {
+                $('#main_paging').paging(data.total, {
                     format: " < . (qq -) nnncnnn (- pp) . >",
                     perpage: app.record_per_page,
                     lapping: 1,
-                    page: 1,
+                    page: app.get_cookie('dm_filter_paging'),
                     onSelect: function(page){
+                        app.set_cookie('dm_filter_paging', page);
+
                         dm.ajax.get_list_by_village(village_id, this.slice[0], this.slice[1], function(err, data){
                             $('#tbl_list > tbody').empty();
                             if(err){
                                 app.alert(err);
                                 $('#tbl_list > tbody').append(
-                                    '<tr><td colspan="9">ไม่พบรายการ</td></tr>'
+                                    '<tr><td colspan="10">ไม่พบรายการ</td></tr>'
                                 );
                             }else{
                                 dm.set_list(data);
@@ -440,6 +463,8 @@ head.ready(function(){
         $('#txt_search_person').val('');
         $('#txt_search_person').removeProp('disabled');
         $('#btn_search_person').removeProp('disabled');
+        $('#txt_discharge_date').val('');
+        app.set_first_selected($('#sl_member_status'));
     };
 
     $(document).on('click', 'a[data-name="remove"]', function() {
@@ -476,6 +501,8 @@ head.ready(function(){
         items.newcase       = $('#ch_newcase').is(":checked") ? '1' : '0';
         items.hosp_serial   = $('#tboRegHosNumber').val();
         items.is_update     = $('#txt_isupdate').val();
+        items.discharge_date = $('#txt_discharge_date').val();
+        items.member_status = $('#sl_member_status').val();
 
         if(!items.hn) {
             app.alert('กรุณาเลือกบุคคลที่ต้องการลงทะเบียนด้วย !');
@@ -560,7 +587,7 @@ head.ready(function(){
 
     $('#txt_search_person').typeahead({
         ajax: {
-            url: site_url + 'diabetes/search_person_ajax',
+            url: site_url + '/person/search_person_ajax',
             timeout: 500,
             displayField: 'name',
             triggerLength: 3,
@@ -590,7 +617,7 @@ head.ready(function(){
 
     $('#txt_query').typeahead({
         ajax: {
-            url: site_url + 'diabetes/search_person_ajax',
+            url: site_url + '/person/search_person_ajax',
             timeout: 500,
             displayField: 'name',
             triggerLength: 3,
@@ -634,7 +661,7 @@ head.ready(function(){
                 {
                     app.alert('ไม่พบรายการ');
                     $('#tbl_list > tbody').append(
-                        '<tr><td colspan="9">ไม่พบรายการ</td></tr>'
+                        '<tr><td colspan="10">ไม่พบรายการ</td></tr>'
                     );
                 }
                 else

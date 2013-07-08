@@ -20,14 +20,7 @@
 ##$root .= str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']);
 
 ##$config['base_url']    = "$root";
-//$config['base_url']    = "";
-
-$proto = "http" . ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == "on") ? "s" : "") . "://";
-$server = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $_SERVER['SERVER_NAME'];
-$server .= str_replace(basename($_SERVER['SCRIPT_NAME']),"",$_SERVER['SCRIPT_NAME']);
-$url = $proto . $server;
-
-$config['base_url'] = $url;
+$config['base_url']    = "";
 
 /*
 |--------------------------------------------------------------------------

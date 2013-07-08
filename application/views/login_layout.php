@@ -67,25 +67,15 @@
     <script type="text/javascript">
         var base_url = '<?=base_url()?>';
         var site_url = '<?=site_url()?>';
-        
     </script>
 
     <script>
         head.js(
                 '<?php echo base_url(); ?>assets/js/bootstrap.min.js',
-                '<?php echo base_url(); ?>assets/js/underscore.min.js',
                 '<?php echo base_url(); ?>assets/js/taffy.js',
                 '<?php echo base_url(); ?>assets/js/bootstrap-datepicker.js',
                 '<?php echo base_url(); ?>assets/js/bootstrap-datepicker.th.js',
                 '<?php echo base_url(); ?>assets/js/jquery.blockUI.js',
-                '<?php echo base_url(); ?>assets/js/jquery.freeow.min.js',
-                '<?php echo base_url(); ?>assets/js/bootbox.min.js',
-                '<?php echo base_url(); ?>assets/js/jquery.maskedinput.min.js',
-                '<?php echo base_url(); ?>assets/js/typeahead.js',
-                '<?php echo base_url(); ?>assets/js/jquery.paging.min.js',
-                '<?php echo base_url(); ?>assets/js/jquery.numeric.js',
-                '<?php echo base_url(); ?>assets/js/numeral.min.js',
-                '<?php echo base_url(); ?>assets/apps/js/apps.js',
                 '<?php echo base_url(); ?>assets/apps/js/apps.users.js'
         );
 

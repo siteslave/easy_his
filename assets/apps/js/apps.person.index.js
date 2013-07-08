@@ -14,33 +14,18 @@ head.ready(document).ready(function(){
         showNewHouse: function(){
             $('#mdlNewHouse').modal({
                     backdrop: 'static'
-                }).css({
-                    width: 780,
-                    'margin-left': function() {
-                        return -($(this).width() / 2);
-                    }
                 });
         },
         /** show house survey **/
         showHouseSurvey: function(){
             $('#mdlHouseSurvey').modal({
                 backdrop: 'static'
-            }).css({
-                    width: 780,
-                    'margin-left': function() {
-                        return -($(this).width() / 2);
-                    }
-                });
+            });
         },
         show_search_person: function(){
             $('#mdl_search_person').modal({
                 backdrop: 'static'
-            }).css({
-                    width: 960,
-                    'margin-left': function() {
-                        return -($(this).width() / 2);
-                    }
-                });
+            });
         },
         hide_search_person: function(){
             $('#mdl_search_person').modal('hide');
@@ -48,12 +33,7 @@ head.ready(document).ready(function(){
         show_village_survey: function(){
             $('#mdl_village_survey').modal({
                 backdrop: 'static'
-            }).css({
-                    width: 960,
-                    'margin-left': function() {
-                        return -($(this).width() / 2);
-                    }
-                });
+            });
         }
     };
 
@@ -458,7 +438,7 @@ head.ready(document).ready(function(){
                         '<td> <div class="btn-group">' +
 /*                        '<a class="btn" href="javascript:void(0);" data-name="btn_remove_person" data-hn="'+ v.hn +'" title="ลบ">' +
                         '<i class="icon-trash"></i></a>' +*/
-                        '<a class="btn" href="'+ site_url + 'person/edit/' + v.hn + '" title="แก้ไข">' +
+                        '<a class="btn btn-success btn-small" href="'+ site_url + '/person/edit/' + v.hn + '" title="แก้ไข">' +
                         '<i class="icon-edit"></i></a>' +
                         '</div></td>' +
                         '</tr>'
@@ -522,12 +502,13 @@ head.ready(document).ready(function(){
                         '</tr>'
                 );
             }else{
-                $('#main_paging > ul').paging(data.total, {
+                $('#main_paging').paging(data.total, {
                     format: " < . (qq -) nnncnnn (- pp) . >",
                     perpage: app.record_per_page,
                     lapping: 1,
-                    page: 1,
+                    page: app.get_cookie('person_current_page'),
                     onSelect: function(page){
+                        app.set_cookie('person_current_page', page);
                         person.ajax.get_list(house_code, village_id, this.slice[0], this.slice[1], function(err, data){
                             if(err){
                                 app.alert(err);
@@ -748,7 +729,7 @@ head.ready(document).ready(function(){
                     '<td>'+ app.mongo_to_thai_date(v.birthdate) +'</td>' +
                     '<td>'+ v.age +'</td>' +
                     '<td>'+ v.sex +'</td>' +
-                    '<td><a href="#" class="btn" data-hn="'+ v.hn + '" data-name="btn_selected_person" data-typearea="'+ v.typearea +'">' +
+                    '<td><a href="#" class="btn btn-default" data-hn="'+ v.hn + '" data-name="btn_selected_person" data-typearea="'+ v.typearea +'">' +
                         '<i class="icon-ok"></i></a></td>' +
                     '</tr>');
             });

@@ -3,10 +3,19 @@
  */
 head.ready(function(){
 	var accident = {};
-	
+
+    accident.modal = {
+        show_entry: function() {
+            $('#mdl_accident').modal({keyboard: false});
+        },
+        hide_entry: function() {
+            $('#mdl_accident').modal('hide');
+        }
+    };
+
 	accident.ajax = {
 		do_save: function(data, cb){
-			var url = 'accidents/save',
+			var url = 'services/save_accident',
             params = {
                 data: data
             };
@@ -16,7 +25,16 @@ head.ready(function(){
 	        });
 		},
 		get_data: function(vn, cb){
-			var url = 'accidents/get_data',
+			var url = 'services/get_accident_data',
+            params = {
+                vn: vn
+            };
+	        app.ajax(url, params, function(err, data){
+	            return err ? cb(err) : cb(null, data);
+	        });
+		},
+		remove: function(vn, cb){
+			var url = 'services/remove_accident',
             params = {
                 vn: vn
             };
@@ -26,11 +44,11 @@ head.ready(function(){
 		}
 	};
 	
-	$('#btn_save').click(function(){
+	$('#btn_save_accident').click(function(){
 		var data = {};
 	
-		data.vn 				= $('#txt_vn').val();
-		data.hn 				= $('#txt_hn').val();
+		data.vn 				= $('#vn').val();
+		data.hn 				= $('#hn').val();
 		data.ae_date 			= $('#txt_aedate').val();
 		data.ae_time 			= $('#txt_aetime').val();
 		data.ae_urgency 		= $('#sl_aeurgency').val();
@@ -95,13 +113,14 @@ head.ready(function(){
 				if(err){
 					app.alert(err);
 				}else{
-					app.alert('การบันทึกข้อมุูลเสร็จเรียบร้อบแล้ว');
+					app.alert('การบันทึกข้อมูลเสร็จเรียบร้อบแล้ว');
+                    accident.modal.hide_entry();
 				}
 			});
 		}
 	});
 	
-	accident.set_date = function(data){
+	accident.set_data = function(data){
 		var data = data.rows;
 		
 		$('#txt_aedate').val(data.ae_date);
@@ -125,23 +144,43 @@ head.ready(function(){
 		$('#txt_aecoma_movement').val(data.ae_coma_movement);
 	};
 	
-	//get update
-	$('#btn_get_data').click(function(){
-		var vn = $('#txt_vn').val();
-		
-		if(!vn){
-			app.alert('ไม่พบเลขที่รับบริการ');
-		}else{
-			accident.ajax.get_data(vn, function(err, data){
-				if(err){
-					app.alert(err);
-				}else{
-					accident.set_date(data);
-					$('#div_warning').fadeOut('slow');
-				}
-			});
-		}
-	});
+	$('#btn_accident').on('click', function() {
+        //get detail
+        var vn = $('#vn').val();
+        accident.ajax.get_data(vn, function(err, data) {
+            if(err)
+            {
+                app.alert(err);
+            }
+            else
+            {
+                accident.set_data(data);
+            }
+
+            accident.modal.show_entry();
+        });
+    });
+
+    //remove
+    $('#btn_remove_accident').on('click', function() {
+        var vn = $('#vn').val();
+        app.confirm('คุณต้องการลบข้อมูลอุบัติเหตุนี้ ใช่หรือไม่?', function(res) {
+            if(res)
+            {
+                accident.ajax.remove(vn, function(err) {
+                    if(err)
+                    {
+                        app.alert(err);
+                    }
+                    else
+                    {
+                        app.alert('ลบรายการเสร็จเรียบร้อยแล้ว');
+                        accident.modal.hide_entry();
+                    }
+                });
+            }
+        });
+    });
 
 });
 

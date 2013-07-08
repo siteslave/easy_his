@@ -2,13 +2,32 @@ head.ready(function(){
     var service = {};
 
     service.modal = {
-        register: function(){
-            $('#mdl_register_new_service').modal({
-                keyboard: false
-            });
+        register: function(hn, vn){
+            if(hn)
+            {
+                if(vn)
+                {
+                    //edit visit
+                    app.load_page($('#mdl_new_service'), '/pages/register_service/' + hn + '/' + vn, 'assets/apps/js/pages/register_service.js');
+                    $('#mdl_new_service').modal({keyboard: false});
+                }
+                else
+                {
+                    //register new visit with patient information
+                    app.load_page($('#mdl_new_service'), '/pages/register_service/' + hn , 'assets/apps/js/pages/register_service.js');
+                    $('#mdl_new_service').modal({keyboard: false});
+                }
+
+            }
+            else
+            {
+                //register new visit without patient information
+                app.load_page($('#mdl_new_service'), '/pages/register_service', 'assets/apps/js/pages/register_service.js');
+                $('#mdl_new_service').modal({keyboard: false});
+            }
         },
         hide_register: function(){
-            $('#mdl_register_new_service').modal('hide');
+            $('#mdl_new_service').modal('hide');
         },
         search_person: function(){
             $('#modal_search_person').modal({
@@ -21,17 +40,6 @@ head.ready(function(){
     };
 
     service.ajax = {
-        get_person_detail: function(hn, cb){
-
-            var url = 'services/get_person_detail',
-                params = {
-                    hn: hn
-                };
-
-            app.ajax(url, params, function(err, data){
-                return err ? cb(err) : cb(null, data);
-            });
-        },
         search_person: function(query, op, cb){
 
             var url = 'services/search_person',
@@ -44,18 +52,6 @@ head.ready(function(){
                 return err ? cb(err) : cb(null, data);
             });
         },
-        do_register: function(data, cb){
-
-            var url = 'services/do_register',
-                params = {
-                    data: data
-                };
-
-            app.ajax(url, params, function(err, data){
-                return err ? cb(err) : cb(null, data);
-            });
-        },
-
         get_list: function(date, doctor_room, start, stop, cb){
             var url = 'services/get_list',
                 params = {
@@ -111,16 +107,6 @@ head.ready(function(){
             app.ajax(url, params, function(err, data){
                 return err ? cb(err) : cb(null, data);
             });
-        },
-        search_person_all: function(query, cb){
-            var url = 'person/search2',
-                params = {
-                    query: query
-                };
-
-            app.ajax(url, params, function(err, data){
-                return err ? cb(err) : cb(null, data);
-            });
         }
     };
 
@@ -150,6 +136,10 @@ head.ready(function(){
         }
     };
 
+    $('#btn_refresh_visit').on('click', function() {
+        service.get_list();
+    });
+
     service.get_list = function(){
 
         var date = $('#txt_service_date').val(),
@@ -166,8 +156,9 @@ head.ready(function(){
                     format: " < . (qq -) nnncnnn (- pp) . >",
                     perpage: app.record_per_page,
                     lapping: 1,
-                    page: 1,
+                    page: app.get_cookie('serv_current_page'),
                     onSelect: function(page){
+                        app.set_cookie('serv_current_page', page)
                         service.ajax.get_list(date, doctor_room, this.slice[0], this.slice[1], function(err, data){
                             $('#tbl_service_list > tbody').empty();
                             if(err){
@@ -348,7 +339,7 @@ head.ready(function(){
         });
         */
     };
-
+/*
     service.clear_register_form = function()
     {
         $('#txt_service_profile_hn').val('');
@@ -379,90 +370,11 @@ head.ready(function(){
         $('#txt_reg_service_insc_hosp_sub_code').val('');
         $('#txt_reg_service_insc_hosp_sub_name').val('');
         $('#txt_reg_service_cc').val('');
-    };
+    };*/
 
     $('#btn_new_visit').click(function(){
-        service.clear_register_form();
+        //service.clear_register_form();
         service.modal.register();
-    });
-
-    $('#txt_reg_service_insc_hosp_main_name').typeahead({
-        ajax: {
-            url: site_url + '/basic/search_hospital_ajax',
-            timeout: 500,
-            displayField: 'fullname',
-            triggerLength: 3,
-            preDispatch: function(query){
-                return {
-                    query: query,
-                    csrf_token: csrf_token
-                }
-            },
-
-            preProcess: function(data){
-                if(data.success){
-                    return data.rows;
-                }else{
-                    return false;
-                }
-            }
-        },
-        updater: function(data){
-            var d = data.split('#');
-            var name = d[0],
-                code = d[1];
-
-            $('#txt_reg_service_insc_hosp_main_code').val(code);
-            $('#txt_reg_service_insc_hosp_main_name').val(name);
-
-            return name;
-        }
-    });
-
-    $('#txt_service_profile_hn').bind('keyup', function(e) {
-        $('#txt_hn').val('');
-    });
-    $('#txt_reg_service_insc_hosp_sub_name').bind('keyup', function(e) {
-        $('#txt_reg_service_insc_hosp_sub_code').val('');
-    });
-    $('#txt_reg_service_insc_hosp_main_name').bind('keyup', function(e) {
-        $('#txt_reg_service_insc_hosp_main_code').val('');
-    });
-    $('#txt_service_profile_hn').bind('keyup', function(e) {
-        $('#txt_service_profile').val('');
-    });
-
-    $('#txt_reg_service_insc_hosp_sub_name').typeahead({
-        ajax: {
-            url: site_url + '/basic/search_hospital_ajax',
-            timeout: 500,
-            displayField: 'fullname',
-            triggerLength: 3,
-            preDispatch: function(query){
-                return {
-                    query: query,
-                    csrf_token: csrf_token
-                }
-            },
-
-            preProcess: function(data){
-                if(data.success){
-                    return data.rows;
-                }else{
-                    return false;
-                }
-            }
-        },
-        updater: function(data){
-            var d = data.split('#');
-            var name = d[0],
-                code = d[1];
-
-            $('#txt_reg_service_insc_hosp_sub_code').val(code);
-            $('#txt_reg_service_insc_hosp_sub_name').val(name);
-
-            return name;
-        }
     });
 
     //search person
@@ -493,67 +405,6 @@ head.ready(function(){
         }
     });
 
-    //save service
-    $('#btn_do_save_service_register').click(function(){
-        var items = {};
-        items.vn = $('#txt_service_vn').val();
-        items.hn = $('#txt_hn').val();
-        items.date_serv = $('#txt_reg_service_date').val();
-        items.time_serv = $('#txt_reg_service_time').val();
-        items.clinic = $('#sl_reg_service_clinic').val();
-        items.doctor_room = $('#sl_reg_service_doctor_room').val();
-        items.patient_type = $('#sl_reg_service_pttype').val();
-        items.location = $('#sl_reg_service_location').val();
-        items.type_in = $('#sl_reg_service_typein').val();
-        items.service_place = $('#sl_reg_service_service_place').val();
-        items.insc_id = $('#sl_reg_service_insc').val();
-        items.insc_code = $('#txt_reg_service_insc_code').val();
-        items.insc_start_date = $('#txt_reg_service_insc_start_date').val();
-        items.insc_expire_date = $('#txt_reg_service_insc_expire_date').val();
-        items.insc_hosp_main = $('#txt_reg_service_insc_hosp_main_code').val();
-        items.insc_hosp_sub = $('#txt_reg_service_insc_hosp_sub_code').val();
-        items.cc = $('#txt_reg_service_cc').val();
-
-
-        if(!items.hn)
-        {
-            app.alert('กรุณาระบุผู้รับบริการ');
-        }
-        else if(!items.date_serv){
-            app.alert('กรุณาระบุวันที่รับบริการ');
-        }else if(!items.time_serv){
-            app.alert('กรุณาระบุเวลารับบริการ');
-        }else if(!items.clinic){
-            app.alert('กรุณาระบุ คลินิก');
-        }else if(!items.patient_type){
-            app.alert('กรุณาระบุ ประเภทผู้ป่วย');
-        }else if(!items.doctor_room){
-            app.alert('กรุณา เลือกห้องตรวจ');
-        }else if(!items.location){
-            app.alert('กรุณาระบุ ที่ตั้ง');
-        }else if(!items.type_in){
-            app.alert('กรุณาระบุ ประเภทการมา');
-        }else if(!items.service_place){
-            app.alert('กรุณาระบุ สถานที่รับบริการ');
-        }else if(!items.insc_id){
-            app.alert('กรุณาระบ สิทธิการรักษาพยาบาล');
-        }else if(!items.cc){
-            app.alert('กรุณาระบุ อาการแรกรับ (CC)');
-        }else{
-            //do save
-            service.ajax.do_register(items, function(err){
-                if(err){
-                    app.alert(err);
-                }else{
-                    app.alert('Save success.');
-                    service.modal.hide_register();
-                    service.get_list();
-                }
-            });
-        }
-
-    });
-
     $(document).on('click', 'a[data-name="btn_selected_visit"]', function(){
         var vn = $(this).data('vn');
 
@@ -581,8 +432,6 @@ head.ready(function(){
             service.get_list_search();
         }
     });
-
-
 
     $('#txt_query_visit').typeahead({
         ajax: {

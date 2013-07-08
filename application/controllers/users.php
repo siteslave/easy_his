@@ -50,45 +50,49 @@ class Users extends CI_Controller
         }
         else
         {
-          $username = $this->input->post('username');
-          $password = $this->input->post('password');
+            $username = $this->input->post('username');
+            $password = $this->input->post('password');
 
-          $users = $this->user->do_login($username, $password);
+            $pass = generate_password($password);
 
-          if(count($users) > 0){
-              $fullname = $users['fullname'];
-              $user_id = get_first_object($users['_id']);
-              $provider_id = get_first_object($users['provider_id']);
+            $users = $this->user->do_login($username, $pass);
 
-              $owner_id = get_first_object($users['owner_id']);
+              if($users){
+                  $fullname = $users['first_name'] . ' ' . $users['last_name'];
+                  $user_id = get_first_object($users['_id']);
+                  $provider_id = get_first_object($users['provider_id']);
 
-              $owners = $this->user->get_owner_detail($owner_id);
+                  $owner_id = get_first_object($users['owner_id']);
+                  $clinic_id = get_first_object($users['clinic_id']);
 
-              $hmain_code = $owners['main_hospital'];
-              $hmain_name = get_hospital_name($hmain_code);
-              $hsub_code = $owners['pcucode'];
-              $hsub_name = get_hospital_name($hsub_code);
+                  $owners = $this->user->get_owner_detail($owner_id);
 
-              $data = array(
-                  'username' => $username,
-                  'fullname' => $fullname,
-                  'hmain_code' => $hmain_code,
-                  'hsub_code' => $hsub_code,
-                  'hmain_name' => $hmain_name,
-                  'hsub_name' => $hsub_name,
-                  'owner_id' => $owner_id,
-                  'user_id' => $user_id,
-                  'provider_id' => $provider_id
-              );
+                  $hmain_code = $owners['main_hospital'];
+                  $hmain_name = get_hospital_name($hmain_code);
+                  $hsub_code = $owners['pcucode'];
+                  $hsub_name = get_hospital_name($hsub_code);
 
-              //set session data
-              $this->session->set_userdata($data);
+                  $data = array(
+                      'username' => $username,
+                      'fullname' => $fullname,
+                      'hmain_code' => $hmain_code,
+                      'hsub_code' => $hsub_code,
+                      'hmain_name' => $hmain_name,
+                      'hsub_name' => $hsub_name,
+                      'owner_id' => $owner_id,
+                      'user_id' => $user_id,
+                      'provider_id' => $provider_id,
+                      'clinic_id' => $clinic_id
+                  );
 
-              redirect(site_url());
+                  //set session data
+                  $this->session->set_userdata($data);
 
-          }else{
-              $this->layout->view('users/login_view', array('success' => FALSE, 'msg' => 'ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง'));
-          }  
+                  redirect(site_url());
+
+              }else{
+                  $this->layout->view('users/login_view', array('success' => FALSE, 'msg' => 'ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง'));
+              }
         }
     }
 

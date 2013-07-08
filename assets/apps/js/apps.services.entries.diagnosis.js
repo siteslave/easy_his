@@ -107,6 +107,10 @@ head.ready(function(){
         diags.get_diag();
     });
 
+    $('#btn_diag_refresh').click(function(){
+        diags.get_diag();
+    });
+
     //remove diag
     $(document).on('click', 'a[data-name="btn_diag_remove"]', function(){
         var obj = $(this).parent().parent(),

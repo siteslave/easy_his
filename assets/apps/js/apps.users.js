@@ -34,4 +34,7 @@ head.ready(function(){
     $('#btn_dologin').on('click', function(){
       user.check_login();
     });
+
+    $('[rel="tooltip"]').tooltip();
+
 });

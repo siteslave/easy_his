@@ -43,6 +43,17 @@ class Appoints extends CI_Controller
         $this->load->model('Service_model', 'service');
         $this->load->model('Basic_model', 'basic');
         $this->load->model('Person_model', 'person');
+
+        $this->basic->owner_id  = $this->owner_id;
+        $this->person->owner_id  = $this->owner_id;
+
+        $this->service->owner_id  = $this->owner_id;
+        $this->service->user_id = $this->user_id;
+
+        $this->appoint->owner_id    = $this->owner_id;
+        $this->appoint->provider_id = $this->provider_id;
+        $this->appoint->user_id     = $this->user_id;
+
     }
     //------------------------------------------------------------------------------------------------------------------
     /*
@@ -56,7 +67,6 @@ class Appoints extends CI_Controller
     {
         if(empty($vn) || !isset($vn))
         {
-            $this->basic->owner_id  = $this->owner_id;
             $data['clinics']        = $this->basic->get_clinic();
             $data['aptypes']        = $this->basic->get_appoint_type();
             $data['doctor_rooms']   = $this->basic->get_doctor_room();
@@ -95,8 +105,6 @@ class Appoints extends CI_Controller
         }
         else
         {
-            $this->basic->owner_id  = $this->owner_id;
-
             $data['person'] = get_patient_info($hn);
             $data['vn']         = $vn;
             $data['hn']         = $hn;
@@ -149,10 +157,6 @@ class Appoints extends CI_Controller
                         }
                         else
                         {
-                            //$this->appoint->provider_id = $this->provider_id;
-                            $this->appoint->user_id     = $this->user_id;
-                            $this->appoint->owner_id    = $this->owner_id;
-
                             $rs = $this->appoint->do_register($data);
 
                             if($rs)
@@ -197,8 +201,6 @@ class Appoints extends CI_Controller
 
             $limit  = (int) $stop - (int) $start;
 
-            $this->appoint->owner_id = $this->owner_id;
-
             if(!empty($data['clinic']))
             {
                 $rs = $this->appoint->get_list_with_clinic($data, $start, $limit);
@@ -219,8 +221,7 @@ class Appoints extends CI_Controller
                     $obj->clinic_name   = get_clinic_name(get_first_object($r['apclinic_id']));
                     $obj->clinic_id     = get_first_object($r['apclinic_id']);
                     $obj->provider_name = get_provider_name_by_id($r['provider_id']);
-                    $obj->apdate_thai   = from_mongo_to_thai_date($r['apdate']);
-                    $obj->apdate_js     = to_js_date($r['apdate']);
+                    $obj->apdate   = from_mongo_to_thai_date($r['apdate']);
                     $obj->aptime        = $r['aptime'];
                     $obj->aptype_name   = get_appoint_type_name($r['aptype_id']);
 
@@ -258,7 +259,6 @@ class Appoints extends CI_Controller
         if($is_ajax)
         {
             $data = $this->input->post('data');
-            $this->appoint->owner_id = $this->owner_id;
             $total = $this->appoint->get_total_with_clinic($data);
 
             $json = '{"success": true, "total": '.$total.'}';
@@ -279,7 +279,6 @@ class Appoints extends CI_Controller
         if($is_ajax)
         {
             $data = $this->input->post('data');
-            $this->appoint->owner_id = $this->owner_id;
             $total = $this->appoint->get_total_without_clinic($data);
 
             $json = '{"success": true, "total": '.$total.'}';
@@ -293,7 +292,6 @@ class Appoints extends CI_Controller
     }
     public function get_list_total_clinic()
     {
-        $this->appoint->owner_id = $this->owner_id;
         $total = $this->appoint->get_list_total();
 
         $json = '{"success": true, "total": '.$total.'}';
@@ -363,7 +361,7 @@ class Appoints extends CI_Controller
                     $obj->time_serv = $r['time_serv'];
                     $obj->clinic_name = get_clinic_name(get_first_object($r['clinic']));
 
-                    array_push($arr_result, $obj);
+                    $arr_result[] = $obj;
                 }
 
                 $rows = json_encode($arr_result);
@@ -504,9 +502,6 @@ class Appoints extends CI_Controller
 
         if($is_ajax)
         {
-            $this->service->user_id = $this->user_id;
-            $this->service->owner_id = $this->owner_id;
-
             $data = $this->input->post('data');
 
             $data['vn'] = generate_serial('VN');
@@ -558,8 +553,7 @@ class Appoints extends CI_Controller
                     $obj->clinic_id     = get_first_object($r['apclinic_id']);
                     $obj->aptype_id     = get_first_object($r['aptype_id']);
                     $obj->provider_name = get_provider_name_by_id($r['provider_id']);
-                    $obj->apdate_thai   = from_mongo_to_thai_date($r['apdate']);
-                    $obj->apdate_js     = to_js_date($r['apdate']);
+                    $obj->apdate   = from_mongo_to_thai_date($r['apdate']);
                     $obj->aptime        = $r['aptime'];
                     $obj->aptype_name   = get_appoint_type_name($r['aptype_id']);
                     $obj->diag          = $r['apdiag'] . ' : ' . get_diag_name($r['apdiag']);

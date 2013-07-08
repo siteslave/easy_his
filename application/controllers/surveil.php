@@ -34,11 +34,7 @@ class Surveil extends CI_Controller {
 
     public function index()
     {
-        $data['provinces'] = $this->basic->get_province();
-        $data['groups'] = $this->surveil->get_506_group();
-        $data['complications'] = $this->surveil->get_complication();
-        $data['syndromes'] = $this->surveil->get_syndromes();
-        $this->layout->view('surveil/index_view', $data);
+        $this->layout->view('surveil/index_view');
     }
 
     public function get_list()

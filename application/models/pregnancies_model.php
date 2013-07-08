@@ -21,6 +21,8 @@ class Pregnancies_model extends CI_Model
      */
     public function get_list($start, $limit)
     {
+        $this->mongo_db->add_index('pregnancies', array('owner_id' => -1));
+
         $rs = $this->mongo_db
             ->where('owner_id', new MongoId($this->owner_id))
             ->offset($start)
@@ -31,6 +33,8 @@ class Pregnancies_model extends CI_Model
 
     public function get_list_total()
     {
+        $this->mongo_db->add_index('pregnancies', array('owner_id' => -1));
+
         $rs = $this->mongo_db
             ->where(array('owner_id' => new MongoId($this->owner_id)))
             ->count('pregnancies');
@@ -40,6 +44,9 @@ class Pregnancies_model extends CI_Model
 
     public function search($hn)
     {
+        $this->mongo_db->add_index('pregnancies', array('owner_id' => -1));
+        $this->mongo_db->add_index('pregnancies', array('hn' => -1));
+
         $rs = $this->mongo_db
             ->where(array(
                 'owner_id' => new MongoId($this->owner_id),
@@ -55,15 +62,21 @@ class Pregnancies_model extends CI_Model
      */
     public function anc_save_service($data)
     {
+        $this->mongo_db->add_index('pregnancies', array('hn' => -1));
+        $this->mongo_db->add_index('pregnancies', array('gravida' => -1));
+
         $rs = $this->mongo_db
             ->where(array('hn' => (string) $data['hn'], 'gravida' => (string) $data['gravida']))
             ->push('anc', array(
+                '_id' => $data['id'],
                 'vn' => $data['vn'],
+                'date_serv' => to_string_date($data['date_serv']),
+                'hospcode' => (string) $data['hospcode'],
                 'anc_no' => $data['anc_no'],
                 'ga' => $data['ga'],
                 'anc_result' => $data['anc_result'],
                 'owner_id' => new MongoId($this->owner_id),
-                'provider_id' => new MongoId($this->provider_id),
+                'provider_id' => new MongoId($data['provider_id']),
                 'user_id' => new MongoId($this->user_id),
                 'last_update' => date('Y-m-d H:i:s')
             ))->update('pregnancies');
@@ -73,30 +86,60 @@ class Pregnancies_model extends CI_Model
 
     public function anc_update_service($data)
     {
+        $this->mongo_db->add_index('pregnancies', array('anc._id' => -1));
+
         $rs = $this->mongo_db
-            ->where(array(
-                            'hn' => $data['hn'],
-                            'gravida' => $data['gravida'],
-                            'anc.vn' => (string) $data['vn']
-            ))
+            ->where(array('anc._id' => new MongoId($data['id'])))
             ->set(array(
                 'anc.$.anc_no' => $data['anc_no'],
                 'anc.$.ga' => $data['ga'],
                 'anc.$.anc_result' => $data['anc_result'],
                 'anc.$.owner_id' => new MongoId($this->owner_id),
-                'anc.$.provider_id' => new MongoId($this->provider_id),
-                'anc.$.user_id' => new MongoId($this->user_id)
+                'anc.$.provider_id' => new MongoId($data['provider_id']),
+                'anc.$.user_id' => new MongoId($this->user_id),
+                'anc.$.last_update' => date('Y-m-d H:i:s')
             ))->update('pregnancies');
 
         return $rs;
     }
 
+    public function anc_remove_visit($hn, $id){
+        $this->mongo_db->add_index('pregnancies', array('anc._id' => -1));
+        $this->mongo_db->add_index('pregnancies', array('hn' => -1));
 
-    public function anc_check_visit_duplicated($hn, $vn, $gravida)
+        $result = $this->mongo_db
+            ->where(array('hn' => (string) $hn))
+            ->pull('anc', array('_id' => new MongoId($id)))
+            ->update('pregnancies');
+        return $result;
+    }
+
+    public function check_anc_visit_owner($id)
+    {
+        $this->mongo_db->add_index('pregnancies', array('anc.owner_id' => -1));
+        $this->mongo_db->add_index('pregnancies', array('anc._id' => -1));
+
+        $rs = $this->mongo_db
+            ->where(array(
+                'anc' =>
+                array(
+                    '$elemMatch' =>
+                    array(
+                        'owner_id' => new MongoId($this->owner_id),
+                        '_id' => new MongoId($id)
+                    )
+                )
+            ))
+            ->count('pregnancies');
+
+        return $rs > 0 ? TRUE : FALSE;
+    }
+
+    public function anc_check_visit_duplicated($hn, $date_serv, $gravida)
     {
         $rs = $this->mongo_db
             ->where(array(
-                        'anc.vn' => (string) $vn,
+                        'anc.date_serv' => to_string_date($date_serv),
                         'gravida' => (string) $gravida,
                         'hn' => (string) $hn))
             ->count('pregnancies');
@@ -107,7 +150,7 @@ class Pregnancies_model extends CI_Model
     public function anc_get_history($hn, $gravida)
     {
         $rs = $this->mongo_db
-            ->select(array('gravida', 'anc'))
+            ->select(array('hn','gravida', 'anc'))
             ->where(array('hn' => (string) $hn, 'gravida' => (string) $gravida))
             ->get('pregnancies');
 
@@ -260,20 +303,27 @@ class Pregnancies_model extends CI_Model
      */
     public function postnatal_save_service($data)
     {
+        $this->mongo_db->add_index('pregnancies', array('hn' => -1));
+        $this->mongo_db->add_index('pregnancies', array('gravida' => -1));
+
         $rs = $this->mongo_db
             ->where(array('hn' => (string) $data['hn'], 'gravida' => (string) $data['gravida']))
             ->push('postnatal', array(
-            'vn' => $data['vn'],
-            'ppresult' => $data['ppresult'],
-            'sugar' => $data['sugar'],
-            'albumin' => $data['albumin'],
-            'perineal' => $data['perineal'],
-            'amniotic_fluid' => $data['amniotic_fluid'],
-            'uterus' => $data['uterus'],
-            'tits' => $data['tits'],
-            'owner_id' => new MongoId($this->owner_id),
-            'provider_id' => new MongoId($this->provider_id),
-            'user_id' => new MongoId($this->user_id)
+                '_id'               => $data['id'],
+                'vn'                => $data['vn'],
+                'date_serv'         => to_string_date($data['date_serv']),
+                'hospcode'          => (string) $data['hospcode'],
+                'ppresult'          => $data['ppresult'],
+                'sugar'             => $data['sugar'],
+                'albumin'           => $data['albumin'],
+                'perineal'          => $data['perineal'],
+                'amniotic_fluid'    => $data['amniotic_fluid'],
+                'uterus'            => $data['uterus'],
+                'tits'              => $data['tits'],
+                'owner_id'          => new MongoId($this->owner_id),
+                'provider_id'       => new MongoId($data['provider_id']),
+                'user_id'           => new MongoId($this->user_id),
+                'last_update'       => date('Y-m-d H:i:s')
         ))->update('pregnancies');
 
         return $rs;
@@ -281,12 +331,10 @@ class Pregnancies_model extends CI_Model
 
     public function postnatal_update_service($data)
     {
+        $this->mongo_db->add_index('pregnancies', array('_id' => -1));
+
         $rs = $this->mongo_db
-            ->where(array(
-                'hn' => $data['hn'],
-                'gravida' => $data['gravida'],
-                'postnatal.vn' => (string) $data['vn']
-            ))
+            ->where(array('postnatal._id' => new MongoId($data['id'])))
             ->set(array(
                 'postnatal.$.ppresult'          => $data['ppresult'],
                 'postnatal.$.sugar'             => $data['sugar'],
@@ -295,16 +343,54 @@ class Pregnancies_model extends CI_Model
                 'postnatal.$.amniotic_fluid'    => $data['amniotic_fluid'],
                 'postnatal.$.uterus'            => $data['uterus'],
                 'postnatal.$.tits'              => $data['tits'],
+                'postnatal.$.provider_id'       => new MongoId($data['provider_id']),
                 'postnatal.$.user_id'           => new MongoId($this->user_id),
-                'last_update'                   => date('Y-m-d H:i:s')
+                'postnatal.$.last_update'       => date('Y-m-d H:i:s')
             ))->update('pregnancies');
 
         return $rs;
     }
 
+    public function postnatal_check_visit_owner($id)
+    {
+        $this->mongo_db->add_index('pregnancies', array('postnatal.owner_id' => -1));
+        $this->mongo_db->add_index('pregnancies', array('postnatal._id' => -1));
+
+        $rs = $this->mongo_db
+            ->where(array(
+                'postnatal' =>
+                array(
+                    '$elemMatch' =>
+                    array(
+                        'owner_id' => new MongoId($this->owner_id),
+                        '_id' => new MongoId($id)
+                    )
+                )
+            ))
+            ->count('pregnancies');
+
+        return $rs > 0 ? TRUE : FALSE;
+    }
+
+
+    public function postnatal_remove_visit($hn, $id){
+        $this->mongo_db->add_index('pregnancies', array('postnatal._id' => -1));
+        $this->mongo_db->add_index('pregnancies', array('hn' => -1));
+
+        $result = $this->mongo_db
+            ->where(array('hn' => (string) $hn))
+            ->pull('postnatal', array('_id' => new MongoId($id)))
+            ->update('pregnancies');
+        return $result;
+    }
 
     public function postnatal_check_visit_duplicated($hn, $vn, $gravida)
     {
+
+        $this->mongo_db->add_index('pregnancies', array('hn' => -1));
+        $this->mongo_db->add_index('pregnancies', array('gravida' => -1));
+        $this->mongo_db->add_index('pregnancies', array('postnatal.vn' => -1));
+
         $rs = $this->mongo_db
             ->where(array(
                 'postnatal.vn'  => (string) $vn,
@@ -318,6 +404,8 @@ class Pregnancies_model extends CI_Model
 
     public function postnatal_get_history($hn)
     {
+        $this->mongo_db->add_index('pregnancies', array('hn' => -1));
+
         $rs = $this->mongo_db
             ->select(array('gravida', 'postnatal'))
             ->where('hn', (string) $hn)
@@ -327,6 +415,10 @@ class Pregnancies_model extends CI_Model
     }
     public function postnatal_get_detail($hn, $vn)
     {
+        $this->mongo_db->add_index('pregnancies', array('hn' => -1));
+        $this->mongo_db->add_index('pregnancies', array('gravida' => -1));
+        $this->mongo_db->add_index('pregnancies', array('postnatal.vn' => -1));
+
         $rs = $this->mongo_db
             ->select(array('gravida', 'postnatal'))
             ->where(array('hn' => (string) $hn, 'postnatal.vn' => (string) $vn))
@@ -338,6 +430,8 @@ class Pregnancies_model extends CI_Model
 
     public function save_anc_info($data)
     {
+        $this->mongo_db->add_index('pregnancies', array('hn' => -1));
+        $this->mongo_db->add_index('pregnancies', array('gravida' => -1));
 
         $rs = $this->mongo_db
             ->where(array('hn' => $data['hn'], 'gravida' => $data['gravida']))
@@ -362,6 +456,8 @@ class Pregnancies_model extends CI_Model
     }
     public function get_anc_info($anc_code)
     {
+        $this->mongo_db->add_index('pregnancies', array('anc_code' => -1));
+
         $rs = $this->mongo_db
             ->select(array('gravida', 'prenatal', 'preg_status'))
             ->where(array('anc_code' => (string) $anc_code))
@@ -372,7 +468,10 @@ class Pregnancies_model extends CI_Model
     }
 
 
-    public function get_person_list_village($persons){
+    public function get_person_list_village($persons)
+    {
+        $this->mongo_db->add_index('pregnancies', array('hn' => -1));
+
         $rs = $this->mongo_db
             ->where_in('hn', $persons)
             ->get('pregnancies');

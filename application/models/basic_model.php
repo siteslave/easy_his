@@ -1287,7 +1287,7 @@ class Basic_model extends CI_Model
     {
         $result = $this->mongo_db->where(array('_id' => new MongoId($vaccine_id)))->get('ref_epi_vaccines');
 
-        return count($result) > 0 ? $result[0]['eng_name'] : '-';
+        return count($result) > 0 ? $result[0]['th_name'] . ' ['.$result[0]['eng_name'] . ']' : '-';
     }
 
     public function get_fp_type_sex($code)

@@ -14,7 +14,9 @@ head.ready(function(){
         $('#txt_start_date').val('');
         $('#txt_out_date').val('');
         $('#txt_move_from_hospital_code').val('');
+        $('#txt_move_from_hospital_name').val('');
         $('#txt_move_to_hospital_code').val('');
+        $('#txt_move_to_hospital_name').val('');
         $('#txt_provider_id').val('');
     };
 
@@ -91,9 +93,6 @@ head.ready(function(){
         provider.ajax.get_provider_list(function(err, data){
 
             $('#tbl_provider_list tbody').empty();
-
-            app.showImageLoading();
-
             if(err){
                 app.alert(err, 'เกิดข้อผิดพลาดระหว่างการดึงข้อมูล ผู้ให้บริการ');
             }else{
@@ -112,7 +111,8 @@ head.ready(function(){
                                 '<td>' + v.provider_type + '</td> ' +
                                 '<td>' + v.start_date + '</td> ' +
                                 '<td>' + v.out_date + '</td> ' +
-                                '<td><a href="javascript:void(0)" class="btn btn-info" data-name="btn_edit_provider" data-id="' + v.id + '"> ' +
+                                '<td><a href="javascript:void(0)" class="btn btn-default" data-name="btn_edit_provider" ' +
+                                'title="แก้ไขรายการ" data-id="' + v.id + '"> ' +
                                 '<i class="icon-edit"></i></a></td> ' +
                                 '</tr>'
                         );
@@ -121,8 +121,6 @@ head.ready(function(){
                     });
                 }
             }
-
-            app.hideImageLoading();
         });
 
     };
@@ -166,22 +164,7 @@ head.ready(function(){
         show_new: function(){
             $('#modal_new_provider').modal({
                 backdrop: 'static'
-            }).css({
-                    width: 700,
-                    'margin-left': function() {
-                        return -($(this).width() / 2);
-                    }
-                });
-        },
-        show_search_hospital: function(){
-            $('#modal_search_hospital').modal({
-                backdrop: 'static'
-            }).css({
-                    width: 680,
-                    'margin-left': function() {
-                        return -($(this).width() / 2);
-                    }
-                });
+            });
         }
     };
 
@@ -190,82 +173,6 @@ head.ready(function(){
         provider.clear_form();
         //show modal
         provider.modal.show_new();
-    });
-
-    $('#btn_do_search_hospital').click(function(){
-        var query = $('#text_query_search_hospital').val();
-        var op = $('#chk_search_by_name').is(":checked") ? 1 : 0;
-
-        if(!query){
-            app.alert('กรุณาระบคำที่ต้องการค้นหา');
-        }else{
-            //do search
-
-            $('#table_search_hospital_result_list tbody').empty();
-
-            provider.ajax.search_hospital(query, op, function(err, data){
-                if(err){
-                    $('#table_search_hospital_result_list tbody').append(
-                        '<tr>' +
-                            '<td colspan="4">' + err + '</td>' +
-                            '</tr>'
-                    );
-                }else{
-                    if( _.size(data) ){
-                        _.each(data, function(v){
-                            $('#table_search_hospital_result_list tbody').append(
-                                '<tr>' +
-                                    '<td>' + v.code + '</td>' +
-                                    '<td>' + v.name + '</td>' +
-                                    '<td>' + v.province + '</td>' +
-                                    '<td><a href="#" class="btn" data-name="btn_set_hospital" ' +
-                                    'data-code="' + v.code + '" data-vname="'+ v.name +'"><i class="icon-share"></i></a></td>' +
-                                    '</tr>'
-                            );
-                        });
-                    }else{
-                        $('#table_search_hospital_result_list tbody').append(
-                            '<tr>' +
-                                '<td colspan="4">ไม่พบรายการ</td>' +
-                                '</tr>'
-                        );
-                    }
-                }
-            });
-        }
-    });
-
-    $(document).on('click', 'a[data-name="btn_set_hospital"]', function(){
-        var act = $('#txt_search_for').val(),
-            hospcode = $(this).attr('data-code'),
-            hospname = $(this).attr('data-vname');
-
-        if(act == 'f'){
-            $('#txt_move_from_hospital_name').val(hospname);
-            $('#txt_move_from_hospital_code').val(hospcode);
-        }else{
-            $('#txt_move_to_hospital_name').val(hospname);
-            $('#txt_move_to_hospital_code').val(hospcode);
-        }
-
-        $('#modal_search_hospital').modal('hide');
-
-    });
-
-    $('#btn_search_hospital_from').click(function(){
-        $('#txt_search_for').val('f');
-        $('#modal_new_provider').modal('hide');
-        provider.modal.show_search_hospital();
-    });
-    $('#btn_search_hospital_to').click(function(){
-        $('#txt_search_for').val('t');
-        $('#modal_new_provider').modal('hide');
-        provider.modal.show_search_hospital();
-    });
-
-
-    $('#modal_search_hospital').on('hidden', function(){
-        $('#modal_new_provider').modal('show');
     });
 
     //save provider
@@ -347,6 +254,78 @@ head.ready(function(){
             app.alert('ไม่พบรหัสของผู้ให้บริการ');
         }else{
             provider.set_provider_detail(id);
+        }
+    });
+
+    $('#txt_move_from_hospital_name').on('keyup', function() {
+        $('#txt_move_from_hospital_code').val('');
+    });
+
+    $('#txt_move_from_hospital_name').typeahead({
+        ajax: {
+            url: site_url + '/basic/search_hospital_ajax',
+            timeout: 500,
+            displayField: 'fullname',
+            triggerLength: 3,
+            preDispatch: function(query){
+                return {
+                    query: query,
+                    csrf_token: csrf_token
+                }
+            },
+
+            preProcess: function(data){
+                if(data.success){
+                    return data.rows;
+                }else{
+                    return false;
+                }
+            }
+        },
+        updater: function(data){
+            var d = data.split('#');
+            var name = d[0],
+                code = d[1];
+
+            $('#txt_move_from_hospital_code').val(code);
+
+            return name;
+        }
+    });
+
+    $('#txt_move_to_hospital_name').on('keyup', function() {
+        $('#txt_move_to_hospital_code').val('');
+    });
+
+    $('#txt_move_to_hospital_name').typeahead({
+        ajax: {
+            url: site_url + '/basic/search_hospital_ajax',
+            timeout: 500,
+            displayField: 'fullname',
+            triggerLength: 3,
+            preDispatch: function(query){
+                return {
+                    query: query,
+                    csrf_token: csrf_token
+                }
+            },
+
+            preProcess: function(data){
+                if(data.success){
+                    return data.rows;
+                }else{
+                    return false;
+                }
+            }
+        },
+        updater: function(data){
+            var d = data.split('#');
+            var name = d[0],
+                code = d[1];
+
+            $('#txt_move_to_hospital_code').val(code);
+
+            return name;
         }
     });
 

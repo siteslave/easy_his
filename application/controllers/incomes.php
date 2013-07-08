@@ -79,7 +79,7 @@ class Incomes extends CI_Controller {
 
                 $price_qty          = $this->income->get_price_qty($r['_id']);
                 $obj->price         = isset($price_qty[0]['price']) ? $price_qty[0]['price'] : 0;
-                //$obj->qty           = isset($price_qty[0]['qty']) ? $price_qty[0]['qty'] : 0;
+                $obj->qty           = isset($price_qty[0]['qty']) ? $price_qty[0]['qty'] : 0;
 
                 $obj->cost          = isset($r['cost']) ? $r['cost'] : '-';
                 $obj->unit          = isset($r['unit']) ? $r['unit'] : '-';
@@ -126,7 +126,7 @@ class Incomes extends CI_Controller {
 
                 $price_qty          = $this->income->get_price_qty($r['_id']);
                 $obj->price         = isset($price_qty[0]['price']) ? $price_qty[0]['price'] : 0;
-                //$obj->qty           = isset($price_qty[0]['qty']) ? $price_qty[0]['qty'] : 0;
+                $obj->qty           = isset($price_qty[0]['qty']) ? $price_qty[0]['qty'] : 0;
 
                 $obj->cost          = isset($r['cost']) ? $r['cost'] : '-';
                 $obj->unit          = isset($r['unit']) ? $r['unit'] : '-';
@@ -173,7 +173,7 @@ class Incomes extends CI_Controller {
 
                     $price_qty          = $this->income->get_price_qty($r['_id']);
                     $obj->price         = isset($price_qty[0]['price']) ? $price_qty[0]['price'] : 0;
-                    //$obj->qty           = isset($price_qty[0]['qty']) ? $price_qty[0]['qty'] : 0;
+                    $obj->qty           = isset($price_qty[0]['qty']) ? $price_qty[0]['qty'] : 0;
 
                     $obj->cost          = isset($r['cost']) ? $r['cost'] : '-';
                     $obj->unit          = isset($r['unit']) ? $r['unit'] : '-';
@@ -229,16 +229,4 @@ class Incomes extends CI_Controller {
 
         render_json($json);
     }
-
-/*
-    public function auto_gen()
-    {
-        $r = $this->income->get_all();
-
-        foreach($r as $r)
-        {
-            $code = generate_serial('ITEM', FALSE);
-            $this->income->set_code(get_first_object($r['_id']), $code);
-        }
-    }*/
 }

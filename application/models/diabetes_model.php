@@ -125,6 +125,8 @@ class Diabetes_model extends CI_Model
                 'hypertension'  => $data['hypertension'],
                 'insulin'       => $data['insulin'],
                 'newcase'       => $data['newcase'],
+                'discharge_date'=> to_string_date($data['discharge_date']),
+                'member_status' => (string) $data['member_status'],
                 'last_update'   => date('Y-m-d H:i:s')
             ))
             ->update('person');
@@ -148,6 +150,8 @@ class Diabetes_model extends CI_Model
                 'registers.$.hypertension'  => $data['hypertension'],
                 'registers.$.insulin'       => $data['insulin'],
                 'registers.$.newcase'       => $data['newcase'],
+                'registers.$.discharge_date'=> to_string_date($data['discharge_date']),
+                'registers.$.member_status' => (string) $data['member_status'],
                 'registers.$.last_update'   => date('Y-m-d H:i:s')
             ))
             ->update('person');

@@ -124,21 +124,11 @@ head.ready(function(){
         show_screen: function(){
             $('#mdl_screen').modal({
                 backdrop: 'static'
-            }).css({
-                    width: 960,
-                    'margin-left': function() {
-                        return -($(this).width() / 2);
-                    }
-                });
+            });
         }, show_result: function(){
             $('#mdl_result').modal({
                 backdrop: 'static'
-            }).css({
-                    width: 680,
-                    'margin-left': function() {
-                        return -($(this).width() / 2);
-                    }
-                });
+            });
         },
         hide_screen: function(){
             $('#mdl_screen').modal('hide');
@@ -157,12 +147,13 @@ head.ready(function(){
             if(err){
                 app.alert(err);
             }else{
-                $('#main_paging > ul').paging(data.total, {
+                $('#main_paging').paging(data.total, {
                     format: " < . (qq -) nnncnnn (- pp) . >",
                     perpage: app.record_per_page,
                     lapping: 1,
-                    page: 1,
+                    page: app.get_cookie('ncdscreen_paging'),
                     onSelect: function(page){
+                        app.set_cookie('ncd_screen_paging', page);
                         ncdscreen.ajax.get_list(year, this.slice[0], this.slice[1], function(err, data){
                             if(err){
                                 app.alert(err);
@@ -241,12 +232,13 @@ head.ready(function(){
             if(err){
                 app.alert(err);
             }else{
-                $('#main_paging > ul').paging(data.total, {
+                $('#main_paging').paging(data.total, {
                     format: " < . (qq -) nnncnnn (- pp) . >",
                     perpage: app.record_per_page,
                     lapping: 1,
-                    page: 1,
+                    page: app.get_cookie('ncdscreen_paging'),
                     onSelect: function(page){
+                        app.set_cookie('ncdscreen_paging', page);
                         ncdscreen.ajax.search_filter(items, this.slice[0], this.slice[1], function(err, data){
                             if(err){
                                 app.alert(err);
@@ -345,11 +337,11 @@ head.ready(function(){
                         '<td>'+ app.clear_null(v.height) +'</td>' +
                         '<td>'+ app.clear_null(v.fbs) +'</td>' +
                         '<td><div class="btn-group">' +
-                        '<a href="javascript:void(0);" data-name="btn_screen" class="btn" data-hn="'+ v.hn +'" ' +
+                        '<a href="javascript:void(0);" data-name="btn_screen" class="btn btn-success btn-small" data-hn="'+ v.hn +'" ' +
                         'data-cid="'+ v.cid +'" data-fullname="'+ v.first_name + ' ' + v.last_name +'" ' +
                         'data-age="'+ v.age +'" data-birthdate="'+ app.mongo_to_thai_date(v.birthdate) +'" data-year="'+ year +'">' +
                         '<i class="icon-edit"></i></a>' +
-                        '<a href="javascript:void(0);" data-name="btn_clear" class="btn" data-hn="'+ v.hn +'" data-year="'+ year +'" title="ยกเลิกข้อมูลการคัดกรอง">' +
+                        '<a href="javascript:void(0);" data-name="btn_clear" class="btn btn-danger btn-small" data-hn="'+ v.hn +'" data-year="'+ year +'" title="ยกเลิกข้อมูลการคัดกรอง">' +
                         '<i class="icon-trash"></i></a>' +
                         '</div></td>' +
                         '</tr>'

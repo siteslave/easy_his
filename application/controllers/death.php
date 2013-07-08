@@ -92,7 +92,7 @@ class Death extends CI_Controller {
             }
             else
             {
-                $json = '{"success": "ไม่พบข้อมูลบุคคล : HN = " '. $data['hn'] . '}';
+                $json = '{"success": "ไม่ใช่กลุ่มเป้าหมาย (Typearea ไม่ใช่ 1 หรือ 3) : HN = " '. $data['hn'] . '}';
             }
         }
         else

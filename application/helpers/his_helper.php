@@ -7,14 +7,16 @@
  * @copyright   Copyright 2013 Maha Sarakham Hospital Information center.
  */
 
-if(!function_exists('get_salt'))
+if(!function_exists('generate_password'))
 {
-    function get_salt()
+    function generate_password($password)
     {
         $salt = '739a1fd7ec6923105c5435f068fad773';
-        return $salt;
+
+        return hash("sha256", $password . $salt);
     }
 }
+
 if( ! function_exists('render_json')){
     function render_json($json){
         header('Cache-Control: no-cache, must-revalidate');
@@ -47,13 +49,20 @@ if(!function_exists('from_mongo_to_thai_date')){
 		
 		var new_date = day + '/' + month + '/' + year;
 		*/
-		$year = (int) substr($mongo_date, 0, 4) + 543;
-		$month = substr($mongo_date, 4, 2);
-		$day = substr($mongo_date, 6, 2);
-		
-		$new_date = $day . '/' . $month . '/' . $year;
-		
-		return $new_date;
+        if(strlen($mongo_date) < 8)
+        {
+            return '-';
+        }
+		else
+        {
+            $year = (int) substr($mongo_date, 0, 4) + 543;
+            $month = substr($mongo_date, 4, 2);
+            $day = substr($mongo_date, 6, 2);
+
+            $new_date = $day . '/' . $month . '/' . $year;
+
+            return $new_date;
+        }
 	}
 }
 

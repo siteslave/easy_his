@@ -22,12 +22,18 @@
         <?php foreach($doctor_rooms as $t) echo '<option value="'.$t->id.'">'.$t->name.'</option>'; ?>
     </select>
 
-    <button class="btn btn-primary" id="btn_do_filter">
+    <button class="btn btn-primary" id="btn_do_filter" type="button">
         <i class="icon-search"></i> แสดง
     </button>
-    <button type="button" class="btn btn-success pull-right" id="btn_new_visit">
-        <i class="icon-plus-sign"></i> ลงทะเบียน
-    </button>
+
+    <div class="btn-group pull-right">
+        <button type="button" class="btn btn-success" id="btn_new_visit">
+            <i class="icon-plus-sign"></i> ลงทะเบียน
+        </button>
+        <button type="button" class="btn btn-default" id="btn_refresh_visit">
+            <i class="icon-refresh"></i> รีเฟรช
+        </button>
+    </div>
 </form>
 </div>
 <table class="table table-striped table-hover" id="tbl_service_list">
@@ -60,162 +66,15 @@
 </table>
     <ul class="pagination" id="main_paging"></ul>
 <!-- modal new -->
-<div class="modal fade" id="mdl_register_new_service">
+<div class="modal fade" id="mdl_new_service">
     <div class="modal-dialog" style="width: 960px; left: 35%">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title"><i class="icon-file-alt"></i> ลงทะเบียนส่งตรวจ</h4>
             </div>
-            <div class="modal-body">
-                <div class="navbar">
-                    <form action="#" class="navbar-form">
-                        <input type="hidden" id="txt_hn" value="" />
-                        <input type="text" style="width: 180px;" id="txt_service_profile_hn"
-                               rel="tooltip" title="พิมพ์ชื่อ, HN หรือ เลขบัตรประชาชน" placeholder="ชื่อ-สกุล, HN หรือ CID" autocomplete="off">
-                        <button type="button" id="btn_show_search_person" class="btn btn-primary"
-                                rel="tooltip" title="คลิกปุ่มเพื่อค้นหาผู้ป่วย"><i class="icon-search"></i></button>
-                        |
-                        <input type="text" style="width: 630px;" disabled="disabled" placeholder="-*-" id="txt_service_profile" />
-                    </form>
-                </div>
-                <div class="tab-pane active" id="tab_user_profile">
-                    <ul class="nav nav-tabs" id="myTab">
-                        <li class="active"><a href="#tab_service_detail" data-toggle="tab"><i class="icon-th-list"></i> ข้อมูลการรับบริการ</a></li>
-<!--                        <li><a href="#tab_service_right" data-toggle="tab"><i class="icon-barcode"></i> สิทธิการรักษา</a></li>-->
-                        <!-- <li><a href="#tab_service_refer" data-toggle="tab"><i class="icon-globe"></i> ข้อมูลการรับส่งต่อ</a></li> -->
-                    </ul>
-                    <div class="tab-content">
-                        <div class="tab-pane active" id="tab_service_detail">
-                            <br>
-                            <form action="#">
-                                <div class="row">
-                                    <div class="col col-lg-2">
-                                        <label for="txt_reg_service_date">วันที่</label>
-                                        <input id="txt_reg_service_date" type="text" data-type="date"
-                                               placeholder="dd/mm/yyyy" style="width: 120px;" required>
-                                    </div>
-                                    <div class="col col-lg-1">
-                                        <label for="txt_reg_service_time">เวลา</label>
-                                        <input type="text" data-type="time" id="txt_reg_service_time"
-                                               placeholder="hh:mm" style="width: 70px;" required>
-                                    </div>
-
-                                    <div class="col col-lg-3">
-                                        <label for="sl_reg_service_patient_status">สภาพผู้ป่วย</label>
-                                        <select name="" id="sl_reg_service_patient_status">
-                                            <option value="0">ปกติ</option>
-                                            <option value="1">เมาสุรา/อาละวาด</option>
-                                            <option value="2">ไม่รู้สึกตัว</option>
-                                            <option value="3">ไม่มีญาติ</option>
-                                        </select>
-                                    </div>
-
-                                    <div class="col col-lg-3">
-                                        <label for="sl_reg_service_clinic">แผนกที่รับบริการ</label>
-                                        <select class="input-xlarge" id="sl_reg_service_clinic">
-                                            <option value="">--</option>
-                                            <?php foreach($clinics as $t) echo '<option value="'.$t->id.'">'.$t->name.'</option>'; ?>
-                                        </select>
-                                    </div>
-                                    <div class="col col-lg-3">
-                                        <label for="sl_reg_service_doctor_room">ห้องตรวจ</label>
-                                        <select class="input-xlarge" id="sl_reg_service_doctor_room">
-                                            <option value="">--</option>
-                                            <?php foreach($doctor_rooms as $t) echo '<option value="'.$t->id.'">'.$t->name.'</option>'; ?>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col col-lg-3">
-                                        <label for="sl_reg_service_pttype">ประเภทผู้ป่วย</label>
-                                        <select name="" id="sl_reg_service_pttype">
-                                            <option value="0">ผู้ป่วยรายเก่า</option>
-                                            <option value="1">ผู้ป่วยรายใหม่</option>
-                                            <option value="2">ผู้รับบริการอื่น</option>
-                                        </select>
-                                    </div>
-                                    <div class="col col-lg-3">
-                                        <label for="sl_reg_service_location">ที่ตั้ง</label>
-                                        <select name="" id="sl_reg_service_location">
-                                            <option value="1">ในเขตรับผิดชอบ</option>
-                                            <option value="2">นอกเขตรับผิดชอบ</option>
-                                        </select>
-                                    </div>
-                                    <div class="col col-lg-3">
-                                        <label for="sl_reg_service_typein">ประเภทการมา</label>
-                                        <select name="" id="sl_reg_service_typein">
-                                            <option value="1">มารับบริการเอง</option>
-                                            <option value="2">มารับบริการตามนัดหมาย</option>
-                                            <option value="3">ได้รับการส่งต่อจากสถานพยาบาลอื่น</option>
-                                            <option value="4">ได้รับการส่งตัวจากบริการ EMS</option>
-                                        </select>
-                                    </div>
-                                    <div class="col col-lg-3">
-                                        <label for="sl_reg_service_service_place">สถานที่รับบริการ</label>
-                                        <select name="" id="sl_reg_service_service_place">
-                                            <option value="1">ในสถานบริการ</option>
-                                            <option value="2">นอกสถานบริการ</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col col-lg-11">
-                                        <label for="txt_reg_service_cc">อาการแรกรับ (CC)</label>
-                                        <textarea rows="1" id="txt_reg_service_cc"></textarea>
-                                    </div>
-                                </div>
-                                <br>
-                                <legend><i class="icon-globe"></i> สิทธิการรักษา</legend>
-                                <form action="#">
-                                    <div class="row">
-                                        <div class="col col-lg-5">
-                                            <label for="sl_reg_service_insc">สิทธิการรักษา</label>
-                                            <select name="" id="sl_reg_service_insc">
-                                                <option value="">--</option>
-                                                <?php foreach($inscls as $t) echo '<option value="'.$t->code.'">'.$t->name.'</option>'; ?>
-                                            </select>
-                                        </div>
-                                        <div class="col col-lg-3">
-                                            <label for="txt_reg_service_insc_code">เลขที่บัตร</label>
-                                            <input type="text" class="input-xlarge" id="txt_reg_service_insc_code">
-                                        </div>
-                                        <div class="col col-lg-2">
-                                            <label for="txt_reg_service_insc_start_date">วันออกบัตร</label>
-                                            <input id="txt_reg_service_insc_start_date" type="text" data-type="date"
-                                                   placeholder="dd/mm/yyyy" rel="tooltip" title="ระบุวันที่ พ.ศ">
-                                        </div>
-                                        <div class="col col-lg-2">
-                                            <label for="txt_reg_service_insc_expire_date">วันหมดอายุ</label>
-                                            <input id="txt_reg_service_insc_expire_date" type="text" data-type="date"
-                                                   placeholder="dd/mm/yyyy" rel="tooltip" title="ระบุวันที่ พ.ศ">
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col col-lg-4">
-                                            <label for="txt_reg_service_insc_hosp_main_name">สถานบริการหลัก</label>
-                                            <input type="hidden" id="txt_reg_service_insc_hosp_main_code">
-                                            <input type="text" class="input-xlarge" id="txt_reg_service_insc_hosp_main_name">
-                                        </div>
-                                        <div class="col col-lg-4">
-                                            <label for="txt_reg_service_insc_hosp_sub_name">สถานบริการรอง</label>
-                                            <input type="hidden" id="txt_reg_service_insc_hosp_sub_code">
-                                            <input type="text" class="input-xlarge" id="txt_reg_service_insc_hosp_sub_name">
-                                        </div>
-                                    </div>
-                                </form>
-                            </form>
-                        </div>
-                        <!--
-                        <div class="tab-pane" id="tab_service_refer">
-
-                        </div>
-                        -->
-                    </div>
-            </div>
+            <div class="modal-body"></div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" id="btn_do_save_service_register"><i class="icon-save"></i> บันทึกข้อมูล</button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="icon-off"></i> ปิดหน้าต่าง</button>
             </div>
         </div>
     </div>

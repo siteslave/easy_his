@@ -16,32 +16,22 @@ head.ready(function(){
         show_search_visit: function(){
             $('#mdl_select_visit').modal({
                 backdrop: 'static'
-            }).css({
-                width: 780,
-                'margin-left': function() {
-                    return -($(this).width() / 2);
-                }
-                });
+            });
         },
         show_register_service: function(){
             $('#mdl_register_service').modal({
                 backdrop: 'static'
-            }).css({
-                width: 960,
-                'margin-left': function() {
-                    return -($(this).width() / 2);
-                }
-                });
-        },
-        show_update: function(){
-            $('#mdl_update').modal({
-                backdrop: 'static'
-            }).css({
-                width: 960,
-                'margin-left': function() {
-                    return -($(this).width() / 2);
-                }
             });
+        },
+
+        show_send_service: function(hn, id) {
+            app.load_page($('#mdl_new_service'), '/pages/register_service_appoint/' + hn + '/' + id, 'assets/apps/js/pages/register_service.js');
+            $('#mdl_new_service').modal({keyboard: false});
+        },
+
+        show_update: function(hn, vn, id){
+            app.load_page($('#mdl_appoint'), '/pages/appoints/' + hn + '/' + vn + '/' + id, 'assets/apps/js/pages/appoints.js');
+            $('#mdl_appoint').modal({keyboard: false});
         },
         hide_new: function(){
             $('#mdl_select_visit').modal('hide');
@@ -147,11 +137,15 @@ head.ready(function(){
             _.each(data.rows, function(v){
                 var vstatus = v.vstatus == '1' ? '<span class="label label-success" title="มาตามนัด">มาตามนัด</span>' :
                     '<span class="label label-warning" title="ไม่มาตามนัด">ไม่มาตามนัด</span>';
+                var status_disabled = v.vstatus == '1' ? 'disabled="disabled"' : '';
+                var edit_disabled = v.vstatus == '1' ? 'disabled="disabled"' : '';
+
+                var visit_vn = typeof v.visit_vn == "undefined" ? '' : v.visit_vn;
 
                 $('#tbl_appoint_list > tbody').append(
                     '<tr>' +
                         '<td>' + vstatus + '</td>' +
-                        '<td>' + v.apdate_thai + '</td>' +
+                        '<td>' + v.apdate + '</td>' +
                         '<td>' + v.aptime + '</td>' +
                         '<td>' + v.hn + '</td>' +
                         '<td>' + v.person_name + '</td>' +
@@ -159,13 +153,14 @@ head.ready(function(){
                         '<td>' + v.clinic_name + '</td>' +
                         '<td>' + v.provider_name + '</td>' +
                         '<td><div class="btn-group">' +
-                        '<a href="javascript:void(0);" data-name="btn_edit" data-id="' + v.id + '" class="btn">' +
+                        '<a href="javascript:void(0);" data-name="btn_edit" data-vn="'+ v.vn +'" ' + edit_disabled +
+                        ' data-hn="'+ v.hn +'" data-id="' + v.id + '" class="btn btn-success btn-small">' +
                         '<i class="icon-edit"></i></a>' +
-                        '<a href="javascript:void(0);" data-name="btn_remove" data-id="' + v.id + '" class="btn"> '+
+                        '<a href="javascript:void(0);" data-name="btn_remove" data-id="' + v.id + '" class="btn btn-danger btn-small" '+ status_disabled +'> '+
                         '<i class="icon-trash"></i></a>' +
-                        '<a href="javascript:void(0);" data-name="btn_set_visit" data-id="' + v.id + '" data-hn="'+ v.hn +'" ' +
-                        'data-fullname="'+ v.person_name +'" data-clinic="' + v.clinic_id + '" data-apdate="'+ v.apdate_js +'" ' +
-                        'data-status="' + v.vstatus + '" class="btn"> '+
+                        '<a href="javascript:void(0);" data-name="btn_set_visit" data-id="' + v.id + '" data-hn="'+ v.hn +'" data-vn="'+ visit_vn +'" ' +
+                        ' data-clinic="' + v.clinic_id + '" data-apdate="'+ v.apdate +'" ' +
+                        ' data-status="' + v.vstatus + '" class="btn btn-success btn-small" '+ status_disabled +'> '+
                         '<i class="icon-share"></i></a>' +
                         '</div></td>' +
                         '</tr>'
@@ -173,6 +168,23 @@ head.ready(function(){
             });
         }
     };
+
+    $(document).on('click', '[data-name="btn_set_visit"]', function() {
+        var id = $(this).data('id'),
+            hn = $(this).data('hn'),
+            status = $(this).data('status');
+
+        if(status == '1')
+        {
+            app.alert('รายการนี้ถูกลงทะเบียนเรียบร้อยแล้ว ไม่สามารถลงทะเบียนส่งตรวจได้อีก');
+        }
+        else
+        {
+            appoint.modal.show_send_service(hn, id);
+        }
+
+
+    });
     /**
      * Get appointment list
      *
@@ -237,7 +249,7 @@ head.ready(function(){
                                 '<td>'+ v.date_serv +'</td>' +
                                 '<td>'+ v.time_serv +'</td>' +
                                 '<td>'+ v.clinic_name +'</td>' +
-                                '<td><a href="javascript:void(0);" class="btn" data-name="btn_selected_visit" ' +
+                                '<td><a href="javascript:void(0);" class="btn btn-default" data-name="btn_selected_visit" ' +
                                 'data-vn="'+ v.vn +'" data-hn="'+ v.hn +'"><i class="icon-ok"></i></a></td>' +
                                 '</tr>'
                         );
@@ -289,7 +301,7 @@ head.ready(function(){
                 app.alert(err);
                 $('#tbl_appoint_list > tbody').append('<tr><td colspan="9">ไม่พบข้อมูล</td></tr>');
             }else{
-                $('#main_paging > ul').paging(data.total, {
+                $('#main_paging').paging(data.total, {
                     format: " < . (qq -) nnncnnn (- pp) . >",
                     perpage: app.record_per_page,
                     lapping: 1,
@@ -372,7 +384,7 @@ head.ready(function(){
                 app.alert(err);
                 $('#tbl_appoint_list > tbody').append('<tr><td colspan="9">ไม่พบข้อมูล</td></tr>');
             }else{
-                $('#main_paging > ul').paging(data.total, {
+                $('#main_paging').paging(data.total, {
                     format: " < . (qq -) nnncnnn (- pp) . >",
                     perpage: app.record_per_page,
                     lapping: 1,
@@ -469,25 +481,11 @@ head.ready(function(){
     };
 
     $(document).on('click', 'a[data-name="btn_edit"]', function(){
-        var id = $(this).attr('data-id');
+        var id = $(this).data('id'),
+            hn = $(this).data('hn'),
+            vn = $(this).data('vn');
 
-        $('#txt_update_id').val(id);
-
-        //get detail
-        appoint.ajax.detail(id, function(err, data){
-            if(err)
-            {
-                app.alert(err);
-            }
-            else
-            {
-                appoint.clear_form();
-                //set data
-                appoint.set_detail(data);
-                //show modal
-                appoint.modal.show_update();
-            }
-        });
+        appoint.modal.show_update(hn, vn, id);
     });
     //save update
     $('#btn_do_update').on('click', function(){

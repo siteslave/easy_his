@@ -13,12 +13,6 @@ class Admin_model extends CI_Model {
 
     public $owner_id;
     public $user_id;
-    public $salt;
-
-    public function __construct()
-    {
-        parent::__construct();
-    }
 
     public function get_list()
     {
@@ -27,25 +21,7 @@ class Admin_model extends CI_Model {
             ->order_by(array('fullname' => 'ASC'))
             ->get('users');
 
-        $arr_result = array();
-
-        foreach($rs as $r)
-        {
-            $obj = new stdClass();
-            $obj->cid           = $r['cid'];
-            $obj->id            = get_first_object($r['_id']);
-            $obj->fullname      = $r['fullname'];
-            $obj->username      = $r['username'];
-            //$obj->owner_name    = get_owner_name(get_first_object($r['owner_id']));
-            $obj->provider_name = get_provider_name_by_id(get_first_object($r['provider_id']));
-            $obj->last_login    = $r['last_login'];
-            $obj->register_date = $r['register_date'];
-            $obj->active        = $r['active'];
-
-            $arr_result[] = $obj;
-        }
-
-        return $arr_result;
+        return $rs;
     }
 
     public function get_list_total()
@@ -61,11 +37,15 @@ class Admin_model extends CI_Model {
     {
         $rs = $this->mongo_db
             ->insert('users', array(
-                'fullname' => $data['fullname'],
+                'first_name' => $data['first_name'],
+                'last_name' => $data['last_name'],
                 'username' => $data['username'],
-                'password' => md5($this->salt.$data['password']),
+                'password' => $data['password'],
                 'active' => $data['active'],
+                'cid' => $data['cid'],
+                'register_date' => date('Y-m-d'),
                 'provider_id' => new MongoId($data['provider_id']),
+                'clinic_id' => new MongoId($data['clinic_id']),
                 'owner_id' => new MongoId($this->owner_id),
                 'last_update' => date('Y-m-d H:i:s')
             ));
@@ -74,24 +54,25 @@ class Admin_model extends CI_Model {
     public function update($data)
     {
         $rs = $this->mongo_db
-            ->where(array('username' => $data['username']))
+            ->where(array('_id' => new MongoId($data['id'])))
             ->set(array(
-                'fullname' => $data['fullname'],
-                'actived' => $data['active'],
+                'first_name' => $data['first_name'],
+                'last_name' => $data['last_name'],
+                'active' => $data['active'],
+                'cid' => $data['cid'],
                 'provider_id' => new MongoId($data['provider_id']),
+                'clinic_id' => new MongoId($data['clinic_id']),
                 'last_update' => date('Y-m-d H:i:s')
             ))
             ->update('users');
         return $rs;
     }
 
-    public function change_password($username, $new_pass)
+    public function change_password($id, $password)
     {
-        $password = sha1(md5($new_pass));
-
         $rs = $this->mongo_db
-            ->where(array('username' => $username))
-            ->set(array('password' => md5($this->salt.$password)))
+            ->where(array('_id' => new MongoId($id)))
+            ->set(array('password' => $password))
             ->update('users');
 
         return $rs;
@@ -113,5 +94,21 @@ class Admin_model extends CI_Model {
         }
 
         return $arr_result;
+    }
+
+    public function check_exist($username)
+    {
+        $rs = $this->mongo_db
+            ->where(array('username' => $username, 'owner_id' => new MongoId($this->owner_id)))
+            ->count('users');
+        return $rs > 0 ? TRUE : FALSE;
+    }
+
+    public function get_detail($id)
+    {
+        $rs = $this->mongo_db
+            ->where(array('_id' => new MongoId($id)))
+            ->get('users');
+        return $rs ? $rs[0] : NULL;
     }
 }

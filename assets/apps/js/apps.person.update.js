@@ -28,12 +28,7 @@ head.ready(function(){
         show_search_dbpop: function(){
             $('#modal_search_dbpop').modal({
                 backdrop: 'static'
-            }).css({
-                    width: 740,
-                    'margin-left': function() {
-                        return -($(this).width() / 2);
-                    }
-                });
+            });
         },
         //search hospital
         show_search_hospital: function(){
@@ -46,26 +41,18 @@ head.ready(function(){
                     }
                 });
         },
-        //search drug allergy
-        show_search_drug_allergy: function(){
-            $('#modal_search_drug_allergy').modal({
-                backdrop: 'static'
-            }).css({
-                    width: 780,
-                    'margin-left': function() {
-                        return -($(this).width() / 2);
-                    }
-                });
+        show_allergy: function(hn){
+            app.load_page($('#modal_search_drug_allergy'), '/pages/allergies/' + hn, 'assets/apps/js/pages/allergies.js');
+            $('#modal_search_drug_allergy').modal({keyboard: false});
+        },
+        show_update_allergy: function(hn, id){
+            app.load_page($('#modal_search_drug_allergy'), '/pages/allergies/' + hn + '/' + id, 'assets/apps/js/pages/allergies.js');
+            $('#modal_search_drug_allergy').modal({keyboard: false});
         },
         show_search_chronic: function(){
             $('#modal_search_chronic').modal({
                 backdrop: 'static'
-            }).css({
-                    width: 780,
-                    'margin-left': function() {
-                        return -($(this).width() / 2);
-                    }
-                });
+            });
         }
     };
     //click event for search dbpop
@@ -339,29 +326,61 @@ head.ready(function(){
                     _.each(data.rows, function(v){
                         $('#tbl_drug_allergy_list > tbody').append(
                             '<tr>' +
-                                '<td>' + v.record_date + '</td>' +
-                                '<td>' + v.drug_detail['stdcode'] + '</td>' +
-                                '<td>' + v.drug_detail['name'] + '</td>' +
-                                '<td>' + v.diag_type_name + '</td>' +
-                                '<td>' + v.alevel_name + '</td>' +
+                                '<td>' + app.to_thai_date(v.record_date) + '</td>' +
+                                '<td>' + v.drug_name + '</td>' +
                                 '<td>' + v.symptom_name + '</td>' +
-                                '<td><div class="btn-group">' +
-                                '<a href="javascript:void(0)" class="btn" data-name="btn_edit_drug_allergy" data-id="' + v.drug_id + '"> ' +
-                                '<i class="icon-edit"></i></a>' +
-                                '<a href="javascript:void(0)" class="btn btn-danger" data-name="btn_remove_drug_allergy" data-id="' + v.drug_id + '"> ' +
-                                '<i class="icon-trash"></i></a>' +
+                                '<td>' + v.alevel_name + '</td>' +
+                                // '<td>' + v.informant_name + '</td>' +
+                                '<td>' + v.hospname + '</td>' +
+                                '<td>' + v.user_fullname + '</td>' +
+                                '<td>' +
+                                '<div class="btn-group"> ' +
+                                '<button class="btn btn-default" type="button" data-name="btn_allergy_edit" ' +
+                                'data-id="' + v.drug_id + '" title="แก้ไขรายการ"><i class="icon-edit"></i></button>' +
+                                '<button class="btn btn-danger" type="button" data-name="btn_allergy_remove" ' +
+                                'data-id="' + v.drug_id + '" title="ลบรายการ"><i class="icon-trash"></i></button>' +
                                 '</div></td>' +
-                            '</tr>'
+                                '</tr>'
                         );
                     });
                 }else{
-                    $('#tbl_drug_allergy_list > tbody').append(
-                        '<tr> <td colspan="6">ไม่พบรายการ</td></tr>'
-                    );
+                    $('#tbl_drug_allergy_list > tbody').append('<tr><td colspan="7">ไม่พบรายการ</td></tr>');
                 }
             }
         });
     };
+
+    $(document).on('click', 'button[data-name="btn_allergy_edit"]', function() {
+        var id = $(this).data('id');
+        var hn = $('#hn').val();
+
+        person.update.modal.show_update_allergy(hn, id);
+    });
+    //remove drug
+    $(document).on('click', 'button[data-name="btn_allergy_remove"]', function(){
+        var id = $(this).attr('data-id');
+        var hn = $('#hn').val();
+
+        app.confirm('คุณต้องการลบรายการนี้ใช่หรือไม่?', function(res){
+            if(res){
+                person.update.ajax.remove_drug_allergy(hn, id, function(err){
+                    if(err){
+                        app.alert(err);
+                    }else{
+                        app.alert('ลบรายการเสร็จเรียบร้อยแล้ว');
+                        person.update.get_drug_allergy_list(hn);
+                    }
+                });
+            }
+        });
+
+    });
+
+    $('#btn_allergy_refresh').on('click', function() {
+        var hn = $('#hn').val();
+        person.update.get_drug_allergy_list(hn);
+    });
+
 
     person.update.set_drug_allergy_detail = function(hn, drug_id){
 
@@ -453,7 +472,7 @@ head.ready(function(){
                                     '<td>' + app.dbpop_to_thai_date(v.birthdate) + '</td>' +
                                     '<td>' + app.count_age_dbpop(v.birthdate) + '</td>' +
                                     '<td>[' + v.subinscl + '] ' + v.maininscl_name + '</td>' +
-                                    '<td><a href="#" class="btn" data-name="button_set_data_from_dbopo" ' +
+                                    '<td><a href="#" class="btn btn-default" data-name="button_set_data_from_dbopo" ' +
                                     'data-cid="' + v.cid + '" data-fname="'+ v.fname +'" data-lname="'+ v.lname+'" ' +
                                     'data-birth="'+ v.birthdate +'" data-maininscl="'+ v.maininscl +'" ' +
                                     ' data-inscl="'+ v.subinscl +'" data-sex="'+ v.sex +'" data-cardid="'+ v.cardid +'"' +
@@ -822,82 +841,10 @@ head.ready(function(){
     });
 
     $('#btn_new_drug_allergy').click(function(){
-        $('#txt_drug_isupdate').val('');
-        person.update.clear_drug_allergy_form();
-
-        person.update.modal.show_search_drug_allergy();
+        var hn = $('#hn').val();
+        person.update.modal.show_allergy(hn);
     });
-/*
-    //search drug
-    $('#button_do_search_drug').click(function(){
-        var query = $('#text_query_search_drug').val();
 
-        if(!query || query.trim().length < 2 ){
-            app.alert('กรุณาระบุคำที่ต้องการค้นหา / 2 ตัวอักษรขึ้นไป');
-        }else{
-            //do search
-            var div = $('#div_search_drug_allergy_result');
-
-            app.show_block(div);
-
-            person.update.ajax.search_drug(query, function(err, data){
-
-                $('#tbl_search_drug_result_list > tbody').empty();
-
-                if(err){
-                    app.alert(err);
-                    app.hide_block(div);
-                }else{
-                    if(_.size(data.rows)){
-                        _.each(data.rows, function(v){
-                            $('#tbl_search_drug_result_list > tbody').append(
-                                '<tr>' +
-                                   // '<td>' + v.stdcode + '</td>' +
-                                    '<td>' + v.name + '</td>' +
-                                    '<td>' + v.unit + '</td>' +
-                                    '<td>' + v.streng + '</td>' +
-                                    '<td>' + v.price + '</td>' +
-                                    '<td><a href="javascript:void(0);" data-name="btn_set_drug_allergy_info" class="btn btn-info" ' +
-                                    'data-id="' + v.id + '" data-vname="' + v.name + '"><i class="icon-share"></i></a></td>' +
-                                    '</tr>'
-                            );
-                        });
-                    }else{
-                        $('#tbl_search_drug_result_list > tbody').append(
-                            '<tr><td colspan="5">ไม่พบรายการ</td></tr>'
-                        );
-                    }
-
-                    app.hide_block(div);
-
-                }
-            });
-        }
-    });
-*/
-    $('a[href="#tab_drug_search"]').click(function(){
-        //person.update.clear_drug_allergy_form();
-    });
-/*
-    //set drug allergy info
-    $('a[data-name="btn_set_drug_allergy_info"]').on('click', function(){
-
-        var isupdate = $('#txt_drug_isupdate').val();
-
-        if(isupdate){
-            app.alert('ไม่สามารถแก้ไขรายการยาได้ กรุณาลบรายการแล้วทำการเพิ่มใหม่');
-        }else{
-            var id = $(this).attr('data-id'),
-                name = $(this).attr('data-vname');
-
-            $('#txt_drug_name').val(name);
-            $('#txt_drug_code').val(id);
-        }
-
-        $('a[href="#tab_save_drug_allergy"]').tab('show');
-
-    });
-    */
     //save drug allergy
     $('#btn_save_drug_allergy').click(function(){
         var items = {};
@@ -940,43 +887,13 @@ head.ready(function(){
         }
     });
 
-    //edit drug allergy
-
-    $(document).on('click', 'a[data-name="btn_edit_drug_allergy"]', function(){
-        //set detail
-        var drug_id = $(this).attr('data-id');
-        person.update.set_drug_allergy_detail(person.hn, drug_id);
-    });
-
-    //remove drug allergy
-    $(document).on('click', 'a[data-name="btn_remove_drug_allergy"]', function(){
-
-        var drug_id = $(this).attr('data-id');
-
-        //if(app.confirm('ยืนยันการลยข้อมูล');
-        app.confirm('คุณต้องการลบรายการนี้ใช่หรือไม่?', function(cb){
-            if(cb){
-                 person.update.ajax.remove_drug_allergy(person.hn, drug_id, function(err){
-                     if(err){
-                        app.alert(err);
-                     }else{
-                         app.alert('ลบรายการเรียบร้อยแล้ว');
-
-                         person.update.clear_drug_allergy_form();
-                         person.update.get_drug_allergy_list(person.hn);
-                     }
-                 });
-            }
-        });
-    });
-
     $('#btn_tab_drug_allergy').click(function(){
         person.update.get_drug_allergy_list(person.hn);
     });
 
     $('#txt_drug_allergy_hosp_name').typeahead({
         ajax: {
-            url: site_url + 'basic/search_hospital_ajax',
+            url: site_url + '/basic/search_hospital_ajax',
             timeout: 500,
             displayField: 'fullname',
             triggerLength: 3,
@@ -1010,7 +927,7 @@ head.ready(function(){
     //typeahead for drug allergy
     $('#txt_drug_name').typeahead({
         ajax: {
-            url: site_url + 'basic/search_drug_ajax',
+            url: site_url + '/basic/search_drug_ajax',
             timeout: 500,
             displayField: 'name',
             triggerLength: 3,
@@ -1043,7 +960,7 @@ head.ready(function(){
 
     $('#txt_chronic_hosp_dx_name').typeahead({
         ajax: {
-            url: site_url + 'basic/search_hospital_ajax',
+            url: site_url + '/basic/search_hospital_ajax',
             timeout: 500,
             displayField: 'fullname',
             triggerLength: 3,
@@ -1076,7 +993,7 @@ head.ready(function(){
 
     $('#txt_chronic_hosp_rx_name').typeahead({
         ajax: {
-            url: site_url + 'basic/search_hospital_ajax',
+            url: site_url + '/basic/search_hospital_ajax',
             timeout: 500,
             displayField: 'fullname',
             triggerLength: 3,
@@ -1110,7 +1027,7 @@ head.ready(function(){
 
     $('#txt_chronic_name').typeahead({
         ajax: {
-            url: site_url + 'basic/search_icd_chronic_ajax',
+            url: site_url + '/basic/search_icd_chronic_ajax',
             timeout: 500,
             displayField: 'name',
             triggerLength: 3,
@@ -1233,13 +1150,13 @@ head.ready(function(){
                                 '<td>' + v.discharge_type_name + '</td>' +
                                 '<td>' + v.discharge_date + '</td>' +
                                 '<td><div class="btn-group">' +
-                                '<a href="javascript:void(0);" data-name="btn_chronic_edit" class="btn" ' +
+                                '<a href="javascript:void(0);" data-name="btn_chronic_edit" class="btn btn-default" ' +
                                 'data-code="' + v.chronic + '" data-desc_r="' + v.chronic_name + '" data-diag_date="' + v.diag_date + '" ' +
                                 'data-discharge="' + v.discharge_type + '" data-discharge_date="' + v.discharge_date + '" ' +
                                 'data-hosp_dx_code="' + v.hosp_dx_code + '" data-hosp_rx_code="' + v.hosp_rx_code + '" '+
                                 'data-hosp_dx_name="' + v.hosp_dx_name + '" data-hosp_rx_name="' + v.hosp_rx_name + '"> '+
                                 '<i class="icon-edit"></i></a>' +
-                                '<a href="javascript:void(0);" class="btn" data-name="btn_chronic_remove" data-id="'+ v.chronic +'">' +
+                                '<a href="javascript:void(0);" class="btn btn-danger" data-name="btn_chronic_remove" data-id="'+ v.chronic +'">' +
                                 '<i class="icon-trash"></i>' +
                                 '</a>' +
                                 '</div></td>' +
@@ -1259,8 +1176,6 @@ head.ready(function(){
     $(document).on('click', 'a[data-name="btn_chronic_remove"]', function(){
         var diag_code = $(this).attr('data-id');
 
-        var obj = $(this).parent().parent().parent();
-
         app.confirm('คุณต้องการลบรายการนี้ใช่หรือไม่', function(res){
             if(res){
                 //do remove
@@ -1269,7 +1184,9 @@ head.ready(function(){
                         app.alert(err);
                     }else{
                         app.alert('ลบรายการเสร็จเรียบร้อยแล้ว');
-                        obj.fadeOut('slos');
+
+                        var hn = $('#hn').val();
+                        person.update.get_chronic_list(hn)
                     }
                 });
             }

@@ -15,32 +15,32 @@ class Accident_model extends CI_Model
 	public function save($data) 
 	{
 		$rs = $this->mongo_db
-					->insert('accidents', 
-							array(
-									'owner_id'			=> new MongoId($this->owner_id),
-									'user_id'			=> new MongoId($this->user_id),
-									'vn'				=> $data['vn'],
-									'hn'				=> $data['hn'],
-									'ae_date' 			=> $data['ae_date'],
-									'ae_time' 			=> $data['ae_time'],
-									'ae_urgency' 		=> $data['ae_urgency'],
-									'ae_type' 			=> new MongoId($data['ae_type']),
-									'ae_place' 			=> new MongoId($data['ae_place']),
-									'ae_typein' 		=> new MongoId($data['ae_typein']),
-									'ae_traffic' 		=> new MongoId($data['ae_traffic']),
-									'ae_vehicle' 		=> new MongoId($data['ae_vehicle']),
-									'ae_alcohol' 		=> $data['ae_alcohol'],
-									'ae_nacrotic_drug' 	=> $data['ae_nacrotic_drug'],
-									'ae_belt' 			=> $data['ae_belt'],
-									'ae_helmet' 		=> $data['ae_helmet'],
-									'ae_airway' 		=> $data['ae_airway'],
-									'ae_stopbleed' 		=> $data['ae_stopbleed'],
-									'ae_splint' 		=> $data['ae_splint'],
-									'ae_fluid' 			=> $data['ae_fluid'],
-									'ae_coma_eye' 		=> $data['ae_coma_eye'],
-									'ae_coma_speak' 	=> $data['ae_coma_speak'],
-									'ae_coma_movement' 	=> $data['ae_coma_movement']
-							));
+            ->insert('visit_accidents',
+                array(
+                    'owner_id'			=> new MongoId($this->owner_id),
+                    'user_id'			=> new MongoId($this->user_id),
+                    'vn'				=> $data['vn'],
+                    'hn'				=> $data['hn'],
+                    'ae_date' 			=> to_string_date($data['ae_date']),
+                    'ae_time' 			=> $data['ae_time'],
+                    'ae_urgency' 		=> $data['ae_urgency'],
+                    'ae_type' 			=> new MongoId($data['ae_type']),
+                    'ae_place' 			=> new MongoId($data['ae_place']),
+                    'ae_typein' 		=> new MongoId($data['ae_typein']),
+                    'ae_traffic' 		=> new MongoId($data['ae_traffic']),
+                    'ae_vehicle' 		=> new MongoId($data['ae_vehicle']),
+                    'ae_alcohol' 		=> $data['ae_alcohol'],
+                    'ae_nacrotic_drug' 	=> $data['ae_nacrotic_drug'],
+                    'ae_belt' 			=> $data['ae_belt'],
+                    'ae_helmet' 		=> $data['ae_helmet'],
+                    'ae_airway' 		=> $data['ae_airway'],
+                    'ae_stopbleed' 		=> $data['ae_stopbleed'],
+                    'ae_splint' 		=> $data['ae_splint'],
+                    'ae_fluid' 			=> $data['ae_fluid'],
+                    'ae_coma_eye' 		=> $data['ae_coma_eye'],
+                    'ae_coma_speak' 	=> $data['ae_coma_speak'],
+                    'ae_coma_movement' 	=> $data['ae_coma_movement']
+                ));
 		return $rs;
 	}
 	
@@ -54,34 +54,30 @@ class Accident_model extends CI_Model
 	public function update($data)
 	{
 		$rs = $this->mongo_db
-		->where('vn', $data['vn'])
-		->set(
-				array(
-						//'owner_id'			=> new MongoId($this->owner_id),
-						//'user_id'			=> new MongoId($this->user_id),
-						//'vn'				=> $data['vn'],
-						//'hn'				=> $data['hn'],
-						'ae_date' 			=> $data['ae_date'],
-						'ae_time' 			=> $data['ae_time'],
-						'ae_urgency' 		=> $data['ae_urgency'],
-						'ae_type' 			=> new MongoId($data['ae_type']),
-						'ae_place' 			=> new MongoId($data['ae_place']),
-						'ae_typein' 		=> new MongoId($data['ae_typein']),
-						'ae_traffic' 		=> new MongoId($data['ae_traffic']),
-						'ae_vehicle' 		=> new MongoId($data['ae_vehicle']),
-						'ae_alcohol' 		=> $data['ae_alcohol'],
-						'ae_nacrotic_drug' 	=> $data['ae_nacrotic_drug'],
-						'ae_belt' 			=> $data['ae_belt'],
-						'ae_helmet' 		=> $data['ae_helmet'],
-						'ae_airway' 		=> $data['ae_airway'],
-						'ae_stopbleed' 		=> $data['ae_stopbleed'],
-						'ae_splint' 		=> $data['ae_splint'],
-						'ae_fluid' 			=> $data['ae_fluid'],
-						'ae_coma_eye' 		=> $data['ae_coma_eye'],
-						'ae_coma_speak' 	=> $data['ae_coma_speak'],
-						'ae_coma_movement' 	=> $data['ae_coma_movement']
-				))
-		->update('accidents');
+            ->where(array('vn' => (string) $data['vn']))
+            ->set(
+                array(
+                    'ae_date' 			=> to_string_date($data['ae_date']),
+                    'ae_time' 			=> $data['ae_time'],
+                    'ae_urgency' 		=> $data['ae_urgency'],
+                    'ae_type' 			=> new MongoId($data['ae_type']),
+                    'ae_place' 			=> new MongoId($data['ae_place']),
+                    'ae_typein' 		=> new MongoId($data['ae_typein']),
+                    'ae_traffic' 		=> new MongoId($data['ae_traffic']),
+                    'ae_vehicle' 		=> new MongoId($data['ae_vehicle']),
+                    'ae_alcohol' 		=> $data['ae_alcohol'],
+                    'ae_nacrotic_drug' 	=> $data['ae_nacrotic_drug'],
+                    'ae_belt' 			=> $data['ae_belt'],
+                    'ae_helmet' 		=> $data['ae_helmet'],
+                    'ae_airway' 		=> $data['ae_airway'],
+                    'ae_stopbleed' 		=> $data['ae_stopbleed'],
+                    'ae_splint' 		=> $data['ae_splint'],
+                    'ae_fluid' 			=> $data['ae_fluid'],
+                    'ae_coma_eye' 		=> $data['ae_coma_eye'],
+                    'ae_coma_speak' 	=> $data['ae_coma_speak'],
+                    'ae_coma_movement' 	=> $data['ae_coma_movement']
+                ))
+		->update('visit_accidents');
 		
 		return $rs;
 	}
@@ -96,7 +92,7 @@ class Accident_model extends CI_Model
 	public function check_exist($vn) {
 		$rs = $this->mongo_db
 					->where('vn', $vn)
-					->count('accidents');
+					->count('visit_accidents');
 		
 		return $rs > 0 ? TRUE : FALSE;
 	}
@@ -110,7 +106,19 @@ class Accident_model extends CI_Model
 	
 	public function get_data($vn)
 	{
-		$rs = $this->mongo_db->where('vn', $vn)->limit(1)->get('accidents');
+		$rs = $this->mongo_db->where('vn', $vn)->limit(1)->get('visit_accidents');
 		return $rs ? $rs[0] : NULL;
 	}
+
+    public function remove($vn)
+    {
+        $rs = $this->mongo_db
+            ->where(array(
+                'vn', (string) $vn,
+                'owner_id' => new MongoId($this->owner_id)
+            ))
+            ->delete('visit_accidents');
+
+        return $rs;
+    }
 }

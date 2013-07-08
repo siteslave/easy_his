@@ -71,7 +71,7 @@ var app = {
     },
     /** mongo date to thai date **/
     mongo_to_thai_date: function(d){
-        if(!d){
+        if(!d || d.length < 8){
             return '';
         }else{
             var old_date = d.toString();
@@ -87,7 +87,7 @@ var app = {
 
     },
     mongo_to_js_date: function(d){
-        if(!d){
+        if(!d || d.length < 8){
             return '';
         }else{
             var old_date = d.toString();
@@ -250,14 +250,7 @@ var app = {
 
     strip: function(msg, len)
     {
-        if(msg.length > len)
-        {
-            return msg.substr(0, 50) + '...';
-        }
-        else
-        {
-            return msg;
-        }
+        return msg.substr(0, len) + '...';
     },
     confirm: function(msg, cb){
         if(confirm(msg))
@@ -333,11 +326,6 @@ app.record_per_page = 25;
 
 app.set_runtime = function()
 {
-    $('div[data-name="datepicker"]').datepicker({
-        format: 'dd/mm/yyyy',
-        language: 'th'
-    });
-
     $('input[data-type="time"]').mask("99:99");
     $('input[data-type="date"]').mask("99/99/9999");
     $('input[data-type="year"]').mask("9999");
@@ -433,4 +421,23 @@ head.ready(function(){
             }
         });
     };
+
+    app.html_safe = (function () {
+        'use strict';
+        var chr = {
+            '"': '&quot;', '&': '&amp;', "'": '&#39;',
+            '/': '&#47;',  '<': '&lt;',  '>': '&gt;'
+        };
+        return function (text) {
+            return text.replace(/[\"&'\/<>]/g, function (a) { return chr[a]; });
+        };
+    }());
+
+    app.set_cookie = function(k, v) {
+        $.cookie(k, v);
+    };
+
+    app.get_cookie = function(k) {
+        return $.cookie(k);
+    }
 });

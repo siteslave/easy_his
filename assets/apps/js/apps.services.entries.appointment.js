@@ -77,7 +77,7 @@ head.ready(function(){
                 $('#tbl_appoint_list > tbody').append(
                     '<tr>' +
                         '<td>'+ i +'</td>' +
-                        '<td>'+ v.apdate_thai +'</td>' +
+                        '<td>'+ v.apdate +'</td>' +
                         '<td>'+ v.aptype_name +'</td>' +
                         '<td>'+ app.strip(v.diag, 50) +'</td>' +
                         '<td>'+ v.clinic_name +'</td>' +

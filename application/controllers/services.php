@@ -27,14 +27,18 @@ class Services extends CI_Controller
             redirect(site_url('users/login'));
         }
 
-        $this->provider_id = $this->session->userdata('provider_id');
-
         $this->load->model('Service_model', 'service');
         $this->load->model('Basic_model', 'basic');
         $this->load->model('Person_model', 'person');
         $this->load->model('Drug_model', 'drug');
+        $this->load->model('Appoint_model', 'appoint');
+        $this->load->model('Accident_model', 'accident');
 
         $this->load->helper('person');
+
+        $this->accident->user_id = $this->user_id;
+        $this->accident->provider_id = $this->provider_id;
+        $this->accident->owner_id = $this->owner_id;
 
         $this->service->owner_id = $this->owner_id;
         $this->service->user_id = $this->user_id;
@@ -80,26 +84,16 @@ class Services extends CI_Controller
 
             $patient_name = $person['first_name'] . ' ' . $person['last_name'];
 
-            $drug_allergy_diag_types    = $this->basic->get_drug_allergy_diag_type();
-            $drug_allergy_alevels       = $this->basic->get_drug_allergy_alevel();
-            $drug_allergy_symptoms      = $this->basic->get_drug_allergy_symptom();
-            $drug_allergy_informants    = $this->basic->get_drug_allergy_informant();
             $drinkings                  = $this->basic->get_drinking();
             $smokings                   = $this->basic->get_smoking();
 
             $diag_types                 = $this->basic->get_diag_type();
-            $fp_types                   = $this->basic->get_fp_type();
-            $lab_groups                 = $this->basic->get_lab_groups_list();
 
-            $data['drug_allergy_informants']    = $drug_allergy_informants;
-            $data['drug_allergy_symptoms']      = $drug_allergy_symptoms;
-            $data['drug_allergy_alevels']       = $drug_allergy_alevels;
-            $data['drug_allergy_diag_types']    = $drug_allergy_diag_types;
+            $lab_groups                 = $this->basic->get_lab_groups_list();
 
             $data['drinkings']  = $drinkings;
             $data['smokings']   = $smokings;
             $data['diag_types'] = $diag_types;
-            $data['fp_types']   = $fp_types;
 
             $data['hn']         = $hn;
             //$data['person_id']  = $person_id;
@@ -111,6 +105,15 @@ class Services extends CI_Controller
             $data['disabilities_types'] = $this->basic->get_disabilities_list();
             $data['icf_qualifiers']     = $this->basic->get_icf_qualifiers();
             $data['patient_name']       = $patient_name;
+            $data['providers']  = $this->basic->get_providers();
+
+            //accident
+
+            $data['aetypes'] 	= $this->basic->get_aetype();
+            $data['aeplaces'] 	= $this->basic->get_aeplace();
+            $data['aetypeins'] 	= $this->basic->get_aetypein();
+            $data['aetraffics'] = $this->basic->get_aetraffic();
+            $data['aevehicles'] = $this->basic->get_aevehicle();
 
             $this->layout->view('services/entries_view', $data);
         }
@@ -210,6 +213,11 @@ class Services extends CI_Controller
             }else{
                 //update
                 $rs = $this->service->do_update($data);
+            }
+
+            if(!empty($data['appoint_id']))
+            {
+                $this->appoint->update_status($data);
             }
             //check result
             if($rs){
@@ -421,45 +429,6 @@ class Services extends CI_Controller
             $rows = json_encode($rs);
 
             $json = '{"success": true, "rows": '.$rows.'}';
-        }
-
-        render_json($json);
-    }
-
-    public function save_screening_allergy(){
-        $data = $this->input->post('data');
-
-        if(empty($data)){
-            $json = '{"success": false, "msg": "No data for save."}';
-        }else{
-
-            $this->person->user_id = $this->user_id;
-
-            //if is update
-            if(!empty($data['isupdate'])){
-                //do update
-                $result = $this->person->update_drug_allergy($data);
-
-                if($result){
-                    $json = '{"success": true, "msg": "updated"}';
-                }else{
-                    $json = '{"success": false, "msg": "Database error, please check your data."}';
-                }
-
-            }else{
-                //check drug duplicate
-                $duplicated = $this->person->check_drug_allergy_duplicate($data['hn'], $data['drug_id']);
-                if($duplicated){
-                    $json = '{"success": false, "msg": "Drug duplicated, please check drug"}';
-                }else{
-                    $result = $this->person->save_drug_allergy($data);
-                    if($result){
-                        $json = '{"success": true, "msg": "inserted"}';
-                    }else{
-                        $json = '{"success": false, "msg": "Database error, please check your data."}';
-                    }
-                }
-            }
         }
 
         render_json($json);
@@ -1047,236 +1016,6 @@ class Services extends CI_Controller
 
         render_json($json);
     }
-    
-    //------------------------------------------------------------------------------------------------------------------
-    /**
-     * Save FP data
-     * 
-     * @internal param	string	$vn
-     * @internal param	string	$hn
-     * @internal param	string 	$fp_type
-     * 
-     * @return 	json
-     */
-    public function save_fp()
-    {
-    	$data = $this->input->post('data');
-    	
-    	if(empty($data))
-    	{
-    		$json = '{"success": false, "msg": "No data for save."}';
-    	}
-    	else
-    	{
-    		//check visit exist
-    		$this->service->owner_id = $this->owner_id;
-    		$visit_exist = $this->service->check_visit_exist($data['vn']);
-    		
-    		if(!$visit_exist)
-    		{
-    			$json = '{"success": false, "msg": "Visit not found."}';
-    		}
-    		else
-    		{
-    			
-    			//check duplicate 
-    			$duplicated = $this->service->check_fp_duplicated($data['vn'], $data['fp_type']);
-    			
-    			if($duplicated)
-    			{
-    				$json = '{"success": false, "msg": "(ซ้ำ) รายการนี้มีอยู่แล้ว กรุณาตรวจสอบ"}';
-    			}
-    			else 
-    			{
-    				//check sex
-    				$fp_sex = $this->basic->get_fp_type_sex($data['fp_type']);
-    				$person_sex = $this->basic->get_person_sex($data['hn']);
-    				
-    				if($fp_sex == $person_sex)
-    				{
-    					$this->service->provider_id = $this->provider_id;
-    					$this->service->owner_id = $this->owner_id;
-    					
-    					$rs = $this->service->save_fp($data);
-    						
-    					if($rs)
-    					{
-    						$json = '{"success": true}';
-    					}
-    					else
-    					{
-    						$json = '{"success": false, "msg": "Can\'t save fp data."}';
-    					}
-    				}
-    				else
-    				{
-    					$json = '{"success": false, "msg": "เพศ ไม่เหมาะสมกับประเภทการคุมกำเนิด กรุณาตรวจสอบ"}';
-    				}	
-    			}
-    		}
-    	}
-    	
-    	render_json($json);
-    }
-    //------------------------------------------------------------------------------------------------------------------
-    /**
-     * Get FP list
-     * 
-     * 
-     */
-   	public function get_fp_list()
-   	{
-   		$vn = $this->input->post('vn');
-   		
-   		if(empty($vn))
-   		{
-   			$json = '{"success": false, "msg": "Vn not found."}';
-   		}
-   		else
-   		{
-   			$rs = $this->service->get_fp_list($vn);
-   			
-   			if($rs)
-   			{
-   				$arr_result = array();
-   				
-   				foreach($rs as $r)
-   				{
-   					$obj = new stdClass();
-   					$obj->id = get_first_object($r['_id']);
-   					$obj->fp_name = get_fp_type_name($r['fp_type']);
-   					$obj->provider_name = get_provider_name_by_id(get_first_object($r['provider_id']));
- 					//$obj->owner_name = get_owner_name(get_first_object($r['owner_id']));
-   					array_push($arr_result, $obj);
-   				}
-   				
-   				$rows = json_encode($arr_result);
-   				
-   				$json = '{"success": true, "rows": '.$rows.'}';
-   			}
-   			else 
-   			{
-   				$json = '{"success": false, "msg": "Record not found."}';
-   			}
-   		}
-   		
-   		render_json($json);
-   	}
-
-   	//------------------------------------------------------------------------------------------------------------------
-   	/**
-   	 * Get FP list
-   	 *
-   	 *
-   	 */
-   	public function get_fp_list_all()
-   	{
-   		$hn = $this->input->post('hn');
-   		 
-   		if(empty($hn))
-   		{
-   			$json = '{"success": false, "msg": "HN not found."}';
-   		}
-   		else
-   		{
-   			$rs = $this->service->get_fp_list_all($hn);
-   	
-   			if($rs)
-   			{
-   				$arr_result = array();
-   					
-   				foreach($rs as $r)
-   				{
-   					$obj = new stdClass();
-   					
-   					$obj->vn = $r['vn'];
-   					
-   					$visit = $this->service->get_visit_info($obj->vn);
-   					$obj->clinic_name = get_clinic_name(get_first_object($visit['clinic']));
-   					$obj->date_serv = to_js_date($visit['date_serv']);
-   					$obj->time_serv = $visit['time_serv'];
-   					
-   					$obj->id = get_first_object($r['_id']);
-   					$obj->fp_name = get_fp_type_name($r['fp_type']);
-   					$obj->provider_name = get_provider_name_by_id(get_first_object($r['provider_id']));
-   					$obj->owner_name = get_owner_name(get_first_object($r['owner_id']));
-
-                    $arr_result[] = $obj;
-   				}
-   					
-   				$rows = json_encode($arr_result);
-   					
-   				$json = '{"success": true, "rows": '.$rows.'}';
-   			}
-   			else
-   			{
-   				$json = '{"success": false, "msg": "Record not found."}';
-   			}
-   		}
-   		 
-   		render_json($json);
-   	}
-
-    public function save_nutrition()
-    {
-        $data = $this->input->post('data');
-
-        if(empty($data))
-        {
-            $json = '{"success": false, "msg": "ไม่พบข้อมูลที่ต้องการบันทึก"}';
-        }
-        else
-        {
-            $rs = $this->service->save_nutrition($data);
-
-            if($rs)
-            {
-                $json = '{"success": true}';
-            }
-            else
-            {
-                $json = '{"success": false, "msg": "ไม่สามารถบันทึกข้อมูลได้"}';
-            }
-        }
-
-        render_json($json);
-    }
-
-    public function get_nutrition()
-    {
-        $vn = $this->input->post('vn');
-
-        if(empty($vn))
-        {
-            $json = '{"success": false, "msg": "VN not found."}';
-        }
-        else
-        {
-            $rs = $this->service->get_nutrition($vn);
-            if($rs)
-            {
-                $data = isset($rs['nutritions']) ? $rs['nutritions'] : NULL;
-
-                if(count($data) > 0)
-                {
-                    $rows = $data ? json_encode($data) : NULL;
-
-                    $json = '{"success": true, "rows": '.$rows.'}';
-                }
-                else
-                {
-                    $json = '{"success": false, "msg": "ไม่พบข้อมูล"}';
-                }
-
-            }
-            else
-            {
-                $json = '{"success": false, "msg": "ไม่พบข้อมูล"}';
-            }
-        }
-
-        render_json($json);
-    }
 
     public function icf_save()
     {
@@ -1425,10 +1164,6 @@ class Services extends CI_Controller
             {
                 $is_duplicated = $this->service->dental_check_duplicated($data['vn']);
 
-                $this->service->user_id = $this->user_id;
-                $this->service->owner_id = $this->owner_id;
-                $this->service->provider_id = $this->provider_id;
-
                 $rs = $is_duplicated ? $this->service->dental_update($data) : $this->service->dental_save($data);
 
                 if($rs)
@@ -1489,6 +1224,7 @@ class Services extends CI_Controller
                 $obj->gum               = $rs['gum'];
                 $obj->schooltype        = $rs['schooltype'];
                 $obj->school_class      = $rs['school_class'];
+                $obj->provider_id       = get_first_object($rs['provider_id']);
 
                 $rows = json_encode($obj);
 
@@ -1602,6 +1338,88 @@ class Services extends CI_Controller
         {
             show_error('Not ajax.', 404);
         }
+    }
+
+    public function save_accident()
+    {
+        $data = $this->input->post('data');
+
+        if(empty($data))
+        {
+            $json = '{"success": false, "msg": "No data for save"}';
+        }
+        else
+        {
+            //check exist
+            $exist = $this->accident->check_exist($data['vn']);
+            $rs = $exist ? $rs = $this->accident->update($data) : $this->accident->save($data);
+            $json = $rs ? '{"success": true}' : '{"success": false, "msg": "Can\'t save data."}';
+        }
+
+        render_json($json);
+    }
+
+    public function get_accident_data()
+    {
+        $vn = $this->input->post('vn');
+
+        if(empty($vn))
+        {
+            $json = '{"success": false, "msg": "No vn found"}';
+        }
+        else
+        {
+            $rs = $this->accident->get_data($vn);
+            if($rs)
+            {
+                $obj = new stdClass();
+                $obj->ae_date = to_js_date($rs['ae_date']);
+                $obj->ae_time = $rs['ae_time'];
+                $obj->ae_urgency = $rs['ae_urgency'];
+                $obj->ae_type = get_first_object($rs['ae_type']);
+                $obj->ae_place = get_first_object($rs['ae_place']);
+                $obj->ae_typein = get_first_object($rs['ae_typein']);
+                $obj->ae_traffic = get_first_object($rs['ae_traffic']);
+                $obj->ae_vehicle = get_first_object($rs['ae_vehicle']);
+                $obj->ae_alcohol = $rs['ae_alcohol'];
+                $obj->ae_nacrotic_drug = $rs['ae_nacrotic_drug'];
+                $obj->ae_belt = $rs['ae_belt'];
+                $obj->ae_helmet = $rs['ae_helmet'];
+                $obj->ae_airway = $rs['ae_airway'];
+                $obj->ae_stopbleed = $rs['ae_stopbleed'];
+                $obj->ae_splint = $rs['ae_splint'];
+                $obj->ae_fluid = $rs['ae_fluid'];
+                $obj->ae_coma_eye = $rs['ae_coma_eye'];
+                $obj->ae_coma_speak = $rs['ae_coma_speak'];
+                $obj->ae_coma_movement = $rs['ae_coma_movement'];
+
+
+                $rows = json_encode($obj);
+                $json = '{"success": true, "rows": '.$rows.'}';
+            }
+            else
+            {
+                $json = '{"success": false, "msg": "ไม่พบข้อมูลการเกิดอุบัติเหตุ."}';
+            }
+        }
+
+        render_json($json);
+    }
+
+    public function remove_accident()
+    {
+        $vn = $this->input->post('vn');
+        if(!empty($vn))
+        {
+            $rs = $this->accident->remove($vn);
+            $json = $rs ? '{"success": true}' : '{"success": false, "msg": "ไม่สามารถลบรายการได้"}';
+        }
+        else
+        {
+            $json = '{"success": false, "msg": "กรุณาระบุเลขที่รับบริการ [VN]"}';
+        }
+
+        render_json($json);
     }
 }
 

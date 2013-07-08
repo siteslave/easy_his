@@ -5,11 +5,6 @@ head.ready(function(){
         show_register: function(){
             $('#mdl_register').modal({
                 backdrop: 'static'
-            }).css({
-                width: 960,
-                'margin-left': function() {
-                    return -($(this).width() / 2);
-                }
             });
         },
         hide_register: function(){
@@ -91,12 +86,14 @@ head.ready(function(){
             if(err){
                 app.alert(err);
             }else{
-                $('#main_paging > ul').paging(data.total, {
+                $('#main_paging').paging(data.total, {
                     format: " < . (qq -) nnncnnn (- pp) . >",
                     perpage: app.record_per_page,
                     lapping: 1,
-                    page: 1,
+                    page: app.get_cookie('death_paging'),
                     onSelect: function(page){
+                        app.set_cookie('death_paging', page);
+
                         death.ajax.get_list(this.slice[0], this.slice[1], function(err, data){
                             if(err){
                                 app.alert(err);
@@ -190,11 +187,11 @@ head.ready(function(){
                         '<td>'+ v.ddeath +'</td>' +
                         '<td>'+ v.icd_code +'</td>' +
                         '<td><div class="btn-group">' +
-                        '<a href="javascript:void(0);" data-name="btn_edit" class="btn" data-hn="'+ v.hn +'" ' +
+                        '<a href="javascript:void(0);" data-name="btn_edit" class="btn btn-success btn-small" data-hn="'+ v.hn +'" ' +
                         'data-cid="'+ v.cid +'" data-fullname="'+ v.first_name + ' ' + v.last_name +'" ' +
-                        'data-age="'+ v.age +'" data-birthdate="'+ app.mongo_to_thai_date(v.birthdate) +'" data-id="'+ v.id +'">' +
+                        'data-age="'+ v.age +'" data-birthdate="'+ app.mongo_to_thai_date(v.birthdate) +'" data-id="'+ v.id +'" title="แก้ไข">' +
                         '<i class="icon-edit"></i></a>' +
-                        '<a href="javascript:void(0);" data-name="btn_remove" class="btn" data-id="'+ v.id +'">' +
+                        '<a href="javascript:void(0);" data-name="btn_remove" class="btn btn-danger btn-small" data-id="'+ v.id +'" title="ลบรายการ">' +
                         '<i class="icon-trash"></i></a>' +
                         '</div></td>' +
                         '</tr>'
@@ -205,7 +202,7 @@ head.ready(function(){
     //search diagnosis
     $('#txt_reg_cdeath_name').typeahead({
         ajax: {
-            url: site_url + 'basic/search_icd_ajax',
+            url: site_url + '/basic/search_icd_ajax',
             timeout: 500,
             displayField: 'name',
             triggerLength: 3,
@@ -234,9 +231,14 @@ head.ready(function(){
             return name;
         }
     });
+
+    $('#txt_reg_cdeath_name').on('keyup', function() {
+        $('#txt_reg_cdeath_code').val('');
+    });
+
     $('#txt_reg_odisease_name').typeahead({
         ajax: {
-            url: site_url + 'basic/search_icd_ajax',
+            url: site_url + '/basic/search_icd_ajax',
             timeout: 500,
             displayField: 'name',
             triggerLength: 3,
@@ -265,9 +267,14 @@ head.ready(function(){
             return name;
         }
     });
+
+    $('#txt_reg_odisease_name').on('keyup', function(){
+        $('#txt_reg_odisease_code').val('');
+    });
+
     $('#txt_hosp_deathA_name').typeahead({
         ajax: {
-            url: site_url + 'basic/search_icd_ajax',
+            url: site_url + '/basic/search_icd_ajax',
             timeout: 500,
             displayField: 'name',
             triggerLength: 3,
@@ -296,9 +303,14 @@ head.ready(function(){
             return name;
         }
     });
+
+    $('#txt_hosp_deathA_name').on('keyup', function(){
+        $('#txt_hosp_deathA_code').val('');
+    });
+
     $('#txt_hosp_deathB_name').typeahead({
         ajax: {
-            url: site_url + 'basic/search_icd_ajax',
+            url: site_url + '/basic/search_icd_ajax',
             timeout: 500,
             displayField: 'name',
             triggerLength: 3,
@@ -327,9 +339,14 @@ head.ready(function(){
             return name;
         }
     });
+
+    $('#txt_hosp_deathB_name').on('keyup', function(){
+        $('#txt_hosp_deathB_code').val('');
+    });
+
     $('#txt_hosp_deathC_name').typeahead({
         ajax: {
-            url: site_url + 'basic/search_icd_ajax',
+            url: site_url + '/basic/search_icd_ajax',
             timeout: 500,
             displayField: 'name',
             triggerLength: 3,
@@ -358,9 +375,14 @@ head.ready(function(){
             return name;
         }
     });
+
+    $('#txt_hosp_deathC_name').on('keyup', function(){
+        $('#txt_hosp_deathC_code').val('');
+    });
+
     $('#txt_hosp_deathD_name').typeahead({
         ajax: {
-            url: site_url + 'basic/search_icd_ajax',
+            url: site_url + '/basic/search_icd_ajax',
             timeout: 500,
             displayField: 'name',
             triggerLength: 3,
@@ -389,9 +411,14 @@ head.ready(function(){
             return name;
         }
     });
+
+    $('#txt_hosp_deathD_name').on('keyup', function(){
+        $('#txt_hosp_deathD_code').val('');
+    });
+
     $('#txt_reg_hn').typeahead({
         ajax: {
-            url: site_url + 'person/search_person_ajax',
+            url: site_url + '/person/search_person_ajax',
             timeout: 500,
             displayField: 'name',
             triggerLength: 3,
@@ -423,9 +450,14 @@ head.ready(function(){
             return code;
         }
     });
+
+    $('#txt_reg_hosp_death_name').on('keyup', function(){
+        $('#txt_reg_hosp_death_code').val('');
+    });
+
     $('#txt_reg_hosp_death_name').typeahead({
         ajax: {
-            url: site_url + 'basic/search_hospital_ajax',
+            url: site_url + '/basic/search_hospital_ajax',
             timeout: 500,
             displayField: 'fullname',
             triggerLength: 3,
@@ -660,7 +692,7 @@ head.ready(function(){
     //search diagnosis
     $('#txt_query').typeahead({
         ajax: {
-            url: site_url + 'person/search_person_ajax',
+            url: site_url + '/person/search_person_ajax',
             timeout: 500,
             displayField: 'name',
             triggerLength: 3,
@@ -686,5 +718,6 @@ head.ready(function(){
             return code;
         }
     });
+
     death.get_list();
 });
