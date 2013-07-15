@@ -135,7 +135,7 @@ class Settings extends CI_Controller
             $rows = json_encode($arr_result);
             $json = '{"success": true, "rows": '.$rows.'}';
         }else{
-            $json = '{"success": false, "msg": "Database error, please check your data."}';
+            $json = '{"success": false, "msg": "ไม่พบรายการ"}';
         }
 
         render_json($json);

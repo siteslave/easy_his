@@ -120,7 +120,7 @@ class Setting_model extends CI_Model
 
     public function check_clinic_duplicated($name)
     {
-        $rs = $this->mongo_db->where(array('name' => $name))->count('ref_clinics');
+        $rs = $this->mongo_db->where(array('name' => $name, 'owner_id' => new MongoId($this->owner_id)))->count('ref_clinics');
 
         return $rs > 0 ? TRUE : FALSE;
     }

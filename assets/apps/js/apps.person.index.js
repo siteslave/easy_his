@@ -436,8 +436,8 @@ head.ready(document).ready(function(){
                         '<td>'+ discharge_status +'</td>' +
                         '<td>'+ app.clear_null(v.typearea) +'</td>' +
                         '<td> <div class="btn-group">' +
-/*                        '<a class="btn" href="javascript:void(0);" data-name="btn_remove_person" data-hn="'+ v.hn +'" title="ลบ">' +
-                        '<i class="icon-trash"></i></a>' +*/
+                        '<a class="btn btn-default btn-small" href="javascript:void(0);" data-name="btn_change_house_person" data-hn="'+ v.hn +'" title="ย้ายบ้าน">' +
+                        '<i class="icon-share"></i></a>' +
                         '<a class="btn btn-success btn-small" href="'+ site_url + '/person/edit/' + v.hn + '" title="แก้ไข">' +
                         '<i class="icon-edit"></i></a>' +
                         '</div></td>' +

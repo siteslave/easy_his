@@ -166,7 +166,7 @@ class Services extends CI_Controller
             }
             else
             {
-                $json = '{"success": false, "msg": "No result."}';
+                $json = '{"success": false, "msg": "ไม่พบรายการ."}';
             }
         }
 
@@ -177,7 +177,7 @@ class Services extends CI_Controller
     {
         $hn = $this->input->post('hn');
         if(empty($hn)){
-            $json = '{"success": false, "msg": "No hn found."}';
+            $json = '{"success": false, "msg": "ไม่พบ HN."}';
         }else{
             $rs = $this->service->get_person_detail($hn);
             if($rs){
@@ -203,7 +203,7 @@ class Services extends CI_Controller
 
         $data = $this->input->post('data');
         if(empty($data)){
-            $json = '{"success": false, "msg": "No data for save."}';
+            $json = '{"success": false, "msg": "ไม่พบข้อมูลที่ต้องการบันทึก."}';
         }else{
 
             if(empty($data['vn'])){
@@ -223,7 +223,7 @@ class Services extends CI_Controller
             if($rs){
                 $json = '{"success": true}';
             }else{
-                $json = '{"success": false, "msg": "Can\'t save data."}';
+                $json = '{"success": false, "msg": "ไม่สามารถบันทึกข้อมูลได้."}';
             }
         }
 
@@ -297,7 +297,7 @@ class Services extends CI_Controller
             $rows = json_encode($arr_result);
             $json = '{"success": true, "rows": '.$rows.'}';
         }else{
-            $json = '{"success": false, "msg": "No result."}';
+            $json = '{"success": false, "msg": "ไม่พบข้อมูล"}';
         }
 
         render_json($json);
@@ -368,7 +368,7 @@ class Services extends CI_Controller
             $rows = json_encode($arr_result);
             $json = '{"success": true, "rows": '.$rows.'}';
         }else{
-            $json = '{"success": false, "msg": "No result."}';
+            $json = '{"success": false, "msg": "ไม่พบข้อมูล"}';
         }
 
         render_json($json);
@@ -404,14 +404,14 @@ class Services extends CI_Controller
         $data = $this->input->post('data');
 
         if(empty($data)){
-            $json = '{"success": false, "msg": "No data for save, please check you data and try again."}';
+            $json = '{"success": false, "msg": "ไม่พบข้อมูลที่ต้องการบันทึก"}';
         }else{
 
             $rs = $this->service->save_screening($data);
             if($rs){
                 $json = '{"success": true}';
             }else{
-                $json = '{"success": false, "msg": "Can\'t save screening data, please try again."}';
+                $json = '{"success": false, "msg": "ไม่สามารถบันทึกข้อมูลได้"}';
             }
         }
 
@@ -422,7 +422,7 @@ class Services extends CI_Controller
 
         $vn = $this->input->post('vn');
         if(empty($vn)){
-            $json = '{"success": false, "msg": "No vn found"}';
+            $json = '{"success": false, "msg": "ไม่พบรหัส VN"}';
         }else{
             $rs = $this->service->get_screening($vn);
 
@@ -437,7 +437,7 @@ class Services extends CI_Controller
     public function get_screening_allergy_list(){
         $hn = $this->input->post('hn');
         if(empty($hn)){
-            $json = '{"success": false, "msg": "No person id found."}';
+            $json = '{"success": false, "msg": "ไม่พบ Person ID"}';
         }else{
             $result = $this->person->get_drug_allergy_list($hn);
 
@@ -472,11 +472,11 @@ class Services extends CI_Controller
                     $rows = json_encode($arr_result);
                     $json = '{"success": true, "rows": '.$rows.'}';
                 }else{
-                    $json = '{"success": false, "msg": "No result found"}';
+                    $json = '{"success": false, "msg": "ไม่พบข้อมูล"}';
                 }
 
             }else{
-                $json = '{"success": false, "msg": "No result found."}';
+                $json = '{"success": false, "msg": "ไม่พบข้อมูล"}';
             }
         }
 

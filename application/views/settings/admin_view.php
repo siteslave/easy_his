@@ -104,15 +104,15 @@
                                     <br>
                                     <div class="alert alert-success">
                                         <div class="row">
-                                            <div class="col-lg-2">
+                                            <div class="col-lg-3">
                                                 <label class="control-label" for="txt_username">ชื่อผู้ใช้งาน</label>
                                                 <input type="text" id="txt_username" placeholder="username">
                                             </div>
-                                            <div class="col-lg-3">
+                                            <div class="col-lg-2">
                                                 <label class="control-label" for="txt_password">รหัสผ่าน</label>
                                                 <input type="password" id="txt_password" placeholder="********">
                                             </div>
-                                            <div class="col-lg-3">
+                                            <div class="col-lg-2">
                                                 <label class="control-label" for="txt_password">รหัสผ่าน (ยืนยัน)</label>
                                                 <input type="password" id="txt_password2" placeholder="********">
                                             </div>

@@ -6,7 +6,7 @@
     <form action="#" class="navbar-form">
     <input type="text" style="width: 200px;" id="txt_query_visit" 
     rel="tooltip" title="พิมพ์ชื่อ หรือ HN หรือ เลขบัตรประชาชน เพื่อค้นหา" autocomplete="off" placeholder="HN, ชื่อ สกุล...">
-    <button type="button" id="btn_do_search_visit" class="btn btn-primary" rel="tooltip" title="ค้นหารายการ"><i class="icon-search"></i> ค้นหา</button>
+    <button type="button" id="btn_do_search_visit" class="btn btn-primary" rel="tooltip" title="ค้นหารายการ"><i class="icon-search"></i></button>
    | 
     <input style="width: 100px;" id="txt_service_date" type="text" 
     placeholder="dd/mm/yyyy" data-type="date" rel="tooltip" title="ระวันที่ เช่น 12/02/2556">
@@ -22,16 +22,16 @@
         <?php foreach($doctor_rooms as $t) echo '<option value="'.$t->id.'">'.$t->name.'</option>'; ?>
     </select>
 
-    <button class="btn btn-primary" id="btn_do_filter" type="button">
-        <i class="icon-search"></i> แสดง
+    <button class="btn btn-primary" id="btn_do_filter" type="button" title="แสดง" rel="tooltip">
+        <i class="icon-search"></i>
     </button>
 
     <div class="btn-group pull-right">
-        <button type="button" class="btn btn-success" id="btn_new_visit">
-            <i class="icon-plus-sign"></i> ลงทะเบียน
+        <button type="button" class="btn btn-success" id="btn_new_visit" title="ลงทะเบียน" rel="tooltip">
+            <i class="icon-plus-sign"></i>
         </button>
-        <button type="button" class="btn btn-default" id="btn_refresh_visit">
-            <i class="icon-refresh"></i> รีเฟรช
+        <button type="button" class="btn btn-default" id="btn_refresh_visit" title="รีเฟรช" rel="tooltip">
+            <i class="icon-refresh"></i>
         </button>
     </div>
 </form>

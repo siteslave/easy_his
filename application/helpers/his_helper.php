@@ -344,7 +344,7 @@ if(!function_exists('get_address')){
 /*
  * Get patient information
  * 
- * @param	string	$hn	Patian hn.
+ * @param	string	$hn.
  * @return 	array
  */
 if(!function_exists('get_patient_info')){

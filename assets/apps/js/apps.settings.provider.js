@@ -94,7 +94,8 @@ head.ready(function(){
 
             $('#tbl_provider_list tbody').empty();
             if(err){
-                app.alert(err, 'เกิดข้อผิดพลาดระหว่างการดึงข้อมูล ผู้ให้บริการ');
+                app.alert(err);
+                $('#tbl_provider_list tbody').append('<tr><td colspan="9">ไม่พบรายการ</td></tr>');
             }else{
                 if( _.size(data.rows) ) {
 
@@ -119,6 +120,10 @@ head.ready(function(){
 
                         i++;
                     });
+                }
+                else
+                {
+                    $('#tbl_provider_list tbody').append('<tr><td colspan="9">ไม่พบรายการ</td></tr>');
                 }
             }
         });

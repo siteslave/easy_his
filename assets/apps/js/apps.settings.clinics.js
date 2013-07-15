@@ -38,6 +38,7 @@ head.ready(function(){
 
             if(err){
                 app.alert(err);
+                $('#tbl_list tbody').append('<tr><td colspan="4">ไม่พบรายการ</td></tr>');
             }else{
                 if( _.size(data.rows) ) {
 
@@ -61,6 +62,10 @@ head.ready(function(){
 
                         i++;
                     });
+                }
+                else
+                {
+                    $('#tbl_list tbody').append('<tr><td colspan="4">ไม่พบรายการ</td></tr>');
                 }
             }
         });

@@ -130,8 +130,8 @@ class Admin extends CI_Controller {
                 $obj->username = $rs['username'];
                 $obj->first_name = $rs['first_name'];
                 $obj->last_name = $rs['last_name'];
-                $obj->provider_id = get_first_object($rs['provider_id']);
-                $obj->clinic_id = get_first_object($rs['clinic_id']);
+                $obj->provider_id = isset($rs['provider_id']) ? get_first_object($rs['provider_id']) : '';
+                $obj->clinic_id = isset($rs['clinic_id']) ? get_first_object($rs['clinic_id']) : '';
                 $obj->active = $rs['active'];
                 $obj->cid = $rs['cid'];
                 $obj->id = get_first_object($rs['_id']);

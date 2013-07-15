@@ -215,8 +215,8 @@
                     </li>
                 </ul>
             </li>
-            <li>
-                <a href="<?php echo site_url('reports'); ?>">
+            <li class="disabled">
+                <a href="javascript:void(0)">
                     <i class="icon-print"></i>
                     รายงาน
                 </a>
