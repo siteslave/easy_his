@@ -21,3 +21,6 @@ system/*
 .buildpath
 .project
 .settings/
+
+phpinfo.php
+rockmongo/
