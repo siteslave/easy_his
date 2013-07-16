@@ -185,19 +185,25 @@
                     <div class="row">
                         <div class="col-lg-2">
                             <label for="txt_reg_service_insc_hosp_main_code">รหัส</label>
-                            <input type="text" disabled="disabled" id="txt_reg_service_insc_hosp_main_code" value="<?=isset($ins_hosp_main_code) ? $ins_hosp_main_code : ''?>">
+                            <input type="text" disabled="disabled" id="txt_reg_service_insc_hosp_main_code" placeholder="-*-"
+                                   value="<?=isset($ins_hosp_main_code) ? $ins_hosp_main_code : ''?>">
                         </div>
                         <div class="col-lg-4">
                             <label for="txt_reg_service_insc_hosp_main_name">สถานบริการหลัก</label>
-                            <input type="text" id="txt_reg_service_insc_hosp_main_name" value="<?=isset($ins_hosp_main_name) ? $ins_hosp_main_name : ''?>">
+                            <input type="text" id="txt_reg_service_insc_hosp_main_name" placeholder="พิมพ์ชื่อหรือรหัสสถานบริการเพื่อค้นหา"
+                                   title="พิมพ์ชื่อหรือรหัสสถานบริการเพื่อค้นหา" rel="tooltip"
+                                   value="<?=isset($ins_hosp_main_name) ? $ins_hosp_main_name : ''?>">
                         </div>
                         <div class="col-lg-2">
                             <label for="txt_reg_service_insc_hosp_sub_code">รหัส</label>
-                            <input type="text" disabled="disabled" id="txt_reg_service_insc_hosp_sub_code" value="<?=isset($ins_hosp_sub_code) ? $ins_hosp_sub_code : ''?>">
+                            <input type="text" disabled="disabled" id="txt_reg_service_insc_hosp_sub_code" placeholder="-*-"
+                                   value="<?=isset($ins_hosp_sub_code) ? $ins_hosp_sub_code : ''?>">
                         </div>
                         <div class="col-lg-4">
                             <label for="txt_reg_service_insc_hosp_sub_name">สถานบริการรอง</label>
-                            <input type="text" id="txt_reg_service_insc_hosp_sub_name" value="<?=isset($ins_hosp_sub_name) ? $ins_hosp_sub_name : ''?>">
+                            <input type="text" id="txt_reg_service_insc_hosp_sub_name" placeholder="พิมพ์ชื่อหรือรหัสสถานบริการเพื่อค้นหา"
+                                   title="พิมพ์ชื่อหรือรหัสสถานบริการเพื่อค้นหา" rel="tooltip"
+                                   value="<?=isset($ins_hosp_sub_name) ? $ins_hosp_sub_name : ''?>">
                         </div>
                     </div>
 
