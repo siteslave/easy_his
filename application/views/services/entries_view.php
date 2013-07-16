@@ -63,6 +63,7 @@
         <li class="active"><a href="#tab_screening" data-toggle="tab"><i class="icon-th-list"></i> ข้อมูลคัดกรอง</a></li>
         <li><a href="#tab_diagnosis" data-toggle="tab"><i class="icon-check"></i> วินิจฉัยโรค</a></li>
         <li><a href="#tab_procedure" data-toggle="tab"><i class="icon-eye-close"></i> หัตถการ</a></li>
+        <li><a href="#tab_dental" data-toggle="tab"><i class="icon-check-sign"></i> ทันตกรรม</a></li>
         <li><a href="#tab_vaccine" data-toggle="tab"><i class="icon-pushpin"></i> วัคซีน</a></li>
         <li><a href="#tab_drug" data-toggle="tab"><i class="icon-filter"></i> จ่ายยา</a></li>
         <li><a href="#tab_income" data-toggle="tab"><i class="icon-shopping-cart"></i> ค่าใช้จ่าย</a></li>

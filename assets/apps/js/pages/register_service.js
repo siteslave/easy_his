@@ -43,13 +43,13 @@ head.ready(function() {
                     var detail = data.rows[0].first_name + ' ' + data.rows[0].last_name +
                         ' อายุ: ' + data.rows[0].age + ' ปี ที่อยู่: ' + data.rows[0].address
                     $('#txt_service_profile').val(detail);
-                    $('#txt_hn').val(data.rows[0].hn);
+                    $('#txt_service_hn').val(data.rows[0].hn);
                 }
                 else
                 {
                     $('#txt_service_profile').val('');
                     app.alert('ไม่พบข้อมูลที่ค้นหา');
-                    $('#txt_hn').val('');
+                    $('#txt_service_hn').val('');
                 }
             });
         }
@@ -105,11 +105,12 @@ head.ready(function() {
             app.alert('กรุณาระบุ อาการแรกรับ (CC)');
         }else{
             //do save
-            regsv.ajax.do_register(items, function(err){
+            regsv.ajax.do_register(items, function(err, v){
                 if(err){
                     app.alert(err);
                 }else{
                     app.alert('บันทึกข้อมูลส่งตรวจเสร็จเรียบร้อยแล้ว.');
+                    $('#txt_service_vn').val(v.vn);
                 }
             });
         }
@@ -160,6 +161,7 @@ head.ready(function() {
     });
     $('#txt_service_profile_hn').bind('keyup', function(e) {
         $('#txt_service_profile').val('');
+        $('#txt_service_hn').val('');
     });
 
     $('#txt_reg_service_insc_hosp_sub_name').typeahead({

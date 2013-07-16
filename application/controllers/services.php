@@ -221,7 +221,7 @@ class Services extends CI_Controller
             }
             //check result
             if($rs){
-                $json = '{"success": true}';
+                $json = '{"success": true, "vn": "'.$data['vn'].'"}';
             }else{
                 $json = '{"success": false, "msg": "ไม่สามารถบันทึกข้อมูลได้."}';
             }
