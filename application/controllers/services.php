@@ -33,12 +33,15 @@ class Services extends CI_Controller
         $this->load->model('Drug_model', 'drug');
         $this->load->model('Appoint_model', 'appoint');
         $this->load->model('Accident_model', 'accident');
+        $this->load->model('Income_model', 'income');
 
         $this->load->helper('person');
 
         $this->accident->user_id = $this->user_id;
         $this->accident->provider_id = $this->provider_id;
         $this->accident->owner_id = $this->owner_id;
+
+        $this->income->owner_id = $this->owner_id;
 
         $this->service->owner_id = $this->owner_id;
         $this->service->user_id = $this->user_id;
@@ -94,6 +97,8 @@ class Services extends CI_Controller
             $data['drinkings']  = $drinkings;
             $data['smokings']   = $smokings;
             $data['diag_types'] = $diag_types;
+
+            $data['dental_charge_items'] = $this->income->get_dental_list();
 
             $data['hn']         = $hn;
             //$data['person_id']  = $person_id;
@@ -870,8 +875,8 @@ class Services extends CI_Controller
                     $obj->drug_name = get_drug_name($obj->drug_id);
                     $obj->usage_id = get_first_object($r['usage_id']);
                     $obj->usage_name = get_usage_name($obj->usage_id);
-                    $obj->price = $r['price'];
-                    $obj->qty = $r['qty'];
+                    $obj->price = isset($r['price']) ? $r['price'] : 0;
+                    $obj->qty = isset($r['qty']) ? $r['qty'] : 0;
 
                     array_push($arr_result, $obj);
 
@@ -998,7 +1003,7 @@ class Services extends CI_Controller
                     $obj = new stdClass();
                     $obj->id = get_first_object($r['_id']);
                     $obj->code = $r['charge_code'];
-                    $obj->name = get_charge_name($obj->code);
+                    $obj->name = get_charge_name($obj->id);
                     $obj->price = $r['price'];
                     $obj->qty = $r['qty'];
 
@@ -1418,6 +1423,95 @@ class Services extends CI_Controller
         else
         {
             $json = '{"success": false, "msg": "กรุณาระบุเลขที่รับบริการ [VN]"}';
+        }
+
+        render_json($json);
+    }
+
+    public function save_charge_dental()
+    {
+        $data = $this->input->post('data');
+        if(!empty($data))
+        {
+            if(empty($data['id']))
+            {
+                //check duplicate
+                $is_duplicated = $this->service->check_charge_dental_exist($data['vn'], $data['charge_id']);
+                if(!$is_duplicated)
+                {
+                    $data['id'] = new MongoId();
+                    $rs = $this->service->save_charge_dental($data);
+                    $json = $rs ? '{"success": true, "id": "'.get_first_object($data['id']).'"}' : '{"success": false, "msg": "ไม่สามารถบันทึกรายการได้"}';
+                }
+                else
+                {
+                    $json = '{"success": false, "msg": "รายการนี้ซ้ำ"}';
+                }
+            }
+            else
+            {
+                //update
+                $rs = $this->service->update_charge_dental($data);
+                $json = $rs ? '{"success": true, "id": "'.$data['id'].'"}' : '{"success": false, "msg": "ไม่สามารถบันทึกรายการได้"}';
+            }
+        }
+        else
+        {
+            $json = '{"success": false, "msg": "ไม่พบข้อมูลที่ต้องการบันทึก"}';
+        }
+
+        render_json($json);
+    }
+
+    public function get_charge_dental_list()
+    {
+        $vn = $this->input->post('vn');
+        if(!empty($vn))
+        {
+            $rs = $this->service->get_charge_dental_list($vn);
+            if($rs)
+            {
+                $arr_result = array();
+                foreach($rs as $r)
+                {
+                    $obj = new stdClass();
+                    $obj->id = get_first_object($r['_id']);
+                    $obj->charge_id = get_first_object($r['charge_id']);
+                    $obj->name = get_charge_name($obj->charge_id);
+                    $obj->price = isset($r['price']) ? $r['price'] : 0;
+                    $obj->teeth = isset($r['teeth']) ? $r['teeth'] : 0;
+                    $obj->side = isset($r['side']) ? $r['side'] : 0;
+
+                    $arr_result[] = $obj;
+                }
+
+                $row = json_encode($arr_result);
+                $json = '{"success": true, "rows": '.$row.'}';
+            }
+            else
+            {
+                $json = '{"success": false, "msg": "ไม่พบรายการ"}';
+            }
+        }
+        else
+        {
+            $json = '{"success": false, "msg": "กรุณาระบุ VN"}';
+        }
+
+        render_json($json);
+    }
+
+    public function get_charge_dental_remove()
+    {
+        $id = $this->input->post('id');
+        if(!empty($id))
+        {
+            $rs = $this->service->get_charge_dental_remove($id);
+            $json = $rs ? '{"success": true}' : '{"success": false, "msg": "ไม่สามารถลบรายการได้"}';
+        }
+        else
+        {
+            $json = '{"success": false, "msg": "กรุณาระบุ ID ที่ต้องการลบ"}';
         }
 
         render_json($json);

@@ -1074,6 +1074,63 @@ class Service_model extends CI_Model
         return $rs;
     }
 
+
+    //================= charge dental =======================
+    public function save_charge_dental($data)
+    {
+        $rs = $this->mongo_db
+            ->insert('visit_charge_dental', array(
+                '_id' => $data['id'],
+                'vn' => (string) $data['vn'],
+                'hn' => (string) $data['hn'],
+                'charge_id' => new MongoId($data['charge_id']),
+                'price' => (float) $data['price'],
+                'teeth' => $data['teeth'],
+                'side' => $data['side']
+            ));
+
+        return $rs;
+    }
+
+    public function check_charge_dental_exist($vn, $id)
+    {
+        $rs = $this->mongo_db
+            ->where(array('vn' => (string) $vn, 'charge_id' => new MongoId($id)))
+            ->count('visit_charge_dental');
+
+        return $rs > 0 ? TRUE : FALSE;
+    }
+
+    public function update_charge_dental($data)
+    {
+        $rs = $this->mongo_db
+            ->where(array('vn' => (string) $data['vn'], '_id' => new MongoId($data['id'])))
+            ->set(array(
+                'price' => (float) $data['price'],
+                'teeth' => $data['teeth'],
+                'side' => $data['side']
+            ))
+            ->update('visit_charge_dental');
+        return $rs;
+    }
+
+    public function get_charge_dental_remove($id)
+    {
+        $rs = $this->mongo_db
+            ->where(array('_id' => new MongoId($id)))
+            ->delete('visit_charge_dental');
+
+        return $rs;
+    }
+
+    public function get_charge_dental_list($vn)
+    {
+        $rs = $this->mongo_db
+            ->where(array('vn' => (string) $vn))
+            ->get('visit_charge_dental');
+
+        return $rs;
+    }
 }
 
 /* End of file service_model.php */

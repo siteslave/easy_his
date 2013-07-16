@@ -112,7 +112,7 @@ head.ready(function(){
                                 '<td>' + v.provider_type + '</td> ' +
                                 '<td>' + v.start_date + '</td> ' +
                                 '<td>' + v.out_date + '</td> ' +
-                                '<td><a href="javascript:void(0)" class="btn btn-default" data-name="btn_edit_provider" ' +
+                                '<td><a href="javascript:void(0)" class="btn btn-success btn-small" data-name="btn_edit_provider" ' +
                                 'title="แก้ไขรายการ" data-id="' + v.id + '"> ' +
                                 '<i class="icon-edit"></i></a></td> ' +
                                 '</tr>'

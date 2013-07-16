@@ -63,7 +63,7 @@
         <li class="active"><a href="#tab_screening" data-toggle="tab"><i class="icon-th-list"></i> ข้อมูลคัดกรอง</a></li>
         <li><a href="#tab_diagnosis" data-toggle="tab"><i class="icon-check"></i> วินิจฉัยโรค</a></li>
         <li><a href="#tab_procedure" data-toggle="tab"><i class="icon-eye-close"></i> หัตถการ</a></li>
-        <li><a href="#tab_dental" data-toggle="tab"><i class="icon-check-sign"></i> ทันตกรรม</a></li>
+        <li><a href="#tab_dental_charge_item" data-toggle="tab"><i class="icon-check-sign"></i> ทันตกรรม</a></li>
         <li><a href="#tab_vaccine" data-toggle="tab"><i class="icon-pushpin"></i> วัคซีน</a></li>
         <li><a href="#tab_drug" data-toggle="tab"><i class="icon-filter"></i> จ่ายยา</a></li>
         <li><a href="#tab_income" data-toggle="tab"><i class="icon-shopping-cart"></i> ค่าใช้จ่าย</a></li>
@@ -480,6 +480,31 @@
             <button class="btn btn-success" rel="tooltip" title="เพิ่มรายการ" id="btn_proced_new"><i class="icon-plus-sign"></i></button>
 
         </div>
+        <div class="tab-pane" id="tab_dental_charge_item">
+            <blockquote>บันทึกข้อมูลกิจกรรม/ค่าใช้จ่ายที่ใช้ในงานทันตกรรม</blockquote>
+            <table class="table table-striped" id="tbl_charge_item_list">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>รายการ</th>
+                    <th>ซี่ฟัน</th>
+                    <th>ด้าน</th>
+                    <th>ราคา</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td colspan="6">...</td>
+                </tr>
+                </tbody>
+            </table>
+
+            <button type="button" class="btn btn-success" id="btn_new_charge_dental"
+                rel="tooltip" title="เพิ่มรายการ">
+                <i class="icon-plus"></i>
+            </button>
+        </div>
         <div class="tab-pane" id="tab_vaccine">
             <blockquote>บันทึกข้อมูลการให้วัคซีนสำหรับกลุ่มเป้าหมายและบุคคลทั่วไป</blockquote>
             <table class="table table-striped" id="tbl_vaccine_list">
@@ -762,6 +787,55 @@
     </div>
 </div>
 <!-- end new charge item -->
+<!-- new dental charge item -->
+<div class="modal fade" id="mdl_dental_charge_new">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title"><i class="icon-shopping-cart"></i> เพิ่มรายการค่าใช้จ่าย</h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="txt_charge_dental_id"/>
+                <label>ค่าใช้จ่าย/กิจกรรม</label>
+                <select id="sl_charge_dental_items">
+                    <option value="">-*-</option>
+                    <?php
+                    foreach($dental_charge_items as $r)
+                    {
+                        echo '<option value="'.$r->id.'" data-price="'.$r->price.'">' . $r->name . '</option>';
+                    }
+                    ?>
+                </select>
+                <div class="row">
+                    <div class="col-lg-4">
+                        <label for="">ราคา</label>
+                        <div class="input-group" style="width: 150px;">
+                            <input data-type="number" id="txt_charge_dental_price" type="text" placeholder="0.0">
+                            <span class="input-group-addon">บาท</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-7">
+                        <label for="">ซี่ (มีหลายซี่ใช้เครื่องหมาย , คั่น)</label>
+                        <input type="text" placeholder="#15, #12" id="txt_charge_dental_teeth" />
+                    </div>
+                    <div class="col-lg-5">
+                        <label for="">ด้าน</label>
+                        <input type="text" data-type="number" placeholder="0" id="txt_charge_dental_side" />
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-success" id="btn_save_charge_dental"><i class="icon-save"></i> บันทึก</a>
+                <a href="#" class="btn btn-danger" data-dismiss="modal"><i class="icon-off"></i> ปิดหน้าต่าง</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end new dental charge item -->
 
 <!-- FP -->
 <div class="modal fade" id="mdl_fp">
@@ -1803,7 +1877,6 @@
     </div>
 </div>
 
-
 <div class="modal fade" id="mdl_ncd_follow">
     <div class="modal-dialog" style="width: 960px; left: 35%">
         <div class="modal-content">
@@ -2153,7 +2226,6 @@
     </div>
 </div>
 
-
 <script type="text/javascript">
     head.js(
             '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.js',
@@ -2177,6 +2249,7 @@
             '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.labs.js',
             '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.accidents.js',
             '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.depress.js',
+            '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.charge_dental.js',
             '<?php echo base_url(); ?>assets/apps/js/apps.services.entries.chronicfu.js'
     );
 </script>

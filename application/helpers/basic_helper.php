@@ -155,12 +155,12 @@ if(!function_exists('get_usage_name')){
 }
 
 if(!function_exists('get_charge_name')){
-    function get_charge_name($code){
+    function get_charge_name($id){
         $ci =& get_instance();
 
         $ci->load->model('Basic_model', 'basic');
 
-        $result = $ci->basic->get_charge_name($code);
+        $result = $ci->basic->get_charge_name($id);
 
         return $result;
     }

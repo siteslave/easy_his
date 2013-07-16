@@ -121,6 +121,30 @@ class Income_model extends CI_Model
         return count($rs) ? $rs[0]['name'] : '-';
     }
 
+    public function get_dental_list()
+    {
+        $rs = $this->mongo_db
+            ->where(array('is_dental' => 'Y'))
+            ->order_by(array('name' => 1))
+            ->get('ref_charge_items');
+
+        $arr_result = array();
+
+        foreach($rs as $r)
+        {
+            $obj = new stdClass();
+            $obj->id = get_first_object($r['_id']);
+            $obj->name = $r['name'];
+            $price_qty          = $this->get_price_qty($r['_id']);
+            $obj->price         = isset($price_qty[0]['price']) ? $price_qty[0]['price'] : 0;
+            $obj->qty           = isset($price_qty[0]['qty']) ? $price_qty[0]['qty'] : 0;
+
+            $arr_result[] = $obj;
+        }
+
+        return $arr_result;
+    }
+
     public function get_price_qty($id)
     {
         $rs = $this->mongo_db

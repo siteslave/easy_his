@@ -250,8 +250,9 @@ var app = {
 
     strip: function(msg, len)
     {
-        return msg.substr(0, len) + '...';
+        return msg.length > len ? msg.substr(0, len) + ' ...' : msg;
     },
+
     confirm: function(msg, cb){
         if(confirm(msg))
             cb(true);

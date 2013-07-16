@@ -156,6 +156,7 @@ head.ready(function(){
         income.ajax.get_list_total(function(err, data){
             if(err){
                 app.alert(err);
+                $('#tbl_list > tbody').append('<tr><td colspan="7">ไม่พบข้อมูล</td></td></tr>');
             }else{
                 $('#main_paging').paging(data.total, {
                     format: " < . (qq -) nnncnnn (- pp) . >",
@@ -168,7 +169,7 @@ head.ready(function(){
                         income.ajax.get_list(this.slice[0], this.slice[1], function(err, data){
                             if(err){
                                 app.alert(err);
-                                $('#tbl_list > tbody').append('<tr><td colspan="8">ไม่พบข้อมูล</td></td></tr>');
+                                $('#tbl_list > tbody').append('<tr><td colspan="7">ไม่พบข้อมูล</td></td></tr>');
                             }else{
                                 income.set_list(data);
                             }
@@ -244,6 +245,7 @@ head.ready(function(){
         income.ajax.get_filter_total(inc, function(err, data){
             if(err){
                 app.alert(err);
+                $('#tbl_list > tbody').append('<tr><td colspan="7">ไม่พบข้อมูล</td></td></tr>');
             }else{
                 $('#main_paging').paging(data.total, {
                     format: " < . (qq -) nnncnnn (- pp) . >",
@@ -256,7 +258,7 @@ head.ready(function(){
                         income.ajax.get_filter_list(inc, this.slice[0], this.slice[1], function(err, data){
                             if(err){
                                 app.alert(err);
-                                $('#tbl_list > tbody').append('<tr><td colspan="8">ไม่พบข้อมูล</td></td></tr>');
+                                $('#tbl_list > tbody').append('<tr><td colspan="7">ไม่พบข้อมูล</td></td></tr>');
                             }else{
                                 income.set_list(data);
                             }
@@ -328,7 +330,7 @@ head.ready(function(){
 
         if(!data.rows)
         {
-            $('#tbl_list > tbody').append('<tr><td colspan="8">ไม่พบข้อมูล</td></td></tr>');
+            $('#tbl_list > tbody').append('<tr><td colspan="7">ไม่พบข้อมูล</td></td></tr>');
         }
         else
         {
@@ -337,7 +339,6 @@ head.ready(function(){
 
                 $('#tbl_list > tbody').append(
                     '<tr>' +
-                        '<td>'+ v.code +'</td>' +
                         '<td>'+ app.strip(v.name, 60) +'</td>' +
                         '<td>'+ app.strip(v.income_name, 40) +'</td>' +
                         '<td>'+ app.add_commars(v.cost) +'</td>' +

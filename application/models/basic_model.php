@@ -764,8 +764,8 @@ class Basic_model extends CI_Model
         return count($result) > 0 ? $result[0]['name1'] : '-';
     }
 
-    public function get_charge_name($code){
-        $result = $this->mongo_db->where(array('code' => $code))->get('ref_charge_items');
+    public function get_charge_name($id){
+        $result = $this->mongo_db->where(array('_id' => new MongoId($id)))->get('ref_charge_items');
 
         return count($result) > 0 ? $result[0]['name'] : '-';
     }

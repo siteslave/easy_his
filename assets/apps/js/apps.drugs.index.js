@@ -283,7 +283,7 @@ head.ready(function(){
                         '<td>'+ app.add_commars(v.price) +'</td>' +
                         '<td>'+ app.add_commars(v.qty) +'</td>' +
                         '<td>' +
-                        '<a href="javascript:void(0);" data-name="btn_edit" class="btn btn-default" data-id="'+ v.id +'" ' +
+                        '<a href="javascript:void(0);" data-name="btn_edit" class="btn btn-success btn-small" data-id="'+ v.id +'" ' +
                         'data-vname="'+ v.name +'" data-did="'+ v.did +'" data-cost="'+ v.cost +'" data-price="'+ v.price +'" ' +
                         'data-qty="'+ v.qty +'" title="แก้ไข">' +
                         '<i class="icon-edit"></i></a>' +
