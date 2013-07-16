@@ -379,7 +379,8 @@ class Services extends CI_Controller
     {
         $date = $this->input->post('date');
         $doctor_room = $this->input->post('doctor_room');
-        $date = to_string_date($date);
+
+        $date = empty($date) ? date('Ymd') : to_string_date($date);
 
         $this->service->owner_id = $this->owner_id;
         $total = $this->service->get_list_total($date, $doctor_room);
