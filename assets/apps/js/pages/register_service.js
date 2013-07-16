@@ -69,6 +69,7 @@ head.ready(function() {
         items.patient_type = $('#sl_reg_service_pttype').val();
         items.location = $('#sl_reg_service_location').val();
         items.type_in = $('#sl_reg_service_typein').val();
+        items.intime = $('#sl_reg_service_intime').val();
         items.service_place = $('#sl_reg_service_service_place').val();
         items.insc_id = $('#sl_reg_service_insc').val();
         items.insc_code = $('#txt_reg_service_insc_code').val();

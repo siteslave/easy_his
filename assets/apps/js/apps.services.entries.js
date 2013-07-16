@@ -52,7 +52,7 @@ head.ready(function(){
         items.dbp = $('#txt_screening_dbp').val();
         items.ill_history = $('input[name="rd_ill_history"]:checked').val();
         items.operate = $('#chk_operate').is(":checked") ? '1' : '0';
-
+        items.typeout = $('#sl_typeout').val();
 
         //screen
         items.smoking = $('#sl_screening_smoking').val();
@@ -188,6 +188,11 @@ head.ready(function(){
             $('#txt_screening_breathe').val(data.rows.breathe);
             $('#txt_screening_sbp').val(data.rows.sbp);
             $('#txt_screening_dbp').val(data.rows.dbp);
+            $('#sl_typeout').val(data.rows.typeout);
+            $('#sl_service_place').val(data.rows.service_place);
+            $('#sl_typein').val(data.rows.typein);
+            $('#sl_location').val(data.rows.location);
+            $('#sl_intime').val(data.rows.intime);
 
             if(data.rows.ill_history == '1'){
                 $('#rd_ill_history2').prop('checked', 'checked');

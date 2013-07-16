@@ -74,20 +74,28 @@
         <div class="tab-pane active" id="tab_screening">
             <blockquote>บันทึกข้อมูลการให้บริการผู้ป่วย <p class="text-warning">กรุณาบันทึกข้อมูลให้ถูกต้องและสมบูรณ์เพื่อป้องกันข้อมูลผิดพลาดเวลาส่งออก</p></blockquote>
             <div class="row">
+                <div class="col-lg-3">
+                    <select id="sl_intime" title="เวลารับบริการ" rel="tooltip" disabled>
+                        <option value="1">[1] ในเวลาราชการ</option>
+                        <option value="2">[2] นอกเวลาราชการ</option>
+                    </select>
+                </div>
                 <div class="col-lg-2">
-                    <select id="sl_typeout" style="width: 150px;" title="ประเภทที่ตั้งของที่อยู่ผู้รับบริการ" rel="tooltip">
+                    <select id="sl_location" title="ประเภทที่ตั้งของที่อยู่ผู้รับบริการ" rel="tooltip" disabled>
                         <option value="1">[1] ในเขต</option>
                         <option value="2">[2] นอกเขต</option>
                     </select>
                 </div>
                 <div class="col-lg-2">
-                    <select id="sl_typeout" style="width: 160px;" title="ประเภทเวลาการมารับบริการ" rel="tooltip">
-                        <option value="1">[1] ในเวลาราชการ</option>
-                        <option value="2">[2] นอกเวลาราชการ</option>
+                    <select id="sl_typein" title="ประเภทเวลาการมารับบริการ" rel="tooltip" disabled>
+                        <option value="1">[1] มารับบริการเอง</option>
+                        <option value="2">[2] มารับบริการตามนัดหมาย</option>
+                        <option value="3">[3] ได้รับการส่งต่อจากสถานพยาบาลอื่น</option>
+                        <option value="4">[4] ได้รับการส่งตัวจากบริการ EMS</option>
                     </select>
                 </div>
                 <div class="col-lg-4">
-                    <select id="sl_typeout" style="width: 250px;" title="ระบุสถานะปัจจุบันของผู้มารับบริการ" rel="tooltip">
+                    <select id="sl_typeout" title="ระบุสถานะปัจจุบันของผู้มารับบริการ" rel="tooltip">
                         <option value="1">[1] จำหน่ายกลับบ้าน</option>
                         <option value="2">[2] รับไว้รักษาต่อในแผนกผู้ป่วยใน</option>
                         <option value="3">[3] ส่งต่อไปสถานพยาบาลอื่น</option>
@@ -1057,242 +1065,236 @@
 <div class="modal fade" id="mdl_dental">
     <div class="modal-dialog" style="width: 960px; left: 35%">
         <div class="modal-content">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h4 class="modal-title">ประเมินสุขภาพฟัน</h4>
-        </div>
-        <div class="modal-body">
-            <div class="tabbable">
-        <ul class="nav nav-tabs">
-            <li class="active"><a href="#tab_dental1" data-toggle="tab"><i class="icon-plus"></i> การให้บริการวันนี้</a></li>
-            <li><a href="#tab_dental2" data-toggle="tab"><i class="icon-refresh"></i> ประวัติการรับบริการ</a></li>
-        </ul>
-        <div class="tab-content">
-        <div class="tab-pane active" id="tab_dental1">
-        <br>
-        <form class="form-horizontal">
-        <div class="alert alert-success">
-            <div class="row">
-                <div class="col-lg-4">
-                    <label class="control-label" for="sl_dental_denttype">ประเภทผู้รับบริการ</label>
-                    <select id="sl_dental_denttype">
-                        <option value="">--</option>
-                        <option value="1">กลุ่มหญิงตั้งครรภ์</option>
-                        <option value="2">กลุ่มเด็กก่อนวัยเรียน</option>
-                        <option value="3">กลุ่มเด็กวัยเรียน</option>
-                        <option value="4">กลุ่มผู้สูงอายุ</option>
-                        <option value="5">กลุ่มอื่นๆ</option>
-                    </select>
-                </div>
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">ประเมินสุขภาพฟัน</h4>
+            </div>
+            <div class="modal-body">
+                <div class="tabbable">
+                    <ul class="nav nav-tabs">
+                        <li class="active"><a href="#tab_dental1" data-toggle="tab"><i class="icon-plus"></i> การให้บริการวันนี้</a></li>
+                        <li><a href="#tab_dental2" data-toggle="tab"><i class="icon-refresh"></i> ประวัติการรับบริการ</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tab_dental1">
+                            <br>
+                            <form class="form-horizontal">
+                                <div class="alert alert-success">
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <label class="control-label" for="sl_dental_denttype">ประเภทผู้รับบริการ</label>
+                                            <select id="sl_dental_denttype">
+                                                <option value="">--</option>
+                                                <option value="1">กลุ่มหญิงตั้งครรภ์</option>
+                                                <option value="2">กลุ่มเด็กก่อนวัยเรียน</option>
+                                                <option value="3">กลุ่มเด็กวัยเรียน</option>
+                                                <option value="4">กลุ่มผู้สูงอายุ</option>
+                                                <option value="5">กลุ่มอื่นๆ</option>
+                                            </select>
+                                        </div>
 
-                <div class="col-lg-5">
-                    <label for="sl_dental_providers" class="control-label" >ผู้ให้บริการ</label>
-                    <select id="sl_dental_providers">
-                        <option value="">-*-</option>
-                        <?php
-                        foreach($providers as $p)
-                        {
-                            echo '<option value="'.$p->id.'">' . $p->name . '</option>';
-                        }
-                        ?>
-                    </select>
+                                        <div class="col-lg-5">
+                                            <label for="sl_dental_providers" class="control-label" >ผู้ให้บริการ</label>
+                                            <select id="sl_dental_providers">
+                                                <option value="">-*-</option>
+                                                <?php
+                                                foreach($providers as $p)
+                                                {
+                                                    echo '<option value="'.$p->id.'">' . $p->name . '</option>';
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tabbable">
+                                    <ul class="nav nav-tabs">
+                                        <li class="active"><a href="#tab_dental_survey1" data-toggle="tab"><i class="icon-file"></i> การสำรวจสภาพฟัน</a></li>
+                                        <li><a href="#tab_dental_survey2" data-toggle="tab"><i class="icon-time"></i> การให้คำแนะนำ</a></li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <div class="tab-pane active" id="tab_dental_survey1">
+                                            <legend>ฟันแท้</legend>
+                                            <div class="row">
+                                                <div class="col-lg-2">
+                                                    <label class="control-label" for="txt_dental_pteeth">มีอยู่ (ซี่)</label>
+                                                    <input type="text" data-type="number" id="txt_dental_pteeth">
+                                                </div>
+                                                <div class="col-lg-2">
+                                                    <label class="control-label" for="txt_dental_pcaries">ผุที่ไม่ได้อุด (ซี่)</label>
+                                                    <input type="text" data-type="number" id="txt_dental_pcaries">
+                                                </div>
+                                                <div class="col-lg-2">
+                                                    <label class="control-label" for="txt_dental_pfilling">ได้อุด (ซี่)</label>
+                                                    <input type="text" data-type="number" id="txt_dental_pfilling">
+                                                </div>
+                                                <div class="col-lg-2">
+                                                    <label class="control-label" for="txt_dental_pextract">ถอน/หลุด (ซี่)</label>
+                                                    <input type="text" data-type="number" id="txt_dental_pextract">
+                                                </div>
+                                            </div>
+                                            <legend>ฟันน้ำนม</legend>
+
+                                            <div class="row">
+
+                                                <div class="col-lg-2">
+                                                    <label class="control-label" for="txt_dental_dteeth">มีอยู่ (ซี่)</label>
+                                                    <input type="text" data-type="number" id="txt_dental_dteeth">
+                                                </div>
+                                                <div class="col-lg-2">
+                                                    <label class="control-label" for="txt_dental_dfilling">ได้อุด (ซี่)</label>
+                                                    <input type="text" data-type="number" id="txt_dental_dfilling">
+                                                </div>
+                                                <div class="col-lg-2">
+                                                    <label class="control-label" for="txt_dental_dcaries">ผุไม่ได้อุด(ซี่)</label>
+                                                    <input type="text" data-type="number" id="txt_dental_dcaries">
+                                                </div>
+                                                <div class="col-lg-2">
+                                                    <label class="control-label" for="txt_dental_dextract">ที่ถอน/หลุด(ซี่)</label>
+                                                    <input type="text" data-type="number" id="txt_dental_dextract">
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <label class="control-label" for="sl_dental_gum">สภาวะปริทันต์</label>
+                                                    <select id="sl_dental_gum">
+                                                        <option value="">--</option>
+                                                        <option value="0">ปกติ</option>
+                                                        <option value="1">มีเลือดออกภายหลังจากการตรวจ</option>
+                                                        <option value="2">มีหินน้ำลายแต่ยังเห็นแถบดำบนเครื่องมือ</option>
+                                                        <option value="3">มีร่องลึกปริทันต์ 4-5 ม.ม. (ขอบเงือกอยู่ภายในแถบดำ)</option>
+                                                        <option value="4">มีร่องลึกปริทันต์ 6 ม.ม. หรือ มากกว่า (มองไม่เห็นแถบดำบนเครื่องมือ)</option>
+                                                        <option value="5">มีหินน้ำลายและมีเลือดออกภายหลังการตรวจ</option>
+                                                        <option value="9">ตรวจไม่ได้/ไม่ตรวจ</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="tab-pane" id="tab_dental_survey2">
+                                            <div class="row">
+                                                <div class="col-lg-3">
+                                                    <label class="control-label" for="txt_dental_need_sealant">ต้องเคลือบ(ซี่)</label>
+                                                    <input type="text" data-type="number" id="txt_dental_need_sealant">
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <label class="control-label" for="sl_dental_need_fluoride">เคลือบฟลูออไรด์</label>
+                                                    <select id="sl_dental_need_fluoride">
+                                                        <option value="">--</option>
+                                                        <option value="1">ต้องทา/เคลือบฟลูออไรด์</option>
+                                                        <option value="2">ไม่ต้องทา/เคลือบฟลูออไรด์</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <label class="control-label" for="sl_dental_need_scaling">ขุดหินน้ำลาย</label>
+                                                    <select id="sl_dental_need_scaling">
+                                                        <option value="">--</option>
+                                                        <option value="1">ต้องขูดหินน้ำลาย</option>
+                                                        <option value="2">ไม่ต้องขูดหินน้ำลาย</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-lg-3">
+                                                    <label class="control-label" for="txt_dental_need_pfilling">ฟันแท้ที่ต้องอุด(ซี่)</label>
+                                                    <input type="text" data-type="number" id="txt_dental_need_pfilling">
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <label class="control-label" for="txt_dental_need_dfilling">ฟันน้ำนมที่ต้องอุด(ซี่)</label>
+                                                    <input type="text" data-type="number" id="txt_dental_need_dfilling">
+                                                </div>
+                                            </div>
+
+                                            <div class="row">
+                                                <div class="col-lg-3">
+                                                    <label class="control-label" for="txt_dental_need_pextract">ฟันแท้ที่ต้องถอน(ซี่)</label>
+                                                    <input type="text" data-type="number" id="txt_dental_need_pextract">
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <label class="control-label" for="txt_dental_need_dextract">ฟันน้ำนมที่ต้องถอน(ซี่)</label>
+                                                    <input type="text" data-type="number" id="txt_dental_need_dextract">
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <label class="control-label" for="txt_dental_nprosthesis">ต้องใส่ฟันเทียม(ซี่)</label>
+                                                    <input type="text" data-type="number" id="txt_dental_nprosthesis">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-3">
+                                                    <label class="control-label" for="txt_dental_permanent_perma">คู่สบฟันแท้กับฟันแท้</label>
+                                                    <input type="text" data-type="number" id="txt_dental_permanent_perma">
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <label class="control-label" for="txt_dental_permanent_prost">คู่สบฟันแท้กับฟันเทียม</label>
+                                                    <input type="text" data-type="number" id="txt_dental_permanent_prost">
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <label class="control-label" for="txt_dental_prosthesis_prost">คู่สบฟันเทียมกับฟันเทียม</label>
+                                                    <input type="text" data-type="number" id="txt_dental_prosthesis_prost">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-5">
+                                                    <label class="control-label" for="sl_dental_schooltype">สถานศึกษา</label>
+                                                    <select id="sl_dental_schooltype">
+                                                        <option value="">--</option>
+                                                        <option value="1">ศพด.</option>
+                                                        <option value="2">ประถมศึกษารัฐบาล</option>
+                                                        <option value="3">ประถมศึกษาเทศบาล</option>
+                                                        <option value="4">ประถมศึกษาท้องถิ่น</option>
+                                                        <option value="5">ประถมศึกษาเอกชน</option>
+                                                        <option value="6">มัธยมศึกษารัฐบาล</option>
+                                                        <option value="7">มัธยมศึกษาเทศบาล</option>
+                                                        <option value="8">มัธยมศึกษาท้องถิ่น</option>
+                                                        <option value="9">มัธยมศึกษาเอกชน</option>
+                                                    </select>
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <label class="control-label" for="txt_dental_school_class">ระดับการศึกษา</label>
+                                                    <input type="text" data-type="number" id="txt_dental_school_class">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label" for="btn_icf_save">&nbsp;</label>
+                                    <div class="controls">
+                                        <button class="btn btn-success" type="button" id="btn_dental_save">
+                                            <i class="icon-save"></i> บันทึกข้อมูล
+                                        </button>
+                                        <button class="btn btn-danger" type="button" id="btn_dental_remove">
+                                            <i class="icon-trash"></i> ลบข้อมูลการให้บริการ
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="tab-pane" id="tab_dental2">
+                            <legend>ประวัติการรับบริการ</legend>
+                            <table class="table table-striped" id="tbl_dental_history">
+                                <thead>
+                                <tr>
+                                    <th>วันที่</th>
+                                    <th>หน่วยบริการ</th>
+                                    <th>ประเภทผู้รับบริการ</th>
+                                    <th>สถานที่</th>
+                                    <th>สภาวะปริทันต์</th>
+                                    <th>ผู้ให้บริการ</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td colspan="6">...</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-
-        <div class="tabbable">
-            <ul class="nav nav-tabs">
-                <li class="active"><a href="#tab_dental_survey1" data-toggle="tab"><i class="icon-file"></i> การสำรวจสภาพฟัน</a></li>
-                <li><a href="#tab_dental_survey2" data-toggle="tab"><i class="icon-time"></i> การให้คำแนะนำ</a></li>
-            </ul>
-            <div class="tab-content">
-                <div class="tab-pane active" id="tab_dental_survey1">
-                    <legend>ฟันแท้</legend>
-                    <div class="row">
-                        <div class="col-lg-2">
-                            <label class="control-label" for="txt_dental_pteeth">มีอยู่ (ซี่)</label>
-                            <input type="text" data-type="number" id="txt_dental_pteeth">
-                        </div>
-                        <div class="col-lg-2">
-                            <label class="control-label" for="txt_dental_pcaries">ผุที่ไม่ได้อุด (ซี่)</label>
-                            <input type="text" data-type="number" id="txt_dental_pcaries">
-                        </div>
-                        <div class="col-lg-2">
-                            <label class="control-label" for="txt_dental_pfilling">ได้อุด (ซี่)</label>
-                            <input type="text" data-type="number" id="txt_dental_pfilling">
-                        </div>
-                        <div class="col-lg-2">
-                            <label class="control-label" for="txt_dental_pextract">ถอน/หลุด (ซี่)</label>
-                            <input type="text" data-type="number" id="txt_dental_pextract">
-                        </div>
-                    </div>
-                    <legend>ฟันน้ำนม</legend>
-
-                    <div class="row">
-
-                        <div class="col-lg-2">
-                            <label class="control-label" for="txt_dental_dteeth">มีอยู่ (ซี่)</label>
-                            <input type="text" data-type="number" id="txt_dental_dteeth">
-                        </div>
-                        <div class="col-lg-2">
-                            <label class="control-label" for="txt_dental_dfilling">ได้อุด (ซี่)</label>
-                            <input type="text" data-type="number" id="txt_dental_dfilling">
-                        </div>
-                        <div class="col-lg-2">
-                            <label class="control-label" for="txt_dental_dcaries">ผุไม่ได้อุด(ซี่)</label>
-                            <input type="text" data-type="number" id="txt_dental_dcaries">
-                        </div>
-                        <div class="col-lg-2">
-                            <label class="control-label" for="txt_dental_dextract">ที่ถอน/หลุด(ซี่)</label>
-                            <input type="text" data-type="number" id="txt_dental_dextract">
-                        </div>
-                    </div>
-<br>
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <label class="control-label" for="sl_dental_gum">สภาวะปริทันต์</label>
-                            <select id="sl_dental_gum">
-                                <option value="">--</option>
-                                <option value="0">ปกติ</option>
-                                <option value="1">มีเลือดออกภายหลังจากการตรวจ</option>
-                                <option value="2">มีหินน้ำลายแต่ยังเห็นแถบดำบนเครื่องมือ</option>
-                                <option value="3">มีร่องลึกปริทันต์ 4-5 ม.ม. (ขอบเงือกอยู่ภายในแถบดำ)</option>
-                                <option value="4">มีร่องลึกปริทันต์ 6 ม.ม. หรือ มากกว่า (มองไม่เห็นแถบดำบนเครื่องมือ)</option>
-                                <option value="5">มีหินน้ำลายและมีเลือดออกภายหลังการตรวจ</option>
-                                <option value="9">ตรวจไม่ได้/ไม่ตรวจ</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tab-pane" id="tab_dental_survey2">
-                    <div class="row">
-                        <div class="col-lg-3">
-                            <label class="control-label" for="txt_dental_need_sealant">ต้องเคลือบ(ซี่)</label>
-                            <input type="text" data-type="number" id="txt_dental_need_sealant">
-                        </div>
-                        <div class="col-lg-3">
-                            <label class="control-label" for="sl_dental_need_fluoride">เคลือบฟลูออไรด์</label>
-                            <select id="sl_dental_need_fluoride">
-                                <option value="">--</option>
-                                <option value="1">ต้องทา/เคลือบฟลูออไรด์</option>
-                                <option value="2">ไม่ต้องทา/เคลือบฟลูออไรด์</option>
-                            </select>
-                        </div>
-                        <div class="col-lg-3">
-                            <label class="control-label" for="sl_dental_need_scaling">ขุดหินน้ำลาย</label>
-                            <select id="sl_dental_need_scaling">
-                                <option value="">--</option>
-                                <option value="1">ต้องขูดหินน้ำลาย</option>
-                                <option value="2">ไม่ต้องขูดหินน้ำลาย</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-lg-3">
-                            <label class="control-label" for="txt_dental_need_pfilling">ฟันแท้ที่ต้องอุด(ซี่)</label>
-                            <input type="text" data-type="number" id="txt_dental_need_pfilling">
-                        </div>
-                        <div class="col-lg-3">
-                            <label class="control-label" for="txt_dental_need_dfilling">ฟันน้ำนมที่ต้องอุด(ซี่)</label>
-                            <input type="text" data-type="number" id="txt_dental_need_dfilling">
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-lg-3">
-                            <label class="control-label" for="txt_dental_need_pextract">ฟันแท้ที่ต้องถอน(ซี่)</label>
-                            <input type="text" data-type="number" id="txt_dental_need_pextract">
-                        </div>
-                        <div class="col-lg-3">
-                            <label class="control-label" for="txt_dental_need_dextract">ฟันน้ำนมที่ต้องถอน(ซี่)</label>
-                            <input type="text" data-type="number" id="txt_dental_need_dextract">
-                        </div>
-                        <div class="col-lg-3">
-                            <label class="control-label" for="txt_dental_nprosthesis">ต้องใส่ฟันเทียม(ซี่)</label>
-                            <input type="text" data-type="number" id="txt_dental_nprosthesis">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-3">
-                            <label class="control-label" for="txt_dental_permanent_perma">คู่สบฟันแท้กับฟันแท้</label>
-                            <input type="text" data-type="number" id="txt_dental_permanent_perma">
-                        </div>
-                        <div class="col-lg-3">
-                            <label class="control-label" for="txt_dental_permanent_prost">คู่สบฟันแท้กับฟันเทียม</label>
-                            <input type="text" data-type="number" id="txt_dental_permanent_prost">
-                        </div>
-                        <div class="col-lg-3">
-                            <label class="control-label" for="txt_dental_prosthesis_prost">คู่สบฟันเทียมกับฟันเทียม</label>
-                            <input type="text" data-type="number" id="txt_dental_prosthesis_prost">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-5">
-                            <label class="control-label" for="sl_dental_schooltype">สถานศึกษา</label>
-                            <select id="sl_dental_schooltype">
-                                <option value="">--</option>
-                                <option value="1">ศพด.</option>
-                                <option value="2">ประถมศึกษารัฐบาล</option>
-                                <option value="3">ประถมศึกษาเทศบาล</option>
-                                <option value="4">ประถมศึกษาท้องถิ่น</option>
-                                <option value="5">ประถมศึกษาเอกชน</option>
-                                <option value="6">มัธยมศึกษารัฐบาล</option>
-                                <option value="7">มัธยมศึกษาเทศบาล</option>
-                                <option value="8">มัธยมศึกษาท้องถิ่น</option>
-                                <option value="9">มัธยมศึกษาเอกชน</option>
-                            </select>
-                        </div>
-                        <div class="col-lg-3">
-                            <label class="control-label" for="txt_dental_school_class">ระดับการศึกษา</label>
-                            <input type="text" data-type="number" id="txt_dental_school_class">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="control-group">
-            <label class="control-label" for="btn_icf_save">&nbsp;</label>
-            <div class="controls">
-                <button class="btn btn-success" type="button" id="btn_dental_save">
-                    <i class="icon-save"></i> บันทึกข้อมูล
-                </button>
-                <button class="btn btn-danger" type="button" id="btn_dental_remove">
-                    <i class="icon-trash"></i> ลบข้อมูลการให้บริการ
-                </button>
-            </div>
-        </div>
-        </form>
-        </div>
-        <div class="tab-pane" id="tab_dental2">
-            <legend>ประวัติการรับบริการ</legend>
-            <table class="table table-striped" id="tbl_dental_history">
-                <thead>
-                <tr>
-                    <th>วันที่</th>
-                    <th>หน่วยบริการ</th>
-                    <th>ประเภทผู้รับบริการ</th>
-                    <th>สถานที่</th>
-                    <th>สภาวะปริทันต์</th>
-                    <th>ผู้ให้บริการ</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td colspan="6">...</td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-        </div>
-        </div>
-        </div>
-        <div class="modal-footer">
-            <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off"></i> ปิดหน้าต่าง</a>
-        </div>
         </div>
     </div>
 </div>

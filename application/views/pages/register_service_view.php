@@ -131,7 +131,14 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-11">
+                    <div class="col-lg-3">
+                        <label for="">ในเวลา</label>
+                        <select id="sl_reg_service_intime">
+                            <option value="1" <?=isset($intime) ? $intime == '1' ? 'selected="selected"' : '' : ''?>>ในเวลาราชการ</option>
+                            <option value="2" <?=isset($intime) ? $intime == '2' ? 'selected="selected"' : '' : ''?>>นอกเวลาราชการ</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-9">
                         <label for="txt_reg_service_cc">อาการแรกรับ (CC)</label>
                         <textarea rows="1" id="txt_reg_service_cc"><?=isset($cc) ? $cc : ''?></textarea>
                     </div>

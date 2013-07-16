@@ -501,24 +501,25 @@ class Pages extends CI_Controller {
 
             $sv = $this->service->get_visit_info($vn);
             $data['date_serv'] = from_mongo_to_thai_date($sv['date_serv']);
-            $data['time_serv'] = $sv['time_serv'];
+            $data['time_serv'] = isset($sv['time_serv']) ? $sv['time_serv'] : '';
 
-            $data['clinic'] = get_first_object($sv['clinic']);
-            $data['service_place'] = $sv['service_place'];
-            $data['doctor_room'] = get_first_object($sv['doctor_room']);
-            $data['patient_type'] = $sv['patient_type'];
-            $data['location'] = $sv['location'];
-            $data['type_in'] = $sv['type_in'];
-            $data['cc'] = $sv['screenings']['cc'];
+            $data['clinic'] = isset($sv['clinic']) ? get_first_object($sv['clinic']) : '';
+            $data['service_place'] = isset($sv['service_place']) ? $sv['service_place'] : '';
+            $data['doctor_room'] = isset($sv['doctor_room']) ? get_first_object($sv['doctor_room']) : '';
+            $data['patient_type'] = isset($sv['patient_type']) ? $sv['patient_type'] : '';
+            $data['location'] = isset($sv['location']) ? $sv['location'] : '';
+            $data['intime'] = isset($sv['intime']) ? $sv['intime'] : '';
+            $data['type_in'] = isset($sv['type_in']) ? $sv['type_in'] : '';
+            $data['cc'] = isset($sv['screenings']['cc']) ? $sv['screenings']['cc'] : '-';
 
-            $data['ins_id'] = $sv['insurances']['id'];
-            $data['ins_code'] = $sv['insurances']['code'];
-            $data['ins_start_date'] = from_mongo_to_thai_date($sv['insurances']['start_date']);
-            $data['ins_expire_date'] = from_mongo_to_thai_date($sv['insurances']['expire_date']);
-            $data['ins_hosp_main_code'] = $sv['insurances']['hosp_main'];
-            $data['ins_hosp_main_name'] = get_hospital_name($sv['insurances']['hosp_main']);
-            $data['ins_hosp_sub_code'] = $sv['insurances']['hosp_sub'];
-            $data['ins_hosp_sub_name'] = get_hospital_name($sv['insurances']['hosp_sub']);
+            $data['ins_id'] = isset($sv['insurances']['id']) ? $sv['insurances']['id'] : '';
+            $data['ins_code'] = isset($sv['insurances']['code']) ? $sv['insurances']['code'] : '';
+            $data['ins_start_date'] = isset($sv['insurances']['start_date']) ? from_mongo_to_thai_date($sv['insurances']['start_date']) : '';
+            $data['ins_expire_date'] = isset($sv['insurances']['expire_date']) ? from_mongo_to_thai_date($sv['insurances']['expire_date']) : '';
+            $data['ins_hosp_main_code'] = isset($sv['insurances']['hosp_main']) ? $sv['insurances']['hosp_main'] : '';
+            $data['ins_hosp_main_name'] = isset($sv['insurances']['hosp_main']) ? get_hospital_name($sv['insurances']['hosp_main']) : '';
+            $data['ins_hosp_sub_code'] = isset($sv['insurances']['hosp_sub']) ? $sv['insurances']['hosp_sub'] : '';
+            $data['ins_hosp_sub_name'] = isset($sv['insurances']['hosp_sub']) ? get_hospital_name($sv['insurances']['hosp_sub']) : '';
         }
 
         $this->load->view('pages/register_service_view', $data);

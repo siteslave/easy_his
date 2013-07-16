@@ -75,6 +75,7 @@ class Service_model extends CI_Model
                 'patient_type'  => $data['patient_type'],
                 'location'      => $data['location'],
                 'type_in'       => $data['type_in'],
+                'intime'       => $data['intime'],
                 'service_place' => $data['service_place'],
                 'screenings'    => array(
                     'cc' => $data['cc']
@@ -104,6 +105,7 @@ class Service_model extends CI_Model
                 'patient_type'  => $data['patient_type'],
                 'location'      => $data['location'],
                 'type_in'       => $data['type_in'],
+                'intime'       => $data['intime'],
                 'service_place' => $data['service_place'],
                 'screenings'    => array(
                     'cc' => $data['cc']
@@ -262,6 +264,7 @@ class Service_model extends CI_Model
         $rs = $this->mongo_db
             ->where('vn', $data['vn'])
             ->set(array(
+                'type_out'                           => (string) $data['typeout'],
                 'screenings.cc'                     => $data['cc'],
                 'screenings.pe'                     => $data['pe'],
                 'screenings.body_tmp'               => (float) $data['body_tmp'],
@@ -314,12 +317,18 @@ class Service_model extends CI_Model
     public function get_screening($vn){
         $this->mongo_db->add_index('visit', array('vn' => -1));
         $rs = $this->mongo_db
-            ->select(array('screenings'))
+            ->select(array('screenings', 'type_in', 'type_out', 'service_place', 'intime'))
             ->where('vn', $vn)
             ->get('visit');
 
         if(isset($rs[0]['screenings'])){
             $obj = new stdClass();
+
+            $obj->typeout                   = isset($rs[0]['type_out']) ? $rs[0]['type_out'] : '';
+            $obj->typein                    = isset($rs[0]['type_in']) ? $rs[0]['type_in'] : '';
+            $obj->service_place             = isset($rs[0]['service_place']) ? $rs[0]['service_place'] : '';
+            $obj->location                  = isset($rs[0]['location']) ? $rs[0]['location'] : '';
+            $obj->intime                    = isset($rs[0]['intime']) ? $rs[0]['intime'] : '';
 
             $obj->cc                        = isset($rs[0]['screenings']['cc']) ? $rs[0]['screenings']['cc'] : '';
             $obj->pe                        = isset($rs[0]['screenings']['pe']) ? $rs[0]['screenings']['pe'] : '';
