@@ -379,7 +379,7 @@ class Person extends CI_Controller
 
                 $rs = $this->do_update_person($data);
 
-                $json = $rs ? '{"success": tru}' : '{"success": false, "msg": "ไม่สามารถปรับปรุงข้อมูลได้"}';
+                $json = $rs ? '{"success": true}' : '{"success": false, "msg": "ไม่สามารถปรับปรุงข้อมูลได้"}';
 
             }else{
                 //check cid
