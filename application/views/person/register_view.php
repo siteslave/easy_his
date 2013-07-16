@@ -19,8 +19,8 @@
             <form action="#" class="form-inline navbar-form">
                 <label>เลขบัตรประชาชน</label>
                 <input id="txt_cid" style="width: 250px;" type="text" value="" placeholder="xxxxxxxxxxxxx">
-                <button class="btn btn-default" type="button"><i class="icon-refresh"></i></button>
-                <button class="btn btn-primary" type="button" id="btn_search_dbpop"><i class="icon-search"></i></button>
+                <button class="btn btn-default" type="button" disabled><i class="icon-refresh"></i></button>
+                <button class="btn btn-primary" type="button" id="btn_search_dbpop-x" disabled><i class="icon-search"></i></button>
                 |
                 <label class="control-label" for="txt_passport">เลขที่ Passport</label>
                 <input type="text" id="txt_passport" style="width: 250px;" value="" placeholder="เลขที่ Passport" class="input-medium">
@@ -183,7 +183,7 @@
                     <?php foreach($labor_types as $t) echo '<option value="'.$t->id.'">'.$t->name.'</option>'; ?>
                 </select>
             </div>
-            <div class="col-lg-8">
+            <div class="col-lg-5">
                 <label class="control-label" for="slTypeArea">ประเภทบุคคล</label>
                 <select  id="slTypeArea">
                     <option value="">--</option>

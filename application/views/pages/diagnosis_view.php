@@ -15,7 +15,7 @@
             <label for="sl_diag_type">ประเภทการวินิจฉัย</label>
             <select id="sl_diag_type" style="width: 300px;">
                 <option value="">--</option>
-                <?php foreach($diag_types as $t) echo '<option value="'.$t->code.'">'.$t->name.'</option>'; ?>
+                <?php foreach($diag_types as $t) echo '<option value="'.$t->code.'">['.$t->code.'] '.$t->name.'</option>'; ?>
             </select>
         </div>
     </div>

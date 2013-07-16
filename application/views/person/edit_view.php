@@ -22,8 +22,8 @@
                     <label>เลขบัตรประชาชน</label>
                     <input type="hidden" id="txt_old_cid" value="<?php echo $data->cid; ?>">
                     <input id="txt_cid" style="width: 250px;" type="text" value="<?php echo $data->cid; ?>" placeholder="xxxxxxxxxxxxx">
-                    <button class="btn btn-default" type="button"><i class="icon-refresh"></i></button>
-                    <button class="btn btn-primary" type="button" id="btn_search_dbpop"><i class="icon-search"></i></button>
+                    <button class="btn btn-default" type="button" disabled><i class="icon-refresh"></i></button>
+                    <button class="btn btn-primary" type="button" id="btn_search_dbpop-x" disabled><i class="icon-search"></i></button>
                     |
                     <label class="control-label" for="txt_passport">เลขที่ Passport</label>
                     <input type="text" id="txt_passport" style="width: 250px;" value="<?php echo $data->passport; ?>" placeholder="เลขที่ Passport" class="input-medium">
@@ -213,8 +213,8 @@
                     <label class="control-label" for="slRHGroup">หมู่เลือด RH</label>
                     <select  id="slRHGroup">
                         <option value="">-*-</option>
-                        <option value="1" <?=$data-rhgroup == '1' ? 'selected="selected"' : ''?>>Positive</option>
-                        <option value="2" <?=$data-rhgroup == '2' ? 'selected="selected"' : ''?>>Negative</option>
+                        <option value="1" <?=$data->rhgroup == '1' ? 'selected="selected"' : ''?>>Positive</option>
+                        <option value="2" <?=$data->rhgroup == '2' ? 'selected="selected"' : ''?>>Negative</option>
                     </select>
                 </div>
             </div>
@@ -231,7 +231,7 @@
                         ?>
                     </select>
                 </div>
-                <div class="col-lg-3">
+                <div class="col-lg-5">
                     <label class="control-label" for="slTypeArea">ประเภทบุคคล</label>
                     <select  id="slTypeArea">
                         <option value="">-*-</option>

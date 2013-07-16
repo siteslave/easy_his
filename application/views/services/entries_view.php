@@ -450,8 +450,8 @@
                 </tr>
                 </tbody>
             </table>
-            <button class="btn btn-default" rel="tooltip" title="รีเฟรชรายการ" id="btn_diag_refresh"><i class="icon-refresh"></i></button>
             <button class="btn btn-success" rel="tooltip" title="เพิ่มรายการ" id="btn_diag_new"><i class="icon-plus-sign"></i></button>
+            <button class="btn btn-default" rel="tooltip" title="รีเฟรชรายการ" id="btn_diag_refresh"><i class="icon-refresh"></i></button>
         </div>
         <div class="tab-pane" id="tab_procedure">
             <blockquote>บันทึกข้อมูลการให้หัตถการ โดยสามารถบันทึกได้ทั้ง ICD9-CM และ ICD10-TM</blockquote>
@@ -483,9 +483,8 @@
                 </tr>
                 </tbody>
             </table>
-
-            <button class="btn btn-default" rel="tooltip" title="รีเฟรชรายการ" id="btn_proced_refresh"><i class="icon-refresh"></i></button>
             <button class="btn btn-success" rel="tooltip" title="เพิ่มรายการ" id="btn_proced_new"><i class="icon-plus-sign"></i></button>
+            <button class="btn btn-default" rel="tooltip" title="รีเฟรชรายการ" id="btn_proced_refresh"><i class="icon-refresh"></i></button>
 
         </div>
         <div class="tab-pane" id="tab_dental_charge_item">
@@ -695,9 +694,6 @@
                 <h4 class="modal-title"><i class="icon-share"></i> บันทึกส่งต่อผู้ป่วย [<span id="spn_refer_out_vn"></span>]</h4>
             </div>
             <div class="modal-body"></div>
-            <div class="modal-footer">
-                <a href="#" class="btn btn-danger" data-dismiss="modal"><i class="icon-off"></i> ปิดหน้าต่าง</a>
-            </div>
         </div>
     </div>
 </div>

@@ -545,10 +545,10 @@ class Person extends CI_Controller
                 $obj->hn                = $hn;
                 $obj->abogroup          = $result['abogroup'];
                 $obj->house_code        = $result['house_code'];
-                $obj->birthdate         = to_js_date($result['birthdate']);
+                $obj->birthdate         = isset($result['birthdate']) ? from_mongo_to_thai_date($result['birthdate']) : '';
                 $obj->cid               = $result['cid'];
                 $obj->couple_cid        = $result['couple_cid'];
-                $obj->discharge_date    = to_js_date($result['discharge_date']);
+                $obj->discharge_date    = isset($result['discharge_date']) ? from_mongo_to_thai_date($result['discharge_date']) : '';
                 $obj->discharge_status  = $result['discharge_status'];
                 $obj->education         = get_first_object($result['education']);
                 $obj->father_cid        = $result['father_cid'];
@@ -559,7 +559,7 @@ class Person extends CI_Controller
                 $obj->labor_type        = get_first_object($result['labor_type']);
                 $obj->last_name         = $result['last_name'];
                 $obj->mother_cid        = $result['mother_cid'];
-                $obj->movein_date       = to_js_date($result['movein_date']);
+                $obj->movein_date       = from_mongo_to_thai_date($result['movein_date']);
                 $obj->mstatus           = get_first_object($result['mstatus']);
                 $obj->nation            = get_first_object($result['nation']);
                 $obj->occupation        = get_first_object($result['occupation']);
@@ -577,8 +577,8 @@ class Person extends CI_Controller
 
                 $obj->ins_code          = isset($result['insurances']['code']) ? $result['insurances']['code'] : NULL;
                 $obj->ins_id            = isset($result['insurances']['id']) ? $result['insurances']['id'] : NULL;
-                $obj->ins_expire_date   = to_js_date(isset($result['insurances']['expire_date']) ? $result['insurances']['expire_date'] : NULL);
-                $obj->ins_start_date    = to_js_date(isset($result['insurances']['start_date']) ? $result['insurances']['start_date'] : NULL);
+                $obj->ins_expire_date   = isset($result['insurances']['expire_date']) ? from_mongo_to_thai_date($result['insurances']['expire_date']) : NULL;
+                $obj->ins_start_date    = isset($result['insurances']['start_date']) ? from_mongo_to_thai_date($result['insurances']['start_date']) : NULL;
                 $obj->ins_hmain_code    = isset($result['insurances']['hmain']) ? $result['insurances']['hmain'] : NULL;
                 $obj->ins_hmain_name    = get_hospital_name($obj->ins_hmain_code);
                 $obj->ins_hsub_code     = isset($result['insurances']['hsub']) ? $result['insurances']['hsub'] : NULL;
@@ -691,7 +691,7 @@ class Person extends CI_Controller
                         $obj->drug_id           = get_first_object($r['drug_id']);
                         $obj->drug_name         = get_drug_name($obj->drug_id);
                         //$obj->drug_detail       = $this->basic->get_drug_detail($obj->drug_id);
-                        $obj->record_date       = to_js_date($r['record_date']);
+                        $obj->record_date       = form_mongo_to_thai_date($r['record_date']);
                         $obj->diag_type_id      = get_first_object($r['diag_type_id']);
                         $obj->diag_type_name    = get_drug_allergy_diag_type_name($obj->diag_type_id);
                         $obj->alevel_id         = get_first_object($r['alevel_id']);

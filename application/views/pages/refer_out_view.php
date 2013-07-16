@@ -138,7 +138,7 @@
                 </div>
             </div>
             <br>
-            <button type="button" class="btn btn-success" id="btn_rfo_save"><i class="icon-save"></i> บันทึกข้อมูลส่งต่อ</button>
+            <button type="button" class="btn btn-success pull-right" id="btn_rfo_save"><i class="icon-save"></i> บันทึกข้อมูลส่งต่อ</button>
 
         </div>
         <div class="tab-pane" id="tab_rfo_followup">
