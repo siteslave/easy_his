@@ -994,4 +994,16 @@ class Person_model extends CI_Model
 
         return $arr_house;
     }
+
+    //================ Move person ===================//
+    public function do_move_person($house_id, $hn)
+    {
+        $rs = $this->mongo_db
+            ->where(array('hn' => (string) $hn))
+            ->set(array(
+                'house_code' => new MongoId($house_id)
+            ))
+            ->update('person');
+        return $rs;
+    }
 }

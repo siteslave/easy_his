@@ -819,7 +819,8 @@ head.ready(function(){
 
     //clear register form
     $("#btn_back_to_home").click(function(){
-        app.go_to_url('person');
+        //app.go_to_url('person');
+        history.go(-1);
     });
 
     $('#btn_tab_drug_allergy').click(function(){

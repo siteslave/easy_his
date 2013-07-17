@@ -34,6 +34,14 @@ head.ready(document).ready(function(){
             $('#mdl_village_survey').modal({
                 backdrop: 'static'
             });
+        },
+        show_move_person: function(){
+            $('#mdl_move_person').modal({
+                backdrop: 'static'
+            });
+        },
+        hide_move_person: function(){
+            $('#mdl_move_person').modal('hide');
         }
     };
 
@@ -210,6 +218,18 @@ head.ready(document).ready(function(){
             var url = 'person/search_result',
                 params = {
                     hn: hn
+                };
+
+            app.ajax(url, params, function(err, data){
+                return err ? cb(err) : cb(null, data);
+            });
+        },
+        do_remove_person: function(hn, house_id, cb){
+
+            var url = 'person/do_move_person',
+                params = {
+                    hn: hn,
+                    house_id: house_id
                 };
 
             app.ajax(url, params, function(err, data){
@@ -399,6 +419,8 @@ head.ready(document).ready(function(){
 
     person.set_person = function(data)
     {
+        $('#tbl_person > tbody').empty();
+
         if(!data.rows)
         {
             $('#tbl_person > tbody').append(
@@ -432,11 +454,13 @@ head.ready(document).ready(function(){
                         '<td>'+ app.to_thai_date(v.birthdate) +'</td>' +
                         '<td>'+ v.age +'</td>' +
                         '<td>'+ v.sex +'</td>' +
-                        '<td>'+ v.fstatus +'</td>' +
+                        //'<td>'+ v.fstatus +'</td>' +
                         '<td>'+ discharge_status +'</td>' +
                         '<td>'+ app.clear_null(v.typearea) +'</td>' +
+                        '<td>'+ app.strip(v.address, 30) +'</td>' +
                         '<td> <div class="btn-group">' +
-                        '<a class="btn btn-default btn-small" href="javascript:void(0);" data-name="btn_change_house_person" data-hn="'+ v.hn +'" title="ย้ายบ้าน">' +
+                        '<a class="btn btn-default btn-small" href="javascript:void(0);" data-name="btn_change_house_person" ' +
+                        'data-hn="'+ v.hn +'" title="ย้ายบ้าน">' +
                         '<i class="icon-share"></i></a>' +
                         '<a class="btn btn-success btn-small" href="'+ site_url + '/person/edit/' + v.hn + '" title="แก้ไข">' +
                         '<i class="icon-edit"></i></a>' +
@@ -470,117 +494,115 @@ head.ready(document).ready(function(){
     })
 
     $('#btn_get_list').on('click', function(){
+       person.get_list();
+    });
+
+    person.get_list = function()
+    {
+
         var house_code = $('#sl_houses').val(),
             village_id = $('#sl_villages').val();
 
         if(!village_id)
         {
-            app.alert('กรุณาเลือกหมู่บ้าน และ หลังคาเรือน');
+            app.alert('กรุณาเลือกหมู่บ้านและหลังคาเรือน');
         }
         else
         {
-            person.get_list(house_code, village_id);
+            $('#tbl_person > tbody').empty();
 
+            $('#main_paging').fadeIn('slow');
+
+            person.ajax.get_list_total(house_code, village_id, function(err, data){
+                if(err){
+                    app.alert(err);
+                    $('#tbl_person > tbody').append(
+                        '<tr>' +
+                            '<td colspan="11">ไม่พบรายการ</td>' +
+                            '</tr>'
+                    );
+                }else{
+                    $('#main_paging').paging(data.total, {
+                        format: " < . (qq -) nnncnnn (- pp) . >",
+                        perpage: app.record_per_page,
+                        lapping: 1,
+                        page: app.get_cookie('person_current_page'),
+                        onSelect: function(page){
+                            app.set_cookie('person_current_page', page);
+                            person.ajax.get_list(house_code, village_id, this.slice[0], this.slice[1], function(err, data){
+                                if(err){
+                                    app.alert(err);
+                                    $('#tbl_person > tbody').append(
+                                        '<tr>' +
+                                            '<td colspan="11">ไม่พบรายการ</td>' +
+                                            '</tr>'
+                                    );
+                                }else{
+                                    person.set_person(data);
+                                }
+
+                            });
+
+                        },
+                        onFormat: function(type){
+                            switch (type) {
+
+                                case 'block':
+
+                                    if (!this.active)
+                                        return '<li class="disabled"><a href="">' + this.value + '</a></li>';
+                                    else if (this.value != this.page)
+                                        return '<li><a href="#' + this.value + '">' + this.value + '</a></li>';
+                                    return '<li class="active"><a href="#">' + this.value + '</a></li>';
+
+                                case 'right':
+                                case 'left':
+
+                                    if (!this.active) {
+                                        return "";
+                                    }
+                                    return '<li><a href="#' + this.value + '">' + this.value + '</a></li>';
+
+                                case 'next':
+
+                                    if (this.active) {
+                                        return '<li><a href="#' + this.value + '">&raquo;</a></li>';
+                                    }
+                                    return '<li class="disabled"><a href="">&raquo;</a></li>';
+
+                                case 'prev':
+
+                                    if (this.active) {
+                                        return '<li><a href="#' + this.value + '">&laquo;</a></li>';
+                                    }
+                                    return '<li class="disabled"><a href="">&laquo;</a></li>';
+
+                                case 'first':
+
+                                    if (this.active) {
+                                        return '<li><a href="#' + this.value + '">&lt;</a></li>';
+                                    }
+                                    return '<li class="disabled"><a href="">&lt;</a></li>';
+
+                                case 'last':
+
+                                    if (this.active) {
+                                        return '<li><a href="#' + this.value + '">&gt;</a></li>';
+                                    }
+                                    return '<li class="disabled"><a href="">&gt;</a></li>';
+
+                                case 'fill':
+                                    if (this.active) {
+                                        return '<li class="disabled"><a href="#">...</a></li>';
+                                    }
+                            }
+                            return ""; // return nothing for missing branches
+                        }
+                    });
+                }
+            });
         }
 
-
-    });
-
-    person.get_list = function(house_code, village_id)
-    {
-
-        $('#tbl_person > tbody').empty();
-
-        $('#main_paging').fadeIn('slow');
-
-        person.ajax.get_list_total(house_code, village_id, function(err, data){
-            if(err){
-                app.alert(err);
-                $('#tbl_person > tbody').append(
-                    '<tr>' +
-                        '<td colspan="11">ไม่พบรายการ</td>' +
-                        '</tr>'
-                );
-            }else{
-                $('#main_paging').paging(data.total, {
-                    format: " < . (qq -) nnncnnn (- pp) . >",
-                    perpage: app.record_per_page,
-                    lapping: 1,
-                    page: app.get_cookie('person_current_page'),
-                    onSelect: function(page){
-                        app.set_cookie('person_current_page', page);
-                        person.ajax.get_list(house_code, village_id, this.slice[0], this.slice[1], function(err, data){
-                            if(err){
-                                app.alert(err);
-                                $('#tbl_person > tbody').append(
-                                    '<tr>' +
-                                        '<td colspan="11">ไม่พบรายการ</td>' +
-                                        '</tr>'
-                                );
-                            }else{
-                                person.set_person(data);
-                            }
-
-                        });
-
-                    },
-                    onFormat: function(type){
-                        switch (type) {
-
-                            case 'block':
-
-                                if (!this.active)
-                                    return '<li class="disabled"><a href="">' + this.value + '</a></li>';
-                                else if (this.value != this.page)
-                                    return '<li><a href="#' + this.value + '">' + this.value + '</a></li>';
-                                return '<li class="active"><a href="#">' + this.value + '</a></li>';
-
-                            case 'right':
-                            case 'left':
-
-                                if (!this.active) {
-                                    return "";
-                                }
-                                return '<li><a href="#' + this.value + '">' + this.value + '</a></li>';
-
-                            case 'next':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&raquo;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&raquo;</a></li>';
-
-                            case 'prev':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&laquo;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&laquo;</a></li>';
-
-                            case 'first':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&lt;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&lt;</a></li>';
-
-                            case 'last':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&gt;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&gt;</a></li>';
-
-                            case 'fill':
-                                if (this.active) {
-                                    return '<li class="disabled"><a href="#">...</a></li>';
-                                }
-                        }
-                        return ""; // return nothing for missing branches
-                    }
-                });
-            }
-        });
     };
 
 
@@ -637,7 +659,10 @@ head.ready(document).ready(function(){
 
     $(document).on('change', '#sl_villages', function(){
         var village_id = $(this).val();
+        person.get_house_list(village_id);
+    });
 
+    person.get_house_list = function(village_id) {
         person.ajax.get_house_list(village_id, function(err, data){
             $('#sl_houses').empty();
             if(err)
@@ -655,7 +680,7 @@ head.ready(document).ready(function(){
                 }
             }
         });
-    });
+    };
 
     $('#btn_village_survey').on('click', function(){
         var id = $('#sl_villages').val();
@@ -797,4 +822,67 @@ head.ready(document).ready(function(){
             });
         }
     });
+
+    $(document).on('change', '#sl_move_person_villages', function(){
+        var village_id = $(this).val();
+
+        person.ajax.get_house_list(village_id, function(err, data){
+            $('#sl_move_person_house').empty();
+            if(err)
+            {
+                app.alert(err);
+            }
+            else
+            {
+                if(data)
+                {
+                    $('#sl_move_person_house').append('<option value="">ทั้งหมด</option>');
+                    _.each(data.rows, function(v){
+                        $('#sl_move_person_house').append('<option value="'+ v.id +'">' + v.house + '</option>');
+                    });
+                }
+            }
+        });
+    });
+
+    $(document).on('click', 'a[data-name="btn_change_house_person"]', function() {
+        var hn = $(this).data('hn');
+        $('#txt_move_person_hn').val(hn);
+        app.set_first_selected($('#sl_move_person_villages'));
+        $('#sl_move_person_house').empty();
+        person.modal.show_move_person();
+    });
+
+    $('#btn_save_move_person').on('click', function() {
+        var hn = $('#txt_move_person_hn').val();
+        var house_id = $('#sl_move_person_house').val();
+        if(!hn)
+        {
+            app.alert('กรุณาระบุ HN');
+        }
+        else if(!house_id)
+        {
+            app.alert('กรุณาระบุ บ้านเลขที่ปลายทาง');
+        }
+        else
+        {
+            person.ajax.do_remove_person(hn, house_id, function(err) {
+                if(err)
+                {
+                    app.alert(err);
+                }
+                else
+                {
+                    app.alert('ย้ายบ้านเสร็จเรียบร้อยแล้ว');
+                    person.modal.hide_move_person();
+                    person.get_list();
+                }
+            });
+        }
+    });
+
+    person.get_list();
+    var village_id = $('#sl_villages').val();
+    person.get_house_list(village_id);
+
 });

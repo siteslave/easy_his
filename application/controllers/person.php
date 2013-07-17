@@ -479,6 +479,7 @@ class Person extends CI_Controller
                     $obj->title         = $this->basic->get_title_name($r['title']);
                     $obj->typearea      = $this->person->get_typearea($r['hn']);
                     $obj->discharge_status = $r['discharge_status'];
+                    $obj->address       = get_address($r['hn']);
 
                     $arr_result[] = $obj;
                 }
@@ -1177,16 +1178,23 @@ class Person extends CI_Controller
         render_json($json);
     }
 
-    public function auto_gen_hn()
+    public function do_move_person()
     {
-        ini_set('memory_limit', '-1');
-        $person = $this->person->get_all_person();
+        $house_id = $this->input->post('house_id');
+        $hn = $this->input->post('hn');
 
-        foreach($person as $r)
+        if(!empty($house_id) && !empty($hn))
         {
-            $hn = generate_serial('HN');
-            $this->person->set_hn(get_first_object($r['_id']), $hn);
+            //$is_owner = $this->person->
+            $rs = $this->person->do_move_person($house_id, $hn);
+            $json = $rs ? '{"success": true}' : '{"success": false, "msg": "ไม่สามารถย้านบ้านได้"}';
         }
+        else
+        {
+            $json = '{"success": false, "msg": "ไม่พบเงื่อนไข กรุณาตรวจสอบ"}';
+        }
+
+        render_json($json);
     }
 }
 

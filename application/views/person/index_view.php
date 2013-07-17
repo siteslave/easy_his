@@ -43,9 +43,9 @@
             <th>วันเกิด</th>
             <th>อายุ</th>
             <th>เพศ</th>
-            <th>สถานะในครอบครัว</th>
             <th>สถานะ</th>
             <th>Typearea</th>
+            <th>ที่อยู่</th>
             <th>#</th>
         </tr>
         </thead>
@@ -564,4 +564,37 @@
         </div>
     </div>
 
+
+    <div class="modal fade" id="mdl_move_person">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title"><i class="icon-share"></i> ย้ายบ้าน</h4>
+                </div>
+                <div class="modal-body">
+                    <form action="#" class="form-horizontal">
+                        <legend>ย้ายไปที่</legend>
+                        <input type="hidden" id="txt_move_person_hn"/>
+                        <label for="sl_move_person_villages">หมู่บ้าน</label>
+                        <select style="width: 350px;" id="sl_move_person_villages">
+                            <option value="">-- เลือกหมู่บ้าน --</option>
+                            <?php
+                            foreach ($villages as $r){
+                                echo '<option value="'.get_first_object($r['_id']).'">' . $r['village_code'] . ' ' . $r['village_name'] . '</option>';
+                            }
+                            ?>
+                        </select>
+                        <label for="sl_move_person_house">บ้านเลขที่</label>
+                        <select id="sl_move_person_house" style="width: 350px;"></select>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" id="btn_save_move_person"><i class="icon-save"></i> ย้ายบ้าน</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="icon-off"></i> ปิดหน้าต่าง</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <script type="text/javascript" src="<?php echo base_url(); ?>assets/apps/js/apps.person.index.js"></script>
