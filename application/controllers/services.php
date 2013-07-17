@@ -1516,6 +1516,35 @@ class Services extends CI_Controller
 
         render_json($json);
     }
+
+    //===================== Remove service ====================//
+    public function remove_service()
+    {
+        $hn = $this->input->post('hn');
+        $vn = $this->input->post('vn');
+
+        if(!empty($hn) && !empty($vn))
+        {
+            //check owner
+            $is_owner = $this->service->check_owner($vn, $this->owner_id);
+            if($is_owner)
+            {
+                $rs = $this->service->remove_service($hn, $vn);
+                $json = $rs ? '{"success": true}' : '{"success": false, "msg": "ไม่สามารถลบรายการได้"}';
+            }
+            else
+            {
+                $json = '{"success": false, "msg": "การรับบริการครั้งนี้ไม่ใช่ของหน่วยงานคุณๆ ไม่มีสิทธิ์ลบหรือแก้ไข"}';
+            }
+        }
+        else
+        {
+            $json = '{"success": false, "msg": "กรุณาระบุเงื่อนไขในการตรวจสอบ"}';
+        }
+
+        render_json($json);
+    }
+
 }
 
 /* End of file services.php */

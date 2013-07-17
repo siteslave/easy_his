@@ -25,12 +25,12 @@
                     <div class="col-lg-2">
                         <label for="txt_reg_service_date">วันที่</label>
                         <input id="txt_reg_service_date" type="text" data-type="date" <?=isset($vn) ? 'disabled="disabled"': ''?>
-                               placeholder="dd/mm/yyyy" style="width: 120px;" required value="<?=isset($date_serv) ? $date_serv : ''?>">
+                               placeholder="dd/mm/yyyy" style="width: 120px;" required value="<?=isset($date_serv) ? $date_serv : get_current_date()?>">
                     </div>
                     <div class="col-lg-1">
                         <label for="txt_reg_service_time">เวลา</label>
                         <input type="text" data-type="time" id="txt_reg_service_time"
-                               placeholder="hh:mm" style="width: 70px;" required  value="<?=isset($time_serv) ? $time_serv : ''?>">
+                               placeholder="hh:mm" style="width: 70px;" required  value="<?=isset($time_serv) ? $time_serv : date('H:i:s')?>">
                     </div>
 
                     <div class="col-lg-3">

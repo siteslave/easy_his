@@ -33,6 +33,18 @@ head.ready(function(){
             app.ajax(url, params, function(err, data){
                 return err ? cb(err) : cb(null, data);
             });
+        },
+        remove_service: function(hn, vn, cb){
+
+            var url = 'services/remove_service',
+                params = {
+                    vn: vn,
+                    hn: hn
+                };
+
+            app.ajax(url, params, function(err, data){
+                return err ? cb(err) : cb(null, data);
+            });
         }
     };
 
@@ -277,5 +289,25 @@ head.ready(function(){
             vn = $('#vn').val();
 
         entries.modal.show_edit(hn, vn);
+    });
+
+    $('#btn_remove_service').on('click', function() {
+        var hn = $('#hn').val(),
+            vn = $('#vn').val();
+
+        if(confirm('คุณต้องการลบการรับบริการครั้งนี้ ใช่หรือไม่?'))
+        {
+            entries.ajax.remove_service(hn, vn, function(err) {
+                if(err)
+                {
+                    app.alert(err);
+                }
+                else
+                {
+                    app.alert('ลบข้อมูลการรับบริการเสร็จเรียบร้อยแล้ว');
+                    app.go_to_url('services');
+                }
+            });
+        }
     });
 });

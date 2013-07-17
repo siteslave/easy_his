@@ -8,7 +8,7 @@
     rel="tooltip" title="พิมพ์ชื่อ หรือ HN หรือ เลขบัตรประชาชน เพื่อค้นหา" autocomplete="off" placeholder="HN, ชื่อ สกุล...">
     <button type="button" id="btn_do_search_visit" class="btn btn-primary" rel="tooltip" title="ค้นหารายการ"><i class="icon-search"></i></button>
    | 
-    <input style="width: 100px;" id="txt_service_date" type="text" 
+    <input style="width: 100px;" id="txt_service_date" type="text" value="<?=get_current_date()?>"
     placeholder="dd/mm/yyyy" data-type="date" rel="tooltip" title="ระวันที่ เช่น 12/02/2556">
     <!--
     <select id="sl_query_filter_by_diag" class="input-medium">

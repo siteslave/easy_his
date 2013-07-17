@@ -1140,6 +1140,51 @@ class Service_model extends CI_Model
 
         return $rs;
     }
+
+    //================ Remove visit ==================//
+    public function remove_service($hn, $vn)
+    {
+        //charge_opd
+        $this->mongo_db->where(array('vn' => (string) $vn))->delete('charge_opd');
+        //diagnosis_opd
+        $this->mongo_db->where(array('vn' => (string) $vn))->delete('diagnosis_opd');
+        //drugs_opd
+        $this->mongo_db->where(array('vn' => (string) $vn))->delete('drugs_opd');
+        //ncdscreen
+        //procedures_opd
+        $this->mongo_db->where(array('vn' => (string) $vn))->delete('procedures_opd');
+        //pregnancies --> anc
+        $this->mongo_db
+            ->where(array('hn' => (string) $hn))
+            ->pull('anc', array('vn' => (string) $vn))
+            ->update('pregnancies');
+        //visit
+        $this->mongo_db->where(array('vn' => (string) $vn))->delete('visit');
+        //visit_charge_dental
+        $this->mongo_db->where(array('vn' => (string) $vn))->delete('visit_charge_dental');
+        //visit_chronicfu
+        $this->mongo_db->where(array('vn' => (string) $vn))->delete('visit_chronicfu');
+        //visit_communities
+        $this->mongo_db->where(array('vn' => (string) $vn))->delete('visit_communities');
+        //visit_dentals
+        $this->mongo_db->where(array('vn' => (string) $vn))->delete('visit_dentals');
+        //visit_epi
+        $this->mongo_db->where(array('vn' => (string) $vn))->delete('visit_epi');
+        //visit_fp
+        $this->mongo_db->where(array('vn' => (string) $vn))->delete('visit_fp');
+        //visit_icf
+        $this->mongo_db->where(array('vn' => (string) $vn))->delete('visit_icf');
+        //visit_lab_orders
+        $this->mongo_db->where(array('vn' => (string) $vn))->delete('visit_lab_orders');
+        //visit_special_pp
+        $this->mongo_db->where(array('vn' => (string) $vn))->delete('visit_special_pp');
+        //visit_surveillance
+        $this->mongo_db->where(array('vn' => (string) $vn))->delete('visit_surveillance');
+        //visit_vaccines
+        $this->mongo_db->where(array('vn' => (string) $vn))->delete('visit_vaccines');
+
+        return TRUE;
+    }
 }
 
 /* End of file service_model.php */

@@ -363,4 +363,12 @@ if(!function_exists('get_patient_info')){
 		}
 	}
 }
+
+if(!function_exists('get_current_date')) {
+    function get_current_date()
+    {
+        $date = date('Ymd');
+        return from_mongo_to_thai_date($date);
+    }
+}
 	
