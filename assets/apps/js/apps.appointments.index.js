@@ -797,6 +797,8 @@ head.ready(function(){
         }
 
     });
+
+    appoint.get_list();
 });
 
-//End file
+//End of file

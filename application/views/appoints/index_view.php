@@ -7,7 +7,7 @@
     <form action="#" class="navbar-form form-inline">
         <input type="hidden" id="txt_status" value="0">
         <label for="txt_date">วันที่</label>
-        <input style="width: 150px;" id="txt_date" type="text" data-type="date" placeholder="dd/mm/yyyy">
+        <input style="width: 150px;" id="txt_date" type="text" data-type="date" placeholder="dd/mm/yyyy" value="<?=get_current_date()?>">
         <label for="txt_date">แผนก</label>
         <select style="width: 250px;" id="sl_clinic">
             <option value="">--- ทั้งหมด ---</option>
@@ -18,9 +18,9 @@
             ?>
         </select>
         <div class="btn-group" data-toggle="buttons-radio">
-            <button type="button" data-name="btn_do_filter" data-id="0" class="btn btn-success"><i class="icon-refresh"></i> ทั้งหมด</button>
-            <button type="button" data-name="btn_do_filter" data-id="1" class="btn btn-default"><i class="icon-check"></i> มาตามนัด</button>
-            <button type="button" data-name="btn_do_filter" data-id="2" class="btn btn-success"><i class="icon-minus-sign"></i> ไม่มาตามนัด</button>
+            <button type="button" data-name="btn_do_filter" title="ทั้งหมด" rel="tooltip" data-id="0" class="btn btn-success"><i class="icon-refresh"></i></button>
+            <button type="button" data-name="btn_do_filter" title="มาตามนัด" rel="tooltip" data-id="1" class="btn btn-default"><i class="icon-check"></i></button>
+            <button type="button" data-name="btn_do_filter" title="ไม่มาตามนัด" rel="tooltip" data-id="2" class="btn btn-success"><i class="icon-minus-sign"></i></button>
         </div>
 
         <div class="btn-group pull-right">
@@ -28,8 +28,8 @@
             <button class="btn btn-success" id="btn_show_visit">
                 <i class="icon-plus-sign"></i> ลงทะเบียน
             </button>-->
-            <button class="btn btn-primary" id="btn_show_print">
-                <i class="icon-print"></i> พิมพ์
+            <button class="btn btn-primary" id="btn_show_print" title="พิมพ์" rel="tooltip">
+                <i class="icon-print"></i>
             </button>
         </div>
     </form>

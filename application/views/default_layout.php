@@ -240,7 +240,7 @@
                         <a href="#"> <i class="icon-info-sign"></i> แก้ไขข้อมูลส่วนตัว (Edit profiles)</a>
                     </li>
                     <li class="disabled">
-                        <a href="#" id="btn_idx_set_provider_clinic"> <i class="icon-user"></i> กำหนดแพทย์/คลินิก (Provider/Clinic)</a>
+                        <a href="#" id="btn_idx_set_provider_clinic-x"> <i class="icon-user"></i> กำหนดแพทย์/คลินิก (Provider/Clinic)</a>
                     </li>
                     <li class="divider"></li>
                     <li>
