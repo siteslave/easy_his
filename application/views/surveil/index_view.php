@@ -6,17 +6,18 @@
     <form action="#" class="navbar-form form-inline">
 
         <label for="txt_query_date">วันทีรับบริการ</label>
-        <input style="width: 150px;" id="txt_query_date" type="text" data-type="date" placeholder="dd/mm/yyyy" title="ระบุวันที่รับบริการ" rel="tooltip">
+        <input style="width: 150px;" id="txt_query_date" type="text" data-type="date" placeholder="dd/mm/yyyy"
+               value="<?=get_current_date()?>" title="ระบุวันที่รับบริการ" rel="tooltip">
         <button type="buttton" id="btn_get_list" class="btn btn-primary"
                 rel="tooltip" title="เลือกวันที่รับบริการ เพื่อค้นหาผู้ป่วยที่มีการวินิจฉัยตรงกับงานระบาดวิทยา">
             <i class="icon-search"></i>
         </button>
         <div class="btn-group pull-right">
-            <button type="button" class="btn btn-success">
-                <i class="icon-download-alt"></i> ส่งออก
+            <button type="button" class="btn btn-success" title="ส่งออก" rel="tooltip">
+                <i class="icon-download-alt"></i>
             </button>
-            <button type="button" class="btn btn-default" id="btn_surveil_resresh">
-                <i class="icon-refresh"></i> รีเฟรช
+            <button type="button" class="btn btn-default" id="btn_surveil_resresh" title="รีเฟรช" rel="tooltip">
+                <i class="icon-refresh"></i>
             </button>
         </div>
     </form>
