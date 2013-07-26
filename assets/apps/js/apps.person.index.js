@@ -457,7 +457,7 @@ head.ready(document).ready(function(){
                         //'<td>'+ v.fstatus +'</td>' +
                         '<td>'+ discharge_status +'</td>' +
                         '<td>'+ app.clear_null(v.typearea) +'</td>' +
-                        '<td>'+ app.strip(v.address, 30) +'</td>' +
+                        '<td>'+ app.strip(v.address, 40) +'</td>' +
                         '<td> <div class="btn-group">' +
                         '<a class="btn btn-default btn-small" href="javascript:void(0);" data-name="btn_change_house_person" ' +
                         'data-hn="'+ v.hn +'" title="ย้ายบ้าน">' +

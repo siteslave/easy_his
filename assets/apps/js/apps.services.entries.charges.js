@@ -6,7 +6,7 @@ head.ready(function(){
     charge.modal = {
         show_new: function(){
             $('#spn_charge_vn').html(charge.vn);
-            app.load_page($('#mdl_charge_new'), '/pages/charges', 'assets/apps/js/pages/charges.js');
+            app.load_page($('#mdl_charge_new'), '/pages/charges/' + charge.hn + '/' + charge.vn, 'assets/apps/js/pages/charges.js');
             $('#mdl_charge_new').modal({
                 keyboard: false
             });
@@ -54,7 +54,7 @@ head.ready(function(){
             if(err){
                 app.alert(err);
                 $('#tbl_charge_list > tbody').empty().append(
-                    '<tr><td colspan="7">ไม่พบรายการ</td></tr>'
+                    '<tr><td colspan="6">ไม่พบรายการ</td></tr>'
                 );
             }else{
                 charge.set_list(data);
@@ -73,7 +73,6 @@ head.ready(function(){
             $('#tbl_charge_list > tbody').append(
                 '<tr>' +
                     '<td>' + i + '</td>' +
-                    '<td>' + v.code + '</td>' +
                     '<td>' + v.name + '</td>' +
                     '<td>' + app.add_commars(v.price) + '</td>' +
                     '<td>' + app.add_commars(v.qty) + '</td>' +

@@ -585,7 +585,6 @@
                 <thead>
                 <tr>
                     <th>#</th>
-                    <th>รหัส</th>
                     <th>รายการ</th>
                     <th>ราคา</th>
                     <th>จำนวน</th>
@@ -595,7 +594,6 @@
                 </thead>
                 <tbody>
                 <tr>
-                    <td>...</td>
                     <td>...</td>
                     <td>...</td>
                     <td>...</td>

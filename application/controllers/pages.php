@@ -119,8 +119,8 @@ class Pages extends CI_Controller {
         {
             $rs = $this->service->get_charge_opd($id);
             $obj = new stdClass();
-            $obj->charge_code = $rs['charge_code'];
-            $obj->charge_name = get_charge_name($obj->charge_code);
+            $obj->charge_id = get_first_object($rs['charge_id']);
+            $obj->charge_name = get_charge_name(get_first_object($rs['charge_id']));
             $obj->qty = $rs['qty'];
             $obj->price = $rs['price'];
 

@@ -4,13 +4,9 @@
     <input type="hidden" id="charge_vn" value="<?=isset($vn) ? $vn : ''?>">
     <input type="hidden" id="charge_hn" value="<?=isset($hn) ? $hn : ''?>">
     <div class="row">
-        <div class="col-lg-3">
-            <label for="txt_charge_code">รหัส</label>
-            <input type="text" disabled="disabled" id="txt_charge_code" placeholder="-*-"
-                value="<?=isset($items->charge_code) ? $items->charge_code : ''?>">
-        </div>
-        <div class="col-lg-9">
+        <div class="col-lg-12">
             <label for="txt_charge_name">รายการ/คำค้น</label>
+            <input type="hidden" id="txt_charge_id" value="<?=isset($items->charge_id) ? $items->charge_id : ''?>"/>
             <input id="txt_charge_name" type="text" placeholder="พิมพ์ชื่อรายการเพื่อค้นหา"
                 title="พิมพ์ชื่อรายการเพื่อค้นหา" rel="tooltip" placeholder="พิมพ์ชื่อเพื่อค้นหา" autocomplete="off"
                 value="<?=isset($items->charge_name) ? $items->charge_name : ''?>" <?=isset($id) ? 'disabled="disabled"' : ''?>>

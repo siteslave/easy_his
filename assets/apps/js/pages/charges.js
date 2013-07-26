@@ -21,7 +21,7 @@ head.ready(function(){
     $('#btn_charge_do_save').click(function(){
         var items = {};
 
-        items.charge_code = $('#txt_charge_code').val();
+        items.charge_id = $('#txt_charge_id').val();
         items.charge_name = $('#txt_charge_name').val();
         items.price = $('#txt_charge_price').val();
         items.qty = $('#txt_charge_qty').val();
@@ -29,7 +29,7 @@ head.ready(function(){
         items.vn = charges.vn;
         items.isupdate = $('#charge_isupdate').val();
 
-        if(!items.charge_code || !items.charge_name){
+        if(!items.charge_id || !items.charge_name){
             app.alert('กรุณาระบุรายการยา')
         }else if(!items.qty){
             app.alert('กรุณาระบุจำนวน');
@@ -70,11 +70,11 @@ head.ready(function(){
         },
         updater: function(data){
             var d = data.split('|');
-            var name = d[1],
-                code = d[0],
-                price = d[2];
+            var name = d[0],
+                price = d[1],
+                id = d[3];
 
-            $('#txt_charge_code').val(code);
+            $('#txt_charge_id').val(id);
             $('#txt_charge_name').val(name);
             $('#txt_charge_price').val(price);
 
@@ -83,7 +83,7 @@ head.ready(function(){
     });
 
     $('#txt_charge_name').on('keyup', function(){
-        $('#txt_charge_code').val('');
+        $('#txt_charge_id').val('');
         $('#txt_charge_price').val('0');
         $('#txt_charge_qty').val('1');
     });

@@ -79,12 +79,11 @@ head.ready(function(){
 
     death.get_list = function()
     {
-        $('#tbl_list > tbody').empty();
-
         $('#main_paging').fadeIn('slow');
         death.ajax.get_list_total(function(err, data){
             if(err){
                 app.alert(err);
+                $('#tbl_list > tbody').append('<tr><td colspan="8">ไม่พบข้อมูล</td></td></tr>');
             }else{
                 $('#main_paging').paging(data.total, {
                     format: " < . (qq -) nnncnnn (- pp) . >",
@@ -95,8 +94,12 @@ head.ready(function(){
                         app.set_cookie('death_paging', page);
 
                         death.ajax.get_list(this.slice[0], this.slice[1], function(err, data){
+
+                            $('#tbl_list > tbody').empty();
+
                             if(err){
                                 app.alert(err);
+                                $('#tbl_list > tbody').append('<tr><td colspan="8">ไม่พบข้อมูล</td></td></tr>');
                             }else{
                                 death.set_list(data);
                             }
@@ -168,7 +171,7 @@ head.ready(function(){
 
         $('#tbl_list > tbody').empty();
 
-        if(!data)
+        if(_.size(data.rows) == 0)
         {
             $('#tbl_list > tbody').append('<tr><td colspan="8">ไม่พบข้อมูล</td></td></tr>');
         }

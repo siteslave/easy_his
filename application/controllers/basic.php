@@ -297,7 +297,7 @@ class Basic extends CI_Controller
                     $price = $this->income->get_price_qty($r['_id']);
                     $vprice = isset($price[0]['price']) ? $price[0]['price'] : 0;
                     $obj = new stdClass();
-                    $obj->name = $r['code'] . '|' . $r['name'] . '|' . $vprice . '|' . $r['unit'];
+                    $obj->name = $r['name'] . '|' . $vprice . '|' . $r['unit'] . '|' . get_first_object($r['_id']);
 
                     $arr_result[] = $obj;
                 }

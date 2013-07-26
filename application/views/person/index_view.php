@@ -44,7 +44,7 @@
             <th>อายุ</th>
             <th>เพศ</th>
             <th>สถานะ</th>
-            <th>Typearea</th>
+            <th>T</th>
             <th>ที่อยู่</th>
             <th>#</th>
         </tr>

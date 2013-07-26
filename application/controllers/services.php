@@ -945,7 +945,7 @@ class Services extends CI_Controller
         else
         {
             //check drug duplicate
-            $duplicated = $this->service->check_charge_duplicate($data['vn'], $data['charge_code']);
+            $duplicated = $this->service->check_charge_duplicate($data['vn'], $data['charge_id']);
             
             if(!$duplicated)
             {
@@ -1002,8 +1002,8 @@ class Services extends CI_Controller
                 foreach($rs as $r){
                     $obj = new stdClass();
                     $obj->id = get_first_object($r['_id']);
-                    $obj->code = $r['charge_code'];
-                    $obj->name = get_charge_name($obj->id);
+                    $obj->charge_id = isset($r['charge_id']) ? get_first_object($r['charge_id']) : '';
+                    $obj->name = get_charge_name($obj->charge_id);
                     $obj->price = $r['price'];
                     $obj->qty = $r['qty'];
 

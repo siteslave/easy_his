@@ -670,7 +670,7 @@ class Service_model extends CI_Model
         $rs = $this->mongo_db
             ->insert('charge_opd', array(
                 'vn'            => (string) $data['vn'],
-                'charge_code'   => $data['charge_code'],
+                'charge_id'     => new MongoId($data['charge_id']),
                 'price'         => (float) $data['price'],
                 'qty'           => (int) $data['qty'],
                 'user_id'       => new MongoId($data['user_id']),
@@ -685,9 +685,9 @@ class Service_model extends CI_Model
      */
     public function update_charge_opd($data){
         $this->mongo_db->add_index('charge_opd', array('vn' => -1));
-        $this->mongo_db->add_index('charge_opd', array('charge_code' => -1));
+        $this->mongo_db->add_index('charge_opd', array('charge_id' => -1));
         $rs = $this->mongo_db
-            ->where(array('vn' => $data['vn'], 'charge_code' => $data['charge_code']))
+            ->where(array('vn' => $data['vn'], 'charge_id' => new MongoId($data['charge_id'])))
             ->set(array(
                 'qty'           => (float) $data['qty'],
                 'price'         => (float) $data['price'],
@@ -726,10 +726,10 @@ class Service_model extends CI_Model
 
     public function check_charge_duplicate($vn, $charge_code){
         $this->mongo_db->add_index('charge_opd', array('vn' => -1));
-        $this->mongo_db->add_index('charge_opd', array('charge_code' => -1));
+        $this->mongo_db->add_index('charge_opd', array('charge_id' => -1));
 
         $rs = $this->mongo_db
-            ->where(array('vn' => (string) $vn,'charge_code' => $charge_code))
+            ->where(array('vn' => (string) $vn,'charge_id' => new MongoId($charge_code)))
             ->count('charge_opd');
         return $rs > 0 ? TRUE : FALSE;
     }

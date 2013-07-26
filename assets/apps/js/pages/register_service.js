@@ -58,6 +58,9 @@ head.ready(function() {
 
     //save service
     $('#btn_save_service_register').click(function(){
+
+        $(this).prop('disabled', true);
+
         var items = {};
         items.vn = $('#txt_service_vn').val();
         items.hn = $('#txt_service_hn').val();
@@ -115,6 +118,8 @@ head.ready(function() {
                 }
             });
         }
+
+        $(this).removeProp('disabled');
 
     });
 
