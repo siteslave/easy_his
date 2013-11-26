@@ -1,5 +1,7 @@
 <input type="hidden" id="txt_rfo_vn" value="<?=$vn?>"/>
 <input type="hidden" id="txt_rfo_hn" value="<?=$hn?>"/>
+<input type="hidden" id="txt_rfo_hospcode2" value="<?=isset($refer_hospital_code) ? $refer_hospital_code : ''?>"/>
+<input type="hidden" id="txt_rfo_hospcode1" value="<?=isset($refer_hospital_name) ? $refer_hospital_name : ''?>"/>
 <div class="tabbable">
     <ul class="nav nav-tabs">
         <li class="active"><a href="#tab_rfo_detail" data-toggle="tab"><i class="icon-edit"></i> ข้อมูลการส่งต่อ</a></li>
@@ -12,33 +14,27 @@
             <div class="row">
                 <div class="col-lg-2">
                     <label for="#">เลขที่</label>
-                    <input type="text" id="txt_rfo_no" disabled="disabled" placeholder="-*-" value="<?=isset($code) ? $code : ''?>" />
+                    <input type="text" class="form-control" id="txt_rfo_no" disabled="disabled" placeholder="-*-" value="<?=isset($code) ? $code : ''?>" />
                 </div>
                 <div class="col-lg-2">
                     <label for="#">วันที่ส่ง</label>
-                    <input type="text" id="txt_rfo_date" data-type="date" rel="tooltip" title="ระบุวันที่ส่ง เช่น 28/02/2556"
+                    <input type="text" class="form-control" id="txt_rfo_date" data-type="date" rel="tooltip" title="ระบุวันที่ส่ง เช่น 28/02/2556"
                            value="<?=isset($refer_date) ? $refer_date : ''?>" placeholder="dd/mm/yyyy" />
                 </div>
                 <div class="col-lg-2">
                     <label for="#">เวลา</label>
-                    <input type="text" id="txt_rfo_time" data-type="time" rel="tooltip" title="ระบุเวลา ชช:นน"
+                    <input type="text" class="form-control" id="txt_rfo_time" data-type="time" rel="tooltip" title="ระบุเวลา ชช:นน"
                            value="<?=isset($refer_time) ? $refer_time : ''?>" placeholder="hh:mm" />
-                </div>
-                <div class="col-lg-2">
-                    <label for="#">รหัส</label>
-                    <input type="text" id="txt_rfo_hosp_code" disabled="disabled" rel="tooltip" title="พิมพ์ชื่อหรือรหัสสถานบริการในช่องค้นหา"
-                           value="<?=isset($refer_hospital_code) ? $refer_hospital_code : ''?>" placeholder="-*-" />
                 </div>
                 <div class="col-lg-4">
                     <label for="#">ค้นหาสถานบริการ</label>
-                    <input type="text" id="txt_rfo_hosp_name" rel="tooltip" title="พิมพ์ชื่อหรือรหัสสถานบริการในช่องค้นหา"
-                           value="<?=isset($refer_hospital_name) ? $refer_hospital_name : ''?>" placeholder="พิมพ์ชื่อหรือรหัสสถานพยาบาลที่ต้องการ..." />
+                    <input type="hidden" id="txt_rfo_hosp_name" style="width: 400px;" />
                 </div>
             </div>
             <div class="row">
                 <div class="col-lg-4">
                     <label for="">สาเหตุการส่งต่อ</label>
-                    <select id="sl_rfo_cause">
+                    <select id="sl_rfo_cause" class="form-control">
                         <option value="">-*-</option>
                         <option value="1" <?=isset($cause) ? $cause == '1' ? 'selected="selected"' : '' : ''?>>เพื่อการวินิจฉัยและรักษา</option>
                         <option value="2" <?=isset($cause) ? $cause == '2' ? 'selected="selected"' : '' : ''?>>เพื่อการวินิจฉัย</option>
@@ -51,7 +47,7 @@
                 </div>
                 <div class="col-lg-4">
                     <label for="">เหตุผลการส่งตัว</label>
-                    <select id="sl_rfo_reason">
+                    <select id="sl_rfo_reason" class="form-control">
                         <option value="">-*-</option>
                         <option value="1" <?=isset($reason) ? $reason == '1' ? 'selected="selected"' : '' : ''?>>วินิจฉัย ชัณสูตร/ส่งต่อ</option>
                         <option value="2" <?=isset($reason) ? $reason == '2' ? 'selected="selected"' : '' : ''?>>ขีดความสามารถไม่เพียงพอ ด้านบุคลากร</option>
@@ -65,7 +61,7 @@
                 </div>
                 <div class="col-lg-4">
                     <label for="sl_rfo_clinic">แผนกที่ส่งต่อ</label>
-                    <select id="sl_rfo_clinic">
+                    <select id="sl_rfo_clinic" class="form-control">
                         <option value="">-*-</option>
                         <?php
                         foreach ($clinics as $t){
@@ -92,17 +88,17 @@
             <div class="row">
                 <div class="col-lg-6">
                     <label for="">สิ่งที่ต้องการให้ดำเนินการ</label>
-                    <textarea rows="3" id="txt_rfo_request"><?=isset($request) ? $request : ''?></textarea>
+                    <textarea rows="3" id="txt_rfo_request" class="form-control"><?=isset($request) ? $request : ''?></textarea>
                 </div>
                 <div class="col-lg-6">
                     <label for="">รายละเอียดเพิ่มเติม</label>
-                    <textarea rows="3" id="txt_rfo_comment"><?=isset($comment) ? $comment : ''?></textarea>
+                    <textarea rows="3" id="txt_rfo_comment" class="form-control"><?=isset($comment) ? $comment : ''?></textarea>
                 </div>
             </div>
             <div class="row">
                 <div class="col-lg-4">
                     <label for="">ผลการส่งต่อ</label>
-                    <select id="sl_rfo_result">
+                    <select id="sl_rfo_result" class="form-control">
                         <option value="">-*-</option>
                         <option value="1" <?=isset($result) ? $result == '1' ? 'selected="selected"' : '' : ''?>>ตอบรับการส่งต่อ</option>
                         <option value="2" <?=isset($result) ? $result == '2' ? 'selected="selected"' : '' : ''?>>ปฏิเสธการส่งต่อ</option>
@@ -113,7 +109,7 @@
                 </div>
                 <div class="col-lg-4">
                     <label for="">แพทย์ผู้ส่งต่อ</label>
-                    <select name="" id="sl_rfo_provider">
+                    <select name="" id="sl_rfo_provider" class="form-control">
                         <option value="">-*-</option>
                         <?php
                         foreach ($providers as $t){
@@ -138,34 +134,30 @@
                 </div>
             </div>
             <br>
-            <button type="button" class="btn btn-success pull-right" id="btn_rfo_save"><i class="icon-save"></i> บันทึกข้อมูลส่งต่อ</button>
+            <button type="button" class="btn btn-success" id="btn_rfo_save"><i class="fa fa-save"></i> บันทึกข้อมูลส่งต่อ</button>
 
         </div>
         <div class="tab-pane" id="tab_rfo_followup">
             <div class="row">
                 <div class="col-lg-2">
                     <label for="">วันที่ตอบกลับ</label>
-                    <input type="text" id="txt_rfo_answer_date" data-type="date" rel="tooltip" title="รูปแบบวันที่ พ.ศ เช่น 28/02/2556" placeholder="dd/mm/yyyy" />
+                    <input type="text" class="form-control" id="txt_rfo_answer_date" data-type="date" rel="tooltip" title="รูปแบบวันที่ พ.ศ เช่น 28/02/2556" placeholder="dd/mm/yyyy" />
                 </div>
             </div>
             <div class="row">
                 <div class="col-lg-11">
                     <label for="">ผลการรักษา</label>
-                    <textarea rows="5" id="txt_rfo_answer_detail"></textarea>
+                    <textarea rows="5" class="form-control" id="txt_rfo_answer_detail"></textarea>
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-2">
-                    <label for="">รหัสวินิจฉัย</label>
-                    <input type="text" disabled="disabled" placeholder="-*-" id="txt_rfo_answer_diag_code" />
-                </div>
                 <div class="col-lg-9">
                     <label for="">การวินิจฉัย (พิมพ์รหัส หรือ ข้อความ เพื่อค้นหา)</label>
-                    <input type="text" id="txt_rfo_answer_diag_name" placeholder="พิมพ์รหัส หรือข้อความเพื่อค้นหา..."/>
+                    <input type="hidden" id="txt_rfo_answer_diag_name" style="width: 550px;"/>
                 </div>
             </div>
             <br>
-            <button type="button" class="btn btn-success" id="btn_answer_save"><i class="icon-save"></i> บันทึกการติดตาม</button>
+            <button type="button" class="btn btn-success" id="btn_answer_save"><i class="fa fa-save"></i> บันทึกการติดตาม</button>
         </div>
         <div class="tab-pane" id="tab_rfo_history">
             <p>Howdy, I'm in Section 2.</p>

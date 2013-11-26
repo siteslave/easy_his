@@ -12,13 +12,14 @@ class Depress extends CI_Controller
         $this->owner_id = $this->session->userdata('owner_id');
         $this->user_id = $this->session->userdata('user_id');
 
-        if(empty($this->owner_id)){
+        if(empty($this->user_id)){
             redirect(site_url('users/login'));
         }
 
-        $this->load->model('Depress_model', 'depress');
-        $this->deperss->owner_id = $this->owner_id;
-        $this->depress->user_id = $this->user_id;
+        $this->load->model('Depress_model', 'dep');
+
+        $this->dep->owner_id = $this->owner_id;
+        $this->dep->user_id = $this->user_id;
     }
 
     public function save()
@@ -27,9 +28,9 @@ class Depress extends CI_Controller
 
         if(!empty($data))
         {
-            $exist = $this->depress->check_exist($data['hn'], $data['vn']);
+            $exist = $this->dep->check_exist($data['hn'], $data['vn']);
 
-            $rs = $exist ? $this->depress->update($data) : $this->depress->save($data);
+            $rs = $exist ? $this->dep->update($data) : $this->dep->save($data);
             $json = $rs ? '{"success": true}' : '{"success": false, "msg": "ไม่สามารถบันทึกข้อมูลได้"}';
         }
         else
@@ -45,7 +46,7 @@ class Depress extends CI_Controller
         $hn = $this->input->post('hn');
         $vn = $this->input->post('vn');
 
-        $rs = $this->depress->detail($hn, $vn);
+        $rs = $this->dep->detail($hn, $vn);
 
         if($rs)
         {
@@ -67,7 +68,7 @@ class Depress extends CI_Controller
 
         if(!empty($hn) && !empty($vn))
         {
-            $rs = $this->depress->remove($hn, $vn);
+            $rs = $this->dep->remove($hn, $vn);
 
             $json = $rs ? '{"success": true}' : '{"success": false, "msg": "ไม่สามารถลบรายการได้"}';
         }

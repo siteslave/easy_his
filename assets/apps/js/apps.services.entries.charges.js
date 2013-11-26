@@ -1,5 +1,7 @@
+var charge = {};
+
 head.ready(function(){
-    var charge = {};
+
     charge.vn = $('#vn').val();
     charge.hn = $('#hn').val();
 
@@ -80,9 +82,9 @@ head.ready(function(){
                     '<td>' +
                     '<div class="btn-group">' +
                     '<a href="javascript:void(0);" class="btn btn-default" title="แก้ไขรายการ" ' +
-                    'data-name="btn_charge_edit" data-id="'+ v.id +'"><i class="icon-edit"></i></a>' +
+                    'data-name="btn_charge_edit" data-id="'+ v.id +'"><i class="fa fa-edit"></i></a>' +
                     '<a href="javascript:void(0);" data-name="btn_charge_remove" class="btn btn-danger" ' +
-                    'title="ลบรายการ" data-id="'+ v.id +'"><i class="icon-trash"></i></a>' +
+                    'title="ลบรายการ" data-id="'+ v.id +'"><i class="fa fa-trash-o"></i></a>' +
                     '</div>' +
                     '</td>' +
                     '</tr>'

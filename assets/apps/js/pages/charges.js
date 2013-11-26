@@ -20,9 +20,10 @@ head.ready(function(){
     //save charge
     $('#btn_charge_do_save').click(function(){
         var items = {};
+        var charge = $('#txt_charge_name').select2('data');
 
-        items.charge_id = $('#txt_charge_id').val();
-        items.charge_name = $('#txt_charge_name').val();
+        items.charge_id = charge.id;
+        items.charge_name = charge.name;
         items.price = $('#txt_charge_price').val();
         items.qty = $('#txt_charge_qty').val();
 
@@ -42,51 +43,75 @@ head.ready(function(){
                     app.alert(err);
                 }else{
                     app.alert('บันทึกรายการเสร็จเรียบร้อยแล้ว');
+                    parent.charge.modal.hide_new();
+                    parent.charge.get_list();
                 }
             });
         }
     });
 
-    $('#txt_charge_name').typeahead({
+    $('#txt_charge_name').on('click', function(e) {
+        e.preventDefault();
+
+        var data = $('#txt_charge_name').select2('data');
+
+        $('#txt_charge_price').val(data.price);
+    });
+
+    $('#txt_charge_name').select2({
+        placeholder: 'รายการยา',
+        minimumInputLength: 2,
+        allowClear: true,
         ajax: {
-            url: site_url + '/basic/search_charge_item_ajax',
-            timeout: 500,
-            displayField: 'name',
-            triggerLength: 3,
-            preDispatch: function(query){
+            url: site_url + "/basic/search_charge_item_ajax",
+            dataType: 'json',
+            type: 'POST',
+            quietMillis: 100,
+            data: function (term, page) {
                 return {
-                    query: query,
-                    csrf_token: csrf_token
-                }
+                    query: term,
+                    csrf_token: csrf_token,
+                    start: page,
+                    stop: 10
+                };
             },
+            results: function (data, page)
+            {
+                var more = (page * 10) < data.total; // whether or not there are more results available
 
-            preProcess: function(data){
-                if(data.success){
-                    return data.rows;
-                }else{
-                    return false;
-                }
+                // notice we return the value of more so Select2 knows if more results can be loaded
+                return {results: data.rows, more: more};
+
+                //return { results: data.rows, more: (data.rows && data.rows.length == 10 ? true : false) };
             }
+            //dropdownCssClass: "bigdrop"
         },
-        updater: function(data){
-            var d = data.split('|');
-            var name = d[0],
-                price = d[1],
-                id = d[3];
 
-            $('#txt_charge_id').val(id);
-            $('#txt_charge_name').val(name);
-            $('#txt_charge_price').val(price);
+        //id: function(data) { return { id: data.code } },
 
-            return name;
+        formatResult: function(data) {
+            return data.name;
+        },
+        formatSelection: function(data) {
+            return data.name;
+        },
+        initSelection: function(el, cb) {
+            //var eltxt = $(el).val();
+            //cb({'term': eltxt });
         }
     });
 
-    $('#txt_charge_name').on('keyup', function(){
-        $('#txt_charge_id').val('');
-        $('#txt_charge_price').val('0');
-        $('#txt_charge_qty').val('1');
-    });
+    charges.set_item_selected = function() {
+        var id = $('#charge_item_id').val(),
+            name = $('#charge_item_name').val();
+        if(id) {
+            $('#txt_charge_name').select2('data', {id: id, name: name, price: null, vprice: null});
+            $('#txt_charge_name').select2('enable', false);
+        }
 
+    };
+    //set select2 selected.
+    charges.set_item_selected();
+    //set runtime
     app.set_runtime();
 });

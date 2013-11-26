@@ -81,25 +81,48 @@ class Basic_model extends CI_Model
         return $arr_result;
     }
 
-    public function search_drug_usage_by_alias_ajax($query)
+    public function search_drug_usage_by_alias_ajax($query, $start, $limit)
     {
         $this->mongo_db->add_index('ref_drug_usages', array('alias_code' => -1));
         $this->mongo_db->add_index('ref_drug_usages', array('name1' => -1));
 
         $result = $this->mongo_db
-            ->like('alias_code', $query)
-            ->limit(50)
+            //->like('alias_code', $query)
+            ->or_where(array(
+                'alias_code' => new MongoRegex('/' . $query . '/'),
+                'name1' => new MongoRegex('/' . $query . '/')
+            ))
+            ->limit($limit)
+            ->offset($start)
             ->get('ref_drug_usages');
 
         $arr_result = array();
 
         foreach($result as $r){
             $obj = new stdClass();
-            $obj->name = $r['alias_code'] . '#' . $r['name1'] . ' ' . $r['name2'] . ' ' . $r['name3'] . '#' . get_first_object($r['_id']);
+            $obj->name = $r['alias_code'];
+            $obj->name1 = $r['name1'];
+            $obj->id = get_first_object($r['_id']);
+
             $arr_result[] = $obj;
         }
 
         return $arr_result;
+    }
+
+    public function search_drug_usage_by_alias_ajax_total($query)
+    {
+        $this->mongo_db->add_index('ref_drug_usages', array('alias_code' => -1));
+        $this->mongo_db->add_index('ref_drug_usages', array('name1' => -1));
+
+        $rs = $this->mongo_db
+            ->or_where(array(
+                'alias_code' => new MongoRegex('/' . $query . '/'),
+                'name1' => new MongoRegex('/' . $query . '/')
+            ))
+            ->count('ref_drug_usages');
+
+        return $rs;
     }
 
 
@@ -415,7 +438,7 @@ class Basic_model extends CI_Model
             $obj = new stdClass();
             $obj->code = $r['hospcode'];
             $obj->name = $r['hospname'];
-            $obj->province = get_changwat($r['changwat']);
+            #$obj->province = get_changwat($r['changwat']);
 
             $arr_result[] = $obj;
         }
@@ -436,8 +459,8 @@ class Basic_model extends CI_Model
             $obj = new stdClass();
             $obj->code = $r['hospcode'];
             $obj->name = $r['hospname'];
-            $obj->fullname = $r['hospname'] . '#' . $r['hospcode'];
-            $obj->province = get_changwat($r['changwat']);
+            #$obj->fullname = $r['hospname'] . '#' . $r['hospcode'];
+            #$obj->province = get_changwat($r['changwat']);
 
             $arr_result[] = $obj;
         }
@@ -961,12 +984,23 @@ class Basic_model extends CI_Model
             ->get('ref_icd10');
         return $result;
     }
-    public function search_icd_by_name($query){
+    public function search_icd_by_name($query, $start, $limit){
         $result = $this->mongo_db
             ->like('desc_r', $query)
             ->where(array('valid' => 'T'))
-            ->limit(10)
+            ->limit($limit)
+            ->offset($start)
             ->get('ref_icd10');
+        return $result;
+    }
+
+    public function search_icd_by_name_total($query){
+        $result = $this->mongo_db
+            ->like('desc_r', $query)
+            ->where(array('valid' => 'T'))
+            //->limit($limit)
+            //->offset($start)
+            ->count('ref_icd10');
         return $result;
     }
 
@@ -979,24 +1013,47 @@ class Basic_model extends CI_Model
         return $result;
     }
 
-    public function search_procedure_by_code($query){
+    public function search_procedure_by_code($query, $start, $limit){
         $result = $this->mongo_db
             ->like('code', $query)
             ->where(array('valid_code' => 'T'))
-            ->limit(10)
+            ->limit($limit)
+            ->offset($start)
             ->get('ref_icd9');
         return $result;
     }
 
-    public function search_procedure_by_name($query){
+    public function search_procedure_by_code_count($query){
+        $result = $this->mongo_db
+            ->like('code', $query)
+            ->where(array('valid_code' => 'T'))
+            //->limit($limit)
+            //->offset($start)
+            ->count('ref_icd9');
+        return $result;
+    }
+
+    public function search_procedure_by_name($query, $start, $limit){
         $result = $this->mongo_db
             ->like('desc_r', $query)
             ->where(array('valid_code' => 'T'))
-            ->limit(10)
+            ->offset($start)
+            ->limit($limit)
             ->get('ref_icd9');
         return $result;
     }
-    public function search_charge_item_ajax($query){
+
+    public function search_procedure_by_name_count($query){
+        $result = $this->mongo_db
+            ->like('desc_r', $query)
+            ->where(array('valid_code' => 'T'))
+            //->offset($start)
+            //->limit($limit)
+            ->count('ref_icd9');
+        return $result;
+    }
+
+    public function search_charge_item_ajax($query, $start, $limit){
 
         $this->mongo_db->add_index('ref_charge_items', array('name' => -1));
         $this->mongo_db->add_index('ref_charge_items', array('active' => -1));
@@ -1004,17 +1061,40 @@ class Basic_model extends CI_Model
         $result = $this->mongo_db
             ->like('name', $query)
             ->where(array('active' => 'Y'))
-            ->limit(15)
+            ->limit($limit)
+            ->offset($start)
             ->get('ref_charge_items');
         return $result;
     }
 
-    public function search_icd_by_code($query){
+    public function search_charge_item_ajax_total($query){
+
+        $this->mongo_db->add_index('ref_charge_items', array('name' => -1));
+        $this->mongo_db->add_index('ref_charge_items', array('active' => -1));
+
+        $result = $this->mongo_db
+            ->like('name', $query)
+            ->where(array('active' => 'Y'))
+            ->count('ref_charge_items');
+        return $result;
+    }
+
+    public function search_icd_by_code($query, $start, $limit){
         $result = $this->mongo_db
             ->like('code', $query)
             ->where(array('valid' => 'T'))
+            ->offset($start)
             ->limit(10)
             ->get('ref_icd10');
+        return $result;
+    }
+    public function search_icd_by_code_total($query){
+        $result = $this->mongo_db
+            ->like('code', $query)
+            ->where(array('valid' => 'T'))
+            //->offset($start)
+            //->limit(10)
+            ->count('ref_icd10');
         return $result;
     }
 
@@ -1050,7 +1130,7 @@ class Basic_model extends CI_Model
         $rs = $this->mongo_db
             ->where(array(
                 'owner_id' => new MongoId($this->owner_id),
-                'active' => 'Y'
+                //'active' => 'Y'
             ))
             ->get('providers');
 
@@ -1091,7 +1171,7 @@ class Basic_model extends CI_Model
         return count($rs) > 0 ? $rs[0] : NULL;
     }
 
-    public function search_drug_ajax($query){
+    public function search_drug_ajax($query, $start, $limit){
         $rs = $this->mongo_db
             ->where(array(
                 'owners' => array(
@@ -1105,7 +1185,8 @@ class Basic_model extends CI_Model
                 )*/
             ))
             ->like('name', $query)
-            ->limit(25)
+            ->limit($limit)
+            ->offset($start)
             ->get('ref_drugs');
 
         if(count($rs) > 0){
@@ -1114,7 +1195,9 @@ class Basic_model extends CI_Model
             foreach($rs as $r){
                 $price = isset($r['owners']) ? $r['owners'][0]['price'] : 0 ;
                 $obj = new stdClass();
-                $obj->name = $r['name'] . '#' . get_first_object($r['_id']) . '#' . $price;
+                $obj->name = $r['name'];
+                $obj->id = get_first_object($r['_id']);
+                $obj->price = $price;
 
                 $arr_result[] = $obj;
             }
@@ -1126,6 +1209,25 @@ class Basic_model extends CI_Model
             return $obj;
         }
 
+    }
+
+    public function search_drug_ajax_total($query){
+        $rs = $this->mongo_db
+            ->where(array(
+                'owners' => array(
+                    '$elemMatch' =>
+                    array(
+                        'owner_id' => new MongoId($this->owner_id)
+                    )
+                ),
+                /*'name' => array(
+                    '$regex' => new MongoRegex('/'.$query.'/i')
+                )*/
+            ))
+            ->like('name', $query)
+            ->count('ref_drugs');
+
+        return $rs;
     }
 
 

@@ -9946,7 +9946,7 @@ Legend.prototype = {
 						fnLegendItemClick = function () {
 							item.setVisible();
 						};
-						
+
 					// Pass over the click/touch event. #4.
 					event = {
 						browserEvent: event

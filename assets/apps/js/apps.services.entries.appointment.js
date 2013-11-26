@@ -1,5 +1,7 @@
+var appoint = {};
+
 head.ready(function(){
-    var appoint = {};
+
     appoint.modal = {
         show_new: function(hn, vn){
             $('#spn_appoint_vn').html(vn);
@@ -83,9 +85,11 @@ head.ready(function(){
                         '<td>'+ v.clinic_name +'</td>' +
                         '<td>'+ v.provider_name +'</td>' +
                         '<td><div class="btn-group">' +
-                        '<a href="javascript:void(0)" data-name="btn_appoint_edit" class="btn btn-default" title="แก้ไข" data-vn="'+ v.vn +'" ' +
-                        'data-hn="'+ v.hn+'" data-id="'+ v.id +'"><i class="icon-edit"></i></a>' +
-                        '<a href="javascript:void(0)" data-name="btn_appoint_remove" data-id="'+ v.id +'" class="btn btn-danger" title="ลบรายการ"><i class="icon-trash"></i></a>' +
+                        '<a href="javascript:void(0)" data-name="btn_appoint_edit" class="btn btn-default" ' +
+                        'title="แก้ไข" data-vn="'+ v.vn +'" ' +
+                        'data-hn="'+ v.hn+'" data-id="'+ v.id +'"><i class="fa fa-edit"></i></a>' +
+                        '<a href="javascript:void(0)" data-name="btn_appoint_remove" data-id="'+ v.id +'" ' +
+                        'class="btn btn-danger" title="ลบรายการ"><i class="fa fa-trash-o"></i></a>' +
                         '</div></td>' +
                         '</tr>'
                 );

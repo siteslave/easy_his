@@ -127,7 +127,7 @@ head.ready(function(){
                         '<td>[<strong>' + v.diag + '</strong>] ' + v.diag_name.substr(0, 20) + '...</td>' +
                         '<td>' + v.provider_name + '</td>' +
                         '<td><a href="javascript:void(0)" data-name="btn_selected_visit" class="btn btn-default" ' +
-                        'data-id="'+ v.person_id +'" data-vn="' + v.vn + '"> <i class="icon-share"></i></a></td>' +
+                        'data-id="'+ v.person_id +'" data-vn="' + v.vn + '"> <i class="fa fa-arrow-circle-o-right"></i></a></td>' +
                         '</tr>'
                 );
             });
@@ -433,40 +433,40 @@ head.ready(function(){
         }
     });
 
-    $('#txt_query_visit').typeahead({
-        ajax: {
-            url: site_url + '/person/search_person_ajax',
-            timeout: 500,
-            displayField: 'name',
-            triggerLength: 3,
-            preDispatch: function(query){
-                return {
-                    query: query,
-                    csrf_token: csrf_token
-                }
-            },
-
-            preProcess: function(data){
-                if(data.success){
-                    return data.rows;
-                }else{
-                    return false;
-                }
-            }
-        },
-        updater: function(data){
-
-            var d = data.split('#');
-
-            var hn = d[0],
-                name = d[1];
-
-           // $('#txt_reg_service_insc_hosp_sub_code').val(code);
-           // $('#txt_reg_service_insc_hosp_sub_name').val(name);
-
-            return hn;
-        }
-    });
+//    $('#txt_query_visit').typeahead({
+//        ajax: {
+//            url: site_url + '/person/search_person_ajax',
+//            timeout: 500,
+//            displayField: 'name',
+//            triggerLength: 3,
+//            preDispatch: function(query){
+//                return {
+//                    query: query,
+//                    csrf_token: csrf_token
+//                }
+//            },
+//
+//            preProcess: function(data){
+//                if(data.success){
+//                    return data.rows;
+//                }else{
+//                    return false;
+//                }
+//            }
+//        },
+//        updater: function(data){
+//
+//            var d = data.split('#');
+//
+//            var hn = d[0],
+//                name = d[1];
+//
+//           // $('#txt_reg_service_insc_hosp_sub_code').val(code);
+//           // $('#txt_reg_service_insc_hosp_sub_name').val(name);
+//
+//            return hn;
+//        }
+//    });
 
     service.get_list();
 });

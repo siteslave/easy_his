@@ -35,7 +35,9 @@ head.ready(function(){
 
     $('#btn_proced_do_save').click(function(){
         var items = {};
-        items.code = $('#txt_proced_query_code').val();
+        var data = $('#txt_proced_query').select2('data');
+
+        items.code = data.code;
         items.price = $('#txt_proced_price').val();
         items.isupdate = $('#txt_proced_isupdate').val();
         items.provider_id = $('#sl_proced_provider').val();
@@ -64,52 +66,98 @@ head.ready(function(){
                     app.alert(err);
                 }else{
                     app.alert('บันทึกข้อมูลเสร็จเรียบร้อยแล้ว');
+                    parent.procedures.get_list();
+                    parent.procedures.modal.hide_new();
                 }
             });
         }
     });
 
-    $('#txt_proced_query').on('keyup', function(){
-        $('#txt_proced_query_code').val('');
-    });
-
-    $('#txt_proced_query').typeahead({
+    $('#txt_proced_query').select2({
+        placeholder: 'รหัส หรือ ชื่อห้ตถการ',
+        minimumInputLength: 2,
+        allowClear: true,
         ajax: {
-            url: site_url + '/basic/search_procedure_ajax',
-            timeout: 500,
-            displayField: 'name',
-            triggerLength: 3,
-            preDispatch: function(query){
+            url: site_url + "/basic/search_procedure_ajax",
+            dataType: 'json',
+            type: 'POST',
+            quietMillis: 100,
+            data: function (term, page) {
                 return {
-                    query: query,
-                    csrf_token: csrf_token
-                }
+                    query: term,
+                    csrf_token: csrf_token,
+                    start: page,
+                    stop: 10
+                };
             },
+            results: function (data, page)
+            {
+                var more = (page * 10) < data.total; // whether or not there are more results available
 
-            preProcess: function(data){
-                if(data.success){
-                    return data.rows;
-                }else{
-                    return false;
-                }
+                // notice we return the value of more so Select2 knows if more results can be loaded
+                return {results: data.rows, more: more};
+
+                //return { results: data.rows, more: (data.rows && data.rows.length == 10 ? true : false) };
             }
+            //dropdownCssClass: "bigdrop"
         },
-        updater: function(data){
-            var d = data.split('#');
-            var name = d[1],
-                code = d[0];
 
-            $('#txt_proced_query_code').val(code);
-            $('#txt_proced_query').val(name);
+        id: function(data) { return { id: data.code } },
 
-            return name;
+        formatResult: function(data) {
+            return '[' + data.code + '] ' + data.name;
+        },
+        formatSelection: function(data) {
+            return '[' + data.code + '] ' + data.name;
         }
+//        ajax: {
+//            url: site_url + '/basic/search_procedure_ajax',
+//            timeout: 500,
+//            displayField: 'name',
+//            triggerLength: 3,
+//            preDispatch: function(query){
+//                return {
+//                    query: query,
+//                    csrf_token: csrf_token
+//                }
+//            },
+//
+//            preProcess: function(data){
+//                if(data.success){
+//                    return data.rows;
+//                }else{
+//                    return false;
+//                }
+//            }
+//        },
+//        updater: function(data){
+//            var d = data.split('#');
+//            var name = d[1],
+//                code = d[0];
+//
+//            $('#txt_proced_query_code').val(code);
+//            $('#txt_proced_query').val(name);
+//
+//            return name;
+//        }
     });
 
     $('#btn_proced_refresh').on('click', function(e){
         procedures.clear_form();
         e.preventDefault();
     });
+
+    procedures.set_procedure = function() {
+        var proced_code = $('#txt_proced_code').val();
+        var proced_name = $('#txt_proced_name').val();
+
+        if(proced_code) {
+            $('#txt_proced_query').select2('data', {code: proced_code, name: proced_name});
+            $('#txt_proced_query').select2('enable', false);
+        }
+    };
+
+    procedures.set_procedure();
 
     app.set_runtime();
 });

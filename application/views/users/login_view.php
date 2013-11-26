@@ -1,17 +1,18 @@
-    <?php 
-    echo form_open(site_url('users/do_login'), array('class' => 'form-signin', 'id' => "frmLogin"));
-    ?>
-    <!-- <h2 class="form-signin-heading">Please sign in</h2> -->
-    <?php if(isset($success)) { ?>
-    <div class="alert">
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-        <strong>Error!</strong> <?=$msg?>
-    </div>
-    <?php } ?>
 
-    <input type="text" class="input-block-level" rel="tooltip" title="ระบุชื่อผู้ใช้งาน" placeholder="ชื่อผู้ใช้งาน" value="<?php echo set_value('username'); ?>"
-        id="txt_username" name="username" autocomplete="off" autofocus>
-    <input type="password" class="input-block-level" rel="tooltip" title="ระบุรหัสผ่าน" placeholder="รหัสผ่าน" value="<?php echo set_value('password'); ?>"
-        id="txt_password" name="password" autocomplete="off">
-    <button class="btn btn-large btn-primary btn-block" type="submit" id="btn_dologin">เข้าใช้งาน</button>
-  </form>
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6 col-md-4 col-md-offset-4">
+                <h1 class="text-center login-title">Sign in to EasyHIS.</h1>
+                <div class="account-wall">
+                    <img class="profile-img" src="https://lh5.googleusercontent.com/-b0-k99FZlyE/AAAAAAAAAAI/AAAAAAAAAAA/eu7opA4byxI/photo.jpg?sz=120"
+                         alt="">
+                    <?php echo form_open(site_url('users/do_login'), array('class' => 'form-signin', 'id' => "frmLogin")); ?>
+                        <input type="text" autocomplete="off" id="txt_username" name="username" class="form-control" placeholder="Username" required autofocus>
+                        <input type="password" id="txt_password" name="password" class="form-control" placeholder="Password" required>
+                        <button class="btn btn-lg btn-primary btn-block" type="submit" id="btn_dologin"> Sign in </button>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>

@@ -26,45 +26,46 @@ head.ready(function(){
         }
     };
 
-    $('#txt_vaccs_hosp_name').on('keyup', function(){
-        $('#txt_vaccs_hosp_code').val('');
-    });
-
-    $('#txt_vaccs_hosp_name').typeahead({
+    $('#txt_vaccs_hosp_name').select2({
+        placeholder: 'ชื่อ หรือ รหัสสถานบริการ',
+        minimumInputLength: 2,
+        allowClear: true,
         ajax: {
-            url: site_url + '/basic/search_hospital_ajax',
-            timeout: 500,
-            displayField: 'fullname',
-            triggerLength: 3,
-            preDispatch: function(query){
+            url: site_url + "/basic/search_hospital_ajax",
+            dataType: 'json',
+            type: 'POST',
+            quietMillis: 100,
+            data: function (term) {
                 return {
-                    query: query,
+                    query: term,
                     csrf_token: csrf_token
-                }
+                };
             },
-
-            preProcess: function(data){
-                if(data.success){
-                    return data.rows;
-                }else{
-                    return false;
-                }
+            results: function (data)
+            {
+                return { results: data.rows, more: (data.rows && data.rows.length == 10 ? true : false) };
             }
+            //dropdownCssClass: "bigdrop"
         },
-        updater: function(data){
-            var d = data.split('#');
-            var name = d[0],
-                code = d[1];
 
-            $('#txt_vaccs_hosp_code').val(code);
+        id: function(data) { return { id: data.code } },
 
-            return name;
+        formatResult: function(data) {
+            return '[' + data.code + '] ' + data.name;
+        },
+        formatSelection: function(data) {
+            return '[' + data.code + '] ' + data.name;
+        },
+        initSelection: function(el, cb) {
+            //var eltxt = $(el).val();
+            //cb({'term': eltxt });
         }
     });
 
-
     $('#btn_vaccs_save').click(function(){
         var items = {};
+
+        var hosp = $('#txt_vaccs_hosp_name').select2('data');
 
         items.id = $('#txt_vaccs_id').val();
         items.hn = $('#txt_vaccs_hn').val();
@@ -74,7 +75,7 @@ head.ready(function(){
         items.expire = $('#txt_vaccs_expire_date').val()
         items.provider_id = $('#sl_vaccs_providers').val()
         items.date_serv = $('#txt_vaccs_date').val()
-        items.hospcode = $('#txt_vaccs_hosp_code').val()
+        items.hospcode = hosp.code;
 
         if(!items.vaccine_id)
         {
@@ -110,8 +111,8 @@ head.ready(function(){
                 else
                 {
                     app.alert('บันทึกข้อมูลวัคซีนเสร็จเรียบร้อยแล้ว');
-                    $('#txt_vaccs_id').val(data.id);
-                    $('#sl_vaccs_vaccine_id').prop('disabled', true).css('background-color', 'white');
+                    parent.epis.get_list();
+                    parent.epis.modal.hide_new();
                 }
             });
         }
@@ -158,6 +159,20 @@ head.ready(function(){
     $('a[href="#tab_epi2"]').on('click', function(){
         vaccs.get_history();
     });
+
+    vaccs.set_hospital_selected = function() {
+        var hospcode = $('#txt_vaccs_hospcode').val(),
+            hospname = $('#txt_vaccs_hospname').val();
+
+        if(hospcode) {
+            $('#txt_vaccs_hosp_name').select2('data', {code: hospcode, name: hospname});
+        } else {
+            $('#txt_vaccs_hosp_name').select2('val', '');
+        }
+
+    };
+
+    vaccs.set_hospital_selected();
 
     app.set_runtime();
 });

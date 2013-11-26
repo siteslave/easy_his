@@ -1,8 +1,11 @@
 /**
  * Service EPI script
  */
+
+var epis = {};
+
 head.ready(function(){
-    var epis = {};
+
     epis.hn = $('#hn').val();
     epis.vn = $('#vn').val();
 
@@ -39,6 +42,10 @@ head.ready(function(){
         {
             app.load_page($('#mdl_vaccines'), '/pages/update_vaccines/' + epis.hn + '/' + id, 'assets/apps/js/pages/vaccines.js');
             $('#mdl_vaccines').modal({keyboard: false});
+        },
+
+        hide_new: function() {
+            $('#mdl_vaccines').modal('hide');
         }
     };
 
@@ -63,8 +70,10 @@ head.ready(function(){
                         '<td>' + app.clear_null(v.provider_name) + '</td>' +
                         '<td>' +
                         '<div class="btn-group">' +
-                        '<a href="javascript:void(0);" class="btn btn-default" data-name="btn_epi_edit" data-id="'+ v.id +'"><i class="icon-edit"></i></a>' +
-                        '<a href="javascript:void(0);" class="btn btn-danger" data-name="btn_epi_remove" data-id="'+ v.id +'"><i class="icon-trash"></i></a>' +
+                        '<a href="javascript:void(0);" class="btn btn-default" data-name="btn_epi_edit" ' +
+                        ' data-id="'+ v.id +'"><i class="fa fa-edit"></i></a>' +
+                        '<a href="javascript:void(0);" class="btn btn-danger" data-name="btn_epi_remove" ' +
+                        ' data-id="'+ v.id +'"><i class="fa fa-trash-o"></i></a>' +
                         '</div>' +
                         '</td>' +
                         '</tr>'

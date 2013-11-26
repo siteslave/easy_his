@@ -44,76 +44,83 @@ head.ready(function(){
         }
     };
 
-    $('#txt_rfo_hosp_name').typeahead({
+    $('#txt_rfo_hosp_name').select2({
+        placeholder: 'ชื่อ หรือ รหัสสถานบริการ',
+        minimumInputLength: 2,
+        allowClear: true,
         ajax: {
-            url: site_url + '/basic/search_hospital_ajax',
-            timeout: 500,
-            displayField: 'fullname',
-            triggerLength: 3,
-            preDispatch: function(query){
+            url: site_url + "/basic/search_hospital_ajax",
+            dataType: 'json',
+            type: 'POST',
+            quietMillis: 100,
+            data: function (term) {
                 return {
-                    query: query,
+                    query: term,
                     csrf_token: csrf_token
-                }
+                };
             },
-
-            preProcess: function(data){
-                if(data.success){
-                    return data.rows;
-                }else{
-                    return false;
-                }
+            results: function (data)
+            {
+                return { results: data.rows, more: (data.rows && data.rows.length == 10 ? true : false) };
             }
+            //dropdownCssClass: "bigdrop"
         },
-        updater: function(data){
-            var d = data.split('#');
-            var name = d[0],
-                code = d[1];
 
-            $('#txt_rfo_hosp_code').val(code);
-            $('#txt_rfo_hosp_name').val(name);
+        id: function(data) { return { id: data.code } },
 
-            return name;
-        }
-    });
-    $('#txt_rfo_answer_diag_name').typeahead({
-        ajax: {
-            url: site_url + '/basic/search_icd_ajax',
-            timeout: 500,
-            displayField: 'name',
-            triggerLength: 3,
-            preDispatch: function(query){
-                return {
-                    query: query,
-                    csrf_token: csrf_token
-                }
-            },
-
-            preProcess: function(data){
-                if(data.success){
-                    return data.rows;
-                }else{
-                    return false;
-                }
-            }
+        formatResult: function(data) {
+            return '[' + data.code + '] ' + data.name;
         },
-        updater: function(data){
-            var d = data.split('#');
-            var name = d[1],
-                code = d[0];
-
-            $('#txt_rfo_answer_diag_code').val(code);
-
-            return name;
+        formatSelection: function(data) {
+            return '[' + data.code + '] ' + data.name;
+        },
+        initSelection: function(el, cb) {
+            //var eltxt = $(el).val();
+            //cb({'term': eltxt });
         }
     });
 
-    $('#txt_rfo_answer_diag_name').on('keyup', function () {
-        $('#txt_rfo_answer_diag_code').val('');
-    });
+    $('#txt_rfo_answer_diag_name').select2({
+        placeholder: 'รหัส หรือ ชื่อการวินิจฉัยโรค',
+        minimumInputLength: 2,
+        allowClear: true,
+        ajax: {
+            url: site_url + "/basic/search_icd_ajax",
+            dataType: 'json',
+            type: 'POST',
+            quietMillis: 100,
+            data: function (term, page) {
+                return {
+                    query: term,
+                    csrf_token: csrf_token,
+                    start: page,
+                    stop: 10
+                };
+            },
+            results: function (data, page)
+            {
+                var more = (page * 10) < data.total; // whether or not there are more results available
 
-    $('#txt_rfo_hosp_name').on('keyup', function(){
-        $('#txt_rfo_hosp_code').val('');
+                // notice we return the value of more so Select2 knows if more results can be loaded
+                return {results: data.rows, more: more};
+
+                //return { results: data.rows, more: (data.rows && data.rows.length == 10 ? true : false) };
+            }
+            //dropdownCssClass: "bigdrop"
+        },
+
+        id: function(data) { return { id: data.code } },
+
+        formatResult: function(data) {
+            return '[' + data.code + '] ' + data.name;
+        },
+        formatSelection: function(data) {
+            return '[' + data.code + '] ' + data.name;
+        },
+        initSelection: function(el, cb) {
+            //var eltxt = $(el).val();
+            //cb({'term': eltxt });
+        }
     });
 
     $('#btn_rfo_save').on('click', function(){

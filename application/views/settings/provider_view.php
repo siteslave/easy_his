@@ -33,17 +33,17 @@
         </table>
 
         <button type="button" class="btn btn-success" id="btn_new_provider">
-            <i class="icon-plus-sign"></i> เพิ่ม
+            <i class="fa fa-plus-circle"></i> เพิ่ม
         </button>
     </div>
 
     <!-- modal new house -->
     <div class="modal fade" id="modal_new_provider">
-        <div class="modal-dialog" style="width: 960px; left: 35%">
+        <div class="modal-dialog" style="width: 960px;">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title"><i class="icon-user-md"></i> เพิ่มข้อมูลผู้ให้บริการ (Provider)</h4>
+                    <h4 class="modal-title"><i class="fa fa-user-md"></i> เพิ่มข้อมูลผู้ให้บริการ (Provider)</h4>
                 </div>
                 <div class="modal-body">
                     <form action="#">
@@ -54,19 +54,19 @@
                         <div class="row">
                             <div class="col-lg-3">
                                 <label class="control-label" for="txt_regster_no">ทะเบียนวิชาชีพ</label>
-                                <input type="text" id="txt_regster_no">
+                                <input type="text" id="txt_regster_no" class="form-control">
                             </div>
                             <div class="col-lg-3">
                                 <label class="control-label" for="txt_council">รหัสสภาวิชาชีพ</label>
-                                <input type="text" id="txt_council">
+                                <input type="text" id="txt_council" class="form-control">
                             </div>
                             <div class="col-lg-3">
                                 <label class="control-label" for="txt_cid">เลขบัตรประชาชน</label>
-                                <input type="text" id="txt_cid">
+                                <input type="text" id="txt_cid" class="form-control">
                             </div>
                             <div class="col-lg-2">
                                 <label class="control-label" for="sl_sex">เพศ</label>
-                                <select  id="sl_sex">
+                                <select  id="sl_sex" class="form-control">
                                     <option value="1">ชาย</option>
                                     <option value="2">หญิง</option>
                                 </select>
@@ -75,7 +75,7 @@
                         <div class="row">
                             <div class="col-lg-2">
                                 <label class="control-label" for="sl_title">คำนำ</label>
-                                <select  id="sl_title">
+                                <select  id="sl_title" class="form-control">
                                     <option value="">--</option>
                                     <?php
                                     foreach($titles as $t){
@@ -86,22 +86,23 @@
                             </div>
                             <div class="col-lg-3">
                                 <label class="control-label" for="txt_first_name">ชื่อ</label>
-                                <input type="text" id="txt_first_name">
+                                <input type="text" id="txt_first_name" class="form-control">
                             </div>
                             <div class="col-lg-3">
                                 <label class="control-label" for="txt_last_name">สกุล</label>
-                                <input type="text" id="txt_last_name">
+                                <input type="text" id="txt_last_name" class="form-control">
                             </div>
                             <div class="col-lg-3">
                                 <label class="control-label" for="txt_birth_date">วันเกิด</label>
-                                <input id="txt_birth_date" type="text" data-type="date" placeholder="dd/mm/yyyy" title="วันเดือนปี เกิด" rel="tooltip">
+                                <input id="txt_birth_date" type="text" data-type="date" class="form-control"
+                                       placeholder="dd/mm/yyyy" title="วันเดือนปี เกิด" rel="tooltip">
 
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-5">
                                 <label class="control-label" for="sl_provider_type">ประเภทบุคลากร</label>
-                                <select  id="sl_provider_type">
+                                <select  id="sl_provider_type" class="form-control">
                                     <option value="">--</option>
                                     <?php
                                     foreach($provider_types as $t){
@@ -112,11 +113,13 @@
                             </div>
                             <div class="col-lg-2">
                                 <label class="control-label" for="txt_start_date">เริ่มปฏิบัติงาน</label>
-                                <input id="txt_start_date" type="text" data-type="date" title="ระบุวันที่ dd/mm/yyyy" rel="tooltip">
+                                <input id="txt_start_date" type="text" data-type="date" class="form-control"
+                                       title="ระบุวันที่ dd/mm/yyyy" rel="tooltip">
                             </div>
                             <div class="col-lg-2">
                                 <label class="control-label" for="txt_out_date">ออกจากงาน</label>
-                                <input id="txt_out_date" type="text" data-type="date" title="ระบุวันที่ dd/mm/yyyy" rel="tooltip">
+                                <input id="txt_out_date" type="text" data-type="date" class="form-control"
+                                       title="ระบุวันที่ dd/mm/yyyy" rel="tooltip">
                             </div>
                         </div>
                         <div class="row">

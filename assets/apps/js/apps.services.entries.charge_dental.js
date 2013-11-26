@@ -57,7 +57,8 @@ head.ready(function() {
     cdental.clear_form = function() {
         $('#txt_charge_dental_id').val('');
         app.set_first_selected($('#sl_charge_dental_items'));
-        $('#sl_charge_dental_items').removeProp('disabled');
+        $('#sl_charge_dental_items').select2('enable', true);
+        $('#sl_charge_dental_items').select2('val', '');
         $('#txt_charge_dental_teeth').val('');
         $('#txt_charge_dental_price').val('');
         $('#txt_charge_dental_side').val('');
@@ -146,11 +147,12 @@ head.ready(function() {
                                 '<td>'+ v.side +'</td>' +
                                 '<td>'+ app.add_commars(v.price) +'</td>' +
                                 '<td><div class="btn-group">' +
-                                '<a href="#" class="btn btn-success" data-name="btn_charge_dental_edit"' +
+                                '<a href="#" class="btn btn-default" data-name="btn_charge_dental_edit"' +
                                 ' data-price="'+ v.price +'" data-teeth="'+ v.teeth +'" ' +
-                                ' data-side="'+ v.side +'" data-id="'+ v.id +'" data-charge_id="'+ v.charge_id+'" title="แก้ไขรายการ"><i class="icon-edit"></i></a>' +
+                                ' data-side="'+ v.side +'" data-id="'+ v.id +'" data-charge_id="'+ v.charge_id+'" ' +
+                                ' title="แก้ไขรายการ"><i class="fa fa-edit"></i></a>' +
                                 '<a href="#" class="btn btn-danger" data-name="btn_charge_dental_remove" data-id="'+ v.id +'" title="ลบรายการ">' +
-                                '<i class="icon-trash"></i></a>' +
+                                '<i class="fa fa-trash-o"></i></a>' +
                                 '</div></td>' +
                                 '</tr>'
                         );
@@ -174,7 +176,9 @@ head.ready(function() {
             side = $(this).data('side');
 
         $('#txt_charge_dental_id').val(id);
-        $('#sl_charge_dental_items').val(charge_id).prop('disabled', true).css('background-color', 'white');
+        $('#sl_charge_dental_items').select2('val', charge_id);
+        $('#sl_charge_dental_items').select2('enable', false);
+        //$('#sl_charge_dental_items').val(charge_id).prop('disabled', true).css('background-color', 'white');
         $('#txt_charge_dental_teeth').val(teeth);
         $('#txt_charge_dental_price').val(price);
         $('#txt_charge_dental_side').val(side);
@@ -182,7 +186,10 @@ head.ready(function() {
         cdental.modal.show_new();
     });
 
-    $(document).on('click', 'a[data-name="btn_charge_dental_remove"]', function() {
+    $(document).on('click', 'a[data-name="btn_charge_dental_remove"]', function(e) {
+
+        e.preventDefault();
+
         var id = $(this).data('id');
         if(confirm('คุณต้องการลบรายการนี้ใช่หรือไม่?'))
         {

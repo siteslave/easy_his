@@ -146,6 +146,7 @@ class Epi_model extends CI_Model
                 'expire' => to_string_date($data['expire']),
                 'provider_id' => new MongoId($data['provider_id']),
                 'user_id' => new MongoId($this->user_id),
+                'hospcode' => $data['hospcode'],
                 'last_update' => date('Ymd H:i:s')
             ))
             ->update('visit_vaccines');

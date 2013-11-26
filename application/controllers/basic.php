@@ -234,15 +234,27 @@ class Basic extends CI_Controller
 
     public function search_drug_usage_ajax(){
         $query = $this->input->post('query');
+
+        $start  = $this->input->post('start');
+        $stop   = $this->input->post('stop');
+
+        $start  = empty($start) ? 1 : $start;
+        $stop   = empty($stop) ? 10 : $stop;
+
+        $start = ($start - 1) * $stop;
+
+        $limit  = $stop;
+
         if(empty($query)){
             $json = '{"success": false, "msg": "No query found."}';
         }else{
 
-            $rs = $this->basic->search_drug_usage_by_alias_ajax($query);
+            $rs = $this->basic->search_drug_usage_by_alias_ajax($query, $start, $limit);
+            $total = $this->basic->search_drug_usage_by_alias_ajax_total($query);
 
             if($rs){
                 $rows = json_encode($rs);
-                $json = '{"success": true, "rows": '.$rows.'}';
+                $json = '{"success": true, "rows": '.$rows.', "total": '.$total.'}';
             }else{
                 $json = '{"success": false, "msg": "ไม่พบรายการ"}';
             }
@@ -253,6 +265,18 @@ class Basic extends CI_Controller
 
     public function search_icd_ajax(){
         $query = $this->input->post('query');
+
+        $start  = $this->input->post('start');
+        $stop   = $this->input->post('stop');
+
+        $start  = empty($start) ? 1 : $start;
+        $stop   = empty($stop) ? 10 : $stop;
+
+        $start = ($start - 1) * $stop;
+
+        $limit  = $stop;
+
+
         if(empty($query)){
             $json = '{"success": false, "msg": "No query found."}';
         }else{
@@ -260,21 +284,24 @@ class Basic extends CI_Controller
             $op = has_number($query);
 
             if($op){
-                $result = $this->basic->search_icd_by_code($query);
+                $result = $this->basic->search_icd_by_code($query, $start, $limit);
+                $total = $this->basic->search_icd_by_code_total($query);
             }else{
-                $result = $this->basic->search_icd_by_name($query);
+                $result = $this->basic->search_icd_by_name($query, $start, $limit);
+                $total = $this->basic->search_icd_by_name_total($query);
             }
 
             if($result){
                 $arr_result = array();
                 foreach ($result as $r) {
                     $obj = new stdClass();
-                    $obj->name = $r['code'] . '#' . $r['desc_r'];
-
+                    $obj->code = $r['code'];
+                    $obj->name = $r['desc_r'];
                     array_push($arr_result, $obj);
                 }
+
                 $rows = json_encode($arr_result);
-                $json = '{"success": true, "rows": '.$rows.'}';
+                $json = '{"success": true, "rows": '.$rows.', "total": '.$total.'}';
             }else{
                 $json = '{"success": false, "msg": "No data."}';
             }
@@ -285,24 +312,37 @@ class Basic extends CI_Controller
 
     public function search_charge_item_ajax(){
         $query = $this->input->post('query');
+        $start  = $this->input->post('start');
+        $stop   = $this->input->post('stop');
+
+        $start  = empty($start) ? 1 : $start;
+        $stop   = empty($stop) ? 10 : $stop;
+
+        $start = ($start - 1) * $stop;
+
+        $limit  = $stop;
+
         if(empty($query)){
             $json = '{"success": false, "msg": "No query found."}';
         }else{
 
-            $result = $this->basic->search_charge_item_ajax($query);
+            $result = $this->basic->search_charge_item_ajax($query, $start, $limit);
+            $total = $this->basic->search_charge_item_ajax_total($query);
 
             if($result){
                 $arr_result = array();
                 foreach ($result as $r) {
-                    $price = $this->income->get_price_qty($r['_id']);
-                    $vprice = isset($price[0]['price']) ? $price[0]['price'] : 0;
                     $obj = new stdClass();
-                    $obj->name = $r['name'] . '|' . $vprice . '|' . $r['unit'] . '|' . get_first_object($r['_id']);
+                    $obj->price = $this->income->get_price_qty($r['_id']);
+                    $obj->vprice = isset($price[0]['price']) ? $price[0]['price'] : 0;
+                    $obj->name = $r['name'];
+                    $obj->id = get_first_object($r['_id']);
+                    #$obj->name = $r['name'] . '|' . $vprice . '|' . $r['unit'] . '|' . get_first_object($r['_id']);
 
                     $arr_result[] = $obj;
                 }
                 $rows = json_encode($arr_result);
-                $json = '{"success": true, "rows": '.$rows.'}';
+                $json = '{"success": true, "rows": '.$rows.', "total": '.$total.'}';
             }else{
                 $json = '{"success": false, "msg": "No data."}';
             }
@@ -313,6 +353,17 @@ class Basic extends CI_Controller
 
     public function search_procedure_ajax(){
         $query = $this->input->post('query');
+
+        $start  = $this->input->post('start');
+        $stop   = $this->input->post('stop');
+
+        $start  = empty($start) ? 1 : $start;
+        $stop   = empty($stop) ? 10 : $stop;
+
+        $start = ($start - 1) * $stop;
+
+        $limit  = $stop;
+
         if(empty($query)){
             $json = '{"success": false, "msg": "No query found."}';
         }else{
@@ -320,21 +371,24 @@ class Basic extends CI_Controller
             $op = has_number($query);
 
             if($op){
-                $result = $this->basic->search_procedure_by_code($query);
+                $result = $this->basic->search_procedure_by_code($query, $start, $limit);
+                $total = $this->basic->search_procedure_by_code_count($query);
             }else{
-                $result = $this->basic->search_procedure_by_name($query);
+                $result = $this->basic->search_procedure_by_name($query, $start, $limit);
+                $total = $this->basic->search_procedure_by_name_count($query);
             }
 
             if($result){
                 $arr_result = array();
                 foreach ($result as $r) {
                     $obj = new stdClass();
-                    $obj->name = $r['code'] . '#' . $r['desc_r'];
+                    $obj->code = $r['code'];
+                    $obj->name = $r['desc_r'];
 
                     array_push($arr_result, $obj);
                 }
                 $rows = json_encode($arr_result);
-                $json = '{"success": true, "rows": '.$rows.'}';
+                $json = '{"success": true, "rows": '.$rows.', "total": '.$total.'}';
             }else{
                 $json = '{"success": false, "msg": "No data."}';
             }
@@ -375,14 +429,28 @@ class Basic extends CI_Controller
     }
 
     public function search_drug_ajax(){
+
         $query = $this->input->post('query');
+
+        $start  = $this->input->post('start');
+        $stop   = $this->input->post('stop');
+
+        $start  = empty($start) ? 1 : $start;
+        $stop   = empty($stop) ? 10 : $stop;
+
+        $start = ($start - 1) * $stop;
+
+        $limit  = $stop;
+
         if(empty($query)){
             $json = '{"success": false, "msg": "No result."}';
         }else{
-            $rs = $this->basic->search_drug_ajax($query);
+
+            $rs = $this->basic->search_drug_ajax($query, $start, $limit);
+            $total = $this->basic->search_drug_ajax_total($query);
             $rows = json_encode($rs);
 
-            $json = '{"success": true, "rows": '.$rows.'}';
+            $json = '{"success": true, "rows": '.$rows.', "total": '.$total.'}';
         }
 
         render_json($json);

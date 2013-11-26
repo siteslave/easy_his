@@ -21,12 +21,14 @@ head.ready(function(){
     //save drug
     $('#btn_drug_do_save').click(function(){
         var items = {};
+        var drug = $('#txt_drug_name').select2('data');
+        var usage = $('#txt_drug_usage_name').select2('data');
 
-        items.usage_id = $('#txt_drug_usage_id').val();
-        items.drug_id = $('#txt_drug_id').val();
+        items.usage_id = usage.id;
+        items.drug_id = drug.id
         items.price = $('#txt_drug_price').val();
         items.qty = $('#txt_drug_qty').val();
-        items.id = $('#service_drug_id').val();
+        items.id = $('#service_drug_visit_id').val();
 
         items.vn = drugs.vn;
         items.hn = drugs.hn;
@@ -48,85 +50,121 @@ head.ready(function(){
                     app.alert(err);
                 }else{
                     app.alert('บันทึกรายการเสร็จเรียบร้อยแล้ว');
+                    parent.drug.modal.hide_new();
+                    parent.drug.get_list();
                 }
             });
         }
     });
 
-    $('#txt_drug_name').on('keyup', function(){
-        $('#txt_drug_id').val('');
+    $('#txt_drug_name').on('click', function(e) {
+        e.preventDefault();
+        var data = $(this).select2('data');
+
+        $('#txt_drug_price').val(data.price);
     });
 
-    $('#txt_drug_name').typeahead({
+    $('#txt_drug_name').select2({
+        placeholder: 'รายการยา',
+        minimumInputLength: 2,
+        allowClear: true,
         ajax: {
-            url: site_url + '/basic/search_drug_ajax',
-            timeout: 500,
-            displayField: 'name',
-            triggerLength: 3,
-            preDispatch: function(query){
+            url: site_url + "/basic/search_drug_ajax",
+            dataType: 'json',
+            type: 'POST',
+            quietMillis: 100,
+            data: function (term, page) {
                 return {
-                    query: query,
-                    csrf_token: csrf_token
-                }
+                    query: term,
+                    csrf_token: csrf_token,
+                    start: page,
+                    stop: 10
+                };
             },
+            results: function (data, page)
+            {
+                var more = (page * 10) < data.total; // whether or not there are more results available
 
-            preProcess: function(data){
-                if(data.success){
-                    return data.rows;
-                }else{
-                    return false;
-                }
+                // notice we return the value of more so Select2 knows if more results can be loaded
+                return {results: data.rows, more: more};
+
+                //return { results: data.rows, more: (data.rows && data.rows.length == 10 ? true : false) };
             }
+            //dropdownCssClass: "bigdrop"
         },
-        updater: function(data){
-            var d = data.split('#');
-            var name = d[0],
-                code = d[1],
-                price = d[2];
 
-            $('#txt_drug_id').val(code);
-            $('#txt_drug_price').val(price);
+        //id: function(data) { return { id: data.code } },
 
-            return name;
+        formatResult: function(data) {
+            return data.name;
+        },
+        formatSelection: function(data) {
+            return data.name;
+        },
+        initSelection: function(el, cb) {
+            //var eltxt = $(el).val();
+            //cb({'term': eltxt });
         }
     });
 
-    $('#txt_drug_usage_name').typeahead({
+    $('#txt_drug_usage_name').select2({
+        placeholder: 'รายการยา',
+        minimumInputLength: 2,
+        allowClear: true,
         ajax: {
-            url: site_url + '/basic/search_drug_usage_ajax',
-            timeout: 500,
-            displayField: 'name',
-            triggerLength: 3,
-            preDispatch: function(query){
+            url: site_url + "/basic/search_drug_usage_ajax",
+            dataType: 'json',
+            type: 'POST',
+            quietMillis: 100,
+            data: function (term, page) {
                 return {
-                    query: query,
-                    csrf_token: csrf_token
-                }
+                    query: term,
+                    csrf_token: csrf_token,
+                    start: page,
+                    stop: 10
+                };
             },
+            results: function (data, page)
+            {
+                var more = (page * 10) < data.total; // whether or not there are more results available
 
-            preProcess: function(data){
-                if(data.success){
-                    return data.rows;
-                }else{
-                    return false;
-                }
+                // notice we return the value of more so Select2 knows if more results can be loaded
+                return {results: data.rows, more: more};
+
+                //return { results: data.rows, more: (data.rows && data.rows.length == 10 ? true : false) };
             }
+            //dropdownCssClass: "bigdrop"
         },
-        updater: function(data){
-            var d = data.split('#');
-            var alias = d[0],
-                name = d[1],
-                id = d[2];
 
-            $('#txt_drug_usage_id').val(id);
+        //id: function(data) { return { id: data.code } },
 
-            return alias;
+        formatResult: function(data) {
+            return data.name + ' [' + data.name1 + ']';
+        },
+        formatSelection: function(data) {
+            return data.name1;
+        },
+        initSelection: function(el, cb) {
+            //var eltxt = $(el).val();
+            //cb({'term': eltxt });
         }
     });
 
-    $('#txt_drug_usage_name').on('keyup', function(){
-        $('#txt_drug_usage_id').val('');
-    });
+    drugs.set_drug_usage_selected = function() {
+        var drug_id = $('#service_drug_id').val(),
+            drug_name = $('#service_drug_name').val(),
+            usage_id = $('#service_drug_usage_id').val(),
+            usage_name = $('#service_drug_usage_name').val();
+
+        if(drug_id) {
+            $('#txt_drug_name').select2('data', {id: drug_id, name: drug_name});
+            $('#txt_drug_name').select2('enable', false);
+
+            $('#txt_drug_usage_name').select2('data', {id: usage_id, name1: usage_name});
+        }
+    };
+
+    drugs.set_drug_usage_selected();
 
     app.set_runtime();
 });

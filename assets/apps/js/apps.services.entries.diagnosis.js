@@ -1,5 +1,6 @@
+var diags = {};
+
 head.ready(function(){
-    var diags = {};
 
     diags.modal = {
         show_new: function(){
@@ -66,7 +67,7 @@ head.ready(function(){
                                     '<td><strong>'+ v.provider_name +'</strong></td>' +
                                     '<td><strong>'+ v.clinic_name +'</strong></td>' +
                                     '<td><a href="javascript:void(0);" class="btn btn-danger" data-name="btn_diag_remove" data-code="'+ v.code +'" title="ลบรายการ">' +
-                                    '<i class="icon-trash"></i>' +
+                                    '<i class="fa fa-trash-o"></i>' +
                                     '</a></td>' +
                                     '</tr>'
                             );
@@ -80,7 +81,7 @@ head.ready(function(){
                                     '<td>'+ v.provider_name +'</td>' +
                                     '<td>'+ v.clinic_name +'</td>' +
                                     '<td><a href="javascript:void(0);" class="btn btn-danger" data-name="btn_diag_remove" data-code="'+ v.code +'" title="ลบรายการ">' +
-                                    '<i class="icon-trash"></i>' +
+                                    '<i class="fa fa-trash-o"></i>' +
                                     '</a></td>' +
                                     '</tr>'
                             );

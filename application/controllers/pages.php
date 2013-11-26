@@ -10,14 +10,16 @@ class Pages extends CI_Controller {
     public function __construct(){
         parent::__construct();
 
-        $this->owner_id = $this->session->userdata('owner_id');
 
-        if(empty($this->owner_id)){
+        $this->user_id = $this->session->userdata('user_id');
+
+        if(empty($this->user_id)){
             redirect(site_url('users/login'));
         }
 
-        $this->user_id = $this->session->userdata('user_id');
         $this->provider_id = $this->session->userdata('provider_id');
+
+        $this->owner_id = $this->session->userdata('owner_id');
 
         $this->load->model('Basic_model', 'basic');
         $this->load->model('Service_model', 'service');
@@ -72,7 +74,7 @@ class Pages extends CI_Controller {
                 $proced = $this->service->get_service_proced_opd_detail($vn, $code);
                 $obj = new stdClass();
                 $obj->code = $proced['code'];
-                $obj->proced_name = get_procedure_name($obj->code);
+                $obj->name = get_procedure_name($obj->code);
                 $obj->price = $proced['price'];
                 $obj->start_time = isset($proced['start_time']) ? $proced['start_time'] : NULL;
                 $obj->end_time = isset($proced['end_time']) ? $proced['end_time'] : NULL;

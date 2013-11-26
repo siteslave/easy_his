@@ -1,6 +1,7 @@
+var drug = {};
 
 head.ready(function(){
-    var drug = {};
+
     drug.vn = $('#vn').val();
     drug.hn = $('#hn').val();
 
@@ -90,9 +91,9 @@ head.ready(function(){
                     '<a href="javascript:void(0);" class="btn btn-default" title="แก้ไขรายการ" ' +
                     'data-name="btn_drug_edit" data-id="'+ v.id +'" data-drug_id="'+ v.drug_id +'" data-drug_name="'+ v.drug_name+'" ' +
                     'data-price="' + v.price + '" data-usage_id="'+ v.usage_id +'" data-usage_name="'+ v.usage_name +'" ' +
-                    'data-qty="'+ v.qty +'"><i class="icon-edit"></i></a>' +
+                    'data-qty="'+ v.qty +'"><i class="fa fa-edit"></i></a>' +
                     '<a href="javascript:void(0);" data-name="btn_drug_remove" class="btn btn-danger" title="ลบรายการ" ' +
-                    'data-id="'+ v.id +'"><i class="icon-trash"></i></a>' +
+                    'data-id="'+ v.id +'"><i class="fa fa-trash-o"></i></a>' +
                     '</div>' +
                     '</td>' +
                     '</tr>'

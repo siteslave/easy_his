@@ -1,21 +1,17 @@
-<div class="navbar">
+<div class="navbar navbar-default">
     <form action="#" class="navbar-form">
         <input type="hidden" id="txt_service_hn" value="<?=isset($hn) ? $hn : ''?>" />
         <input type="hidden" id="txt_service_vn" value="<?=isset($vn) ? $vn : ''?>" />
         <input type="hidden" id="txt_service_appoint_id" value="<?=!empty($appoint_id) ? $appoint_id : ''?>" />
 
-        <input type="text" style="width: 180px;" id="txt_service_profile_hn"
-               rel="tooltip" title="พิมพ์ชื่อ, HN หรือ เลขบัตรประชาชน" placeholder="ชื่อ-สกุล, HN หรือ CID" autocomplete="off"
-                <?=isset($hn) ? 'disabled="disabled"' : ''?> value="<?=isset($hn) ? $hn : ''?>">
-        <button type="button" id="btn_show_search_person" class="btn btn-primary" <?=isset($hn) ? 'disabled="disabled"' : ''?>
-                rel="tooltip" title="คลิกปุ่มเพื่อค้นหาผู้ป่วย"><i class="icon-search"></i></button>
-        |
-        <input type="text" style="width: 630px;" disabled="disabled" placeholder="-*-" id="txt_service_profile" value="<?=isset($patient) ? $patient : ''?>" />
+        <input type="hidden" style="width: 180px;" id="txt_service_profile_hn" class="form-control">
+        <input type="text" style="width: 630px;" disabled="disabled" placeholder="-*-" id="txt_service_profile"
+               class="form-control" value="<?=isset($patient) ? $patient : ''?>" />
     </form>
 </div>
 <div class="tab-pane active" id="tab_user_profile">
     <ul class="nav nav-tabs" id="myTab">
-        <li class="active"><a href="#tab_service_detail" data-toggle="tab"><i class="icon-th-list"></i> ข้อมูลการรับบริการ</a></li>
+        <li class="active"><a href="#tab_service_detail" data-toggle="tab"><i class="fa fa-th-list"></i> ข้อมูลการรับบริการ</a></li>
     </ul>
     <div class="tab-content">
         <div class="tab-pane active" id="tab_service_detail">
@@ -24,18 +20,18 @@
                 <div class="row">
                     <div class="col-lg-2">
                         <label for="txt_reg_service_date">วันที่</label>
-                        <input id="txt_reg_service_date" type="text" data-type="date" <?=isset($vn) ? 'disabled="disabled"': ''?>
+                        <input id="txt_reg_service_date" class="form-control" type="text" data-type="date" <?=isset($vn) ? 'disabled="disabled"': ''?>
                                placeholder="dd/mm/yyyy" style="width: 120px;" required value="<?=isset($date_serv) ? $date_serv : get_current_date()?>">
                     </div>
                     <div class="col-lg-1">
                         <label for="txt_reg_service_time">เวลา</label>
-                        <input type="text" data-type="time" id="txt_reg_service_time"
+                        <input type="text" data-type="time" id="txt_reg_service_time" class="form-control"
                                placeholder="hh:mm" style="width: 70px;" required  value="<?=isset($time_serv) ? $time_serv : date('H:i:s')?>">
                     </div>
 
                     <div class="col-lg-3">
                         <label for="sl_reg_service_patient_status">สภาพผู้ป่วย</label>
-                        <select id="sl_reg_service_patient_status">
+                        <select id="sl_reg_service_patient_status" class="form-control">
                             <option value="0" <?=isset($patient_type) ? $patient_type == '0' ? 'selected="selected"' : '' : ''?>>ปกติ</option>
                             <option value="1" <?=isset($patient_type) ? $patient_type == '1' ? 'selected="selected"' : '' : ''?>>เมาสุรา/อาละวาด</option>
                             <option value="2" <?=isset($patient_type) ? $patient_type == '2' ? 'selected="selected"' : '' : ''?>>ไม่รู้สึกตัว</option>
@@ -45,7 +41,7 @@
 
                     <div class="col-lg-3">
                         <label for="sl_reg_service_clinic">แผนกที่รับบริการ</label>
-                        <select id="sl_reg_service_clinic">
+                        <select id="sl_reg_service_clinic" class="form-control">
                             <option value="">--</option>
                             <?php
                             foreach($clinics as $t)
@@ -71,7 +67,7 @@
                     </div>
                     <div class="col-lg-3">
                         <label for="sl_reg_service_doctor_room">ห้องตรวจ</label>
-                        <select id="sl_reg_service_doctor_room">
+                        <select id="sl_reg_service_doctor_room" class="form-control">
                             <option value="">--</option>
                             <?php
                             foreach($doctor_rooms as $t)
@@ -100,7 +96,7 @@
                 <div class="row">
                     <div class="col-lg-3">
                         <label for="sl_reg_service_pttype">ประเภทผู้ป่วย</label>
-                        <select  id="sl_reg_service_pttype">
+                        <select  id="sl_reg_service_pttype" class="form-control">
                             <option value="0" <?=isset($patient_type) ? $patient_type == '0' ? 'selected="selected"' : '' : ''?>>ผู้ป่วยรายเก่า</option>
                             <option value="1" <?=isset($patient_type) ? $patient_type == '1' ? 'selected="selected"' : '' : ''?>>ผู้ป่วยรายใหม่</option>
                             <option value="2" <?=isset($patient_type) ? $patient_type == '2' ? 'selected="selected"' : '' : ''?>>ผู้รับบริการอื่น</option>
@@ -108,14 +104,14 @@
                     </div>
                     <div class="col-lg-3">
                         <label for="sl_reg_service_location">ที่ตั้ง</label>
-                        <select  id="sl_reg_service_location">
+                        <select  id="sl_reg_service_location" class="form-control">
                             <option value="1" <?=isset($location) ? $location == '1' ? 'selected="selected"' : '' : ''?>>ในเขตรับผิดชอบ</option>
                             <option value="2" <?=isset($location) ? $location == '2' ? 'selected="selected"' : '' : ''?>>นอกเขตรับผิดชอบ</option>
                         </select>
                     </div>
                     <div class="col-lg-3">
                         <label for="sl_reg_service_typein">ประเภทการมา</label>
-                        <select id="sl_reg_service_typein">
+                        <select id="sl_reg_service_typein" class="form-control">
                             <option value="1" <?=isset($type_in) ? $type_in == '1' ? 'selected="selected"' : '' : ''?>>มารับบริการเอง</option>
                             <option value="2" <?=isset($type_in) ? $type_in == '2' ? 'selected="selected"' : '' : ''?>>มารับบริการตามนัดหมาย</option>
                             <option value="3" <?=isset($type_in) ? $type_in == '3' ? 'selected="selected"' : '' : ''?>>ได้รับการส่งต่อจากสถานพยาบาลอื่น</option>
@@ -124,7 +120,7 @@
                     </div>
                     <div class="col-lg-3">
                         <label for="sl_reg_service_service_place">สถานที่รับบริการ</label>
-                        <select id="sl_reg_service_service_place">
+                        <select id="sl_reg_service_service_place" class="form-control">
                             <option value="1" <?=isset($service_place) ? $service_place == '1' ? 'selected="selected"' : '' : ''?>>ในสถานบริการ</option>
                             <option value="2" <?=isset($service_place) ? $service_place == '2' ? 'selected="selected"' : '' : ''?>>นอกสถานบริการ</option>
                         </select>
@@ -133,14 +129,14 @@
                 <div class="row">
                     <div class="col-lg-3">
                         <label for="">ในเวลา</label>
-                        <select id="sl_reg_service_intime">
+                        <select id="sl_reg_service_intime" class="form-control">
                             <option value="1" <?=isset($intime) ? $intime == '1' ? 'selected="selected"' : '' : ''?>>ในเวลาราชการ</option>
                             <option value="2" <?=isset($intime) ? $intime == '2' ? 'selected="selected"' : '' : ''?>>นอกเวลาราชการ</option>
                         </select>
                     </div>
                     <div class="col-lg-9">
                         <label for="txt_reg_service_cc">อาการแรกรับ (CC)</label>
-                        <textarea rows="1" id="txt_reg_service_cc"><?=isset($cc) ? $cc : ''?></textarea>
+                        <textarea rows="1" id="txt_reg_service_cc" class="form-control"><?=isset($cc) ? $cc : ''?></textarea>
                     </div>
                 </div>
                 <br>
@@ -149,7 +145,7 @@
                     <div class="row">
                         <div class="col-lg-5">
                             <label for="sl_reg_service_insc">สิทธิการรักษา</label>
-                            <select id="sl_reg_service_insc">
+                            <select id="sl_reg_service_insc" class="form-control">
                                 <option value="">--</option>
                                 <?php
                                     foreach($inscls as $t) {
@@ -176,41 +172,43 @@
                         </div>
                         <div class="col-lg-3">
                             <label for="txt_reg_service_insc_code">เลขที่บัตร</label>
-                            <input type="text" id="txt_reg_service_insc_code" value="<?=isset($ins_code) ? $ins_code : ''?>">
+                            <input type="text" id="txt_reg_service_insc_code" class="form-control" value="<?=isset($ins_code) ? $ins_code : ''?>">
                         </div>
                         <div class="col-lg-2">
                             <label for="txt_reg_service_insc_start_date">วันออกบัตร</label>
-                            <input id="txt_reg_service_insc_start_date" type="text" data-type="date"
+                            <input id="txt_reg_service_insc_start_date" type="text" data-type="date" class="form-control"
                                    placeholder="dd/mm/yyyy" rel="tooltip" title="ระบุวันที่ พ.ศ" value="<?=isset($ins_start_date) ? $ins_start_date : ''?>">
                         </div>
                         <div class="col-lg-2">
                             <label for="txt_reg_service_insc_expire_date">วันหมดอายุ</label>
-                            <input id="txt_reg_service_insc_expire_date" type="text" data-type="date"
+                            <input id="txt_reg_service_insc_expire_date" type="text" data-type="date" class="form-control"
                                    placeholder="dd/mm/yyyy" rel="tooltip" title="ระบุวันที่ พ.ศ" value="<?=isset($ins_expire_date) ? $ins_expire_date : ''?>">
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-2">
-                            <label for="txt_reg_service_insc_hosp_main_code">รหัส</label>
-                            <input type="text" disabled="disabled" id="txt_reg_service_insc_hosp_main_code" placeholder="-*-"
-                                   value="<?=isset($ins_hosp_main_code) ? $ins_hosp_main_code : ''?>">
-                        </div>
+<!--                        <div class="col-lg-2">-->
+<!--                            <label for="txt_reg_service_insc_hosp_main_code">รหัส</label>-->
+<!--                            <input type="text" disabled="disabled" id="txt_reg_service_insc_hosp_main_code" placeholder="-*-"-->
+<!--                                   class="form-control" value="--><?//=isset($ins_hosp_main_code) ? $ins_hosp_main_code : ''?><!--">-->
+<!--                        </div>-->
                         <div class="col-lg-4">
                             <label for="txt_reg_service_insc_hosp_main_name">สถานบริการหลัก</label>
-                            <input type="text" id="txt_reg_service_insc_hosp_main_name" placeholder="พิมพ์ชื่อหรือรหัสสถานบริการเพื่อค้นหา"
-                                   title="พิมพ์ชื่อหรือรหัสสถานบริการเพื่อค้นหา" rel="tooltip"
-                                   value="<?=isset($ins_hosp_main_name) ? $ins_hosp_main_name : ''?>">
+<!--                            <select name="txt_reg_service_insc_hosp_main_name"-->
+<!--                                    class="form-control" id="txt_reg_service_insc_hosp_main_name" data-placeholder="เลือกสถานบริการ">-->
+<!--                                <option value=""></option>-->
+<!--                            </select>-->
+                            <input type="hidden" id="txt_reg_service_insc_hosp_main_name" value="<?=isset($ins_hosp_main_code) ? $ins_hosp_main_code : ''?>" style="width: 300px;" />
                         </div>
-                        <div class="col-lg-2">
-                            <label for="txt_reg_service_insc_hosp_sub_code">รหัส</label>
-                            <input type="text" disabled="disabled" id="txt_reg_service_insc_hosp_sub_code" placeholder="-*-"
-                                   value="<?=isset($ins_hosp_sub_code) ? $ins_hosp_sub_code : ''?>">
-                        </div>
+<!--                        <div class="col-lg-2">-->
+<!--                            <label for="txt_reg_service_insc_hosp_sub_code">รหัส</label>-->
+<!--                            <input type="text" disabled="disabled" id="txt_reg_service_insc_hosp_sub_code"-->
+<!--                                   placeholder="-*-" class="form-control"-->
+<!--                                   value="--><?//=isset($ins_hosp_sub_code) ? $ins_hosp_sub_code : ''?><!--">-->
+<!--                        </div>-->
                         <div class="col-lg-4">
                             <label for="txt_reg_service_insc_hosp_sub_name">สถานบริการรอง</label>
-                            <input type="text" id="txt_reg_service_insc_hosp_sub_name" placeholder="พิมพ์ชื่อหรือรหัสสถานบริการเพื่อค้นหา"
-                                   title="พิมพ์ชื่อหรือรหัสสถานบริการเพื่อค้นหา" rel="tooltip"
-                                   value="<?=isset($ins_hosp_sub_name) ? $ins_hosp_sub_name : ''?>">
+                            <input type="hidden" id="txt_reg_service_insc_hosp_sub_name" style="width: 300px;"
+                                   value="<?=isset($ins_hosp_sub_code) ? $ins_hosp_sub_code : ''?>">
                         </div>
                     </div>
 
@@ -221,3 +219,4 @@
         </div>
     </div>
 </div>
+

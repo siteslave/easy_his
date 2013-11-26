@@ -2,20 +2,18 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-
-    <meta http-equiv="cache-control" content="no-cache" />
-    <meta http-equiv="pragma" content="no-cache" />
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Health information system.">
+    <meta name="author" content="Mr.Satit Rianpit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
     <title>Health Information System</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link href="<?php echo base_url(); ?>assets/css/bootstrap.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/css/bootstrap.min.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/css/font-awesome.min.css" rel="stylesheet">
-    <link href="<?php echo base_url(); ?>assets/css/font-awesome-ie7.min.css" rel="stylesheet">
-    <link href="<?php echo base_url(); ?>assets/css/datepicker.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/css/freeow/freeow.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/css/select2.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/css/select2-bootstrap.css" rel="stylesheet">
 
     <script src="<?php echo base_url(); ?>assets/js/jquery.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/head.load.min.js"></script>
@@ -49,7 +47,6 @@
             '<?php echo base_url(); ?>assets/js/jquery.blockUI.js',
             '<?php echo base_url(); ?>assets/js/jquery.freeow.min.js',
             '<?php echo base_url(); ?>assets/js/jquery.maskedinput.min.js',
-            '<?php echo base_url(); ?>assets/js/typeahead.js',
             '<?php echo base_url(); ?>assets/js/jquery.cookie.js',
             '<?php echo base_url(); ?>assets/js/jquery.paging.min.js',
             '<?php echo base_url(); ?>assets/js/jquery.numeric.js',
@@ -57,6 +54,8 @@
             '<?php echo base_url(); ?>assets/js/highchart/highcharts.js',
             '<?php echo base_url(); ?>assets/js/highchart/highcharts-more.js',
             '<?php echo base_url(); ?>assets/js/holder.js',
+            '<?php echo base_url(); ?>assets/js/select2.min.js',
+            '<?php echo base_url(); ?>assets/js/select2_locale_th.js',
             '<?php echo base_url(); ?>assets/apps/js/apps.js'
         );
 
@@ -67,42 +66,40 @@
 
 <div id="freeow" class="freeow freeow-bottom-right"></div>
 
-    <div class="navbar navbar-fixed-top">
+    <div class="navbar navbar-default navbar-fixed-top" role="navigation">
       <div class="container">
-        <a class="navbar-toggle" data-toggle="collapse" data-target=".nav-collapse">
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </a>
-        <a class="navbar-brand" href="#">EHIS</a>
-        <div class="nav-collapse collapse">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-ext1-collapse">
+          <span class="fa fa-bars"></span>
+        </button>
+        <a class="navbar-brand" href="#"><span class="fa fa-windows"></span> eHIS</a>
+        <div class="collapse navbar-collapse navbar-ex1-collapse">
           <ul class="nav navbar-nav">
-            <li class=""><a href="<?=site_url()?>">หน้าหลัก</a></li>
+            <li><a href="<?=site_url()?>"><span class="fa fa-home"></span> หน้าหลัก</a></li>
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                <i class="icon-th-list"></i> การให้บริการ
+                <i class="fa fa-list fa-fw"></i> การให้บริการ
                 <b class="caret"></b>
               </a>
               <ul class="dropdown-menu">
                 <li>
                   <a href="<?php echo site_url('services'); ?>">
-                    <i class="icon-th-list"></i> ผู้มารับบริการ
+                    <i class="fa fa-th-list fa-fw"></i> ผู้มารับบริการ
                   </a>
                 </li>
                 <li>
                   <a href="<?php echo site_url('appoints'); ?>">
-                    <i class="icon-calendar"></i> ทะเบียนนัด
+                    <i class="fa fa-calendar fa-fw"></i> ทะเบียนนัด
                   </a>
                 </li>
                 <li>
                   <a href="<?php echo site_url('ncdscreen'); ?>">
-                    <i class="icon-book"></i> คัดกรองเบาหวาน/ความดัน 15 ปีขึ้นไป
+                    <i class="fa fa-book fa-fw"></i> คัดกรองเบาหวาน/ความดัน 15 ปีขึ้นไป
                   </a>
                 </li>
                 <li class="divider"></li>
                 <li>
                   <a href="<?php echo site_url('surveil'); ?>">
-                    <i class="icon-book"></i> บันทึกข้อมูลระบาดวิทยา (R506)
+                    <i class="fa fa-book"></i> บันทึกข้อมูลระบาดวิทยา (R506)
                   </a>
                 </li>
               </ul>
@@ -110,51 +107,51 @@
 
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                <i class="icon-th-list"></i> ทะเบียนต่างๆ
+                <i class="fa fa-th-list fa-fw"></i> ทะเบียนต่างๆ
                 <b class="caret"></b>
               </a>
               <ul class="dropdown-menu">
                   <li>
                       <a href="<?php echo site_url('epis'); ?>">
-                          <i class="icon-book"></i> ทะเบียนส่งเสริมป้องกันโรค
+                          <i class="fa fa-book fa-fw"></i> ทะเบียนส่งเสริมป้องกันโรค
                       </a>
                   </li>
                   <li>
                       <a href="<?php echo site_url('pregnancies'); ?>">
-                          <i class="icon-book"></i> ทะเบียนฝากครรภ์/คลอด/การดูแลหลังคลอด
+                          <i class="fa-book fa-fw"></i> ทะเบียนฝากครรภ์/คลอด/การดูแลหลังคลอด
                       </a>
                   </li>
                   <li>
                       <a href="<?php echo site_url('babies'); ?>">
-                          <i class="icon-medkit"></i> ทะเบียนเด็กแรกเกิด/ดูแลหลังคลอด
+                          <i class="fa fa-medkit fa-fw"></i> ทะเบียนเด็กแรกเกิด/ดูแลหลังคลอด
                       </a>
                   </li>
                   <li class="divider"></li>
                   <li>
                       <a href="<?php echo site_url('diabetes'); ?>">
-                          <i class="icon-tags"></i> ทะเบียนผู้ป่วยเบาหวาน
+                          <i class="fa-tags fa-fw"></i> ทะเบียนผู้ป่วยเบาหวาน
                       </a>
                   </li>
                   <li>
                       <a href="<?php echo site_url('hypertension'); ?>">
-                          <i class="icon-tags"></i> ทะเบียนผู้ป่วยความดัน
+                          <i class="fa-tags fa-fw"></i> ทะเบียนผู้ป่วยความดัน
                       </a>
                   </li>
 
                   <li class="divider"></li>
                   <li>
                       <a href="<?php echo site_url('death'); ?>">
-                          <i class="icon-group"></i> ทะเบียนผู้เสียชีวิต
+                          <i class="fa-group fa-fw"></i> ทะเบียนผู้เสียชีวิต
                       </a>
                   </li>
                   <li>
                       <a href="<?php echo site_url('disabilities'); ?>">
-                          <i class="icon-tags"></i> ทะเบียนผู้พิการ
+                          <i class="fa-tags fa-fw"></i> ทะเบียนผู้พิการ
                       </a>
                   </li>
                   <li>
                       <a href="<?php echo site_url('women'); ?>">
-                          <i class="icon-tags"></i> ทะเบียนหญิงวัยเจริญพันธุ์
+                          <i class="fa-tags fa-fw"></i> ทะเบียนหญิงวัยเจริญพันธุ์
                       </a>
                   </li>
               </ul>
@@ -162,14 +159,14 @@
 
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                    <i class="icon-briefcase"></i>
+                    <i class="fa fa-briefcase fa-fw"></i>
                     ข้อมูลพื้นฐาน
                     <b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu">
                     <li>
                         <a href="<?php echo site_url('person'); ?>">
-                            <i class="icon-home"></i>
+                            <i class="fa fa-home fa-fw"></i>
                             ประชากร/หมู่บ้าน/หลังคาเรือน
                         </a>
                     </li>
@@ -177,39 +174,39 @@
             </li>
             <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                    <i class="icon-briefcase"></i>
+                    <i class="fa fa-briefcase fa-fw"></i>
                     กำหนดค่า
                     <b class="caret"></b>
                 </a>
                 <ul class="dropdown-menu">
                     <li>
                         <a href="<?php echo site_url('settings/providers'); ?>">
-                            <i class="icon-user"></i>
+                            <i class="fa fa-user fa-fw"></i>
                             ข้อมูลผู้ให้บริการ
                         </a>
                     </li>
                     <li>
                         <a href="<?php echo site_url('drugs'); ?>">
-                            <i class="icon-shopping-cart"></i>
+                            <i class="fa fa-shopping-cart fa-fw"></i>
                             ข้อมูลเวชภัณฑ์
                         </a>
                     </li>
                     <li>
                         <a href="<?php echo site_url('incomes'); ?>">
-                            <i class="icon-shopping-cart"></i>
+                            <i class="fa fa-shopping-cart fa-fw"></i>
                             ข้อมูลค่าใช้จ่าย
                         </a>
                     </li>
                     <li class="divider"></li>
                     <li>
                         <a href="<?php echo site_url('settings/clinics'); ?>">
-                            <i class="icon-th-list"></i>
+                            <i class="fa fa-th-list fa-fw"></i>
                             ข้อมูลแผนกให้บริการ
                         </a>
                     </li>
                     <li>
                         <a href="<?php echo site_url('admin'); ?>">
-                            <i class="icon-group"></i>
+                            <i class="fa fa-group fa-fw"></i>
                             ข้อมูลผู้ใช้งาน
                         </a>
                     </li>
@@ -217,7 +214,7 @@
             </li>
             <li class="disabled">
                 <a href="javascript:void(0)">
-                    <i class="icon-print"></i>
+                    <i class="fa fa-print fa-fw"></i>
                     รายงาน
                 </a>
             </li>
@@ -232,19 +229,19 @@
                                                    <b class="caret"></b>
                                                                            </a>
                     <ul class="dropdown-menu">
-                    <li class="nav-header">USER PROFILES</li>
+                    <li class="dropdown-header">USER PROFILES</li>
                     <li class="disabled">
-                        <a href="#"><i class="icon-key"></i> เปลี่ยนรหัสผ่าน (Change password)</a>
+                        <a href="#"><i class="fa fa-key fa-fw"></i> เปลี่ยนรหัสผ่าน (Change password)</a>
                     </li>
                     <li class="disabled">
-                        <a href="#"> <i class="icon-info-sign"></i> แก้ไขข้อมูลส่วนตัว (Edit profiles)</a>
+                        <a href="#"> <i class="fa fa-info-sign fa-fw"></i> แก้ไขข้อมูลส่วนตัว (Edit profiles)</a>
                     </li>
                     <li class="disabled">
-                        <a href="#" id="btn_idx_set_provider_clinic-x"> <i class="icon-user"></i> กำหนดแพทย์/คลินิก (Provider/Clinic)</a>
+                        <a href="#" id="btn_idx_set_provider_clinic-x"> <i class="fa fa-user fa-fw"></i> กำหนดแพทย์/คลินิก (Provider/Clinic)</a>
                     </li>
                     <li class="divider"></li>
                     <li>
-                        <a href="<?php echo site_url('users/logout'); ?>"><i class="icon-signout"></i> ออกจากระบบ (Logout)</a>
+                        <a href="<?php echo site_url('users/logout'); ?>"><i class="fa fa-sign-out fa-fw"></i> ออกจากระบบ (Logout)</a>
                     </li>
                 </ul>
                 </li>

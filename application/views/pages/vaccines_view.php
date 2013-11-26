@@ -10,26 +10,24 @@
                 <input type="hidden" id="txt_vaccs_id" value="<?=isset($id) ? $id : ''?>" />
                 <input type="hidden" id="txt_vaccs_hn" value="<?=isset($hn) ? $hn : ''?>" />
                 <input type="hidden" id="txt_vaccs_vn" value="<?=isset($vn) ? $vn : ''?>" />
+                <input type="hidden" id="txt_vaccs_hospcode" value="<?=isset($hospcode) ? $hospcode : ''?>"/>
+                <input type="hidden" id="txt_vaccs_hospname" value="<?=isset($hospname) ? $hospname : ''?>"/>
                 <div class="row">
-                    <div class="col-lg-2">
+                    <div class="col-sm-2">
                         <label for="">วันที่รับบริการ</label>
-                        <input type="text" id="txt_vaccs_date" data-type="date" placeholder="dd/mm/yyyy" title="ระบุวันที่รับบริการวัคซีน" rel="tooltip"
+                        <input type="text" id="txt_vaccs_date" data-type="date" placeholder="dd/mm/yyyy"
+                               class="form-control" title="ระบุวันที่รับบริการวัคซีน" rel="tooltip"
                             value="<?=isset($date_serv) ? $date_serv : ''?>" <?=isset($date_serv) ? 'disabled="disabled"' : ''?> />
                     </div>
-                    <div class="col-lg-2">
-                        <label for="">รหัส</label>
-                        <input type="text" id="txt_vaccs_hosp_code" value="<?=isset($hospcode) ? $hospcode : ''?>" disabled="disabled" placeholder="-*-" />
-                    </div>
-                    <div class="col-lg-8">
+                    <div class="col-sm-7">
                         <label for="">สถานพยาบาล</label>
-                        <input type="text" id="txt_vaccs_hosp_name" value="<?=isset($hospname) ? $hospname : ''?>" <?=isset($hospname) ? 'disabled="disabled"' : ''?>
-                               placeholder="พิมพ์ชื่อหรือรหัสสถาพยาบาล..." title="พิมพ์ชื่อหรือรหัสสถานพยาบาลเพื่อค้นหา" rel="tooltip"/>
+                        <input type="hidden" id="txt_vaccs_hosp_name" class="form-control" style="width: 450px;"/>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-6">
+                    <div class="col-sm-6">
                         <label for="sl_vaccs_vaccine_id">วัคซีน</label>
-                        <select id="sl_vaccs_vaccine_id" <?=isset($id) ? 'disabled="disabled"' : ''?>>
+                        <select id="sl_vaccs_vaccine_id" <?=isset($id) ? 'disabled="disabled"' : ''?> class="form-control">
                             <option value="">-*-</option>
                             <?php
                             foreach($vaccines as $r)
@@ -54,20 +52,20 @@
                             ?>
                         </select>
                     </div>
-                    <div class="col-lg-2">
+                    <div class="col-sm-2">
                         <label for="">Lot.</label>
-                        <input type="text" id="txt_vaccs_lot" placeholder="Lot number." value="<?=isset($lot) ? $lot : ''?>" />
+                        <input type="text" id="txt_vaccs_lot" placeholder="Lot number." class="form-control" value="<?=isset($lot) ? $lot : ''?>" />
                     </div>
-                    <div class="col-lg-2">
+                    <div class="col-sm-2">
                         <label for="">หมดอายุ</label>
-                        <input type="text" id="txt_vaccs_expire_date" title="ระบุวันที่หมดอายุ" value="<?=isset($expire) ? $expire : ''?>"
+                        <input type="text" id="txt_vaccs_expire_date" title="ระบุวันที่หมดอายุ" class="form-control" value="<?=isset($expire) ? $expire : ''?>"
                                data-type="date" placeholder="dd/mm/yyyy" />
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-4">
+                    <div class="col-sm-4">
                         <label for="">ผู้ให้บริการ</label>
-                        <select id="sl_vaccs_providers">
+                        <select id="sl_vaccs_providers" class="form-control">
                             <option value="">-*-</option>
                             <?php
                             foreach($providers as $r)
@@ -94,7 +92,7 @@
                 </div>
                 <br>
                 <a href="#" class="btn btn-success" id="btn_vaccs_save">
-                    <i class="icon-save"></i> บันทึกรายการวัคซีน
+                    <i class="fa fa-save"></i> บันทึกรายการวัคซีน
                 </a>
             </form>
 

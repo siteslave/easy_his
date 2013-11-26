@@ -59,9 +59,16 @@ head.ready(function() {
     //save service
     $('#btn_save_service_register').click(function(){
 
+        var hmain = $('#txt_reg_service_insc_hosp_main_name').select2('data');
+        var hsub = $('#txt_reg_service_insc_hosp_sub_name').select2('data');
+        //delete data.element;
+        //var code = data.code;
+
+
         $(this).prop('disabled', true);
 
         var items = {};
+
         items.vn = $('#txt_service_vn').val();
         items.hn = $('#txt_service_hn').val();
         items.appoint_id = $('#txt_service_appoint_id').val();
@@ -78,8 +85,8 @@ head.ready(function() {
         items.insc_code = $('#txt_reg_service_insc_code').val();
         items.insc_start_date = $('#txt_reg_service_insc_start_date').val();
         items.insc_expire_date = $('#txt_reg_service_insc_expire_date').val();
-        items.insc_hosp_main = $('#txt_reg_service_insc_hosp_main_code').val();
-        items.insc_hosp_sub = $('#txt_reg_service_insc_hosp_sub_code').val();
+        items.insc_hosp_main = hmain.code;
+        items.insc_hosp_sub = hsub.code;
         items.cc = $('#txt_reg_service_cc').val();
 
 
@@ -123,86 +130,151 @@ head.ready(function() {
 
     });
 
-    $('#txt_reg_service_insc_hosp_main_name').typeahead({
+    $('#txt_reg_service_insc_hosp_main_name').select2({
+        placeholder: 'ชื่อ หรือ รหัสสถานบริการ',
+        minimumInputLength: 2,
+        allowClear: true,
         ajax: {
-            url: site_url + '/basic/search_hospital_ajax',
-            timeout: 500,
-            displayField: 'fullname',
-            triggerLength: 3,
-            preDispatch: function(query){
+            url: site_url + "/basic/search_hospital_ajax",
+            dataType: 'json',
+            type: 'POST',
+            quietMillis: 100,
+            data: function (term) {
                 return {
-                    query: query,
+                    query: term,
                     csrf_token: csrf_token
-                }
+                };
             },
-
-            preProcess: function(data){
-                if(data.success){
-                    return data.rows;
-                }else{
-                    return false;
-                }
+            results: function (data)
+            {
+                return { results: data.rows, more: (data.rows && data.rows.length == 10 ? true : false) };
             }
+            //dropdownCssClass: "bigdrop"
         },
-        updater: function(data){
-            var d = data.split('#');
-            var name = d[0],
-                code = d[1];
 
-            $('#txt_reg_service_insc_hosp_main_code').val(code);
-            $('#txt_reg_service_insc_hosp_main_name').val(name);
+        id: function(data) { return { id: data.code } },
 
-            return name;
+        formatResult: function(data) {
+            return '[' + data.code + '] ' + data.name;
+        },
+        formatSelection: function(data) {
+            return '[' + data.code + '] ' + data.name;
+        },
+        initSelection: function(el, cb) {
+            //var eltxt = $(el).val();
+            //cb({'term': eltxt });
         }
     });
 
-    $('#txt_service_profile_hn').bind('keyup', function(e) {
-        $('#txt_hn').val('');
+    $('#sl_reg_service_insc').select2({
+        placeholder: 'สิทธิการรักษา',
+        minimumInputLength: 2,
+        allowClear: true
     });
+
+    //$('#txt_service_profile_hn').bind('keyup', function(e) {
+    //    $('#txt_hn').val('');
+    //});
     $('#txt_reg_service_insc_hosp_sub_name').bind('keyup', function(e) {
         $('#txt_reg_service_insc_hosp_sub_code').val('');
     });
     $('#txt_reg_service_insc_hosp_main_name').bind('keyup', function(e) {
         $('#txt_reg_service_insc_hosp_main_code').val('');
     });
+
     $('#txt_service_profile_hn').bind('keyup', function(e) {
         $('#txt_service_profile').val('');
         $('#txt_service_hn').val('');
     });
 
-    $('#txt_reg_service_insc_hosp_sub_name').typeahead({
+    $('#txt_reg_service_insc_hosp_sub_name').select2({
+        placeholder: 'ชื่อ หรือ รหัสสถานบริการ',
+        minimumInputLength: 2,
+        allowClear: true,
         ajax: {
-            url: site_url + '/basic/search_hospital_ajax',
-            timeout: 500,
-            displayField: 'fullname',
-            triggerLength: 3,
-            preDispatch: function(query){
+            url: site_url + "/basic/search_hospital_ajax",
+            dataType: 'json',
+            type: 'POST',
+            quietMillis: 100,
+            data: function (term) {
                 return {
-                    query: query,
+                    query: term,
                     csrf_token: csrf_token
-                }
+                };
             },
-
-            preProcess: function(data){
-                if(data.success){
-                    return data.rows;
-                }else{
-                    return false;
-                }
+            results: function (data)
+            {
+                return { results: data.rows, more: (data.rows && data.rows.length == 10 ? true : false) };
             }
+            //dropdownCssClass: "bigdrop"
         },
-        updater: function(data){
-            var d = data.split('#');
-            var name = d[0],
-                code = d[1];
 
-            $('#txt_reg_service_insc_hosp_sub_code').val(code);
-            $('#txt_reg_service_insc_hosp_sub_name').val(name);
+        id: function(data) { return { id: data.code } },
 
-            return name;
+        formatResult: function(data) {
+            return '[' + data.code + '] ' + data.name;
+        },
+        formatSelection: function(data) {
+            return '[' + data.code + '] ' + data.name;
+        },
+        initSelection: function(el, cb) {
+            //var eltxt = $(el).val();
+            //cb({'term': eltxt });
         }
     });
 
+
+    $('#txt_service_profile_hn').on('click', function() {
+        var data = $(this).select2('data');
+
+        var info = [
+            data.text,
+            '[' + data.cid + '] ',
+            'วันเกิด: ' + data.birthdate,
+            'อายุ: ' + data.age + ' ปี',
+            'ที่อยู่: ' + data.address
+        ].join(" ");
+
+        $('#txt_service_hn').val(data.hn);
+        $('#txt_service_profile').val(info);
+        //console.log(JSON.stringify(data));
+    });
+
+    $('#txt_service_profile_hn').select2({
+        placeholder: 'HN, เลขบัตรประชาชน, ชื่อ-สกุล',
+        minimumInputLength: 2,
+        allowClear: true,
+        ajax: {
+            url: site_url + "/person/search_person_all_ajax",
+            dataType: 'json',
+            type: 'POST',
+            quietMillis: 100,
+            data: function (term) {
+                return {
+                    query: term,
+                    csrf_token: csrf_token
+                };
+            },
+            results: function (data)
+            {
+                return { results: data.rows, more: (data.rows && data.rows.length == 10 ? true : false) };
+            }
+            //dropdownCssClass: "bigdrop"
+        },
+
+        id: function(data) { return { id: data.hn } },
+
+        formatResult: function(data) {
+            return '[' + data.hn + '] ' + data.text + ' [' + data.cid + ']';
+        },
+        formatSelection: function(data) {
+            return data.hn;
+        },
+        initSelection: function(el, cb) {
+            //var eltxt = $(el).val();
+            //cb({'term': eltxt });
+        }
+    });
 
     app.set_runtime();
 });

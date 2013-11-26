@@ -1,6 +1,6 @@
-head.ready(function(){
+var allergy = {};
 
-    var allergy = {};
+head.ready(function(){
 
     allergy.person_id = $('#person_id').val();
 
@@ -17,6 +17,10 @@ head.ready(function(){
             $('#spn_allergy_vn').html(allergy.vn);
             app.load_page($('#modal_screening_allergy'), '/pages/allergies/' + hn + '/' + id, 'assets/apps/js/pages/allergies.js');
             $('#modal_screening_allergy').modal({keyboard: false});
+        },
+
+        hide_allergy: function() {
+            $('#modal_screening_allergy').modal('hide');
         }
     };
 
@@ -47,10 +51,10 @@ head.ready(function(){
         }
     };
 
-    allergy.get_list = function(hn){
+    allergy.get_list = function(){
         $('#tbl_screening_allergy_list > tbody').empty();
 
-        allergy.ajax.get_list(hn, function(err, data){
+        allergy.ajax.get_list(allergy.hn, function(err, data){
             if(err){
                 app.alert(err);
                 $('#tbl_screening_allergy_list > tbody').append('<tr><td colspan="7">ไม่พบรายการ</td></tr>');
@@ -69,9 +73,9 @@ head.ready(function(){
                                 '<td>' +
                                 '<div class="btn-group"> ' +
                                 '<button class="btn btn-default" type="button" data-name="btn_screening_allergy_edit" ' +
-                                'data-id="' + v.drug_id + '" title="แก้ไขรายการ"><i class="icon-edit"></i></button>' +
+                                'data-id="' + v.drug_id + '" title="แก้ไขรายการ"><i class="fa fa-edit"></i></button>' +
                                 '<button class="btn btn-danger" type="button" data-name="btn_screening_allergy_remove" ' +
-                                'data-id="' + v.drug_id + '" title="ลบรายการ"><i class="icon-trash"></i></button>' +
+                                'data-id="' + v.drug_id + '" title="ลบรายการ"><i class="fa fa-trash-o"></i></button>' +
                                 '</div></td>' +
                                 '</tr>'
                         );
@@ -89,11 +93,11 @@ head.ready(function(){
 
 
     $('a[href="#tab_screening_allergy"]').click(function(){
-        allergy.get_list(allergy.hn);
+        allergy.get_list();
     });
 
     $('#btn_screening_refresh_drug_allergy').on('click', function(e){
-        allergy.get_list(allergy.hn);
+        allergy.get_list();
         e.preventDefault();
     });
 
@@ -108,7 +112,7 @@ head.ready(function(){
                         app.alert(err);
                     }else{
                         app.alert('ลบรายการเสร็จเรียบร้อยแล้ว');
-                        allergy.get_list(allergy.hn);
+                        allergy.get_list();
                     }
                 });
             }

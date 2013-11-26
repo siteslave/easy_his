@@ -334,11 +334,12 @@ app.set_runtime = function()
     $('select[disabled]').css('background-color', 'white');
     $('input[disabled]').css('background-color', 'white');
     $('textarea[disabled]').css('background-color', 'white');
-
+    $('select').select2();
     $('[rel="tooltip"]').tooltip();
 };
 
 head.ready(function(){
+
     app.set_runtime();
 
     app.get_providers = function(cb){

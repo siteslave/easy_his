@@ -266,73 +266,73 @@ head.ready(function(){
         $('#txt_move_from_hospital_code').val('');
     });
 
-    $('#txt_move_from_hospital_name').typeahead({
-        ajax: {
-            url: site_url + '/basic/search_hospital_ajax',
-            timeout: 500,
-            displayField: 'fullname',
-            triggerLength: 3,
-            preDispatch: function(query){
-                return {
-                    query: query,
-                    csrf_token: csrf_token
-                }
-            },
-
-            preProcess: function(data){
-                if(data.success){
-                    return data.rows;
-                }else{
-                    return false;
-                }
-            }
-        },
-        updater: function(data){
-            var d = data.split('#');
-            var name = d[0],
-                code = d[1];
-
-            $('#txt_move_from_hospital_code').val(code);
-
-            return name;
-        }
-    });
+//    $('#txt_move_from_hospital_name').typeahead({
+//        ajax: {
+//            url: site_url + '/basic/search_hospital_ajax',
+//            timeout: 500,
+//            displayField: 'fullname',
+//            triggerLength: 3,
+//            preDispatch: function(query){
+//                return {
+//                    query: query,
+//                    csrf_token: csrf_token
+//                }
+//            },
+//
+//            preProcess: function(data){
+//                if(data.success){
+//                    return data.rows;
+//                }else{
+//                    return false;
+//                }
+//            }
+//        },
+//        updater: function(data){
+//            var d = data.split('#');
+//            var name = d[0],
+//                code = d[1];
+//
+//            $('#txt_move_from_hospital_code').val(code);
+//
+//            return name;
+//        }
+//    });
 
     $('#txt_move_to_hospital_name').on('keyup', function() {
         $('#txt_move_to_hospital_code').val('');
     });
 
-    $('#txt_move_to_hospital_name').typeahead({
-        ajax: {
-            url: site_url + '/basic/search_hospital_ajax',
-            timeout: 500,
-            displayField: 'fullname',
-            triggerLength: 3,
-            preDispatch: function(query){
-                return {
-                    query: query,
-                    csrf_token: csrf_token
-                }
-            },
-
-            preProcess: function(data){
-                if(data.success){
-                    return data.rows;
-                }else{
-                    return false;
-                }
-            }
-        },
-        updater: function(data){
-            var d = data.split('#');
-            var name = d[0],
-                code = d[1];
-
-            $('#txt_move_to_hospital_code').val(code);
-
-            return name;
-        }
-    });
+//    $('#txt_move_to_hospital_name').typeahead({
+//        ajax: {
+//            url: site_url + '/basic/search_hospital_ajax',
+//            timeout: 500,
+//            displayField: 'fullname',
+//            triggerLength: 3,
+//            preDispatch: function(query){
+//                return {
+//                    query: query,
+//                    csrf_token: csrf_token
+//                }
+//            },
+//
+//            preProcess: function(data){
+//                if(data.success){
+//                    return data.rows;
+//                }else{
+//                    return false;
+//                }
+//            }
+//        },
+//        updater: function(data){
+//            var d = data.split('#');
+//            var name = d[0],
+//                code = d[1];
+//
+//            $('#txt_move_to_hospital_code').val(code);
+//
+//            return name;
+//        }
+//    });
 
     provider.get_provider_list();
 

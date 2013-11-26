@@ -1,5 +1,8 @@
+
+var procedures = {};
+
 head.ready(function(){
-    var procedures = {};
+
     procedures.modal = {
         show_new: function(vn){
             $('#spn_procedure_vn').html(vn);
@@ -87,10 +90,10 @@ head.ready(function(){
                                 '<div class="btn-group">' +
                                 '<a href="javascript:void(0);" class="btn btn-default" data-name="btn_proced_edit" data-code="'+ v.code +'"' +
                                 ' title="แก้ไข">' +
-                                '<i class="icon-edit"></i>' +
+                                '<i class="fa fa-edit"></i>' +
                                 '</a>' +
                                 '<a href="javascript:void(0);" class="btn btn-danger" data-name="btn_proced_remove" data-code="'+ v.code +'" title="ลบรายการ">' +
-                                '<i class="icon-trash"></i>' +
+                                '<i class="fa fa-trash-o"></i>' +
                                 '</a>' +
                                 '</div></td>' +
                                 '</tr>'
