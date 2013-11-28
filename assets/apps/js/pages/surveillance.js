@@ -100,6 +100,8 @@ head.ready(function() {
                 else
                 {
                     app.alert('บันทึกรายการเสร็จเรียบร้อยแล้ว');
+                    parent.surveil.modal.hide_entry();
+                    parent.surveil.get_list();
                 }
             });
         }

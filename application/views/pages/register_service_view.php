@@ -2,11 +2,17 @@
     <form action="#" class="navbar-form">
         <input type="hidden" id="txt_service_hn" value="<?=isset($hn) ? $hn : ''?>" />
         <input type="hidden" id="txt_service_vn" value="<?=isset($vn) ? $vn : ''?>" />
+        <input type="hidden" id="txt_reg_service_patient_fullname" value="<?=isset($fullname) ? $fullname : ''?>" />
         <input type="hidden" id="txt_service_appoint_id" value="<?=!empty($appoint_id) ? $appoint_id : ''?>" />
 
-        <input type="hidden" style="width: 180px;" id="txt_service_profile_hn" class="form-control">
-        <input type="text" style="width: 630px;" disabled="disabled" placeholder="-*-" id="txt_service_profile"
-               class="form-control" value="<?=isset($patient) ? $patient : ''?>" />
+        <input type="hidden" id="txt_reg_service_insc_hosp_main_code1" value="<?=isset($ins_hosp_main_code) ? $ins_hosp_main_code : ''?>" />
+        <input type="hidden" id="txt_reg_service_insc_hosp_main_name1" value="<?=isset($ins_hosp_main_name) ? $ins_hosp_main_name : ''?>" />
+        <input type="hidden" id="txt_reg_service_insc_hosp_sub_code1" value="<?=isset($ins_hosp_sub_code) ? $ins_hosp_sub_code : ''?>" />
+        <input type="hidden" id="txt_reg_service_insc_hosp_sub_name1" value="<?=isset($ins_hosp_sub_name) ? $ins_hosp_sub_name : ''?>" />
+
+        <input type="hidden" style="width: 300px;" id="txt_service_profile_hn" class="form-control">
+        <input type="text" style="width: 530px;" disabled="disabled" placeholder="-*-" id="txt_service_profile"
+               class="form-control" value="<?=isset($patient_detail) ? $patient_detail : ''?>" />
     </form>
 </div>
 <div class="tab-pane active" id="tab_user_profile">
@@ -197,7 +203,7 @@
 <!--                                    class="form-control" id="txt_reg_service_insc_hosp_main_name" data-placeholder="เลือกสถานบริการ">-->
 <!--                                <option value=""></option>-->
 <!--                            </select>-->
-                            <input type="hidden" id="txt_reg_service_insc_hosp_main_name" value="<?=isset($ins_hosp_main_code) ? $ins_hosp_main_code : ''?>" style="width: 300px;" />
+                            <input type="hidden" id="txt_reg_service_insc_hosp_main_name" style="width: 300px;" />
                         </div>
 <!--                        <div class="col-lg-2">-->
 <!--                            <label for="txt_reg_service_insc_hosp_sub_code">รหัส</label>-->
@@ -207,8 +213,7 @@
 <!--                        </div>-->
                         <div class="col-lg-4">
                             <label for="txt_reg_service_insc_hosp_sub_name">สถานบริการรอง</label>
-                            <input type="hidden" id="txt_reg_service_insc_hosp_sub_name" style="width: 300px;"
-                                   value="<?=isset($ins_hosp_sub_code) ? $ins_hosp_sub_code : ''?>">
+                            <input type="hidden" id="txt_reg_service_insc_hosp_sub_name" style="width: 300px;">
                         </div>
                     </div>
 

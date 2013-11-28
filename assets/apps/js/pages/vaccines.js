@@ -103,7 +103,7 @@ head.ready(function(){
         }
         else
         {
-            vaccs.ajax.save(items, function(err, data){
+            vaccs.ajax.save(items, function(err){
                 if(err)
                 {
                     app.alert(err);
@@ -111,8 +111,8 @@ head.ready(function(){
                 else
                 {
                     app.alert('บันทึกข้อมูลวัคซีนเสร็จเรียบร้อยแล้ว');
-                    parent.epis.get_list();
-                    parent.epis.modal.hide_new();
+                    //parent.epis.get_list();
+                    //parent.epis.modal.hide_new();
                 }
             });
         }

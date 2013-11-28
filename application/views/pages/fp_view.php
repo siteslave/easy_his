@@ -14,23 +14,23 @@
                 <div class="row">
                     <div class="col-lg-2">
                         <label for="txt_fp_date">วันที่รับบริการ</label>
-                        <input type="text" data-type="date" id="txt_fp_date" placeholder="dd/mm/yyyy" title="ระบุวันที่รับบริการวัคซีน" rel="tooltip"
+                        <input type="text" class="form-control" data-type="date" id="txt_fp_date" placeholder="dd/mm/yyyy" title="ระบุวันที่รับบริการวัคซีน" rel="tooltip"
                                value="<?=isset($date_serv) ? $date_serv : ''?>" <?=isset($date_serv) ? 'disabled="disabled"' : ''?> />
                     </div>
                     <div class="col-lg-2">
                         <label for="txt_fp_hosp_code">รหัส</label>
-                        <input type="text" id="txt_fp_hosp_code" value="<?=isset($hospcode) ? $hospcode : ''?>" disabled="disabled" placeholder="-*-" />
+                        <input type="text" class="form-control" id="txt_fp_hosp_code" value="<?=isset($hospcode) ? $hospcode : ''?>" disabled="disabled" placeholder="-*-" />
                     </div>
                     <div class="col-lg-8">
                         <label for="txt_fp_hosp_name">สถานพยาบาล</label>
-                        <input type="text" id="txt_fp_hosp_name" value="<?=isset($hospname) ? $hospname : ''?>" <?=isset($hospname) ? 'disabled="disabled"' : ''?>
+                        <input type="text" class="form-control" id="txt_fp_hosp_name" value="<?=isset($hospname) ? $hospname : ''?>" <?=isset($hospname) ? 'disabled="disabled"' : ''?>
                                placeholder="พิมพ์ชื่อหรือรหัสสถาพยาบาล..." title="พิมพ์ชื่อหรือรหัสสถานพยาบาลเพื่อค้นหา" rel="tooltip"/>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-4">
                         <label for="sl_fp_type">วิธีการคุมกำเนิด</label>
-                        <select id="sl_fp_type">
+                        <select id="sl_fp_type" class="form-control">
                             <option value="">-----</option>
                             <?php
                             foreach($fp_types as $r) echo '<option value="'.$r->code.'">'.$r->name.'</option>';
@@ -39,7 +39,7 @@
                     </div>
                     <div class="col-lg-4">
                         <label for="sl_fp_providers">ผู้ให้บริการ</label>
-                        <select id="sl_fp_providers">
+                        <select id="sl_fp_providers" class="form-control">
                             <option value="">-*-</option>
                             <?php
                             foreach($providers as $r)
@@ -65,7 +65,7 @@
                     </div>
                     <div class="col-lg-2">
                         <label for=""><span style="color: white;">ดำเนินการ</span></label>
-                        <a href="#" class="btn btn-success" id="btn_save_fp"><i class="icon-save"></i> บันทึกรายการ</a>
+                        <a href="#" class="btn btn-success" id="btn_save_fp"><i class="fa fa-save"></i> บันทึกรายการ</a>
                     </div>
                 </div>
             </form>

@@ -1,6 +1,7 @@
+//namespace
+var surveil = {};
+
 head.ready(function(){
-    //namespace
-    var surveil = {};
 
     surveil.ajax = {
         get_list: function(visit_date, start, stop, cb){
@@ -208,10 +209,10 @@ head.ready(function(){
                         '<td><div class="btn-group">' +
                         '<a href="javascript:void(0);" data-name="btn_entry" class="btn btn-default" data-hn="'+ v.hn +'" data-vn="'+ v.vn +'" ' +
                         'data-diag="'+ v.diag_code +'">' +
-                        '<i class="icon-edit"></i></a>' +
+                        '<i class="fa fa-edit"></i></a>' +
                         '<a href="javascript:void(0);" data-name="btn_clear" class="btn btn-danger" data-vn="'+ v.vn +'" ' +
                         'data-hn="'+ v.hn +'" data-diag="'+ v.diag_code +'">' +
-                        '<i class="icon-trash"></i></a>' +
+                        '<i class="fa fa-trash-o"></i></a>' +
                         '</div></td>' +
                         '</tr>'
                 );

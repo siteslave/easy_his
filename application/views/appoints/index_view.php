@@ -3,13 +3,13 @@
     <li><a href="<?php echo site_url('services');?>">การให้บริการ</a></li>
     <li class="active">ทะเบียนนัด</li>
 </ul>
-<div class="navbar">
+<div class="navbar navbar-default">
     <form action="#" class="navbar-form form-inline">
         <input type="hidden" id="txt_status" value="0">
         <label for="txt_date">วันที่</label>
-        <input style="width: 150px;" id="txt_date" type="text" data-type="date" placeholder="dd/mm/yyyy" value="<?=get_current_date()?>">
+        <input style="width: 150px;" class="form-control" id="txt_date" type="text" data-type="date" placeholder="dd/mm/yyyy" value="<?=get_current_date()?>">
         <label for="txt_date">แผนก</label>
-        <select style="width: 250px;" id="sl_clinic">
+        <select style="width: 250px;" id="sl_clinic" class="form-control">
             <option value="">--- ทั้งหมด ---</option>
             <?php
             foreach ($clinics as $t){
@@ -18,9 +18,12 @@
             ?>
         </select>
         <div class="btn-group" data-toggle="buttons-radio">
-            <button type="button" data-name="btn_do_filter" title="ทั้งหมด" rel="tooltip" data-id="0" class="btn btn-success"><i class="icon-refresh"></i></button>
-            <button type="button" data-name="btn_do_filter" title="มาตามนัด" rel="tooltip" data-id="1" class="btn btn-default"><i class="icon-check"></i></button>
-            <button type="button" data-name="btn_do_filter" title="ไม่มาตามนัด" rel="tooltip" data-id="2" class="btn btn-success"><i class="icon-minus-sign"></i></button>
+            <button type="button" data-name="btn_do_filter" title="ทั้งหมด" rel="tooltip"
+                    data-id="0" class="btn btn-success"><i class="fa fa-refresh"></i></button>
+            <button type="button" data-name="btn_do_filter" title="มาตามนัด" rel="tooltip"
+                    data-id="1" class="btn btn-default"><i class="fa fa-check-circle"></i></button>
+            <button type="button" data-name="btn_do_filter" title="ไม่มาตามนัด" rel="tooltip"
+                    data-id="2" class="btn btn-success"><i class="fa fa-minus-circle"></i></button>
         </div>
 
         <div class="btn-group pull-right">
@@ -29,7 +32,7 @@
                 <i class="icon-plus-sign"></i> ลงทะเบียน
             </button>-->
             <button class="btn btn-primary" id="btn_show_print" title="พิมพ์" rel="tooltip">
-                <i class="icon-print"></i>
+                <i class="fa fa-print"></i>
             </button>
         </div>
     </form>
@@ -59,7 +62,7 @@
 <ul class="pagination pagination-centered" id="main_paging"></ul>
 
 <div class="modal fade" id="mdl_appoint">
-    <div class="modal-dialog" style="width: 960px; left: 35%">
+    <div class="modal-dialog" style="width: 960px;">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -74,7 +77,7 @@
 </div>
 
 <div class="modal fade" id="mdl_select_visit">
-    <div class="modal-dialog" style="width: 960px; left: 35%">
+    <div class="modal-dialog" style="width: 960px;">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -198,9 +201,8 @@
     </div>
 </div>
 
-
 <div class="modal fade" id="mdl_new_service">
-    <div class="modal-dialog" style="width: 960px; left: 35%">
+    <div class="modal-dialog" style="width: 960px;">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>

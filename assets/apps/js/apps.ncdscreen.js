@@ -337,37 +337,19 @@ head.ready(function(){
                         '<td>'+ app.clear_null(v.height) +'</td>' +
                         '<td>'+ app.clear_null(v.fbs) +'</td>' +
                         '<td><div class="btn-group">' +
-                        '<a href="javascript:void(0);" data-name="btn_screen" class="btn btn-success btn-small" data-hn="'+ v.hn +'" ' +
-                        'data-cid="'+ v.cid +'" data-fullname="'+ v.first_name + ' ' + v.last_name +'" ' +
+                        '<a href="javascript:void(0);" data-name="btn_screen" class="btn btn-success btn-small" ' +
+                        'data-hn="'+ v.hn + '" data-cid="'+ v.cid +'" data-fullname="'+ v.first_name + ' ' + v.last_name +'" ' +
                         'data-age="'+ v.age +'" data-birthdate="'+ app.mongo_to_thai_date(v.birthdate) +'" data-year="'+ year +'">' +
-                        '<i class="icon-edit"></i></a>' +
-                        '<a href="javascript:void(0);" data-name="btn_clear" class="btn btn-danger btn-small" data-hn="'+ v.hn +'" data-year="'+ year +'" title="ยกเลิกข้อมูลการคัดกรอง">' +
-                        '<i class="icon-trash"></i></a>' +
+                        '<i class="fa fa-edit"></i></a>' +
+                        '<a href="javascript:void(0);" data-name="btn_clear" class="btn btn-danger btn-small" ' +
+                        ' data-hn="'+ v.hn +'" data-year="'+ year +'" title="ยกเลิกข้อมูลการคัดกรอง">' +
+                        '<i class="fa fa-trash-o"></i></a>' +
                         '</div></td>' +
                         '</tr>'
                 );
             });
         }
     };
-
-
-    var dm_history = '0',
-        ht_history = '0',
-        lv_history = '0',
-        ds_history = '0',
-        hb_history = '0',
-        lb_history = '0',
-        lg_history = '0',
-        bb_history = '0',
-        wt_history = '0',
-        ur_history = '0',
-        et_history = '0',
-        we_history = '0',
-        mo_history = '0',
-        sk_history = '0',
-        ey_history = '0',
-        fg_history = '0',
-        status_history = '0';
 
     $(document).on('click', 'a[data-name="btn_screen"]', function(){
         var fullname = $(this).data('fullname'),
@@ -403,7 +385,7 @@ head.ready(function(){
 
     ncdscreen.set_detail = function(v)
     {
-        $('#txt_screen_date').val(app.mongo_to_js_date(v.screen_date));
+        $('#txt_screen_date').val(app.mongo_to_thai_date(v.screen_date));
         $('#txt_screen_time').val(v.screen_time);
         $('#txt_weight').val(v.weight);
         $('#txt_height').val(v.height);
@@ -456,10 +438,8 @@ head.ready(function(){
             $(this).val() == v.sport ? $(this).prop('checked', true) : $(this).prop('checked', false);
         });
 
-        v.food_taste_sweet == '1' ? $('#food_taste_sweet').prop('checked', true) : $('#food_taste_sweet').prop('checked', false);
-        v.food_taste_salt == '1' ? $('#food_taste_salt').prop('checked', true) : $('#food_taste_salt').prop('checked', false);
-        v.food_taste_creamy == '1' ? $('#food_taste_creamy').prop('checked', true) : $('#food_taste_creamy').prop('checked', false);
-        v.food_taste_no == '1' ? $('#food_taste_no').prop('checked', true) : $('#food_taste_no').prop('checked', false);
+        $('#sl_food_taste').select2('val', v.food_tastes);
+
 
         $('input[name="rd_screen_tb"]').each(function(){
             $(this).val() == v.screen_tb ? $(this).prop('checked', true) : $(this).prop('checked', false);
@@ -496,57 +476,24 @@ head.ready(function(){
             $(this).val() == v.risk_disb ? $(this).prop('checked', true) : $(this).prop('checked', false);
         });
 
-        $('button[data-name="btn_dm_history"]').each(function(){
-            $(this).data('value') == v.dm_history ? $(this).addClass('active') : $(this).removeClass('active');
-        });
-        $('button[data-name="btn_ht_history"]').each(function(){
-            $(this).data('value') == v.ht_history ? $(this).addClass('active') : $(this).removeClass('active');
-        });
-        $('button[data-name="btn_lv_history"]').each(function(){
-            $(this).data('value') == v.lv_history ? $(this).addClass('active') : $(this).removeClass('active');
-        });
-        $('button[data-name="btn_ds_history"]').each(function(){
-            $(this).data('value') == v.ds_history ? $(this).addClass('active') : $(this).removeClass('active');
-        });
-        $('button[data-name="btn_hb_history"]').each(function(){
-            $(this).data('value') == v.hb_history ? $(this).addClass('active') : $(this).removeClass('active');
-        });
-        $('button[data-name="btn_lb_history"]').each(function(){
-            $(this).data('value') == v.lb_history ? $(this).addClass('active') : $(this).removeClass('active');
-        });
-        $('button[data-name="btn_lg_history"]').each(function(){
-            $(this).data('value') == v.lg_history ? $(this).addClass('active') : $(this).removeClass('active');
-        });
-        $('button[data-name="btn_bb_history"]').each(function(){
-            $(this).data('value') == v.bb_history ? $(this).addClass('active') : $(this).removeClass('active');
-        });
-        $('button[data-name="btn_wt_history"]').each(function(){
-            $(this).data('value') == v.wt_history ? $(this).addClass('active') : $(this).removeClass('active');
-        });
-        $('button[data-name="btn_ur_history"]').each(function(){
-            $(this).data('value') == v.ur_history ? $(this).addClass('active') : $(this).removeClass('active');
-        });
-        $('button[data-name="btn_et_history"]').each(function(){
-            $(this).data('value') == v.et_history ? $(this).addClass('active') : $(this).removeClass('active');
-        });
-        $('button[data-name="btn_we_history"]').each(function(){
-            $(this).data('value') == v.we_history ? $(this).addClass('active') : $(this).removeClass('active');
-        });
-        $('button[data-name="btn_mo_history"]').each(function(){
-            $(this).data('value') == v.mo_history ? $(this).addClass('active') : $(this).removeClass('active');
-        });
-        $('button[data-name="btn_sk_history"]').each(function(){
-            $(this).data('value') == v.sk_history ? $(this).addClass('active') : $(this).removeClass('active');
-        });
-        $('button[data-name="btn_ey_history"]').each(function(){
-            $(this).data('value') == v.ey_history ? $(this).addClass('active') : $(this).removeClass('active');
-        });
-        $('button[data-name="btn_fg_history"]').each(function(){
-            $(this).data('value') == v.fg_history ? $(this).addClass('active') : $(this).removeClass('active');
-        });
-        $('button[data-name="btn_status_history"]').each(function(){
-            $(this).data('value') == v.status_history ? $(this).addClass('active') : $(this).removeClass('active');
-        });
+        $('#sl_dm_history').select2('val', v.dm_history);
+        $('#sl_ht_history').select2('val', v.ht_history);
+        $('#sl_lv_history').select2('val', v.lv_history);
+        $('#sl_ds_history').select2('val', v.ds_history);
+        $('#sl_hb_history').select2('val', v.hb_history);
+        $('#sl_lb_history').select2('val', v.lb_history);
+        $('#sl_lg_history').select2('val', v.lg_history);
+        $('#sl_bb_history').select2('val', v.bb_history);
+        $('#sl_wt_history').select2('val', v.wt_history);
+        $('#sl_ur_history').select2('val', v.ur_history);
+        $('#sl_et_history').select2('val', v.et_history);
+        $('#sl_we_history').select2('val', v.we_history);
+        $('#sl_mo_history').select2('val', v.mo_history);
+        $('#sl_sk_history').select2('val', v.sk_history);
+        $('#sl_ey_history').select2('val', v.ey_history);
+        $('#sl_fg_history').select2('val', v.fg_history);
+        $('#sl_status_history').select2('val', v.status_history);
+
     };
 
     ncdscreen.clear_form = function()
@@ -600,10 +547,7 @@ head.ready(function(){
             $(this).val() == '0' ? $(this).prop('checked', true) : $(this).prop('checked', false);
         });
 
-        $('#food_taste_sweet').removeAttr('checked');
-        $('#food_taste_salt').removeAttr('checked');
-        $('#food_taste_creamy').removeAttr('checked');
-        $('#food_taste_no').removeAttr('checked');
+        $('#sl_food_taste').select2('val', '');
 
         $('input[name="rd_screen_tb"]').each(function(){
             $(this).val() == '0' ? $(this).prop('checked', true) : $(this).prop('checked', false);
@@ -639,110 +583,65 @@ head.ready(function(){
         $('input[name="rd_risk_disb"]').each(function(){
             $(this).val() == '0' ? $(this).prop('checked', true) : $(this).prop('checked', false);
         });
+//
+//        $('button[data-name="btn_dm_history"]').removeClass('active');
+//        $('button[data-name="btn_ht_history"]').removeClass('active');
+//        $('button[data-name="btn_lv_history"]').removeClass('active');
+//        $('button[data-name="btn_ds_history"]').removeClass('active');
+//        $('button[data-name="btn_hb_history"]').removeClass('active');
+//        $('button[data-name="btn_lb_history"]').removeClass('active');
+//        $('button[data-name="btn_lg_history"]').removeClass('active');
+//        $('button[data-name="btn_bb_history"]').removeClass('active');
+//        $('button[data-name="btn_wt_history"]').removeClass('active');
+//        $('button[data-name="btn_ur_history"]').removeClass('active');
+//        $('button[data-name="btn_et_history"]').removeClass('active');
+//        $('button[data-name="btn_we_history"]').removeClass('active');
+//        $('button[data-name="btn_mo_history"]').removeClass('active');
+//        $('button[data-name="btn_sk_history"]').removeClass('active');
+//        $('button[data-name="btn_ey_history"]').removeClass('active');
+//        $('button[data-name="btn_fg_history"]').removeClass('active');
+//        $('button[data-name="btn_status_history"]').removeClass('active');
 
-        $('button[data-name="btn_dm_history"]').removeClass('active');
-        $('button[data-name="btn_ht_history"]').removeClass('active');
-        $('button[data-name="btn_lv_history"]').removeClass('active');
-        $('button[data-name="btn_ds_history"]').removeClass('active');
-        $('button[data-name="btn_hb_history"]').removeClass('active');
-        $('button[data-name="btn_lb_history"]').removeClass('active');
-        $('button[data-name="btn_lg_history"]').removeClass('active');
-        $('button[data-name="btn_bb_history"]').removeClass('active');
-        $('button[data-name="btn_wt_history"]').removeClass('active');
-        $('button[data-name="btn_ur_history"]').removeClass('active');
-        $('button[data-name="btn_et_history"]').removeClass('active');
-        $('button[data-name="btn_we_history"]').removeClass('active');
-        $('button[data-name="btn_mo_history"]').removeClass('active');
-        $('button[data-name="btn_sk_history"]').removeClass('active');
-        $('button[data-name="btn_ey_history"]').removeClass('active');
-        $('button[data-name="btn_fg_history"]').removeClass('active');
-        $('button[data-name="btn_status_history"]').removeClass('active');
+        app.set_first_selected($('#sl_dm_history'));
+        app.set_first_selected($('#sl_ht_history'));
+        app.set_first_selected($('#sl_lv_history'));
+        app.set_first_selected($('#sl_ds_history'));
+        app.set_first_selected($('#sl_hb_history'));
+        app.set_first_selected($('#sl_lb_history'));
+        app.set_first_selected($('#sl_lg_history'));
+        app.set_first_selected($('#sl_bb_history'));
+        app.set_first_selected($('#sl_wt_history'));
+        app.set_first_selected($('#sl_et_history'));
+        app.set_first_selected($('#sl_ur_history'));
+        app.set_first_selected($('#sl_we_history'));
+        app.set_first_selected($('#sl_mo_history'));
+        app.set_first_selected($('#sl_sk_history'));
+        app.set_first_selected($('#sl_ey_history'));
+        app.set_first_selected($('#sl_fg_history'));
+        app.set_first_selected($('#sl_status_history'));
     };
-
-
-    $('button[data-name="btn_dm_history"]').on('click', function(){
-        dm_history = $(this).data('value');
-    });
-    $('button[data-name="btn_ht_history"]').on('click', function(){
-        ht_history = $(this).data('value');
-    });
-
-    $('button[data-name="btn_lv_history"]').on('click', function(){
-        lv_history = $(this).data('value');
-    });
-
-    $('button[data-name="btn_ds_history"]').on('click', function(){
-        ds_history = $(this).data('value');
-    });
-    $('button[data-name="btn_hb_history"]').on('click', function(){
-        hb_history = $(this).data('value');
-    });
-
-    $('button[data-name="btn_lb_history"]').on('click', function(){
-        lb_history = $(this).data('value');
-    });
-
-    $('button[data-name="btn_lg_history"]').on('click', function(){
-        lg_history = $(this).data('value');
-    });
-    $('button[data-name="btn_bb_history"]').on('click', function(){
-        bb_history = $(this).data('value');
-    });
-    $('button[data-name="btn_wt_history"]').on('click', function(){
-        wt_history = $(this).data('value');
-    });
-    $('button[data-name="btn_ur_history"]').on('click', function(){
-        ur_history = $(this).data('value');
-    });
-
-    $('button[data-name="btn_et_history"]').on('click', function(){
-        et_history = $(this).data('value');
-    });
-
-    $('button[data-name="btn_we_history"]').on('click', function(){
-        we_history = $(this).data('value');
-    });
-
-    $('button[data-name="btn_mo_history"]').on('click', function(){
-        mo_history = $(this).data('value');
-    });
-
-    $('button[data-name="btn_sk_history"]').on('click', function(){
-        sk_history = $(this).data('value');
-    });
-
-    $('button[data-name="btn_ey_history"]').on('click', function(){
-        ey_history = $(this).data('value');
-    });
-
-    $('button[data-name="btn_fg_history"]').on('click', function(){
-        fg_history = $(this).data('value');
-    });
-    $('button[data-name="btn_status_history"]').on('click', function(){
-        status_history = $(this).data('value');
-    });
 
     //save
     $('#btn_save').on('click', function(){
         var items = {};
 
-        items.dm_history = dm_history;
-        items.ht_history = ht_history;
-        items.ds_history = ds_history;
-        items.hb_history = hb_history;
-        items.lb_history = lb_history;
-        items.lg_history = lg_history;
-        items.lv_history = lv_history;
-        items.bb_history = bb_history;
-        items.wt_history = wt_history;
-        items.ur_history = ur_history;
-        items.et_history = et_history;
-        items.we_history = we_history;
-        items.mo_history = mo_history;
-        items.sk_history = sk_history;
-        items.ey_history = ey_history;
-        items.fg_history = fg_history;
-        items.status_history = status_history;
+        items.dm_history = $('#sl_dm_history').val();
+        items.ht_history = $('#sl_ht_history').val();
+        items.ds_history = $('#sl_ds_history').val();
+        items.hb_history = $('#sl_hb_history').val();
+        items.lb_history = $('#sl_lb_history').val();
+        items.lg_history = $('#sl_lg_history').val();
+        items.lv_history = $('#sl_lv_history').val();
+        items.bb_history = $('#sl_bb_history').val();
+        items.wt_history = $('#sl_wt_history').val();
+        items.ur_history = $('#sl_ur_history').val();
+        items.et_history = $('#sl_et_history').val();
+        items.we_history = $('#sl_we_history').val();
+        items.mo_history = $('#sl_mo_history').val();
+        items.sk_history = $('#sl_sk_history').val();
+        items.ey_history = $('#sl_ey_history').val();
+        items.fg_history = $('#sl_fg_history').val();
+        items.status_history = $('#sl_status_history').val();
 
 
         items.screen_place = $('#sl_place').val();
@@ -788,10 +687,14 @@ head.ready(function(){
 
         items.sport = $('input[name="rd_sport"]').val() ? $('input[name="rd_sport"]').val() : '0';
 
-        items.food_taste_sweet = $('#food_taste_sweet').is(':checked') ? '1' : '0';
-        items.food_taste_salt = $('#food_taste_salt').is(':checked') ? '1' : '0';
-        items.food_taste_creamy = $('#food_taste_creamy').is(':checked') ? '1' : '0';
-        items.food_taste_no = $('#food_taste_no').is(':checked') ? '1' : '0';
+        var food_tastes = $('#sl_food_taste').select2('val');
+
+        items.food_tastes = _.contains(food_tastes, '4') ? ['4'] : food_tastes;
+
+//        _.contains(food_tastes, '1') ? items.food_taste_sweet = '1' : items.food_taste_sweet = '0';
+//        _.contains(food_tastes, '2') ? items.food_taste_creamy = '1' : items.food_taste_creamy = '0';
+//        _.contains(food_tastes, '3') ? items.food_taste_salt = '1' : items.food_taste_salt = '0';
+//        _.contains(food_tastes, '4') ? items.food_taste_no = '1' : items.food_taste_no = '0';
 
         items.screen_tb = $('input[name="rd_screen_tb"]').val() ? $('input[name="rd_screen_tb"]').val() : '0';
 
@@ -819,7 +722,7 @@ head.ready(function(){
 
         items.risk_disb = $('input[name="rd_risk_disb"]').val() ? $('input[name="rd_risk_disb"]').val() : '0';
 
-        items.year = $('#sl_year').val();
+        items.year = $('#sl_year').select2('val');
 
         if(!items.hn)
         {
@@ -911,33 +814,45 @@ head.ready(function(){
     });
 
     //search person
-    $('#txt_query').typeahead({
+    $('#txt_query').select2({
+        placeholder: 'HN, เลขบัตรประชาชน, ชื่อ-สกุล',
+        minimumInputLength: 2,
+        allowClear: true,
         ajax: {
-            url: site_url + 'person/search_person_ajax',
-            timeout: 500,
-            displayField: 'name',
-            triggerLength: 3,
-            preDispatch: function(query){
+            url: site_url + "/person/search_person_all_ajax",
+            dataType: 'json',
+            type: 'POST',
+            quietMillis: 100,
+            data: function (term, page) {
                 return {
-                    query: query,
-                    csrf_token: csrf_token
-                }
+                    query: term,
+                    csrf_token: csrf_token,
+                    start: page,
+                    stop: 10
+                };
             },
+            results: function (data, page)
+            {
+                var more = (page * 10) < data.total; // whether or not there are more results available
 
-            preProcess: function(data){
-                if(data.success){
-                    return data.rows;
-                }else{
-                    return false;
-                }
+                // notice we return the value of more so Select2 knows if more results can be loaded
+                return {results: data.rows, more: more};
+
+                //return { results: data.rows, more: (data.rows && data.rows.length == 10 ? true : false) };
             }
         },
-        updater: function(data){
-            var d = data.split('#');
-            var code = d[0],
-                name = d[1];
 
-            return code;
+        id: function(data) { return { id: data.hn } },
+
+        formatResult: function(data) {
+            return '[' + data.hn + '] ' + data.fullname;
+        },
+        formatSelection: function(data) {
+            return '[' + data.hn + '] ' + data.fullname;
+        },
+        initSelection: function(el, cb) {
+            //var eltxt = $(el).val();
+            //cb({'term': eltxt });
         }
     });
 
@@ -946,8 +861,10 @@ head.ready(function(){
     });
 
     $('#btn_do_search').on('click', function(){
-        var query = $('#txt_query').val();
+        var query = $('#txt_query').select2('data');
         var year = $('#sl_year').val();
+
+        query = query.hn;
 
         $('#main_paging').fadeOut('slow');
 
@@ -970,23 +887,66 @@ head.ready(function(){
         }
     });
 
+    ncdscreen.cal_bmi = function() {
+        var weight = $('#txt_weight').val();
+        var height = $('#txt_height').val();
+
+        height = height / 100;
+
+        var bmi;
+
+        try {
+            bmi = parseFloat(weight) / (parseFloat(height) * parseFloat(height));
+        } catch (ex) {
+            bmi = 0;
+        }
+
+        $('#txt_bmi').val(numeral(bmi).format('0.00'));
+
+
+        if(bmi < 16) {
+            $('#spn_bmi_indicator').html('ผอมมาก');
+        } else if(bmi >= 16 && bmi <= 18.4) {
+            $('#spn_bmi_indicator').html('ผอม');
+        } else if(bmi >= 18.5 && bmi <= 24.9) {
+            $('#spn_bmi_indicator').html('ปกติ');
+        } else if(bmi >= 25 && bmi <= 29.9) {
+            $('#spn_bmi_indicator').html('ท้วม');
+        } else if(bmi >= 30 && bmi <= 34.9) {
+            $('#spn_bmi_indicator').html('โรคอ้วนระดับ 1');
+        } else if(bmi >= 35 && bmi <= 39.9) {
+            $('#spn_bmi_indicator').html('โรคอ้วนระดับ 2');
+        } else if(bmi >= 40) {
+            $('#spn_bmi_indicator').html('โรคอ้วนระดับ 3');
+        } else {
+            $('#spn_bmi_indicator').html('?');
+        }
+    };
+
+    $('#txt_height').on('change', function(e) {
+        ncdscreen.cal_bmi();
+    });
+    $('#txt_weight').on('change', function(e) {
+        ncdscreen.cal_bmi();
+    });
+
     $('#btn_result').on('click', function(){
         ncdscreen.modal.show_result();
     });
 
-    $('#btn_get_result').on('click', function(){
-        var year = $('#sl_result_year').val();
-        ncdscreen.ajax.get_result(year, function(err, data){
-            $('#txt_total').html(app.add_commars_with_out_decimal(data.total));
-            $('#txt_result').html(app.add_commars_with_out_decimal(data.result));
-
-            var percent = (parseInt(data.result) * 100) / parseInt(data.total);
-
-            $('#txt_percent').html(percent.toFixed(2));
-
-            ncdscreen.set_result_chart(parseInt(data.total), parseInt(data.result));
-        });
-    });
+//    $('#btn_get_result').on('click', function(){
+//        var year = $('#sl_result_year').val();
+//        ncdscreen.ajax.get_result(year, function(err, data){
+//            $('#txt_total').html(app.add_commars_with_out_decimal(data.total));
+//            $('#txt_result').html(app.add_commars_with_out_decimal(data.result));
+//
+//            var percent = (parseInt(data.result) * 100) / parseInt(data.total);
+//
+//            $('#txt_percent').html(percent.toFixed(2));
+//
+//            ncdscreen.set_result_chart(parseInt(data.total), parseInt(data.result));
+//        });
+//    });
 
     ncdscreen.set_result_chart = function(total, result){
 

@@ -3,9 +3,9 @@
     <li class="active">ทะเบียนฝากครรภ์</li>
 </ul>
 
-<div class="navbar">
+<div class="navbar navbar-default">
     <form action="#" class="navbar-form">
-        <select style="width: 250px;" id="sl_village">
+        <select style="width: 250px;" id="sl_village" class="form-control">
             <option value="">-- เลือกหมู่บ้าน [ทั้งหมด] --</option>
             <?php
             foreach ($villages as $r){
@@ -15,20 +15,20 @@
         </select>
         <div class="btn-group">
             <button type="button" class="btn btn-primary" id="btn_do_get_list" rel="tooltip" title="แสดงรายชื่อ">
-                <i class="icon-search"></i> แสดง</button>
+                <i class="fa fa-search"></i> แสดง</button>
             <button type="button" class="btn btn-default" id="btn_print" rel="tooltip" title="พิมพ์รายชื่อ">
-                <i class="icon-print"></i> พิมพ์</button>
+                <i class="fa fa-print"></i> พิมพ์</button>
         </div>
         |
         HN:
-        <input style="width: 180px;" id="txt_query_preg" type="text" data-type="number" autocomplete="off" placeholder="ระบุ HN เพื่อค้นหา">
+        <input style="width: 180px;" id="txt_query_preg" class="form-control" type="text" data-type="number" autocomplete="off" placeholder="ระบุ HN เพื่อค้นหา">
         <button class="btn btn-primary" type="button" id="btn_do_search_preg" rel="tooltip" title="ค้นหา">
-            <i class="icon-search"></i>
+            <i class="fa fa-search"></i>
         </button>
 
-        <button type="button" id="btn_refresh" rel="tooltip" title="รีเฟรช (Refresh)" class="btn btn-default pull-right"><i class="icon-refresh"></i></button>
+        <button type="button" id="btn_refresh" rel="tooltip" title="รีเฟรช (Refresh)" class="btn btn-default pull-right"><i class="fa fa-refresh"></i></button>
         <button type="button" id="btn_register" rel="tooltip" title="ลงทะเบียนรายใหม่" class="btn btn-success">
-            <i class="icon-plus-sign"></i> ลงทะเบียน</button>
+            <i class="fa fa-plus-circle"></i> ลงทะเบียน</button>
     </form>
 </div>
 
@@ -57,70 +57,34 @@
 <ul class="pagination" id="main_paging"></ul>
 
 <div class="modal fade" id="mdl_search_person">
-    <div class="modal-dialog" style="width: 960px; left: 35%">
+    <div class="modal-dialog" style="width: 580px;">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title">
-                    <i class="icon-search"></i>
+                    <i class="fa fa-search"></i>
                     ค้นหาข้อมูลประชากร
                 </h4>
             </div>
             <div class="modal-body">
-                <input type="hidden" id="txt_search_person_filter" value="0" />
-                <div class="navbar">
+                <div class="navbar navbar-default">
                     <form action="#" class="navbar-form">
-                        <input id="txt_search_query" type="text" autocomplete="off" placeholder="พิมพ์คำที่ต้องการค้นหา เช่น เลขบัตรประชาชน, HN, ชื่อ-สกุล..."
-                               title="พิมพ์คำที่ต้องการค้นหา เช่น เลขบัตรประชาชน, HN, ชื่อ-สกุล..." rel="tooltip" style="width: 400px;">
-                        <div class="btn-group">
-                            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" rel="tooltip" title="ระบุเงื่อนไขในการค้นหา">
-                                <i class="icon-cog"></i>
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a href="#" data-name="btn_search_person_fillter" data-value="0">ค้นจาก เลขบัตรประชาชน</a></li>
-                                <li><a href="#" data-name="btn_search_person_fillter" data-value="1">ค้นจาก HN</a></li>
-                                <li><a href="#" data-name="btn_search_person_fillter" data-value="2">ค้นจาก ชื่อ - สกุล</a></li>
-                            </ul>
-                        </div>
-                        <button type="button" class="btn btn-primary" rel="tooltip" title="ค้นหา" id="btn_do_search_person"><i class="icon-search"></i> ค้นหา</button>
+                        <input id="txt_search_query" type="hidden" style="width: 350px;">
+                        <button type="button" class="btn btn-primary" rel="tooltip" title="ลงทะเบียน"
+                                id="btn_do_register"><i class="fa fa-search"></i> ลงทะเบียน</button>
                     </form>
                 </div>
-                <table class="table table-striped" id="tbl_search_person_result">
-                    <thead>
-                    <tr>
-                        <th>HN</th>
-                        <th>เลขบัตรประชาชน</th>
-                        <th>ชื่อ - สกุล</th>
-                        <th>วันเกิด</th>
-                        <th>อายุ</th>
-                        <th>เพศ</th>
-                        <th>#</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>...</td>
-                        <td>...</td>
-                        <td>...</td>
-                        <td>...</td>
-                        <td>...</td>
-                        <td>...</td>
-                        <td>...</td>
-                    </tr>
-                    </tbody>
-                </table>
             </div>
         </div>
     </div>
 </div>
 
 <div class="modal fade" id="mdl_labor">
-    <div class="modal-dialog" style="width: 960px; left: 35%">
+    <div class="modal-dialog" style="width: 960px;">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title"><i class="icon-group"></i> ข้อมูลการคลอด</h4>
+                <h4 class="modal-title"><i class="fa fa-group"></i> ข้อมูลการคลอด</h4>
             </div>
             <div class="modal-body">
 
@@ -128,23 +92,23 @@
                     <div class="row">
                         <div class="col-lg-2">
                             <label>HN</label>
-                            <input type="text" disabled="disabled" id="txt_labor_hn">
+                            <input type="text" disabled="disabled" id="txt_labor_hn" class="form-control">
                         </div>
                         <div class="col-lg-3">
                             <label>เลขบัตรประชาชน</label>
-                            <input type="text" disabled="disabled" id="txt_labor_cid">
+                            <input type="text" disabled="disabled" id="txt_labor_cid" class="form-control">
                         </div>
                         <div class="col-lg-3">
                             <label>ชื่อ - สกุล</label>
-                            <input type="text" disabled="disabled" id="txt_labor_fullname">
+                            <input type="text" disabled="disabled" id="txt_labor_fullname" class="form-control">
                         </div>
                         <div class="col-lg-2">
                             <label>วันเกิด</label>
-                            <input type="text" disabled="disabled" id="txt_labor_birthdate">
+                            <input type="text" disabled="disabled" id="txt_labor_birthdate" class="form-control">
                         </div>
                         <div class="col-lg-2">
                             <label>อายุ (ปี)</label>
-                            <input type="text" disabled="disabled" id="txt_labor_age">
+                            <input type="text" disabled="disabled" id="txt_labor_age" class="form-control">
                         </div>
                     </div>
                 </form>
@@ -154,34 +118,24 @@
                     <div class="row">
                         <div class="col-lg-2">
                             <label class="control-label" for="txt_labor_gravida">ครรภ์ที่</label>
-                            <input type="text" class="input-small uneditable-input" id="txt_labor_gravida" disabled="disabled">
+                            <input type="text" class="form-control" id="txt_labor_gravida" disabled="disabled">
                         </div>
                         <div class="col-lg-2">
                             <div class="control-group">
                                 <label for="txt_labor_bdate">วันที่คลอด</label>
                                 <input data-type="date" id="txt_labor_bdate" type="text" placeholder="dd/mm/yyyy"
-                                    rel="tooltip" title="ระบุวันที่คลอด เช่น 28/02/2556">
+                                    rel="tooltip" title="ระบุวันที่คลอด เช่น 28/02/2556" class="form-control">
                             </div>
                         </div>
                         <div class="col-lg-2">
                             <label for="sl_labor_btime">เวลา</label>
-                            <input type="text" data-type="time" id="txt_labor_btime" rel="tooltip" title="เวลาที่คลอด" placeholder="hh:mm">
+                            <input type="text" data-type="time" id="txt_labor_btime" rel="tooltip" class="form-control"
+                                   title="เวลาที่คลอด" placeholder="hh:mm">
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-2">
-                            <label for="txt_labor_bresult_icdcode">รหัส</label>
-                            <input type="text" id="txt_labor_bresult_icdcode" disabled="disabled" placeholder="-*-" rel="tooltip" title="พิมพ์รหัสการวินิจฉัย">
-                        </div>
-                        <div class="col-lg-10">
-                            <label for="txt_labor_bresult_icdname">รหัสวินิจฉัย</label>
-                            <input type="text" id="txt_labor_bresult_icdname" placeholder="-*-" title="พิมพ์รหัสหรือรายละเอียดการวินิจฉัย เพื่อค้นหา" rel="tooltip">
-                        </div>
-                    </div>
-                    <div class="row">
+
                         <div class="col-lg-3">
                             <label for="sl_labor_bplace">สถานที่คลอด</label>
-                            <select id="sl_labor_bplace">
+                            <select id="sl_labor_bplace" class="form-control">
                                 <option value="">--</option>
                                 <option value="1">โรงพยาบาล</option>
                                 <option value="2">สถานีอนามัย</option>
@@ -190,19 +144,23 @@
                                 <option value="5">อื่นๆ</option>
                             </select>
                         </div>
-                        <div class="col-lg-2">
-                            <label for="txt_labor_hospcode">รหัส</label>
-                            <input type="text" id="txt_labor_hospcode" disabled="disabled" placeholder="-*-" rel="tooltip" title="พิมพ์รหัสหรือชื่อสถานพยาบาลเพื่อค้นหา">
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label for="txt_labor_bresult_icdname">รหัสวินิจฉัย</label>
+                            <input type="hidden" id="txt_labor_bresult_icdname" class="form-control" style="width: 480px;">
                         </div>
-                        <div class="col-lg-7">
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
                             <label for="txt_labor_hospname">สถานพยาบาลที่คลอด</label>
-                            <input type="text" id="txt_labor_hospname" placeholder="-*-" rel="tooltip" title="พิมพ์รหัสหรือชื่อสถานพยาบาลเพื่อค้นหา">
+                            <input type="hidden" id="txt_labor_hospname" class="form-control" style="width: 480px;">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-lg-3">
                             <label for="sl_labor_btype">วิธีการคลอด</label>
-                            <select id="sl_labor_btype">
+                            <select id="sl_labor_btype" class="form-control">
                                 <option value="">--</option>
                                 <option value="1">Normal</option>
                                 <option value="2">Cesarean</option>
@@ -214,7 +172,7 @@
                         </div>
                         <div class="col-lg-4">
                             <label for="sl_labor_bdoctor">ประเภทผู้ทำคลอด</label>
-                            <select id="sl_labor_bdoctor">
+                            <select id="sl_labor_bdoctor" class="form-control">
                                 <option value="">--</option>
                                 <option value="1">แพทย์</option>
                                 <option value="2">พยาบาล</option>
@@ -226,19 +184,19 @@
                         </div>
                         <div class="col-lg-2">
                             <label for="txt_labor_lborn">เกิดมีชีพ</label>
-                            <input type="text" data-type="number" id="txt_labor_lborn">
+                            <input type="text" data-type="number" class="form-control" id="txt_labor_lborn">
                         </div>
                         <div class="col-lg-2">
                             <label for="txt_labor_sborn">เกิดไร้ชีพ</label>
-                            <input type="text" data-type="number" id="txt_labor_sborn">
+                            <input type="text" data-type="number" class="form-control" id="txt_labor_sborn">
                         </div>
                     </div>
                 </form>
 
             </div>
             <div class="modal-footer">
-                <a href="#" class="btn btn-success" id="btn_labor_do_save"><i class="icon-save"></i> บันทึกข้อมูล</a>
-                <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off"></i> ปิดหน้าต่าง</a>
+                <a href="#" class="btn btn-success" id="btn_labor_do_save"><i class="fa fa-save"></i> บันทึกข้อมูล</a>
+                <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="fa fa-power-off"></i> ปิดหน้าต่าง</a>
             </div>
         </div>
     </div>

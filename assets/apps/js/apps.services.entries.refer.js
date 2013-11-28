@@ -1,5 +1,7 @@
+var refer = {};
+
 head.ready(function(){
-    var refer = {};
+
     refer.modal = {
         show_new: function(hn, vn){
             $('#spn_refer_out_vn').html(vn);
@@ -84,9 +86,9 @@ head.ready(function(){
                         '<td>'+ v.provider_name +'</td>' +
                         '<td><div class="btn-group">' +
                         '<a href="javascript:void(0)" data-name="btn_rfo_edit" data-hn="'+ v.hn +'" data-vn="'+ v.vn +'" ' +
-                        'class="btn btn-default" title="แก้ไข" data-code="'+ v.code +'"><i class="icon-edit"></i></a>' +
+                        'class="btn btn-default" title="แก้ไข" data-code="'+ v.code +'"><i class="fa fa-edit"></i></a>' +
                         '<a href="javascript:void(0)" data-name="btn_rfo_remove" data-code="'+ v.code +'" ' +
-                        'class="btn btn-danger" title="ลบรายการ"><i class="icon-trash"></i></a>' +
+                        'class="btn btn-danger" title="ลบรายการ"><i class="fa fa-trash-o"></i></a>' +
                         '</div></td>' +
                         '</tr>'
                 );

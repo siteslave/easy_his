@@ -1,7 +1,7 @@
 <div class="tabbable">
     <ul class="nav nav-tabs">
-        <li class="active"><a href="#tab_nutri1" data-toggle="tab"><i class="icon-plus"></i> เพิ่มข้อมูล</a></li>
-        <li><a href="#tab_nutri2" data-toggle="tab"><i class="icon-refresh"></i> ประวัติการรับบริการ</a></li>
+        <li class="active"><a href="#tab_nutri1" data-toggle="tab"><i class="fa fa-plus-circle"></i> เพิ่มข้อมูล</a></li>
+        <li><a href="#tab_nutri2" data-toggle="tab"><i class="fa fa-refresh"></i> ประวัติการรับบริการ</a></li>
     </ul>
     <div class="tab-content">
         <div class="tab-pane active" id="tab_nutri1">
@@ -13,35 +13,35 @@
                 <div class="row">
                     <div class="col-lg-2">
                         <label for="txt_fp_date">วันที่รับบริการ</label>
-                        <input type="text" id="txt_fp_date" placeholder="dd/mm/yyyy" title="ระบุวันที่รับบริการวัคซีน" rel="tooltip" data-type="date"
+                        <input type="text" class="form-control" id="txt_fp_date" placeholder="dd/mm/yyyy" title="ระบุวันที่รับบริการวัคซีน" rel="tooltip" data-type="date"
                                value="<?=isset($date_serv) ? $date_serv : ''?>" <?=isset($date_serv) ? 'disabled="disabled"' : ''?> />
                     </div>
                     <div class="col-lg-2">
                         <label for="txt_nutri_hospcode">รหัส</label>
-                        <input type="text" id="txt_nutri_hospcode" value="<?=isset($hospcode) ? $hospcode : ''?>" disabled="disabled" placeholder="-*-" />
+                        <input type="text" class="form-control" id="txt_nutri_hospcode" value="<?=isset($hospcode) ? $hospcode : ''?>" disabled="disabled" placeholder="-*-" />
                     </div>
                     <div class="col-lg-8">
                         <label for="txt_nutri_hospname">สถานพยาบาล</label>
-                        <input type="text" id="txt_nutri_hospname" value="<?=isset($hospname) ? $hospname : ''?>" <?=isset($hospname) ? 'disabled="disabled"' : ''?>
+                        <input type="text" class="form-control" id="txt_nutri_hospname" value="<?=isset($hospname) ? $hospname : ''?>" <?=isset($hospname) ? 'disabled="disabled"' : ''?>
                                placeholder="พิมพ์ชื่อหรือรหัสสถาพยาบาล..." title="พิมพ์ชื่อหรือรหัสสถานพยาบาลเพื่อค้นหา" rel="tooltip"/>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-2">
                         <label for="txt_nutri_weight">น้ำหนัก (Kg.)</label>
-                        <input id="txt_nutri_weight" type="text" data-type="number" value="<?=isset($weight) ? $weight : '' ?>">
+                        <input id="txt_nutri_weight" class="form-control" type="text" data-type="number" value="<?=isset($weight) ? $weight : '' ?>">
                     </div>
                     <div class="col-lg-2">
                         <label for="txt_nutri_height">ส่วนสูง (cm.)</label>
-                        <input id="txt_nutri_height" type="text" data-type="number" value="<?=isset($height) ? $height : '' ?>">
+                        <input id="txt_nutri_height" class="form-control" type="text" data-type="number" value="<?=isset($height) ? $height : '' ?>">
                     </div>
                     <div class="col-lg-2">
                         <label for="txt_nutri_headcircum">เส้นรอบศีรษะ (cm.)</label>
-                        <input id="txt_nutri_headcircum" type="text" data-type="number" value="<?=isset($headcircum) ? $headcircum : '' ?>">
+                        <input id="txt_nutri_headcircum" class="form-control" type="text" data-type="number" value="<?=isset($headcircum) ? $headcircum : '' ?>">
                     </div>
                     <div class="col-lg-3">
                         <label for="sl_nutri_childdevelop">ระดับพัฒนาการ</label>
-                        <select id="sl_nutri_childdevelop">
+                        <select id="sl_nutri_childdevelop" class="form-control">
                             <option value="">-*-</option>
                             <option value="1" <?=isset($childdevelop) ? $childdevelop == '1' ? 'selected="selected"' : '' : ''?>>ปกติ</option>
                             <option value="2" <?=isset($childdevelop) ? $childdevelop == '2' ? 'selected="selected"' : '' : ''?>>สงสัยช้ากว่าปกติ</option>
@@ -52,7 +52,7 @@
                 <div class="row">
                     <div class="col-lg-4">
                         <label for="sl_nutri_food">อาหารที่รับประทาน</label>
-                        <select id="sl_nutri_food">
+                        <select id="sl_nutri_food" class="form-control">
                             <option value="">-*-</option>
                             <option value="1" <?=isset($food) ? $food == '1' ? 'selected="selected"' : '' : ''?>>นมแม่อย่างเดียว</option>
                             <option value="2" <?=isset($food) ? $food == '2' ? 'selected="selected"' : '' : ''?>>นมแม่และน้ำ</option>
@@ -63,7 +63,7 @@
 
                     <div class="col-lg-4">
                         <label for="sl_nutri_bottle">การใช้ขวดนม</label>
-                        <select id="sl_nutri_bottle">
+                        <select id="sl_nutri_bottle" class="form-control">
                             <option value="">-*-</option>
                             <option value="1" <?=isset($bottle) ? $bottle == '1' ? 'selected="selected"' : '' : ''?>>ใช้ขวดนม</option>
                             <option value="2" <?=isset($bottle) ? $bottle == '2' ? 'selected="selected"' : '' : ''?>>ไม่ใช้ขวดนม</option>
@@ -73,7 +73,7 @@
                 <div class="row">
                     <div class="col-lg-4">
                         <label for="sl_nutri_providers">ผู้ให้บริการ</label>
-                        <select id="sl_nutri_providers">
+                        <select id="sl_nutri_providers" class="form-control">
                             <option value="">-*-</option>
                             <?php
                             foreach($providers as $r)
@@ -101,7 +101,7 @@
             </form>
             <br>
             <button class="btn btn-success" type="button" id="btn_nutri_save">
-                <i class="icon-save"></i> บันทึกโภชนาการ
+                <i class="fa fa-save"></i> บันทึกโภชนาการ
             </button>
         </div>
         <div class="tab-pane" id="tab_nutri2">

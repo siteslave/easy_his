@@ -155,13 +155,13 @@ head.ready(function(){
                         '<td><div class="btn-group">' +
                         '<a href="javascript:void(0);" data-name="btn_edit" data-vn="'+ v.vn +'" ' + edit_disabled +
                         ' data-hn="'+ v.hn +'" data-id="' + v.id + '" class="btn btn-success btn-small">' +
-                        '<i class="icon-edit"></i></a>' +
+                        '<i class="fa fa-edit"></i></a>' +
                         '<a href="javascript:void(0);" data-name="btn_remove" data-id="' + v.id + '" class="btn btn-danger btn-small" '+ status_disabled +'> '+
-                        '<i class="icon-trash"></i></a>' +
+                        '<i class="fa fa-trash-o"></i></a>' +
                         '<a href="javascript:void(0);" data-name="btn_set_visit" data-id="' + v.id + '" data-hn="'+ v.hn +'" data-vn="'+ visit_vn +'" ' +
                         ' data-clinic="' + v.clinic_id + '" data-apdate="'+ v.apdate +'" ' +
                         ' data-status="' + v.vstatus + '" class="btn btn-success btn-small" '+ status_disabled +'> '+
-                        '<i class="icon-share"></i></a>' +
+                        '<i class="fa fa-share-square"></i></a>' +
                         '</div></td>' +
                         '</tr>'
                 );
@@ -250,7 +250,7 @@ head.ready(function(){
                                 '<td>'+ v.time_serv +'</td>' +
                                 '<td>'+ v.clinic_name +'</td>' +
                                 '<td><a href="javascript:void(0);" class="btn btn-default" data-name="btn_selected_visit" ' +
-                                'data-vn="'+ v.vn +'" data-hn="'+ v.hn +'"><i class="icon-ok"></i></a></td>' +
+                                'data-vn="'+ v.vn +'" data-hn="'+ v.hn +'"><i class="fa fa-check-circle"></i></a></td>' +
                                 '</tr>'
                         );
                     });
@@ -536,38 +536,38 @@ head.ready(function(){
     });
 
     //search diag
-    $('#txt_update_diag_code').typeahead({
-        ajax: {
-            url: site_url + 'basic/search_icd_ajax',
-            timeout: 500,
-            displayField: 'name',
-            triggerLength: 3,
-            preDispatch: function(query){
-                return {
-                    query: query,
-                    csrf_token: csrf_token
-                }
-            },
-
-            preProcess: function(data){
-                if(data.success){
-                    return data.rows;
-                }else{
-                    return false;
-                }
-            }
-        },
-        updater: function(data){
-            var d = data.split('#');
-            var code = d[0],
-                name = d[1];
-            //alert(code);
-            $('#txt_update_diag_code').val(code);
-            $('#txt_update_diag_name').val(name);
-
-            return code;
-        }
-    });
+//    $('#txt_update_diag_code').typeahead({
+//        ajax: {
+//            url: site_url + 'basic/search_icd_ajax',
+//            timeout: 500,
+//            displayField: 'name',
+//            triggerLength: 3,
+//            preDispatch: function(query){
+//                return {
+//                    query: query,
+//                    csrf_token: csrf_token
+//                }
+//            },
+//
+//            preProcess: function(data){
+//                if(data.success){
+//                    return data.rows;
+//                }else{
+//                    return false;
+//                }
+//            }
+//        },
+//        updater: function(data){
+//            var d = data.split('#');
+//            var code = d[0],
+//                name = d[1];
+//            //alert(code);
+//            $('#txt_update_diag_code').val(code);
+//            $('#txt_update_diag_name').val(name);
+//
+//            return code;
+//        }
+//    });
 
     //set visit
     $(document).on('click', 'a[data-name="btn_set_visit"]', function(){
@@ -604,38 +604,38 @@ head.ready(function(){
     });
 
 
-    $('#txt_serv_insc_hosp_main_name').typeahead({
-        ajax: {
-            url: site_url + 'basic/search_hospital_ajax',
-            timeout: 500,
-            displayField: 'fullname',
-            triggerLength: 3,
-            preDispatch: function(query){
-                return {
-                    query: query,
-                    csrf_token: csrf_token
-                }
-            },
-
-            preProcess: function(data){
-                if(data.success){
-                    return data.rows;
-                }else{
-                    return false;
-                }
-            }
-        },
-        updater: function(data){
-            var d = data.split('#');
-            var name = d[0],
-                code = d[1];
-
-            $('#txt_serv_insc_hosp_main_code').val(code);
-            $('#txt_serv_insc_hosp_main_name').val(name);
-
-            return name;
-        }
-    });
+//    $('#txt_serv_insc_hosp_main_name').typeahead({
+//        ajax: {
+//            url: site_url + 'basic/search_hospital_ajax',
+//            timeout: 500,
+//            displayField: 'fullname',
+//            triggerLength: 3,
+//            preDispatch: function(query){
+//                return {
+//                    query: query,
+//                    csrf_token: csrf_token
+//                }
+//            },
+//
+//            preProcess: function(data){
+//                if(data.success){
+//                    return data.rows;
+//                }else{
+//                    return false;
+//                }
+//            }
+//        },
+//        updater: function(data){
+//            var d = data.split('#');
+//            var name = d[0],
+//                code = d[1];
+//
+//            $('#txt_serv_insc_hosp_main_code').val(code);
+//            $('#txt_serv_insc_hosp_main_name').val(name);
+//
+//            return name;
+//        }
+//    });
 
     $('#txt_serv_insc_hosp_sub_name').bind('keyup', function(e) {
         //alert(e.keyCode);
@@ -650,38 +650,38 @@ head.ready(function(){
         }
     });
 
-    $('#txt_serv_insc_hosp_sub_name').typeahead({
-        ajax: {
-            url: site_url + 'basic/search_hospital_ajax',
-            timeout: 500,
-            displayField: 'fullname',
-            triggerLength: 3,
-            preDispatch: function(query){
-                return {
-                    query: query,
-                    csrf_token: csrf_token
-                }
-            },
-
-            preProcess: function(data){
-                if(data.success){
-                    return data.rows;
-                }else{
-                    return false;
-                }
-            }
-        },
-        updater: function(data){
-            var d = data.split('#');
-            var name = d[0],
-                code = d[1];
-
-            $('#txt_serv_insc_hosp_sub_code').val(code);
-            $('#txt_serv_insc_hosp_sub_name').val(name);
-
-            return name;
-        }
-    });
+//    $('#txt_serv_insc_hosp_sub_name').typeahead({
+//        ajax: {
+//            url: site_url + 'basic/search_hospital_ajax',
+//            timeout: 500,
+//            displayField: 'fullname',
+//            triggerLength: 3,
+//            preDispatch: function(query){
+//                return {
+//                    query: query,
+//                    csrf_token: csrf_token
+//                }
+//            },
+//
+//            preProcess: function(data){
+//                if(data.success){
+//                    return data.rows;
+//                }else{
+//                    return false;
+//                }
+//            }
+//        },
+//        updater: function(data){
+//            var d = data.split('#');
+//            var name = d[0],
+//                code = d[1];
+//
+//            $('#txt_serv_insc_hosp_sub_code').val(code);
+//            $('#txt_serv_insc_hosp_sub_name').val(name);
+//
+//            return name;
+//        }
+//    });
 
     appoint.clear_register_service_form = function()
     {

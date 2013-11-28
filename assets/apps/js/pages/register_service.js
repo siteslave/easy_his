@@ -139,17 +139,23 @@ head.ready(function() {
             dataType: 'json',
             type: 'POST',
             quietMillis: 100,
-            data: function (term) {
+            data: function (term, page) {
                 return {
                     query: term,
-                    csrf_token: csrf_token
+                    csrf_token: csrf_token,
+                    start: page,
+                    stop: 10
                 };
             },
-            results: function (data)
+            results: function (data, page)
             {
-                return { results: data.rows, more: (data.rows && data.rows.length == 10 ? true : false) };
+                var more = (page * 10) < data.total; // whether or not there are more results available
+
+                // notice we return the value of more so Select2 knows if more results can be loaded
+                return {results: data.rows, more: more};
+
+                //return { results: data.rows, more: (data.rows && data.rows.length == 10 ? true : false) };
             }
-            //dropdownCssClass: "bigdrop"
         },
 
         id: function(data) { return { id: data.code } },
@@ -172,21 +178,6 @@ head.ready(function() {
         allowClear: true
     });
 
-    //$('#txt_service_profile_hn').bind('keyup', function(e) {
-    //    $('#txt_hn').val('');
-    //});
-    $('#txt_reg_service_insc_hosp_sub_name').bind('keyup', function(e) {
-        $('#txt_reg_service_insc_hosp_sub_code').val('');
-    });
-    $('#txt_reg_service_insc_hosp_main_name').bind('keyup', function(e) {
-        $('#txt_reg_service_insc_hosp_main_code').val('');
-    });
-
-    $('#txt_service_profile_hn').bind('keyup', function(e) {
-        $('#txt_service_profile').val('');
-        $('#txt_service_hn').val('');
-    });
-
     $('#txt_reg_service_insc_hosp_sub_name').select2({
         placeholder: 'ชื่อ หรือ รหัสสถานบริการ',
         minimumInputLength: 2,
@@ -196,17 +187,23 @@ head.ready(function() {
             dataType: 'json',
             type: 'POST',
             quietMillis: 100,
-            data: function (term) {
+            data: function (term, page) {
                 return {
                     query: term,
-                    csrf_token: csrf_token
+                    csrf_token: csrf_token,
+                    start: page,
+                    stop: 10
                 };
             },
-            results: function (data)
+            results: function (data, page)
             {
-                return { results: data.rows, more: (data.rows && data.rows.length == 10 ? true : false) };
+                var more = (page * 10) < data.total; // whether or not there are more results available
+
+                // notice we return the value of more so Select2 knows if more results can be loaded
+                return {results: data.rows, more: more};
+
+                //return { results: data.rows, more: (data.rows && data.rows.length == 10 ? true : false) };
             }
-            //dropdownCssClass: "bigdrop"
         },
 
         id: function(data) { return { id: data.code } },
@@ -228,11 +225,11 @@ head.ready(function() {
         var data = $(this).select2('data');
 
         var info = [
-            data.text,
+            data.fullname,
             '[' + data.cid + '] ',
-            'วันเกิด: ' + data.birthdate,
-            'อายุ: ' + data.age + ' ปี',
-            'ที่อยู่: ' + data.address
+            'เกิด: ' + data.birthdate,
+            'อายุ: ' + data.age + ' ปี'
+            //'ที่อยู่: ' + data.address
         ].join(" ");
 
         $('#txt_service_hn').val(data.hn);
@@ -249,32 +246,63 @@ head.ready(function() {
             dataType: 'json',
             type: 'POST',
             quietMillis: 100,
-            data: function (term) {
+            data: function (term, page) {
                 return {
                     query: term,
-                    csrf_token: csrf_token
+                    csrf_token: csrf_token,
+                    start: page,
+                    stop: 10
                 };
             },
-            results: function (data)
+            results: function (data, page)
             {
-                return { results: data.rows, more: (data.rows && data.rows.length == 10 ? true : false) };
+                var more = (page * 10) < data.total; // whether or not there are more results available
+
+                // notice we return the value of more so Select2 knows if more results can be loaded
+                return {results: data.rows, more: more};
+
+                //return { results: data.rows, more: (data.rows && data.rows.length == 10 ? true : false) };
             }
-            //dropdownCssClass: "bigdrop"
         },
 
         id: function(data) { return { id: data.hn } },
 
         formatResult: function(data) {
-            return '[' + data.hn + '] ' + data.text + ' [' + data.cid + ']';
+            return '[' + data.hn + '] ' + data.fullname;
         },
         formatSelection: function(data) {
-            return data.hn;
+            return '[' + data.hn + '] ' + data.fullname;
         },
         initSelection: function(el, cb) {
             //var eltxt = $(el).val();
             //cb({'term': eltxt });
         }
     });
+
+    regsv.set_selected_data = function() {
+        var hmain_code = $('#txt_reg_service_insc_hosp_main_code1').val(),
+            hmain_name = $('#txt_reg_service_insc_hosp_main_name1').val(),
+            hsub_code = $('#txt_reg_service_insc_hosp_sub_code1').val(),
+            hsub_name = $('#txt_reg_service_insc_hosp_sub_name1').val(),
+            hn = $('#txt_service_hn').val(),
+            fullname = $('#txt_reg_service_patient_fullname').val();
+
+        if(hn) {
+            $('#txt_service_profile_hn').select2('data', {hn: hn, fullname: fullname});
+            $('#txt_service_profile_hn').select2('enable', false);
+        }
+
+        if(hmain_code) {
+            $('#txt_reg_service_insc_hosp_main_name').select2('data', {code: hmain_code, name: hmain_name});
+        }
+
+        if(hsub_code) {
+            $('#txt_reg_service_insc_hosp_sub_name').select2('data', {code: hsub_code, name: hsub_name});
+        }
+
+    };
+
+    regsv.set_selected_data();
 
     app.set_runtime();
 });

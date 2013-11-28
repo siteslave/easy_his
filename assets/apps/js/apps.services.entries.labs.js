@@ -111,7 +111,7 @@ head.ready(function(){
                             '<td>' + i + '</td>' +
                             '<td>' + v.name + '</td>' +
                             '<td><a href="#" data-name="btn_lab_remove_order" class="btn btn-danger" ' +
-                            'data-id="' + v.group_id + '"><i class="icon-trash"></i></a></td>' +
+                            'data-id="' + v.group_id + '"><i class="fa fa-trash-o"></i></a></td>' +
                         '</tr>'
                     );
 
@@ -151,14 +151,14 @@ head.ready(function(){
                 $('#tbl_lab_result > tbody').append(
                     '<tr>' +
                         '<td>' + v.name + '</td>' +
-                        '<td><input type="text" style="width: 150px;" data-type="number" value="' + v.result + '"></td>' +
+                        '<td><input type="text" class="form-control" style="width: 150px;" data-type="number" value="' + v.result + '"></td>' +
                         '<td>' + v.unit + '</td>' +
                         '<td>' + v.default_value + '</td>' +
                         '<td><div class="btn-group">' +
                         '<a href="#" class="btn btn-success" data-name="btn_lab_result_save" data-id="' + v.id + '">' +
-                        '<i class="icon-save"></i></a>' +
+                        '<i class="fa fa-save"></i></a>' +
                         '<a href="#" class="btn btn-danger" data-name="btn_lab_result_remove" data-id="' + v.id + '">' +
-                        '<i class="icon-trash"></i></a>' +
+                        '<i class="fa fa-trash-o"></i></a>' +
                         '</div></td>' +
                         '</tr>'
                 );

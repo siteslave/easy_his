@@ -175,17 +175,23 @@ head.ready(function(){
             dataType: 'json',
             type: 'POST',
             quietMillis: 100,
-            data: function (term) {
+            data: function (term, page) {
                 return {
                     query: term,
-                    csrf_token: csrf_token
+                    csrf_token: csrf_token,
+                    start: page,
+                    stop: 10
                 };
             },
-            results: function (data)
+            results: function (data, page)
             {
-                return { results: data.rows, more: (data.rows && data.rows.length == 10 ? true : false) };
+                var more = (page * 10) < data.total; // whether or not there are more results available
+
+                // notice we return the value of more so Select2 knows if more results can be loaded
+                return {results: data.rows, more: more};
+
+                //return { results: data.rows, more: (data.rows && data.rows.length == 10 ? true : false) };
             }
-            //dropdownCssClass: "bigdrop"
         },
 
         id: function(data) { return { id: data.code } },

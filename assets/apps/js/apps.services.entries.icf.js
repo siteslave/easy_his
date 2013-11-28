@@ -153,7 +153,7 @@ head.ready(function(){
                           '<td>' + v.qualifier_name + '</td>' +
                           '<td>' + v.provider_name + '</td>' +
                           '<td><a href="#" class="btn" data-name="btn_icf_remove" ' +
-                          'data-id="' + v.id + '" title="ลบ"><i class="icon-trash"></i></a></td>' +
+                          'data-id="' + v.id + '" title="ลบ"><i class="fa fa-trash-o"></i></a></td>' +
                       '</tr>'
                   );
                });

@@ -118,7 +118,7 @@
                   </li>
                   <li>
                       <a href="<?php echo site_url('pregnancies'); ?>">
-                          <i class="fa-book fa-fw"></i> ทะเบียนฝากครรภ์/คลอด/การดูแลหลังคลอด
+                          <i class="fa fa-book fa-fw"></i> ทะเบียนฝากครรภ์/คลอด/การดูแลหลังคลอด
                       </a>
                   </li>
                   <li>
@@ -129,29 +129,29 @@
                   <li class="divider"></li>
                   <li>
                       <a href="<?php echo site_url('diabetes'); ?>">
-                          <i class="fa-tags fa-fw"></i> ทะเบียนผู้ป่วยเบาหวาน
+                          <i class="fa fa-tags fa-fw"></i> ทะเบียนผู้ป่วยเบาหวาน
                       </a>
                   </li>
                   <li>
                       <a href="<?php echo site_url('hypertension'); ?>">
-                          <i class="fa-tags fa-fw"></i> ทะเบียนผู้ป่วยความดัน
+                          <i class="fa fa-tags fa-fw"></i> ทะเบียนผู้ป่วยความดัน
                       </a>
                   </li>
 
                   <li class="divider"></li>
                   <li>
                       <a href="<?php echo site_url('death'); ?>">
-                          <i class="fa-group fa-fw"></i> ทะเบียนผู้เสียชีวิต
+                          <i class="fa fa-group fa-fw"></i> ทะเบียนผู้เสียชีวิต
                       </a>
                   </li>
                   <li>
                       <a href="<?php echo site_url('disabilities'); ?>">
-                          <i class="fa-tags fa-fw"></i> ทะเบียนผู้พิการ
+                          <i class="fa fa-tags fa-fw"></i> ทะเบียนผู้พิการ
                       </a>
                   </li>
                   <li>
                       <a href="<?php echo site_url('women'); ?>">
-                          <i class="fa-tags fa-fw"></i> ทะเบียนหญิงวัยเจริญพันธุ์
+                          <i class="fa fa-tags fa-fw"></i> ทะเบียนหญิงวัยเจริญพันธุ์
                       </a>
                   </li>
               </ul>

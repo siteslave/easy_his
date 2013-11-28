@@ -152,13 +152,13 @@ head.ready(function(){
         if(_.size(data.rows) > 0){
             _.each(data.rows, function(v){
 
-                var html = '<button type="button" class="btn btn-success btn-samll" data-name="btn_add_cover" ' +
-                    'data-hn="'+ v.hn +'"><i class="icon-plus-sign"></i> วัคซีนจากที่อื่น</button>';
+                var html = '<button type="button" class="btn btn-success" data-name="btn_add_cover" ' +
+                    'data-hn="'+ v.hn +'"><i class="fa fa-plus-circle"></i> วัคซีนจากที่อื่น</button>';
 
                 if(_.size(v.history) > 0)
                 {
                     html +=
-                        '<table style="width: 690px;">' +
+                        '<table style="width: 690px;" class="table table-striped">' +
                         '<thead>' +
                         '<tr>' +
                         '<th>วันที่</th>' +
@@ -177,9 +177,9 @@ head.ready(function(){
                             '<td>['+ h.hospcode +'] ' + h.hospname + '</td>' +
                             '<td><div class="btn-group">' +
                             '<a href="#" data-hn="'+ v.hn +'" data-id="'+ h.id +'" data-name="btn_edit_vaccine" rel="tooltip" title="แก้ไขวัคซีน"' +
-                            'class="btn btn-success btn-small"><i class="icon-edit"></i></a>' +
-                            '<a href="#" class="btn btn-danger btn-small" data-id="'+ h.id +'" data-name="btn_remove_vaccine" rel="tooltip" title="ลบรายการวัคซีน">' +
-                            '<i class="icon-trash"></i></a>' +
+                            'class="btn btn-success btn-small"><i class="fa fa-edit"></i></a>' +
+                            '<a href="#" class="btn btn-danger" data-id="'+ h.id +'" data-name="btn_remove_vaccine" rel="tooltip" title="ลบรายการวัคซีน">' +
+                            '<i class="fa fa-trash-o"></i></a>' +
                             '</div></td>' +
                             '</tr>'
                     });
@@ -188,7 +188,7 @@ head.ready(function(){
                 }
                 else
                 {
-                    html += '<table style="width: 650px;">' +
+                    html += '<table style="width: 650px;" class="table table-striped">' +
                         '<thead>' +
                         '<tr>' +
                         '<th>วันที่</th>' +
@@ -212,15 +212,16 @@ head.ready(function(){
                         '<td>' + v.first_name +' '+ v.last_name + '</td>' +
                         '<td>' + app.mongo_to_thai_date(v.birthdate) + '</td>' +
                         '<td>' + v.age + '</td>' +
-                        '<td>' +
-                        '<div class="progress"><div class=" progress-bar progress-bar-success" style="width: 55%;" title="55%"></div></div>' +
-                        '</td>' +
+                        '<td>*</td>' +
+//                        '<td>' +
+//                        '<div class="progress"><div class="progress-bar progress-bar-success" style="width: 55%;" title="55%"></div></div>' +
+//                        '</td>' +
                         '<td>' +
                         '<div class="btn-group">' +
                         '<a href="javascript:void(0);" class="btn btn-success btn-small" data-name="cover_history" ' +
-                        'data-title="ประวัติการรับวัคซีน" rel="tooltip" data-content="' + app.html_safe(html) + '" title="ดูประวัติการรับวัคซีน"><i class="icon-share"></i></a>' +
+                        'data-title="ประวัติการรับวัคซีน" rel="tooltip" data-content="' + app.html_safe(html) + '" title="ดูประวัติการรับวัคซีน"><i class="fa fa-share-square"></i></a>' +
                         '<a href="javascript:void(0);" rel="tooltip" class="btn btn-danger btn-small" data-name="remove" title="จำหน่ายรายการ" ' +
-                        'data-hn="' + v.hn + '"><i class="icon-trash"></i></a>' +
+                        'data-hn="' + v.hn + '"><i class="fa fa-trash-o"></i></a>' +
                         '</div>' +
                         '</td>' +
                         '</tr>'
@@ -418,78 +419,121 @@ head.ready(function(){
         epi.modal.show_register();
     });
 
+//
+//    epi.set_search_person_result = function(data)
+//    {
+//        if(!data)
+//        {
+//            $('#tbl_search_person_result > tbody').append(
+//                '<tr><td colspan="7">ไม่พบรายการ</td></tr>');
+//        }
+//        else
+//        {
+//            _.each(data.rows, function(v){
+//                $('#tbl_search_person_result > tbody').append(
+//                    '<tr>' +
+//                        '<td>'+ v.hn +'</td>' +
+//                        '<td>'+ v.cid +'</td>' +
+//                        '<td>'+ v.first_name + ' ' + v.last_name +'</td>' +
+//                        '<td>'+ app.mongo_to_thai_date(v.birthdate) +'</td>' +
+//                        '<td>'+ v.age +'</td>' +
+//                        '<td>'+ v.sex +'</td>' +
+//                        '<td><a href="#" class="btn btn-success btn-small" data-hn="'+ v.hn + '" data-name="btn_selected_person" data-typearea="'+ v.typearea +'">' +
+//                        '<i class="icon-ok"></i></a></td>' +
+//                        '</tr>');
+//            });
+//        }
+//    };
 
-    epi.set_search_person_result = function(data)
-    {
-        if(!data)
-        {
-            $('#tbl_search_person_result > tbody').append(
-                '<tr><td colspan="7">ไม่พบรายการ</td></tr>');
-        }
-        else
-        {
-            _.each(data.rows, function(v){
-                $('#tbl_search_person_result > tbody').append(
-                    '<tr>' +
-                        '<td>'+ v.hn +'</td>' +
-                        '<td>'+ v.cid +'</td>' +
-                        '<td>'+ v.first_name + ' ' + v.last_name +'</td>' +
-                        '<td>'+ app.mongo_to_thai_date(v.birthdate) +'</td>' +
-                        '<td>'+ v.age +'</td>' +
-                        '<td>'+ v.sex +'</td>' +
-                        '<td><a href="#" class="btn btn-success btn-small" data-hn="'+ v.hn + '" data-name="btn_selected_person" data-typearea="'+ v.typearea +'">' +
-                        '<i class="icon-ok"></i></a></td>' +
-                        '</tr>');
-            });
-        }
-    };
+//    //search person
+//    $('#btn_do_search_person').click(function(){
+//        var query = $('#txt_search_query').val(),
+//            filter = $('#txt_search_person_filter').val();
+//
+//        if(!query)
+//        {
+//            app.alert('กรุณาระบุคำค้นหา โดยระบุชื่อ-สกุล หรือ HN หรือ เลขบัตรประชาชน');
+//        }
+//        else
+//        {
+//            //do search
+//            $('#tbl_search_person_result > tbody').empty();
+//
+//            epi.ajax.search_person(query, filter, function(err, data){
+//
+//                if(err)
+//                {
+//                    app.alert(err);
+//                    $('#tbl_search_person_result > tbody').append(
+//                        '<tr><td colspan="7">ไม่พบรายการ</td></tr>');
+//                }
+//                else
+//                {
+//                   epi.set_search_person_result(data);
+//                }
+//            });
+//        }
+//    });
+//
+//    //set filter
+//    $('a[data-name="btn_search_person_fillter"]').click(function(){
+//        var filter = $(this).data('value');
+//
+//        $('#txt_search_person_filter').val(filter);
+//    });
+
 
     //search person
-    $('#btn_do_search_person').click(function(){
-        var query = $('#txt_search_query').val(),
-            filter = $('#txt_search_person_filter').val();
+    $('#txt_search_query').select2({
+        placeholder: 'HN, เลขบัตรประชาชน, ชื่อ-สกุล',
+        minimumInputLength: 2,
+        allowClear: true,
+        ajax: {
+            url: site_url + "/person/search_person_all_ajax",
+            dataType: 'json',
+            type: 'POST',
+            quietMillis: 100,
+            data: function (term, page) {
+                return {
+                    query: term,
+                    csrf_token: csrf_token,
+                    start: page,
+                    stop: 10
+                };
+            },
+            results: function (data, page)
+            {
+                var more = (page * 10) < data.total; // whether or not there are more results available
 
-        if(!query)
-        {
-            app.alert('กรุณาระบุคำค้นหา โดยระบุชื่อ-สกุล หรือ HN หรือ เลขบัตรประชาชน');
-        }
-        else
-        {
-            //do search
-            $('#tbl_search_person_result > tbody').empty();
+                // notice we return the value of more so Select2 knows if more results can be loaded
+                return {results: data.rows, more: more};
 
-            epi.ajax.search_person(query, filter, function(err, data){
+                //return { results: data.rows, more: (data.rows && data.rows.length == 10 ? true : false) };
+            }
+        },
 
-                if(err)
-                {
-                    app.alert(err);
-                    $('#tbl_search_person_result > tbody').append(
-                        '<tr><td colspan="7">ไม่พบรายการ</td></tr>');
-                }
-                else
-                {
-                   epi.set_search_person_result(data);
-                }
-            });
+        id: function(data) { return { id: data.hn } },
+
+        formatResult: function(data) {
+            return '[' + data.hn + '] ' + data.fullname;
+        },
+        formatSelection: function(data) {
+            return '[' + data.hn + '] ' + data.fullname;
+        },
+        initSelection: function(el, cb) {
+            //var eltxt = $(el).val();
+            //cb({'term': eltxt });
         }
     });
 
-    //set filter
-    $('a[data-name="btn_search_person_fillter"]').click(function(){
-        var filter = $(this).data('value');
+    $('#btn_do_register_epi').on('click', function(){
 
-        $('#txt_search_person_filter').val(filter);
-    });
+         var person = $('#txt_search_query').select2('data');
 
-    $(document).on('click', 'a[data-name="btn_selected_person"]', function(){
 
-        if( ! _.indexOf(['1', '3'], $(this).data('typearea')) ||  !$(this).data('typearea'))
+        if(person.typearea == '1' || person.typearea == '3')
         {
-            app.alert('บุคคลนี้ไม่ใช่บุคคลในเขตรับผิดชอบ (Typearea ไม่ใช่ 1 หรือ 3)');
-        }
-        else
-        {
-            var hn = $(this).data('hn');
+            var hn = person.hn;
 
             if(confirm('คุณต้องการลงทะเบียนข้อมูลนี้ใช่หรือไม่?'))
             {
@@ -507,6 +551,11 @@ head.ready(function(){
                     }
                 });
             }
+
+        }
+        else
+        {
+            app.alert('บุคคลนี้ไม่ใช่บุคคลในเขตรับผิดชอบ (Typearea ไม่ใช่ 1 หรือ 3) Typearea ปัจจุบันคือ ' + person.typearea);
         }
     });
 
@@ -593,7 +642,7 @@ head.ready(function(){
                         '<td>'+ v.date_serv +'</td>' +
                         '<td>'+ app.clear_null(v.vaccine_name) +'</td>' +
                         '<td>['+ v.hospcode +'] ' + v.hospname + '</td>' +
-                        '<td><a href="#" class="btn btn-success btn-small"><i class="icon-edit"></i></a></td>' +
+                        '<td><a href="#" class="btn btn-success btn-small"><i class="fa fa-edit"></i></a></td>' +
                     '</tr>'
                 });
 

@@ -29,41 +29,38 @@ head.ready(function(){
         }
     };
 
-    $('#txt_nutri_hospname').on('keyup', function(){
-        $('#txt_nutri_hospcode').val('');
-    });
-
-    $('#txt_nutri_hospname').typeahead({
-        ajax: {
-            url: site_url + '/basic/search_hospital_ajax',
-            timeout: 500,
-            displayField: 'fullname',
-            triggerLength: 3,
-            preDispatch: function(query){
-                return {
-                    query: query,
-                    csrf_token: csrf_token
-                }
-            },
-
-            preProcess: function(data){
-                if(data.success){
-                    return data.rows;
-                }else{
-                    return false;
-                }
-            }
-        },
-        updater: function(data){
-            var d = data.split('#');
-            var name = d[0],
-                code = d[1];
-
-            $('#txt_nutri_hospcode').val(code);
-
-            return name;
-        }
-    });
+//
+//    $('#txt_nutri_hospname').typeahead({
+//        ajax: {
+//            url: site_url + '/basic/search_hospital_ajax',
+//            timeout: 500,
+//            displayField: 'fullname',
+//            triggerLength: 3,
+//            preDispatch: function(query){
+//                return {
+//                    query: query,
+//                    csrf_token: csrf_token
+//                }
+//            },
+//
+//            preProcess: function(data){
+//                if(data.success){
+//                    return data.rows;
+//                }else{
+//                    return false;
+//                }
+//            }
+//        },
+//        updater: function(data){
+//            var d = data.split('#');
+//            var name = d[0],
+//                code = d[1];
+//
+//            $('#txt_nutri_hospcode').val(code);
+//
+//            return name;
+//        }
+//    });
 
     $('#btn_nutri_save').click(function(){
         var data = {};

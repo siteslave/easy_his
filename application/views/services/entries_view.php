@@ -31,7 +31,7 @@
         <ul class="dropdown-menu">
             <li class="disabled"><a href="javascript:void(0);" data-name="btn_chronic_fu"><i class="fa fa-tags fa-fw"></i> คัดกรองความเสี่ยง (เบาหวาน, ความดัน)</a></li>
             <li><a href="javascript:void(0);" data-name="btn_depress"><i class="fa fa-leaf fa-fw"></i> คัดกรองโรคซึมเศร้า</a></li>
-            <li><a href="javascript:void(0);" data-name="btn_papsemear"><i class="fa fa-fire fa-fw"></i> คัดกรองมะเร็งปากมดลูก</a></li>
+            <li class="disabled"><a href="javascript:void(0);" data-name="btn_papsemear"><i class="fa fa-fire fa-fw"></i> คัดกรองมะเร็งปากมดลูก</a></li>
         </ul>
     </div>
     <div class="btn-group">
@@ -890,7 +890,7 @@
             </div>
             <div class="modal-body"></div>
             <div class="modal-footer">
-                <a href="#" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-power-off"></i> ปิดหน้าต่าง</a>
+<!--                <a href="#" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-power-off"></i> ปิดหน้าต่าง</a>-->
             </div>
         </div>
     </div>
@@ -923,7 +923,7 @@
             </div>
             <div class="modal-body"></div>
             <div class="modal-footer">
-                <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="fa fa-power-off"></i> ปิดหน้าต่าง</a>
+<!--                <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="fa fa-power-off"></i> ปิดหน้าต่าง</a>-->
             </div>
         </div>
     </div>
@@ -1089,7 +1089,7 @@
 
             </div>
             <div class="modal-footer">
-                <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="fa fa-power-off"></i> ปิดหน้าต่าง</a>
+<!--                <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="fa fa-power-off"></i> ปิดหน้าต่าง</a>-->
             </div>
         </div>
     </div>
@@ -1408,7 +1408,7 @@
 
             </div>
             <div class="modal-footer">
-                <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="fa fa-power-off"></i> ปิดหน้าต่าง</a>
+<!--                <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="fa fa-power-off"></i> ปิดหน้าต่าง</a>-->
             </div>
         </div>
     </div>
@@ -2050,7 +2050,7 @@
                         <div class="row">
                             <div class="col-lg-6">
                                 <label for="txt_cfu_eye_treatment">การรักษาที่ให้ (Treatment)</label>
-                                <textarea id="txt_cfu_eye_treatment" class="form-contorl" rows="2"></textarea>
+                                <textarea id="txt_cfu_eye_treatment" class="form-control" rows="2"></textarea>
                             </div>
                             <div class="col-lg-6">
                                 <label for="">รายละเอียดเพิ่มเติม</label>

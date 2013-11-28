@@ -1,7 +1,7 @@
 <input type="hidden" id="txt_rfo_vn" value="<?=$vn?>"/>
 <input type="hidden" id="txt_rfo_hn" value="<?=$hn?>"/>
-<input type="hidden" id="txt_rfo_hospcode2" value="<?=isset($refer_hospital_code) ? $refer_hospital_code : ''?>"/>
-<input type="hidden" id="txt_rfo_hospcode1" value="<?=isset($refer_hospital_name) ? $refer_hospital_name : ''?>"/>
+<input type="hidden" id="txt_rfo_hospcode1" value="<?=isset($refer_hospital_code) ? $refer_hospital_code : ''?>"/>
+<input type="hidden" id="txt_rfo_hospname1" value="<?=isset($refer_hospital_name) ? $refer_hospital_name : ''?>"/>
 <div class="tabbable">
     <ul class="nav nav-tabs">
         <li class="active"><a href="#tab_rfo_detail" data-toggle="tab"><i class="icon-edit"></i> ข้อมูลการส่งต่อ</a></li>

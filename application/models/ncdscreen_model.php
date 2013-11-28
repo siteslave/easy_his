@@ -143,11 +143,11 @@ class Ncdscreen_model extends CI_Model
 
                 'drink'             => $data['drink'],
                 'drink_qty'         => $data['drink_qty'],
-                'food_taste_sweet'  => $data['food_taste_sweet'],
-                'food_taste_salt'   => $data['food_taste_salt'],
-                'food_taste_creamy' => $data['food_taste_creamy'],
-                'food_taste_no'     => $data['food_taste_no'],
-
+//                'food_taste_sweet'  => $data['food_taste_sweet'],
+//                'food_taste_salt'   => $data['food_taste_salt'],
+//                'food_taste_creamy' => $data['food_taste_creamy'],
+//                'food_taste_no'     => $data['food_taste_no'],
+                'food_tastes' => $data['food_tastes'],
                 'screen_tb' => $data['screen_tb'],
 
                 'sbp1'  => $data['sbp1'],
@@ -244,11 +244,11 @@ class Ncdscreen_model extends CI_Model
 
                 'drink'             => $data['drink'],
                 'drink_qty'         => $data['drink_qty'],
-                'food_taste_sweet'  => $data['food_taste_sweet'],
-                'food_taste_salt'   => $data['food_taste_salt'],
-                'food_taste_creamy' => $data['food_taste_creamy'],
-                'food_taste_no'     => $data['food_taste_no'],
-
+//                'food_taste_sweet'  => $data['food_taste_sweet'],
+//                'food_taste_salt'   => $data['food_taste_salt'],
+//                'food_taste_creamy' => $data['food_taste_creamy'],
+//                'food_taste_no'     => $data['food_taste_no'],
+                'food_tastes' => $data['food_tastes'],
                 'screen_tb' => $data['screen_tb'],
 
                 'sbp1'  => $data['sbp1'],

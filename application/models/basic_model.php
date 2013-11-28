@@ -445,12 +445,19 @@ class Basic_model extends CI_Model
 
         return $arr_result;
     }
-    public function search_hospital_ajax_by_code($query){
+
+    public function search_hospital_ajax($query, $start, $limit){
         $this->mongo_db->add_index('ref_hospitals', array('hospcode' => -1));
+        $this->mongo_db->add_index('ref_hospitals', array('hospname' => -1));
 
         $result = $this->mongo_db
-            ->order_by(array('hospcode' => 1))
-            ->where(array('hospcode' => $query))
+            ->order_by(array('hospname' => 1))
+            ->or_where(array(
+                'hospcode' => new MongoRegex('/^' . $query . '/'),
+                'hospname' => new MongoRegex('/' . $query . '/')
+            ))
+            ->offset($start)
+            ->limit($limit)
             ->get('ref_hospitals');
 
         $arr_result = array();
@@ -459,14 +466,28 @@ class Basic_model extends CI_Model
             $obj = new stdClass();
             $obj->code = $r['hospcode'];
             $obj->name = $r['hospname'];
-            #$obj->fullname = $r['hospname'] . '#' . $r['hospcode'];
-            #$obj->province = get_changwat($r['changwat']);
 
             $arr_result[] = $obj;
         }
 
         return $arr_result;
     }
+    public function search_hospital_ajax_total($query){
+        $this->mongo_db->add_index('ref_hospitals', array('hospcode' => -1));
+        $this->mongo_db->add_index('ref_hospitals', array('hospname' => -1));
+
+        $result = $this->mongo_db
+            ->order_by(array('hospname' => 1))
+            ->or_where(array(
+                'hospcode' => new MongoRegex('/^' . $query . '/'),
+                'hospname' => new MongoRegex('/' . $query . '/')
+            ))
+            ->count('ref_hospitals');
+
+        return $result;
+    }
+
+
     public function get_province(){
         $this->mongo_db->add_index('ref_provinces', array('code' => -1));
 

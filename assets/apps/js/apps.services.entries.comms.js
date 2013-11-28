@@ -90,7 +90,7 @@ head.ready(function(){
                                '<td>'+ v.comservice +'</td>' +
                                '<td>'+ v.provider +'</td>' +
                                '<td><a href="#" class="btn btn-danger" data-id="'+ v.id +'" data-name="btn_remove_comms" title="ลบรายการ">' +
-                               '<i class="icon-trash"></i></a></td>' +
+                               '<i class="fa fa-trash-o"></i></a></td>' +
                             '</tr>'
                        );
 

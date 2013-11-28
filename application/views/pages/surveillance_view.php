@@ -5,23 +5,23 @@
     <div class="row">
         <div class="col-lg-2">
             <label>HN</label>
-            <input type="text" disabled="disabled" value="<?=isset($hn) ? $hn : ''?>">
+            <input type="text" class="form-control" disabled="disabled" value="<?=isset($hn) ? $hn : ''?>">
         </div>
         <div class="col-lg-3">
             <label>ชื่อ - สกุล</label>
-            <input type="text" disabled="disabled" value="<?=isset($name) ? $name : ''?>">
+            <input type="text" class="form-control" disabled="disabled" value="<?=isset($name) ? $name : ''?>">
         </div>
         <div class="col-lg-2">
             <label>CID</label>
-            <input type="text" disabled="disabled" value="<?=isset($cid) ? $cid : ''?>">
+            <input type="text" class="form-control" disabled="disabled" value="<?=isset($cid) ? $cid : ''?>">
         </div>
         <div class="col-lg-2">
             <label>วันเกิด</label>
-            <input type="text" disabled="disabled" value="<?=isset($birthdate) ? $birthdate : ''?>">
+            <input type="text" class="form-control" disabled="disabled" value="<?=isset($birthdate) ? $birthdate : ''?>">
         </div>
         <div class="col-lg-2">
             <label>อายุ (ปี)</label>
-            <input type="text" disabled="disabled" value="<?=isset($age) ? $age : ''?>">
+            <input type="text" class="form-control" disabled="disabled" value="<?=isset($age) ? $age : ''?>">
         </div>
     </div>
 
@@ -33,21 +33,23 @@
     <div class="col-lg-2">
         <label class="control-label" for="txt_surveil_illdate">วันที่เริ่มป่วย</label>
         <input id="txt_surveil_illdate" type="text" value="<?=isset($illdate) ? $illdate : ''?>" <?=isset($illdate) ? 'disalbed="disabled"' : ''?> data-type="date"
-            placeholder="dd/mm/yyyy" rel="tooltip" title="ระบุวันที่เริ่มป่วย">
+            placeholder="dd/mm/yyyy" rel="tooltip" title="ระบุวันที่เริ่มป่วย" class="form-control">
     </div>
     <div class="col-lg-2">
         <label class="control-label" for="txt_surveil_diag_code">รหัส</label>
-        <input type="text" id="txt_surveil_diag_code" disabled="disabled" placeholder="-*-" value="<?=isset($diag_code) ? $diag_code : ''?>" />
+        <input type="text" id="txt_surveil_diag_code" disabled="disabled" placeholder="-*-"
+               class="form-control" value="<?=isset($diag_code) ? $diag_code : ''?>" />
     </div>
     <div class="col-lg-8">
         <label class="control-label" for="txt_surveil_diag_name">การวินิจฉัย</label>
-        <input type="text" id="txt_surveil_diag_name" disabled="disabled" value="<?=isset($diag_name) ? $diag_name : ''?>" />
+        <input type="text" id="txt_surveil_diag_name" class="form-control"
+               disabled="disabled" value="<?=isset($diag_name) ? $diag_name : ''?>" />
     </div>
 </div>
 <div class="row">
     <div class="col-lg-4">
         <label class="control-label" for="sl_surveil_syndrome">กลุ่มอาการ</label>
-        <select id="sl_surveil_syndrome">
+        <select id="sl_surveil_syndrome" class="form-control">
             <option value="">--</option>
             <?php
             foreach($syndromes as $r)
@@ -74,7 +76,7 @@
     </div>
     <div class="col-lg-4">
         <label class="control-label" for="sl_surveil_506">รหัส 506</label>
-        <select id="sl_surveil_506">
+        <select id="sl_surveil_506" class="form-control">
             <option value="">--</option>
             <?php
             foreach($groups as $r)
@@ -102,7 +104,7 @@
 
     <div class="col-lg-4">
         <label class="control-label" for="sl_surveil_organism">ชนิดของเชื้อ</label>
-        <select id="sl_surveil_organism">
+        <select id="sl_surveil_organism" class="form-control">
             <option value="">--</option>
             <?php
             foreach($ogranisms as $r)
@@ -132,7 +134,7 @@
 <div class="row">
     <div class="col-lg-4">
         <label class="control-label" for="sl_surveil_complication">สาเหตุการป่วย</label>
-        <select id="sl_surveil_complication">
+        <select id="sl_surveil_complication" class="form-control">
             <option value="">--</option>
             <?php
             foreach($complications as $r)
@@ -158,7 +160,7 @@
     </div>
     <div class="col-lg-3">
         <label class="control-label" for="sl_surveil_ptstatus">สภาพผู้ป่วย</label>
-        <select id="sl_surveil_ptstatus">
+        <select id="sl_surveil_ptstatus" class="form-control">
             <option value="">--</option>
             <option value="1" <?=isset($ptstatus) ? $ptstatus == '1' ? 'selected="selected"' : '' : ''?>>[1] หาย</option>
             <option value="2" <?=isset($ptstatus) ? $ptstatus == '2' ? 'selected="selected"' : '' : ''?>>[2] ตาย</option>
@@ -169,23 +171,23 @@
     <div class="col-lg-2">
         <label class="control-label" for="txt_surveil_date_death">วันที่เสียชีวิต</label>
         <input id="txt_surveil_date_death" type="text" data-type="date" placeholder="dd/mm/yyyy" rel="tooltip"
-            title="ระบุวันที่" value="<?=isset($date_death) ? $date_death : ''?>">
+            class="form-control" title="ระบุวันที่" value="<?=isset($date_death) ? $date_death : ''?>">
     </div>
 </div>
 <legend>ที่อยู่ขณะป่วย</legend>
 <div class="row">
     <div class="col-lg-2">
         <label class="control-label" for="txt_surveil_address">เลขที่</label>
-        <input type="text" class="input-mini" id="txt_surveil_address" placeholder=".." value="<?=isset($illhouse) ? $illhouse : ''?>">
+        <input type="text" class="form-control" id="txt_surveil_address" placeholder=".." value="<?=isset($illhouse) ? $illhouse : ''?>">
     </div>
     <div class="col-lg-1">
         <label class="control-label" for="txt_surveil_moo">หมู่</label>
-        <input type="text" rel="tooltip" title="ระบุตัวเลข 2 หลัก เช่น 00, 01, 02" data-type="number"
+        <input type="text" rel="tooltip" title="ระบุตัวเลข 2 หลัก เช่น 00, 01, 02" data-type="number" class="form-control"
                value="<?=isset($illvillage) ? $illvillage : ''?>" id="txt_surveil_moo" placeholder="00">
     </div>
     <div class="col-lg-3">
         <label class="control-label" for="sl_surveil_province">จังหวัด</label>
-        <select id="sl_surveil_province">
+        <select id="sl_surveil_province" class="form-control">
             <option value="99">ไม่ทราบ</option>
             <?php
             foreach($provinces as $t)
@@ -212,7 +214,7 @@
     </div>
     <div class="col-lg-3">
         <label class="control-label" for="sl_surveil_ampur">อำเภอ</label>
-        <select id="sl_surveil_ampur" rel="tooltip" title="กรุณาเลือกจังหวัดก่อน">
+        <select id="sl_surveil_ampur" rel="tooltip" title="กรุณาเลือกจังหวัดก่อน" class="form-control">
             <option value="">-*-</option>
             <?php
             foreach($ampur as $t)
@@ -239,7 +241,7 @@
     </div>
     <div class="col-lg-3">
         <label class="control-label" for="sl_surveil_tambon">ตำบล</label>
-        <select id="sl_surveil_tambon" rel="tooltip" title="กรุณาเลือกอำเภอก่อน">
+        <select id="sl_surveil_tambon" rel="tooltip" title="กรุณาเลือกอำเภอก่อน" class="form-control">
             <option value="">-*-</option>
             <?php
             foreach($tambon as $t)
@@ -268,20 +270,20 @@
 <div class="row">
     <div class="col-lg-3">
         <label class="control-label" for="txt_surveil_school_class">ชั้นเรียน</label>
-        <input type="text" id="txt_surveil_school_class" value="<?=isset($school_class) ? $school_class : ''?>" />
+        <input type="text" class="form-control" id="txt_surveil_school_class" value="<?=isset($school_class) ? $school_class : ''?>" />
     </div>
     <div class="col-lg-3">
         <label class="control-label" for="txt_surveil_school_name">โรงเรียน</label>
-        <input type="text" id="txt_surveil_school_name" value="<?=isset($school_name) ? $school_name : ''?>" />
+        <input type="text" class="form-control" id="txt_surveil_school_name" value="<?=isset($school_name) ? $school_name : ''?>" />
     </div>
     <div class="col-lg-3">
         <label class="control-label" for="txt_surveil_latitude">Latitude</label>
-        <input type="text" id="txt_surveil_latitude" value="<?=isset($latitude) ? $latitude : ''?>" />
+        <input type="text" class="form-control" id="txt_surveil_latitude" value="<?=isset($latitude) ? $latitude : ''?>" />
     </div>
     <div class="col-lg-3">
         <label class="control-label" for="txt_longitude">Longitude</label>
-        <input id="txt_surveil_longitude" type="text" value="<?=isset($longitude) ? $longitude : ''?>" >
+        <input id="txt_surveil_longitude" class="form-control" type="text" value="<?=isset($longitude) ? $longitude : ''?>" >
     </div>
 </div>
 <br>
-<a href="#" id="btn_surveil_save" class="btn btn-success"><i class="icon-save"></i> บันทึกข้อมูล</a>
+<a href="#" id="btn_surveil_save" class="btn btn-success"><i class="fa fa-save"></i> บันทึกข้อมูล</a>

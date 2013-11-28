@@ -43,19 +43,28 @@ class Basic extends CI_Controller
     public function search_hospital_ajax(){
         $query = $this->input->post('query');
 
-        if(!empty($query)){
+        $start  = $this->input->post('start');
+        $stop   = $this->input->post('stop');
 
-            if(is_numeric($query)){
-                //search by code
-                $result = $this->basic->search_hospital_ajax_by_code($query);
-            }else{
-                //search by name
-                $result = $this->basic->search_hospital_ajax_by_name($query);
-            }
-            $rows=  json_encode($result);
+        $start  = empty($start) ? 1 : $start;
+        $stop   = empty($stop) ? 10 : $stop;
 
-            $json = '{"success": true, "rows": '.$rows.'}';
-        }else{
+        $start = ($start - 1) * $stop;
+
+        $limit  = $stop;
+
+        if(!empty($query))
+        {
+
+            $rs = $this->basic->search_hospital_ajax($query, $start, $limit);
+            $total = $this->basic->search_hospital_ajax_total($query);
+
+            $rows=  json_encode($rs);
+
+            $json = '{"success": true, "rows": '.$rows.', "total": ' . $total . '}';
+        }
+        else
+        {
             $json = '{"success": false, "msg": "Query empty."}';
         }
 

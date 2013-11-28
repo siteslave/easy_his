@@ -125,12 +125,15 @@ head.ready(function(){
 
     $('#btn_rfo_save').on('click', function(){
         var items = {};
+
+        var hospital = $('#txt_rfo_hosp_name').select2('data');
+
         items.code = $('#txt_rfo_no').val();
         items.vn = $('#txt_rfo_vn').val();
         items.hn = $('#txt_rfo_hn').val();
         items.refer_date = $('#txt_rfo_date').val();
         items.refer_time = $('#txt_rfo_time').val();
-        items.refer_hospital = $('#txt_rfo_hosp_code').val();
+        items.refer_hospital = hospital.code;
         items.cause = $('#sl_rfo_cause').val();
         items.reason = $('#sl_rfo_reason').val();
         items.clinic_id = $('#sl_rfo_clinic').val();
@@ -193,10 +196,13 @@ head.ready(function(){
     });
 
     $('#btn_answer_save').on('click', function(){
+
+        var diag = $('#txt_rfo_answer_diag_name').select2('data');
+
         var items = {
             answer_date: $('#txt_rfo_answer_date').val(),
             answer_detail: $('#txt_rfo_answer_detail').val(),
-            answer_diag: $('#txt_rfo_answer_diag_code').val(),
+            answer_diag: diag.code,
             rfo_code: $('#txt_rfo_no').val()
         };
 
@@ -226,6 +232,8 @@ head.ready(function(){
                 else
                 {
                     app.alert('บันทึกรายการตอบรับเสร็จเรียบร้อยแล้ว');
+
+                    parent.refer.get_rfo_list();
                 }
             });
         }
@@ -243,11 +251,27 @@ head.ready(function(){
             {
                 $('#txt_rfo_answer_date').val(data.rows.answer_date);
                 $('#txt_rfo_answer_detail').val(data.rows.answer_detail);
-                $('#txt_rfo_answer_diag_code').val(data.rows.answer_diag_code);
-                $('#txt_rfo_answer_diag_name').val(data.rows.answer_diag_name);
+
+                if(data.rows.answer_diag_code) {
+                    $('#txt_rfo_answer_diag_name').select2('data', {code: data.rows.answer_diag_code, name: data.rows.answer_diag_name});
+                }
+                //$('#txt_rfo_answer_diag_code').val(data.rows.answer_diag_code);
+                //$('#txt_rfo_answer_diag_name').val(data.rows.answer_diag_name);
             }
         });
     });
+
+    rfos.set_hospital_selected = function() {
+        var code = $('#txt_rfo_hospcode1').val(),
+            name = $('#txt_rfo_hospname1').val();
+
+        if(code) {
+            $('#txt_rfo_hosp_name').select2('data', {code: code, name: name});
+            $('#txt_rfo_hosp_name').select2('enable', false);
+        }
+    };
+
+    rfos.set_hospital_selected();
 
     app.set_runtime();
 });

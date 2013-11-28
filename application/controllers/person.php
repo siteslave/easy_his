@@ -1133,22 +1133,15 @@ class Person extends CI_Controller
     {
         $query = $this->input->post('query');
 
-        if(is_numeric($query))
-        {
-            $str = (string)($query);
-            if(strlen($str) == 13) //CID
-            {
-                $filter = 0;
-            }
-            else
-            {
-                $filter = 1;
-            }
-        }
-        else
-        {
-            $filter = 2;
-        }
+        $start  = $this->input->post('start');
+        $stop   = $this->input->post('stop');
+
+        $start  = empty($start) ? 1 : $start;
+        $stop   = empty($stop) ? 10 : $stop;
+
+        $start = ($start - 1) * $stop;
+
+        $limit  = $stop;
 
         if(empty($query))
         {
@@ -1157,24 +1150,8 @@ class Person extends CI_Controller
         else
         {
 
-            if($filter == '0') //by cid
-            {
-                $rs = $this->person->search_person_by_cid($query);
-            }
-            else if($filter == '2')
-            {
-                //get hn by first name and last name
-                $name = explode(' ', $query); // [0] = first name, [1] = last name
-
-                $first_name = count($name) == 2 ? $name[0] : '';
-                $last_name = count($name) == 2 ? $name[1] : '';
-
-                $rs = $this->person->search_person_by_first_last_name($first_name, $last_name);
-            }
-            else
-            {
-                $rs = $this->person->search_person_by_hn($query);
-            }
+            $rs = $this->person->search_person_all_ajax($query, $start, $limit);
+            $total = $this->person->search_person_all_ajax_total($query);
 
             if($rs)
             {
@@ -1187,19 +1164,19 @@ class Person extends CI_Controller
                     $obj->id            = get_first_object($r['_id']);
                     $obj->hn            = $r['hn'];
                     $obj->cid           = $r['cid'];
-                    $obj->text          = $r['first_name'] . ' ' . $r['last_name'];
+                    $obj->fullname      = $r['first_name'] . ' ' . $r['last_name'];
                     //$obj->last_name     = $r['last_name'];
                     $obj->birthdate     = from_mongo_to_thai_date($r['birthdate']);
-                    $obj->sex           = $r['sex'] == '1' ? 'ชาย' : 'หญิง';
+                    $obj->sex           = $r['sex'];
                     $obj->age           = count_age($r['birthdate']);
                     $obj->typearea      = $this->person->get_typearea($r['hn']);
-                    $obj->address       = get_address($obj->hn);
+                    //$obj->address       = get_address($obj->hn);
 
                     $arr_result[] = $obj;
                 }
 
                 $rows = json_encode($arr_result);
-                $json = '{"success": true, "rows": '.$rows.'}';
+                $json = '{"success": true, "rows": '.$rows.', "total": ' . $total . '}';
             }
             else
             {

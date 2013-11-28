@@ -33,6 +33,8 @@ class Pages extends CI_Controller {
         $this->load->model('Babies_model', 'babies');
         $this->load->model('Spp_model', 'spp');
 
+        $this->load->helper('person');
+
         $this->epi->owner_id = $this->owner_id;
 
         $this->preg->owner_id = $this->owner_id;
@@ -490,10 +492,15 @@ class Pages extends CI_Controller {
 
             $person     = $this->person->get_person_detail_with_hn($hn);
 
-            $cid    = $person['cid'];
+            $data['cid']    = $person['cid'];
             $sex    = $person['sex'] == '1' ? 'ชาย' : 'หญิง';
 
-            $data['patient'] = $person['first_name'] . ' ' . $person['last_name'] . ' เพศ: ' . $sex . ' ที่อยู่: ' . get_address($data['hn']);
+            $data['patient_detail'] = $person['first_name'] . ' ' . $person['last_name'] .
+                ' [' . $data['cid'] . '] ' . ' เกิด ' . from_mongo_to_thai_date($person['birthdate']) .
+                ' อายุ ' . count_age($person['birthdate']) . ' ปี ' .
+                ' เพศ: ' . $sex; // . ' ที่อยู่: ' . get_address($data['hn']);
+            $data['fullname'] = $person['first_name'] . ' ' . $person['last_name'];
+            $data['birthdate'] = $person['birthdate'];
 
         }
 
@@ -544,11 +551,15 @@ class Pages extends CI_Controller {
 
             $person     = $this->person->get_person_detail_with_hn($hn);
 
-            $cid    = $person['cid'];
+            $data['cid']    = $person['cid'];
             $sex    = $person['sex'] == '1' ? 'ชาย' : 'หญิง';
 
-            $data['patient'] = $person['first_name'] . ' ' . $person['last_name'] . ' เพศ: ' . $sex . ' ที่อยู่: ' . get_address($data['hn']);
-
+            $data['patient_detail'] = $person['first_name'] . ' ' . $person['last_name'] .
+                ' [' . $data['cid'] . '] ' . ' เกิด ' . from_mongo_to_thai_date($person['birthdate']) .
+                ' อายุ ' . count_age($person['birthdate']) . ' ปี ' .
+                ' เพศ: ' . $sex; // . ' ที่อยู่: ' . get_address($data['hn']);
+            $data['fullname'] = $person['first_name'] . ' ' . $person['last_name'];
+            $data['birthdate'] = $person['birthdate'];
         }
 
         if(!empty($appoint_id))

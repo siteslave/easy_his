@@ -741,6 +741,44 @@ class Person_model extends CI_Model
         return $rs;
     }
 
+    public function search_person_all_ajax($query, $start, $limit)
+    {
+        $this->mongo_db->add_index('person', array('cid' => -1));
+        $this->mongo_db->add_index('person', array('first_name' => -1));
+        $this->mongo_db->add_index('person', array('hn' => -1));
+
+        $rs = $this->mongo_db
+            ->or_where(array(
+                'cid' => $query,
+                'first_name' => new MongoRegex('/'. $query . '/'),
+                'hn' => new MongoRegex('/^' . $query . '/')
+            ))
+            ->limit($limit)
+            ->offset($start)
+            ->get('person');
+
+        return $rs;
+    }
+
+    public function search_person_all_ajax_total($query)
+    {
+        $this->mongo_db->add_index('person', array('cid' => -1));
+        $this->mongo_db->add_index('person', array('first_name' => -1));
+        $this->mongo_db->add_index('person', array('hn' => -1));
+
+        $rs = $this->mongo_db
+            ->or_where(array(
+                'cid' => $query,
+                'first_name' => new MongoRegex('/'. $query . '/'),
+                'hn' => new MongoRegex('/^' . $query . '/')
+            ))
+            //->limit($limit)
+            //->offset($start)
+            ->count('person');
+
+        return $rs;
+    }
+
 	//------------------------------------------------------------------------------------------------------------------
     /**
      * Search person by cid
