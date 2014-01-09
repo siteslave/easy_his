@@ -61,7 +61,7 @@ head.ready(function(){
                 if(_.size(data.rows) > 0)
                 {
                     _.each(data.rows, function(v) {
-                        var active = v.active == 'Y' ? '<i class="icon-ok"></i>' : '<i class="icon-minus"></i>';
+                        var active = v.active == 'Y' ? '<i class="fa fa-check-circle"></i>' : '<i class="fa fa-minus-circle"></i>';
                         $('#tbl_users_list > tbody').append(
                             '<tr>' +
                                 '<td>'+ v.username +'</td>' +
@@ -73,9 +73,9 @@ head.ready(function(){
                                 '<td>'+ active +'</td>' +
                                 '<td><div class="btn-group">' +
                                 '<a href="javascript:void(0);" data-name="btn_edit" class="btn btn-success btn-small" data-id="'+ v.id +'" title="ดูข้อมูล/แก้ไข">' +
-                                '<i class="icon-edit"></i></a>' +
+                                '<i class="fa fa-edit"></i></a>' +
                                 '<a href="javascript:void(0);" data-name="btn_change_password" class="btn btn-default btn-small" data-id="'+ v.id +'" title="เปลี่ยนรหัสผ่าน">' +
-                                '<i class="icon-key"></i></a>' +
+                                '<i class="fa fa-key"></i></a>' +
                                 '</div></td>' +
                             '</tr>'
                         );
@@ -130,8 +130,8 @@ head.ready(function(){
     $('#btn_save').on('click', function() {
         var items = {};
 
-        items.provider_id = $('#sl_providers').val();
-        items.clinic_id = $('#sl_clinics').val();
+        items.provider_id = $('#sl_providers').select2('val');
+        items.clinic_id = $('#sl_clinics').select2('val');
         items.username = $('#txt_username').val();
         items.password = $('#txt_password').val();
         items.password2 = $('#txt_password2').val();
@@ -139,13 +139,19 @@ head.ready(function(){
         items.first_name = $('#txt_first_name').val();
         items.last_name = $('#txt_last_name').val();
         items.id = $('#txt_id').val();
+//
+//       $('button[data-name="btn_active"]').each(function(){
+//           if($(this).hasClass('active'))
+//           {
+//               items.active = $(this).data('value');
+//           }
+//        });
 
-       $('button[data-name="btn_active"]').each(function(){
-           if($(this).hasClass('active'))
-           {
-               items.active = $(this).data('value');
-           }
-        });
+        if($('#lbl_active').hasClass('active')) {
+            items.active = 'Y';
+        } else {
+            items.active = 'N';
+        }
 
         if(!items.provider_id)
         {
@@ -211,8 +217,8 @@ head.ready(function(){
     });
 
     users.set_detail = function(v) {
-        $('#sl_providers').val(v.provider_id);
-        $('#sl_clinics').val(v.clinic_id);
+        $('#sl_providers').select2('val', v.provider_id);
+        $('#sl_clinics').select2('val', v.clinic_id);
         $('#txt_username').val(v.username).prop('disabled', true).css('background-color', 'white');
         $('#txt_password').prop('disabled', true).css('background-color', 'white');
         $('#txt_password2').prop('disabled', true).css('background-color', 'white');
@@ -222,9 +228,23 @@ head.ready(function(){
 
         $('#txt_id').val(v.id);
 
-        $('button[data-name="btn_active"]').each(function(){
-            $(this).data('value') == v.active ? $(this).addClass('active', true) : $(this).removeClass('active')
-        });
+        if(v.active == 'Y') {
+            $("#lbl_active").addClass('active');
+            $("#lbl_deny").removeClass('active');
+
+            //$("#opt_active").prop('checked', true);
+            //$("#opt_deny").prop('checked', false);
+        } else {
+            $("#lbl_active").removeClass('active');
+            $("#lbl_deny").addClass('active');
+
+            //$("#opt_active").prop('checked', false);
+            //$("#opt_deny").prop('checked', true);
+        }
+//
+//        $('button[data-name="btn_active"]').each(function(){
+//            $(this).data('value') == v.active ? $(this).addClass('active', true) : $(this).removeClass('active')
+//        });
 
     };
 

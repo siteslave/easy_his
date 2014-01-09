@@ -50,6 +50,8 @@ head.ready(function(){
     $('#btn_anc_save').click(function(){
         var data = {};
 
+        var hospital = $('#txt_anc_hosp_name').select2('data');
+
         data.hn = $('#txt_svc_anc_hn').val();
         data.id = $('#txt_svc_anc_id').val();
         data.gravida = $('#sl_anc_gravida').val();
@@ -58,7 +60,7 @@ head.ready(function(){
         data.ga = $('#txt_anc_ga').val();
         data.anc_result = $('#sl_anc_result').val();
         data.date_serv = $('#txt_anc_date').val();
-        data.hospcode = $('#txt_anc_hosp_code').val();
+        data.hospcode = hospital === null ? '' : hospital.code;
         data.provider_id = $('#sl_anc_providers').val();
 
         if(!data.gravida)
@@ -119,15 +121,15 @@ head.ready(function(){
                     $('#tbl_anc_history > tbody').append(
                         '<tr>' +
                             '<td>' + app.clear_null(v.date_serv) + '</td>' +
-                            '<td>' + app.clear_null(v.owner_name) + '</td>' +
+                            '<td>' + app.clear_null(v.hospname) + '</td>' +
                             '<td>' + app.clear_null(data.gravida) + '</td>' +
                             '<td>' + app.clear_null(v.anc_no) + '</td>' +
                             '<td>' + app.clear_null(v.ga) + '</td>' +
                             '<td>' + app.clear_null(res) + '</td>' +
                             '<td>' + app.clear_null(v.provider_name) + '</td>' +
-                            '<td><a href="#" class="btn btn-danger" data-name="btn_anc_remove" data-hn="'+ v.hn +'" ' +
+                            '<td><a href="#" class="btn btn-danger" data-name="btn_anc_remove2" data-hn="'+ v.hn +'" ' +
                             'data-id="'+ v.id +'" title="ลบรายการ">' +
-                            '<i class="icon-trash"></i></a></td>' +
+                            '<i class="fa fa-trash-o"></i></a></td>' +
                             '</tr>'
                     );
                 });
@@ -151,7 +153,7 @@ head.ready(function(){
         }
     };
 
-    $(document).on('click', 'a[data-name="btn_anc_remove"]', function(e){
+    $(document).on('click', 'a[data-name="btn_anc_remove2"]', function(e){
         var id = $(this).data('id'),
             hn = $(this).data('hn');
 
@@ -178,7 +180,7 @@ head.ready(function(){
 
     $('a[href="#tab_anc2"]').click(function(){
         var hn = $('#txt_svc_anc_hn').val(),
-            gravida = $('#sl_anc_gravida2').val();
+            gravida = $('#sl_anc_gravida2').select2('val');
 
         svanc.get_history(hn, gravida);
     });
@@ -207,48 +209,96 @@ head.ready(function(){
             else
             {
                 //set anc_no
-                $('#sl_anc_no').val(data.rows.anc[0].anc_no);
+                $('#sl_anc_no').select2('val', data.rows.anc[0].anc_no);
                 $('#txt_anc_ga').val(data.rows.anc[0].ga);
-                $('#sl_anc_result').val(data.rows.anc[0].anc_result);
-                $('#sl_anc_gravida').val(data.rows.gravida);
+                $('#sl_anc_result').select2('val', data.rows.anc[0].anc_result);
+                $('#sl_anc_gravida').select2('val', data.rows.gravida);
             }
         });
     };
-    $('#txt_anc_hosp_name').on('keyup', function(){
-        $('#txt_anc_hosp_code').val('');
-    });
 
-    $('#txt_anc_hosp_name').typeahead({
+    $('#txt_anc_hosp_name').select2({
+        placeholder: 'ชื่อ หรือ รหัสสถานบริการ',
+        minimumInputLength: 2,
+        allowClear: true,
         ajax: {
-            url: site_url + '/basic/search_hospital_ajax',
-            timeout: 500,
-            displayField: 'fullname',
-            triggerLength: 3,
-            preDispatch: function(query){
+            url: site_url + "/basic/search_hospital_ajax",
+            dataType: 'json',
+            type: 'POST',
+            quietMillis: 100,
+            data: function (term) {
                 return {
-                    query: query,
+                    query: term,
                     csrf_token: csrf_token
-                }
+                };
             },
-
-            preProcess: function(data){
-                if(data.success){
-                    return data.rows;
-                }else{
-                    return false;
-                }
+            results: function (data)
+            {
+                return { results: data.rows, more: (data.rows && data.rows.length == 10 ? true : false) };
             }
+            //dropdownCssClass: "bigdrop"
         },
-        updater: function(data){
-            var d = data.split('#');
-            var name = d[0],
-                code = d[1];
 
-            $('#txt_anc_hosp_code').val(code);
+        id: function(data) { return { id: data.code } },
 
-            return name;
+        formatResult: function(data) {
+            return '[' + data.code + '] ' + data.name;
+        },
+        formatSelection: function(data) {
+            return '[' + data.code + '] ' + data.name;
+        },
+        initSelection: function(el, cb) {
+            //var eltxt = $(el).val();
+            //cb({'term': eltxt });
         }
     });
 
+//    $('#txt_anc_hosp_name').on('keyup', function(){
+//        $('#txt_anc_hosp_code').val('');
+//    });
+//
+//    $('#txt_anc_hosp_name').typeahead({
+//        ajax: {
+//            url: site_url + '/basic/search_hospital_ajax',
+//            timeout: 500,
+//            displayField: 'fullname',
+//            triggerLength: 3,
+//            preDispatch: function(query){
+//                return {
+//                    query: query,
+//                    csrf_token: csrf_token
+//                }
+//            },
+//
+//            preProcess: function(data){
+//                if(data.success){
+//                    return data.rows;
+//                }else{
+//                    return false;
+//                }
+//            }
+//        },
+//        updater: function(data){
+//            var d = data.split('#');
+//            var name = d[0],
+//                code = d[1];
+//
+//            $('#txt_anc_hosp_code').val(code);
+//
+//            return name;
+//        }
+//    });
+
+    svanc.set_hospital_selected = function() {
+        var hospcode = $('#txt_svc_anc_hospcode1').val();
+        var hospname = $('#txt_svc_anc_hospname1').val();
+
+        if(hospcode) {
+            $('#txt_anc_hosp_name').select2('data', {code: hospcode, name: hospname});
+            $('#txt_anc_hosp_name').select2('enable', false);
+        }
+    };
+
+    svanc.set_hospital_selected();
     app.set_runtime();
 });

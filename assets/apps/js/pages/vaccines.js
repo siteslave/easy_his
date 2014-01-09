@@ -75,7 +75,7 @@ head.ready(function(){
         items.expire = $('#txt_vaccs_expire_date').val()
         items.provider_id = $('#sl_vaccs_providers').val()
         items.date_serv = $('#txt_vaccs_date').val()
-        items.hospcode = hosp.code;
+        items.hospcode = hosp === null ? '' : hosp.code;
 
         if(!items.vaccine_id)
         {

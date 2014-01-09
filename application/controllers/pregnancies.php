@@ -315,6 +315,8 @@ class Pregnancies extends CI_Controller
                         $obj->anc_result = $r['anc_result'];
                         $obj->provider_name = get_provider_name_by_id(get_first_object($r['provider_id']));
                         $obj->owner_name = get_owner_name(get_first_object($r['owner_id']));
+                        $obj->hospcode = $r['hospcode'];
+                        $obj->hospname = get_hospital_name($r['hospcode']);
 
                         $arr_result[] = $obj;
                     }

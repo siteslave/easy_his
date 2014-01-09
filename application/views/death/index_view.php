@@ -2,17 +2,23 @@
     <li><a href="<?php echo site_url(); ?>">หน้าหลัก</a></li>
     <li class="active">ทะเบียนผู้เสียชีวิต</li>
 </ul>
-<div class="navbar">
+<div class="navbar navbar-default">
     <form action="#" class="navbar-form form-inline">
         <label for="txt_query">ค้นหา</label>
-        <input style="width: 300px;" id="txt_query" type="text" placeholder="พิมพ์เลขบัตรประชาชน หรือ HN หรือ ชื่อ - สกุล" autocomplete="off" />
+        <input style="width: 300px;" id="txt_query" type="hidden" />
         <button class="btn btn-primary" id="btn_search">
-            <i class="icon-search"></i>
+            <i class="fa fa-search"></i> ค้นหา
         </button>
-    
-        <button class="btn btn-success pull-right" id="btn_register">
-            <i class="icon-plus-sign"></i> ลงทะเบียน
-        </button>
+
+        <div class="btn-group pull-right">
+            <button class="btn btn-success" id="btn_register">
+                <i class="fa fa-plus-circle"></i> ลงทะเบียน
+            </button>
+            <button class="btn btn-default" id="btn_refresh">
+                <i class="fa fa-refresh"></i> รีเฟรช
+            </button>
+        </div>
+
     </form>
 </div>
 
@@ -24,7 +30,7 @@
             <th>เลขบัตรประชาชน</th>
             <th>ชื่อ - สกุล</th>
             <th>วันเกิด</th>
-            <th>อายุ</th>
+            <th>อายุ (ปี)</th>
             <th>วันที่เสียชีวิต</th>
             <th>สาเหตุการเสียชีวิต</th>
             <th>#</th>
@@ -41,34 +47,37 @@
 
 <!-- register service -->
 <div class="modal fade" id="mdl_register">
-    <div class="modal-dialog" style="width: 960px; left: 35%">
+    <div class="modal-dialog" style="width: 960px;">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title"><i class="icon-briefcase"></i> ลงทะเบียนผู้เสียชีวิต</h4>
+                <h4 class="modal-title"><i class="fa fa-briefcase"></i> ลงทะเบียนผู้เสียชีวิต</h4>
             </div>
             <div class="modal-body">
-                <form action="#" class="form-inline well well-small">
-                    <div class="row">
-                        <div class=col-lg-3>
-                            <label for="">HN</label>
-                            <input type="text" id="txt_reg_hn" placeholder="พิมพ์ HN เพื่อค้นหา"/>
+                <div class="navbar navbar-default">
+                    <form action="#" class="navbar-form">
+                        <div class="row">
+                            <div class=col-lg-4>
+                                <label for="">HN</label>
+                                <input type="hidden" id="txt_reg_hn" style="width: 250px;"/>
+                            </div>
+                            <div class="col-lg-4">
+                                <label for="txt_reg_cid">เลขบัตรประชาชน</label>
+                                <input type="text" class="form-control" id="txt_reg_cid" disabled="disabled" />
+                            </div>
+                            <div class="col-lg-2">
+                                <label for="">วันเกิด</label>
+                                <input type="text" class="form-control" id="txt_reg_birthdate" disabled="disabled" />
+                            </div>
+                            <div class="col-lg-2">
+                                <label for="">อายุ (ปี)</label>
+                                <input type="text" class="form-control" id="txt_reg_age" disabled="disabled" />
+
+                            </div>
                         </div>
-                        <div class="col-lg-4">
-                            <label for="">ชื่อ - สกุล</label>
-                            <input type="text" id="txt_reg_fullname" disabled="disabled" />
-                        </div>
-                        <div class="col-lg-2">
-                            <label for="">วันเกิด</label>
-                            <input type="text" id="txt_reg_birthdate" disabled="disabled" />
-                        </div>
-                        <div class="col-lg-2">
-                            <label for="">อายุ (ปี)</label>
-                            <input type="text" id="txt_reg_age" disabled="disabled" />
-                            
-                        </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
+
             
                 <form action="#">
             
@@ -77,11 +86,11 @@
                     <div class="row">
                         <div class="col-lg-2">
                             <label class="control-label" for="txt_reg_death_date">วันที่</label>
-                            <input id="txt_reg_death_date" value="<?= date('d/m/Y') ?>" type="text" data-type="date">
+                            <input id="txt_reg_death_date" class="form-control" value="<?= date('d/m/Y') ?>" type="text" data-type="date">
                         </div>
                         <div class="col-lg-3">
                             <label class="control-label" for="sl_pdeath">สถานที่</label>
-                            <select id="sl_pdeath">
+                            <select id="sl_pdeath" class="form-control">
                                 <option value="">--</option>
                                 <option value="1">ในสถานพยาบาล</option>
                                 <option value="2">นอกสถานพยาบาล</option>
@@ -89,14 +98,13 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-4">
+                        <div class="col-lg-6">
                             <label class="control-label" for="txt_reg_hosp_death">สถานบริการที่เสียชีวิต</label>
-                            <input type="hidden" id="txt_reg_hosp_death_code" />
-                            <input type="text" id="txt_reg_hosp_death_name" placeholder="พิมพ์รหัส หรือ ชื่อ สถานบริการ" />
+                            <input type="hidden" id="txt_reg_hosp_death" style="width: 400px;" />
                         </div>
-                        <div class="col-lg-4">
+                        <div class="col-lg-6">
                            <label class="control-label" for="sl_reg_pregdeath">การตั้งครรภ์</label>
-                            <select id="sl_reg_pregdeath">
+                            <select id="sl_reg_pregdeath" class="form-control">
                                 <option value="">--</option>
                                 <option value="1">เสียชีวิตระหว่างตั้งครรภ์</option>
                                 <option value="2">เสียชีวิตระหว่าง/หลังคลอด ภายใน 42 วัน</option>
@@ -107,39 +115,33 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-4">
-                            <label class="control-label" for="txt_reg_cdeath_name">สาเหตุการตาย</label>
-                            <input type="hidden" id="txt_reg_cdeath_code"/>
-                            <input type="text" id="txt_reg_cdeath_name" class="input-xlarge" placeholder="พิมพ์รหัสการวินิจฉัย...">
+                        <div class="col-lg-6">
+                            <label class="control-label" for="txt_icd_cdeath">สาเหตุการตาย</label>
+                            <input type="hidden" id="txt_icd_cdeath" style="width: 400px;">
                         </div>
-                        <div class="col-lg-4">
-                            <label class="control-label" for="txt_reg_odisease_name">โรคที่เป็นเหตุหนุน</label>
-                            <input type="hidden" id="txt_reg_odisease_code" />
-                            <input type="text" id="txt_reg_odisease_name" class="input-xlarge" placeholder="พิมพ์รหัสการวินิจฉัย...">
+                        <div class="col-lg-6">
+                            <label class="control-label" for="txt_icd_odisease">โรคที่เป็นเหตุหนุน</label>
+                            <input type="hidden" id="txt_icd_odisease" style="width: 400px;">
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-4">
-                            <label class="control-label" for="txt_hosp_deathA_name">สาเหตุการตาย (A)</label>
-                            <input type="hidden" id="txt_hosp_deathA_code" />
-                            <input type="text" id="txt_hosp_deathA_name" class="input-xlarge" placeholder="พิมพ์รหัสการวินิจฉัย...">
+                        <div class="col-lg-6">
+                            <label class="control-label" for="txt_icd_deathA">สาเหตุการตาย (A)</label>
+                            <input type="hidden" id="txt_icd_deathA" style="width: 400px;">
                         </div>
-                        <div class="col-lg-4">
-                            <label class="control-label" for="txt_hosp_deathB_name">สาเหตุการตาย (B)</label>
-                            <input type="hidden" id="txt_hosp_deathB_code" />
-                            <input type="text" id="txt_hosp_deathB_name" class="input-xlarge" placeholder="พิมพ์รหัสการวินิจฉัย...">
+                        <div class="col-lg-6">
+                            <label class="control-label" for="txt_icd_deathB">สาเหตุการตาย (B)</label>
+                            <input type="hidden" id="txt_icd_deathB" style="width: 400px;" >
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-4">
-                            <label class="control-label" for="txt_hosp_deathC_name">สาเหตุการตาย (C)</label>
-                            <input type="hidden" id="txt_hosp_deathC_code" />
-                            <input type="text" id="txt_hosp_deathC_name" class="input-xlarge" placeholder="พิมพ์รหัสการวินิจฉัย...">
+                        <div class="col-lg-6">
+                            <label class="control-label" for="txt_icd_deathC">สาเหตุการตาย (C)</label>
+                            <input type="text" id="txt_icd_deathC" style="width: 400px;">
                         </div>
-                        <div class="col-lg-4">
-                            <label class="control-label" for="txt_hosp_deathD_name">สาเหตุการตาย (D)</label>
-                            <input type="hidden" id="txt_hosp_deathD_code"/>
-                            <input type="text" id="txt_hosp_deathD_name" class="input-xlarge" placeholder="พิมพ์รหัสการวินิจฉัย...">
+                        <div class="col-lg-6">
+                            <label class="control-label" for="txt_icd_deathD">สาเหตุการตาย (D)</label>
+                            <input type="text" id="txt_icd_deathD" style="width: 400px;">
                         </div>
                     </div>
                 </form>

@@ -31,6 +31,7 @@ class Users extends CI_Controller
         $this->login();
     }
     public function login(){
+        if(isset($this->session->userdata['owner_id'])) redirect(site_url());
         $this->layout->view('users/login_view');
     }
 

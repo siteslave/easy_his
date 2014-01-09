@@ -4,19 +4,17 @@ head.ready(function(){
 
     provider.clear_form = function(){
         $('#txt_regster_no').val('');
-        $('#txt_council').val('');
+        $('#sl_council').select2('val', '');
         $('#txt_cid').val('');
         $('#txt_old_cid').val('');
         $('#txt_first_name').val('');
         $('#txt_last_name').val('');
-        $('#sl_sex').val('');
+        $('#sl_sex').select2('val', '');
         $('#txt_birth_date').val('');
         $('#txt_start_date').val('');
         $('#txt_out_date').val('');
-        $('#txt_move_from_hospital_code').val('');
-        $('#txt_move_from_hospital_name').val('');
-        $('#txt_move_to_hospital_code').val('');
-        $('#txt_move_to_hospital_name').val('');
+        $('#txt_move_from_hospital_name').select2('val', '');
+        $('#txt_move_to_hospital_name').select2('val', '');
         $('#txt_provider_id').val('');
     };
 
@@ -114,7 +112,7 @@ head.ready(function(){
                                 '<td>' + v.out_date + '</td> ' +
                                 '<td><a href="javascript:void(0)" class="btn btn-success btn-small" data-name="btn_edit_provider" ' +
                                 'title="แก้ไขรายการ" data-id="' + v.id + '"> ' +
-                                '<i class="icon-edit"></i></a></td> ' +
+                                '<i class="fa fa-edit"></i></a></td> ' +
                                 '</tr>'
                         );
 
@@ -140,21 +138,19 @@ head.ready(function(){
                 $('#txt_regster_no').val(data['register_no']);
                 $('#txt_provider_id').val(id);
 
-                $('#txt_council').val(data['council']);
+                $('#sl_council').select2('val', data['council']);
                 $('#txt_cid').val(data['cid']);
                 $('#txt_old_cid').val(data['cid']);
-                $('#sl_title').val(data['title_id']);
-                $('#sl_provider_type').val(data['provider_type_id']);
+                $('#sl_title').select2('val', data['title_id']);
+                $('#sl_provider_type').select2('val', data['provider_type_id']);
                 $('#txt_first_name').val(data['first_name']);
                 $('#txt_last_name').val(data['last_name']);
-                $('#sl_sex').val(data['sex']);
+                $('#sl_sex').select2('val', data['sex']);
                 $('#txt_birth_date').val(data['birth_date']);
                 $('#txt_start_date').val(data['start_date']);
                 $('#txt_out_date').val(data['out_date']);
-                $('#txt_move_from_hospital_code').val(data['move_from_hospital_code']);
-                $('#txt_move_from_hospital_name').val(data['move_from_hospital_name']);
-                $('#txt_move_to_hospital_code').val(data['move_to_hospital_code']);
-                $('#txt_move_to_hospital_name').val(data['move_to_hospital_name']);
+                $('#txt_move_from_hospital_name').select2('data', { code: data['move_from_hospital_code'], name: data['move_from_hospital_name']});
+                $('#txt_move_to_hospital_name').select2('data', { code: data['move_to_hospital_code'], name: data['move_to_hospital_name'] });
 
                 $('#is_update').val('1');
 
@@ -183,19 +179,23 @@ head.ready(function(){
     //save provider
     $('#btn_do_save_provider').click(function(){
         var items                   = {};
+
+        var hospital_to           = $('#txt_move_to_hospital_name').select2('data');
+        var hospital_from           = $('#txt_move_from_hospital_name').select2('data');
+
         items.register_no           = $('#txt_regster_no').val();
-        items.council               = $('#txt_council').val();
+        items.council               = $('#sl_council').select2('val');
         items.cid                   = $('#txt_cid').val();
-        items.title_id              = $('#sl_title').val();
+        items.title_id              = $('#sl_title').select2('val');
         items.first_name            = $('#txt_first_name').val();
         items.last_name             = $('#txt_last_name').val();
-        items.sex                   = $('#sl_sex').val();
+        items.sex                   = $('#sl_sex').select2('val');
         items.birth_date            = $('#txt_birth_date').val();
-        items.provider_type_id      = $('#sl_provider_type').val();
+        items.provider_type_id      = $('#sl_provider_type').select2('val');
         items.start_date            = $('#txt_start_date').val();
         items.out_date              = $('#txt_out_date').val();
-        items.move_from_hospital    = $('#txt_move_from_hospital_code').val();
-        items.move_to_hospital      = $('#txt_move_to_hospital_code').val();
+        items.move_from_hospital    = hospital_from === null ? '' : hospital_from.code;
+        items.move_to_hospital      = hospital_to === null ? '' : hospital_to.code;
 
         if(!items.register_no){
             app.alert('กรุณาระบุทะเบียนวิชาชีพ');
@@ -262,77 +262,77 @@ head.ready(function(){
         }
     });
 
-    $('#txt_move_from_hospital_name').on('keyup', function() {
-        $('#txt_move_from_hospital_code').val('');
+    $('#txt_move_from_hospital_name').select2({
+        placeholder: 'ชื่อ หรือ รหัสสถานบริการ',
+        minimumInputLength: 2,
+        allowClear: true,
+        ajax: {
+            url: site_url + "/basic/search_hospital_ajax",
+            dataType: 'json',
+            type: 'POST',
+            quietMillis: 100,
+            data: function (term) {
+                return {
+                    query: term,
+                    csrf_token: csrf_token
+                };
+            },
+            results: function (data)
+            {
+                return { results: data.rows, more: (data.rows && data.rows.length == 10 ? true : false) };
+            }
+            //dropdownCssClass: "bigdrop"
+        },
+
+        id: function(data) { return { id: data.code } },
+
+        formatResult: function(data) {
+            return '[' + data.code + '] ' + data.name;
+        },
+        formatSelection: function(data) {
+            return '[' + data.code + '] ' + data.name;
+        },
+        initSelection: function(el, cb) {
+            //var eltxt = $(el).val();
+            //cb({'term': eltxt });
+        }
+    });
+    $('#txt_move_to_hospital_name').select2({
+        placeholder: 'ชื่อ หรือ รหัสสถานบริการ',
+        minimumInputLength: 2,
+        allowClear: true,
+        ajax: {
+            url: site_url + "/basic/search_hospital_ajax",
+            dataType: 'json',
+            type: 'POST',
+            quietMillis: 100,
+            data: function (term) {
+                return {
+                    query: term,
+                    csrf_token: csrf_token
+                };
+            },
+            results: function (data)
+            {
+                return { results: data.rows, more: (data.rows && data.rows.length == 10 ? true : false) };
+            }
+            //dropdownCssClass: "bigdrop"
+        },
+
+        id: function(data) { return { id: data.code } },
+
+        formatResult: function(data) {
+            return '[' + data.code + '] ' + data.name;
+        },
+        formatSelection: function(data) {
+            return '[' + data.code + '] ' + data.name;
+        },
+        initSelection: function(el, cb) {
+            //var eltxt = $(el).val();
+            //cb({'term': eltxt });
+        }
     });
 
-//    $('#txt_move_from_hospital_name').typeahead({
-//        ajax: {
-//            url: site_url + '/basic/search_hospital_ajax',
-//            timeout: 500,
-//            displayField: 'fullname',
-//            triggerLength: 3,
-//            preDispatch: function(query){
-//                return {
-//                    query: query,
-//                    csrf_token: csrf_token
-//                }
-//            },
-//
-//            preProcess: function(data){
-//                if(data.success){
-//                    return data.rows;
-//                }else{
-//                    return false;
-//                }
-//            }
-//        },
-//        updater: function(data){
-//            var d = data.split('#');
-//            var name = d[0],
-//                code = d[1];
-//
-//            $('#txt_move_from_hospital_code').val(code);
-//
-//            return name;
-//        }
-//    });
-
-    $('#txt_move_to_hospital_name').on('keyup', function() {
-        $('#txt_move_to_hospital_code').val('');
-    });
-
-//    $('#txt_move_to_hospital_name').typeahead({
-//        ajax: {
-//            url: site_url + '/basic/search_hospital_ajax',
-//            timeout: 500,
-//            displayField: 'fullname',
-//            triggerLength: 3,
-//            preDispatch: function(query){
-//                return {
-//                    query: query,
-//                    csrf_token: csrf_token
-//                }
-//            },
-//
-//            preProcess: function(data){
-//                if(data.success){
-//                    return data.rows;
-//                }else{
-//                    return false;
-//                }
-//            }
-//        },
-//        updater: function(data){
-//            var d = data.split('#');
-//            var name = d[0],
-//                code = d[1];
-//
-//            $('#txt_move_to_hospital_code').val(code);
-//
-//            return name;
-//        }
-//    });
 
     provider.get_provider_list();
 

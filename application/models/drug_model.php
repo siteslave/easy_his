@@ -53,7 +53,37 @@ class Drug_model extends CI_Model
             ->limit(1)
             ->get('ref_drugs');
 
-        return count($rs) > 0 ? $rs[0]['owners'] : NULL;
+      $obj = new stdClass();
+
+      if( count( $rs) > 0 ) {
+        if( $rs[0]['owners'] ) {
+          foreach( $rs[0]['owners'] as $r ) {
+
+            if( isset($r['owner_id']) ) {
+
+              $obj_owner_id = get_first_object( $r['owner_id'] );
+
+              if( $obj_owner_id == $this->owner_id ) {
+                $obj->price = isset($r['price']) ? $r['price'] : 0;
+                $obj->qty = isset($r['qty']) ? $r['qty'] : 0;
+
+                return $obj;
+                break;
+              }
+            } else {
+              return $obj;
+              break;
+            }
+          }
+        } else {
+          return $obj;
+        }
+
+      } else {
+        return $obj;
+      }
+
+        #return count($rs) > 0 ? $rs[0]['owners'] : NULL;
     }
 
 

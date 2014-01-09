@@ -29,41 +29,46 @@ head.ready(function(){
         }
     };
 
-//
-//    $('#txt_nutri_hospname').typeahead({
-//        ajax: {
-//            url: site_url + '/basic/search_hospital_ajax',
-//            timeout: 500,
-//            displayField: 'fullname',
-//            triggerLength: 3,
-//            preDispatch: function(query){
-//                return {
-//                    query: query,
-//                    csrf_token: csrf_token
-//                }
-//            },
-//
-//            preProcess: function(data){
-//                if(data.success){
-//                    return data.rows;
-//                }else{
-//                    return false;
-//                }
-//            }
-//        },
-//        updater: function(data){
-//            var d = data.split('#');
-//            var name = d[0],
-//                code = d[1];
-//
-//            $('#txt_nutri_hospcode').val(code);
-//
-//            return name;
-//        }
-//    });
+    $('#txt_nutri_hospname').select2({
+        placeholder: 'ชื่อ หรือ รหัสสถานบริการ',
+        minimumInputLength: 2,
+        allowClear: true,
+        ajax: {
+            url: site_url + "/basic/search_hospital_ajax",
+            dataType: 'json',
+            type: 'POST',
+            quietMillis: 100,
+            data: function (term) {
+                return {
+                    query: term,
+                    csrf_token: csrf_token
+                };
+            },
+            results: function (data)
+            {
+                return { results: data.rows, more: (data.rows && data.rows.length == 10 ? true : false) };
+            }
+            //dropdownCssClass: "bigdrop"
+        },
+
+        id: function(data) { return { id: data.code } },
+
+        formatResult: function(data) {
+            return '[' + data.code + '] ' + data.name;
+        },
+        formatSelection: function(data) {
+            return '[' + data.code + '] ' + data.name;
+        },
+        initSelection: function(el, cb) {
+            //var eltxt = $(el).val();
+            //cb({'term': eltxt });
+        }
+    });
 
     $('#btn_nutri_save').click(function(){
         var data = {};
+        var hos = $('#txt_nutri_hospname').select2('data');
+
         data.height = $('#txt_nutri_height').val();
         data.weight = $('#txt_nutri_weight').val();
         data.headcircum = $('#txt_nutri_headcircum').val();
@@ -71,7 +76,7 @@ head.ready(function(){
         data.food = $('#sl_nutri_food').val();
         data.bottle = $('#sl_nutri_bottle').val();
         data.provider_id = $('#sl_nutri_providers').val();
-        data.hospcode = $('#txt_nutri_hospcode').val();
+        data.hospcode = hos === null ? '' : hos.code;
         data.date_serv = $('#txt_fp_date').val();
 
         data.id = $('#txt_nutri_id').val();
@@ -176,6 +181,25 @@ head.ready(function(){
             $('#tbl_nutri_history > tbody').append('<tr><td colspan="7">ไม่พบรายการ</td></tr>');
         }
     };
+
+    nutris.set_hospital_selected = function() {
+        var vn = $('#txt_nutri_vn').val();
+        var hospcode = $('#txt_nutri_hospcode1').val();
+
+        if(vn && hospcode) {
+            var hospname = $('#txt_nutri_hospname1').val();
+            $('#txt_nutri_hospname').select2('data', {code: hospcode, name: hospname});
+            $('#txt_nutri_hospname').select2('enable', false);
+        } else if(vn && !hospcode) {
+            var code = $('#txt_nutri_owner_code').val(),
+                name = $('#txt_nutri_owner_name').val();
+
+            $('#txt_nutri_hospname').select2('data', {code: code, name: name});
+            $('#txt_nutri_hospname').select2('enable', false);
+        }
+    };
+
+    nutris.set_hospital_selected();
 
     app.set_runtime();
 

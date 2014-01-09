@@ -57,8 +57,16 @@
                                 <input type="text" id="txt_regster_no" class="form-control">
                             </div>
                             <div class="col-lg-3">
-                                <label class="control-label" for="txt_council">รหัสสภาวิชาชีพ</label>
-                                <input type="text" id="txt_council" class="form-control">
+                                <label class="control-label" for="txt_council">สภาวิชาชีพ</label>
+                                <select name="sl_council" id="sl_council" class="form-control">
+                                    <option value="">-*-</option>
+                                    <option value="01">แพทยสภา</option>
+                                    <option value="02">สภาการพยาบาล</option>
+                                    <option value="03">สภาเภสัชกรรม</option>
+                                    <option value="04">สภากายภาพบำบัด</option>
+                                    <option value="05">สภาเทคนิคการแพท์</option>
+                                    <option value="06">สัตวแพทยสภา</option>
+                                </select>
                             </div>
                             <div class="col-lg-3">
                                 <label class="control-label" for="txt_cid">เลขบัตรประชาชน</label>
@@ -114,30 +122,22 @@
                             <div class="col-lg-2">
                                 <label class="control-label" for="txt_start_date">เริ่มปฏิบัติงาน</label>
                                 <input id="txt_start_date" type="text" data-type="date" class="form-control"
-                                       title="ระบุวันที่ dd/mm/yyyy" rel="tooltip">
+                                       title="ระบุวันที่ dd/mm/yyyy" placeholder="dd/mm/yyyy" rel="tooltip">
                             </div>
                             <div class="col-lg-2">
                                 <label class="control-label" for="txt_out_date">ออกจากงาน</label>
                                 <input id="txt_out_date" type="text" data-type="date" class="form-control"
-                                       title="ระบุวันที่ dd/mm/yyyy" rel="tooltip">
+                                       title="ระบุวันที่ dd/mm/yyyy" placeholder="dd/mm/yyyy" rel="tooltip">
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-2">
-                                <label class="control-label" for="txt_move_from_hospital_code">รหัส</label>
-                                <input type="text" id="txt_move_from_hospital_code" placeholder="-*-" disabled>
-                            </div>
-                            <div class="col-lg-4">
+                            <div class="col-lg-6">
                                 <label for="txt_move_from_hospital_name">สถานบริการที่ย้ายมา</label>
-                                <input id="txt_move_from_hospital_name" type="text" placeholder="พิมพ์ชื่อหรือรหัสสถานพยาบาล">
+                                <input id="txt_move_from_hospital_name" class="form-control" type="hidden">
                             </div>
-                            <div class="col-lg-2">
-                                <label class="control-label" for="txt_move_to_hospital_code">รหัส</label>
-                                <input type="text" id="txt_move_to_hospital_code" placeholder="-*-" disabled>
-                            </div>
-                            <div class="col-lg-4">
+                            <div class="col-lg-6">
                                 <label for="txt_move_to_hospital_name">สถานบริการที่ย้ายไป</label>
-                                <input id="txt_move_to_hospital_name" type="text" placeholder="พิมพ์ชื่อหรือรหัสสถานพยาบาล">
+                                <input id="txt_move_to_hospital_name" class="form-control" type="hidden">
                             </div>
                         </div>
 

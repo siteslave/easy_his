@@ -24,8 +24,8 @@ head.ready(function(){
         var drug = $('#txt_drug_name').select2('data');
         var usage = $('#txt_drug_usage_name').select2('data');
 
-        items.usage_id = usage.id;
-        items.drug_id = drug.id
+        items.usage_id = usage === null ? false : usage.id;
+        items.drug_id = drug === null ? false : drug.id;
         items.price = $('#txt_drug_price').val();
         items.qty = $('#txt_drug_qty').val();
         items.id = $('#service_drug_visit_id').val();

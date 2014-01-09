@@ -30,7 +30,6 @@ class Drugs extends CI_Controller
             redirect(site_url('users/access_denied'));
         }
 
-        $this->owner_id = $this->session->userdata('owner_id');
         $this->user_id = $this->session->userdata('user_id');
         $this->provider_id = $this->session->userdata('provider_id');
 
@@ -77,7 +76,7 @@ class Drugs extends CI_Controller
             $arr_result = array();
             foreach($rs as $r)
             {
-                $price_qty = $this->drug->get_price_qty($r['_id']);
+                $price_qty          = $this->drug->get_price_qty($r['_id']);
                 $obj                = new stdClass();
                 $obj->id            = get_first_object($r['_id']);
                 $obj->name          = $r['name'];
@@ -87,8 +86,8 @@ class Drugs extends CI_Controller
                 $obj->unit_name     = get_unit_name(get_first_object($r['unit']), $this->owner_id);
                 $obj->cost          = $r['cost'];
 
-                $obj->price         = isset($price_qty[0]['price']) ? $price_qty[0]['price'] : 0;
-                $obj->qty           = isset($price_qty[0]['qty']) ? $price_qty[0]['qty'] : 0;
+                $obj->price         = isset($price_qty->price) ? $price_qty->price : 0;
+                $obj->qty           = isset($price_qty->qty) ? $price_qty->qty : 0;
 
                 $arr_result[]       = $obj;
             }
@@ -144,8 +143,8 @@ class Drugs extends CI_Controller
                 $obj->unit_name     = get_unit_name(get_first_object($r['unit']), $this->owner_id);
                 $obj->cost          = $r['cost'];
 
-                $obj->price         = isset($price_qty[0]['price']) ? $price_qty[0]['price'] : 0;
-                $obj->qty           = isset($price_qty[0]['qty']) ? $price_qty[0]['qty'] : 0;
+                $obj->price         = isset($price_qty->price) ? $price_qty->price : 0;
+                $obj->qty           = isset($price_qty->qty) ? $price_qty->qty : 0;
 
                 $arr_result[]       = $obj;
             }

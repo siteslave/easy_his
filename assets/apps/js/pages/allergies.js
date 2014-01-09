@@ -115,9 +115,9 @@ head.ready(function(){
                     app.alert(err);
                 }else{
                     app.alert('บันทึกข้อมูลการแพ้ยา เสร็จเรียบร้อยแล้ว');
-                    //$('#txt_isupdate').val('1');
-                    parent.allergy.get_list();
-                    parent.allergy.modal.hide_allergy();
+                    $('#txt_isupdate').val('1');
+                    //parent.allergy.get_list();
+                    //parent.allergy.modal.hide_allergy();
                 }
             });
         }

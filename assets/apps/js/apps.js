@@ -220,32 +220,30 @@ var app = {
 
                 data: params,
 
-                success: function(data){
-                    if(data.success){
-
-                        if(data){
-                            cb(null, data);
-                        }else{
-                            cb('Record not found.', null);
-                        }
-
-                        app.hide_loading();
-
-                    }else{
-                        cb(data.msg, null);
-                        app.hide_loading();
-                    }
-                },
-
                 error: function(xhr, status){
                     cb('Error:  [' + xhr.status + '] ' + xhr.statusText, null);
                     app.hide_loading();
                 }
+            }).done(function(data) {
+                if(data.success){
+
+                  if(data){
+                    cb(null, data);
+                  }else{
+                    cb('Record not found.', null);
+                  }
+
+                  app.hide_loading();
+
+                }else{
+                  cb(data.msg, null);
+                  app.hide_loading();
+                }
             });
+
         }catch(err){
             cb(err, null);
         }
-
     },
 
     strip: function(msg, len)
@@ -272,7 +270,8 @@ var app = {
         });
     },
     set_first_selected: function(obj){
-        $(obj).find('option').first().prop('selected', 'selected');
+        //$(obj).find('option').first().prop('selected', 'selected');
+        $(obj).select2('val', '');
     },
 
     trim: function(string){
@@ -442,4 +441,59 @@ head.ready(function(){
     app.get_cookie = function(k) {
         return $.cookie(k);
     }
+
+    app.paging_format = function(type){
+        switch (type) {
+
+            case 'block':
+
+                if (!this.active)
+                    return '<li class="disabled"><a href="">' + this.value + '</a></li>';
+                else if (this.value != this.page)
+                    return '<li><a href="#' + this.value + '">' + this.value + '</a></li>';
+                return '<li class="active"><a href="#">' + this.value + '</a></li>';
+
+            case 'right':
+            case 'left':
+
+                if (!this.active) {
+                    return "";
+                }
+                return '<li><a href="#' + this.value + '">' + this.value + '</a></li>';
+
+            case 'next':
+
+                if (this.active) {
+                    return '<li><a href="#' + this.value + '">&raquo;</a></li>';
+                }
+                return '<li class="disabled"><a href="">&raquo;</a></li>';
+
+            case 'prev':
+
+                if (this.active) {
+                    return '<li><a href="#' + this.value + '">&laquo;</a></li>';
+                }
+                return '<li class="disabled"><a href="">&laquo;</a></li>';
+
+            case 'first':
+
+                if (this.active) {
+                    return '<li><a href="#' + this.value + '">&lt;</a></li>';
+                }
+                return '<li class="disabled"><a href="">&lt;</a></li>';
+
+            case 'last':
+
+                if (this.active) {
+                    return '<li><a href="#' + this.value + '">&gt;</a></li>';
+                }
+                return '<li class="disabled"><a href="">&gt;</a></li>';
+
+            case 'fill':
+                if (this.active) {
+                    return '<li class="disabled"><a href="#">...</a></li>';
+                }
+        }
+        return ''; // return nothing for missing branches
+    };
 });

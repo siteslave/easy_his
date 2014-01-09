@@ -769,46 +769,54 @@
     </div>
 </div>
 
-<div class="modal hide fade" id="mdl_result">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>ผลการปฏิบัติงาน</h3>
-    </div>
-    <div class="modal-body">
-        <form class="well well-small form-inline">
-            <label for="">เลือกปีงบประมาณ</label>
-            <select name="" id="sl_result_year" class="input-small">
-                <option value="2556">2556</option>
-                <option value="2557">2557</option>
-                <option value="2558">2558</option>
-            </select>
-            <button type="button" class="btn btn-info" id="btn_get_result">
-                <i class="icon-refresh"></i> แสดงผลงาน
-            </button>
-        </form>
-        <div class="row">
-            <div class="col-lg-6">
-                <table class="table table-bordered" id="tbl_result">
-                    <thead>
-                    <tr>
-                        <th>เป้าหมาย</th>
-                        <th>ผลงาน</th>
-                        <th>คิดเป็น %</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td><span id="txt_total"></span></td>
-                        <td><span id="txt_result"></span></td>
-                        <td><span id="txt_percent"></span></td>
-                    </tr>
-                    </tbody>
-                </table>
+<div class="modal fade" id="mdl_result">
+    <div class="modal-dialog" style="width: 960px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title"><i class="fa fa-bar-chart-o"></i> ผลการปฏิบัติงาน</h4>
             </div>
-            <div class="col-lg-6" id="div_result_chart" style="height: 250px;"> </div>
+            <div class="modal-body">
+                <form class="well well-small form-inline">
+                    <label for="">เลือกปีงบประมาณ</label>
+                    <select name="" id="sl_result_year" class="input-small">
+                        <option value="2556">2556</option>
+                        <option value="2557">2557</option>
+                        <option value="2558">2558</option>
+                    </select>
+                    <button type="button" class="btn btn-info" id="btn_get_result">
+                        <i class="icon-refresh"></i> แสดงผลงาน
+                    </button>
+                </form>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <table class="table table-bordered" id="tbl_result">
+                            <thead>
+                            <tr>
+                                <th>เป้าหมาย</th>
+                                <th>ผลงาน</th>
+                                <th>คิดเป็น %</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td><span id="txt_total"></span></td>
+                                <td><span id="txt_result"></span></td>
+                                <td><span id="txt_percent"></span></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-lg-6" id="div_result_chart" style="height: 250px;"> </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off"></i> ปิดหน้าต่าง</a>
+            </div>
         </div>
     </div>
 </div>
+
 
 <script type="text/javascript">
     head.js('<?php echo base_url(); ?>assets/apps/js/apps.ncdscreen.js');

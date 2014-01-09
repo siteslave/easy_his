@@ -245,7 +245,7 @@ class Person_model extends CI_Model
             ->set(array(
                     'address.address_type'  => $data['address_type'],
                     'address.house_id'      => $data['house_id'],
-                    'address.house_type'    => new MongoId($data['house_type']),
+                    'address.house_type'    => empty($data['house_type']) ? null : new MongoId($data['house_type']),
                     'address.room_no'       => $data['room_no'],
                     'address.condo'         => $data['condo'],
                     'address.houseno'       => $data['houseno'],
@@ -760,6 +760,81 @@ class Person_model extends CI_Model
         return $rs;
     }
 
+    public function search_person_all_ajax_by_name($query, $start, $limit)
+    {
+        $this->mongo_db->add_index('person', array('cid' => -1));
+        $this->mongo_db->add_index('person', array('first_name' => -1));
+        $this->mongo_db->add_index('person', array('hn' => -1));
+
+        $rs = $this->mongo_db
+            ->or_where(array(
+                //'cid' => $query,
+                'first_name' => new MongoRegex('/'. $query . '/'),
+                //'hn' => new MongoRegex('/^' . $query . '/')
+            ))
+            ->limit($limit)
+            ->offset($start)
+            ->get('person');
+
+        return $rs;
+    }
+
+    public function search_person_all_ajax_by_hn_cid($query, $start, $limit)
+    {
+        $this->mongo_db->add_index('person', array('cid' => -1));
+        //$this->mongo_db->add_index('person', array('first_name' => -1));
+        $this->mongo_db->add_index('person', array('hn' => -1));
+
+        $rs = $this->mongo_db
+            ->or_where(array(
+                'cid' => $query,
+                //'first_name' => new MongoRegex('/'. $query . '/'),
+                'hn' => $query
+            ))
+            ->limit($limit)
+            ->offset($start)
+            ->get('person');
+
+        return $rs;
+    }
+
+    public function search_person_all_ajax_by_name_total($query)
+    {
+        //$this->mongo_db->add_index('person', array('cid' => -1));
+        $this->mongo_db->add_index('person', array('first_name' => -1));
+        //$this->mongo_db->add_index('person', array('hn' => -1));
+
+        $rs = $this->mongo_db
+            ->or_where(array(
+                //'cid' => $query,
+                'first_name' => new MongoRegex('/'. $query . '/'),
+                //'hn' => new MongoRegex('/^' . $query . '/')
+            ))
+            //->limit($limit)
+            //->offset($start)
+            ->count('person');
+
+        return $rs;
+    }
+    public function search_person_all_ajax_by_hn_cid_total($query)
+    {
+        $this->mongo_db->add_index('person', array('cid' => -1));
+        //$this->mongo_db->add_index('person', array('first_name' => -1));
+        $this->mongo_db->add_index('person', array('hn' => -1));
+
+        $rs = $this->mongo_db
+            ->or_where(array(
+                'cid' => $query,
+                //'first_name' => new MongoRegex('/'. $query . '/'),
+                'hn' => $query
+            ))
+            //->limit($limit)
+            //->offset($start)
+            ->count('person');
+
+        return $rs;
+    }
+
     public function search_person_all_ajax_total($query)
     {
         $this->mongo_db->add_index('person', array('cid' => -1));
@@ -1043,5 +1118,17 @@ class Person_model extends CI_Model
             ))
             ->update('person');
         return $rs;
+    }
+
+    //============= update discharge status =========//
+    public function change_discharge_status($hn, $status) {
+        $this->mongo_db->add_index('person', array('hn' => -1));
+
+        $this->mongo_db
+            ->where(array('hn' => (string) $hn))
+            ->set(array(
+                'discharge_status' => $status
+            ))
+            ->update('person');
     }
 }

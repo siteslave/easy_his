@@ -103,7 +103,7 @@ head.ready(function(){
 
     //remove drug
     $(document).on('click', 'button[data-name="btn_screening_allergy_remove"]', function(){
-        var drug_id = $(this).attr('data-id');
+        var drug_id = $(this).data('id');
 
         app.confirm('คุณต้องการลบรายการนี้ใช่หรือไม่?', function(res){
             if(res){
@@ -121,7 +121,7 @@ head.ready(function(){
     });
 
     $(document).on('click', 'button[data-name="btn_screening_allergy_edit"]', function(){
-        var drug_id = $(this).attr('data-id');
+        var drug_id = $(this).data('id');
 
         //get detail
         allergy.modal.show_update(allergy.hn, drug_id);

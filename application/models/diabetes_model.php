@@ -189,6 +189,28 @@ class Diabetes_model extends CI_Model
             ->get('person');
         return $rs;
     }
+
+
+    public function is_registered($hn)
+    {
+        $this->mongo_db->add_index('person', array('registers.clinic_code' => -1));
+        $this->mongo_db->add_index('person', array('registers.owner_id' => -1));
+
+        $rs = $this->mongo_db
+            ->where(array(
+                'registers' =>
+                    array(
+                        '$elemMatch' =>
+                            array(
+                                'clinic_code' => $this->clinic_code,
+                                'owner_id' => new MongoId($this->owner_id)
+                            )
+                    ),
+                'hn' => (string) $hn
+            ))
+            ->count('person');
+        return $rs > 0 ? true : false;
+    }
 }
 
 //End of file

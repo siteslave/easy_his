@@ -269,60 +269,7 @@ head.ready(function(){
                         });
 
                     },
-                    onFormat: function(type){
-                        switch (type) {
-
-                            case 'block':
-
-                                if (!this.active)
-                                    return '<li class="disabled"><a href="">' + this.value + '</a></li>';
-                                else if (this.value != this.page)
-                                    return '<li><a href="#' + this.value + '">' + this.value + '</a></li>';
-                                return '<li class="active"><a href="#">' + this.value + '</a></li>';
-
-                            case 'right':
-                            case 'left':
-
-                                if (!this.active) {
-                                    return "";
-                                }
-                                return '<li><a href="#' + this.value + '">' + this.value + '</a></li>';
-
-                            case 'next':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&raquo;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&raquo;</a></li>';
-
-                            case 'prev':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&laquo;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&laquo;</a></li>';
-
-                            case 'first':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&lt;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&lt;</a></li>';
-
-                            case 'last':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&gt;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&gt;</a></li>';
-
-                            case 'fill':
-                                if (this.active) {
-                                    return '<li class="disabled"><a href="#">...</a></li>';
-                                }
-                        }
-                        return ""; // return nothing for missing branches
-                    }
+                    onFormat: app.paging_format
                 });
             }
         });
@@ -356,60 +303,7 @@ head.ready(function(){
                         });
 
                     },
-                    onFormat: function(type){
-                        switch (type) {
-
-                            case 'block':
-
-                                if (!this.active)
-                                    return '<li class="disabled"><a href="">' + this.value + '</a></li>';
-                                else if (this.value != this.page)
-                                    return '<li><a href="#' + this.value + '">' + this.value + '</a></li>';
-                                return '<li class="active"><a href="#">' + this.value + '</a></li>';
-
-                            case 'right':
-                            case 'left':
-
-                                if (!this.active) {
-                                    return "";
-                                }
-                                return '<li><a href="#' + this.value + '">' + this.value + '</a></li>';
-
-                            case 'next':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&raquo;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&raquo;</a></li>';
-
-                            case 'prev':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&laquo;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&laquo;</a></li>';
-
-                            case 'first':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&lt;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&lt;</a></li>';
-
-                            case 'last':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&gt;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&gt;</a></li>';
-
-                            case 'fill':
-                                if (this.active) {
-                                    return '<li class="disabled"><a href="#">...</a></li>';
-                                }
-                        }
-                        return ""; // return nothing for missing branches
-                    }
+                    onFormat: app.paging_format
                 });
             }
         });
@@ -418,70 +312,6 @@ head.ready(function(){
     $('#btn_register').click(function(){
         epi.modal.show_register();
     });
-
-//
-//    epi.set_search_person_result = function(data)
-//    {
-//        if(!data)
-//        {
-//            $('#tbl_search_person_result > tbody').append(
-//                '<tr><td colspan="7">ไม่พบรายการ</td></tr>');
-//        }
-//        else
-//        {
-//            _.each(data.rows, function(v){
-//                $('#tbl_search_person_result > tbody').append(
-//                    '<tr>' +
-//                        '<td>'+ v.hn +'</td>' +
-//                        '<td>'+ v.cid +'</td>' +
-//                        '<td>'+ v.first_name + ' ' + v.last_name +'</td>' +
-//                        '<td>'+ app.mongo_to_thai_date(v.birthdate) +'</td>' +
-//                        '<td>'+ v.age +'</td>' +
-//                        '<td>'+ v.sex +'</td>' +
-//                        '<td><a href="#" class="btn btn-success btn-small" data-hn="'+ v.hn + '" data-name="btn_selected_person" data-typearea="'+ v.typearea +'">' +
-//                        '<i class="icon-ok"></i></a></td>' +
-//                        '</tr>');
-//            });
-//        }
-//    };
-
-//    //search person
-//    $('#btn_do_search_person').click(function(){
-//        var query = $('#txt_search_query').val(),
-//            filter = $('#txt_search_person_filter').val();
-//
-//        if(!query)
-//        {
-//            app.alert('กรุณาระบุคำค้นหา โดยระบุชื่อ-สกุล หรือ HN หรือ เลขบัตรประชาชน');
-//        }
-//        else
-//        {
-//            //do search
-//            $('#tbl_search_person_result > tbody').empty();
-//
-//            epi.ajax.search_person(query, filter, function(err, data){
-//
-//                if(err)
-//                {
-//                    app.alert(err);
-//                    $('#tbl_search_person_result > tbody').append(
-//                        '<tr><td colspan="7">ไม่พบรายการ</td></tr>');
-//                }
-//                else
-//                {
-//                   epi.set_search_person_result(data);
-//                }
-//            });
-//        }
-//    });
-//
-//    //set filter
-//    $('a[data-name="btn_search_person_fillter"]').click(function(){
-//        var filter = $(this).data('value');
-//
-//        $('#txt_search_person_filter').val(filter);
-//    });
-
 
     //search person
     $('#txt_search_query').select2({
@@ -529,34 +359,37 @@ head.ready(function(){
     $('#btn_do_register_epi').on('click', function(){
 
          var person = $('#txt_search_query').select2('data');
-
-
-        if(person.typearea == '1' || person.typearea == '3')
-        {
+        if(person === null) {
+          alert('กรุณาระบุข้อมูลที่ต้องการ');
+        } else {
+          if(person.typearea == '1' || person.typearea == '3')
+          {
             var hn = person.hn;
 
             if(confirm('คุณต้องการลงทะเบียนข้อมูลนี้ใช่หรือไม่?'))
             {
-                //do register
-                epi.ajax.do_register(hn, function(err){
-                    if(err)
-                    {
-                        app.alert(err);
-                    }
-                    else
-                    {
-                        app.alert('ลงทะเบียนรายการเสร็จเรียบร้อยแล้ว');
-                        epi.modal.hide_register();
-                        epi.get_list();
-                    }
-                });
+              //do register
+              epi.ajax.do_register(hn, function(err){
+                if(err)
+                {
+                  app.alert(err);
+                }
+                else
+                {
+                  app.alert('ลงทะเบียนรายการเสร็จเรียบร้อยแล้ว');
+                  epi.modal.hide_register();
+                  epi.get_list();
+                }
+              });
             }
 
-        }
-        else
-        {
+          }
+          else
+          {
             app.alert('บุคคลนี้ไม่ใช่บุคคลในเขตรับผิดชอบ (Typearea ไม่ใช่ 1 หรือ 3) Typearea ปัจจุบันคือ ' + person.typearea);
+          }
         }
+
     });
 
     $('#btn_fillter').click(function(e){

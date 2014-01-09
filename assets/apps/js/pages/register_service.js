@@ -85,8 +85,8 @@ head.ready(function() {
         items.insc_code = $('#txt_reg_service_insc_code').val();
         items.insc_start_date = $('#txt_reg_service_insc_start_date').val();
         items.insc_expire_date = $('#txt_reg_service_insc_expire_date').val();
-        items.insc_hosp_main = hmain.code;
-        items.insc_hosp_sub = hsub.code;
+        items.insc_hosp_main = hmain === null ? '' : hmain.code;
+        items.insc_hosp_sub = hsub === null ? '' : hsub.code;
         items.cc = $('#txt_reg_service_cc').val();
 
 

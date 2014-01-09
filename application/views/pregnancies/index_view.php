@@ -20,15 +20,17 @@
                 <i class="fa fa-print"></i> พิมพ์</button>
         </div>
         |
-        HN:
-        <input style="width: 180px;" id="txt_query_preg" class="form-control" type="text" data-type="number" autocomplete="off" placeholder="ระบุ HN เพื่อค้นหา">
+        <input style="width: 250px;" id="txt_query_preg" type="hidden">
         <button class="btn btn-primary" type="button" id="btn_do_search_preg" rel="tooltip" title="ค้นหา">
             <i class="fa fa-search"></i>
         </button>
 
-        <button type="button" id="btn_refresh" rel="tooltip" title="รีเฟรช (Refresh)" class="btn btn-default pull-right"><i class="fa fa-refresh"></i></button>
-        <button type="button" id="btn_register" rel="tooltip" title="ลงทะเบียนรายใหม่" class="btn btn-success">
-            <i class="fa fa-plus-circle"></i> ลงทะเบียน</button>
+        <div class="btn-group pull-right">
+            <button type="button" id="btn_refresh" rel="tooltip" title="รีเฟรช (Refresh)" class="btn btn-default">
+                <i class="fa fa-refresh"></i> รีเฟรช</button>
+            <button type="button" id="btn_register" rel="tooltip" title="ลงทะเบียนรายใหม่" class="btn btn-success">
+                <i class="fa fa-plus-circle"></i> ลงทะเบียน</button>
+        </div>
     </form>
 </div>
 
@@ -204,34 +206,34 @@
 
 <!-- anc info -->
 <div class="modal fade" id="mdl_anc_info">
-    <div class="modal-dialog" style="width: 960px; left: 35%">
+    <div class="modal-dialog" style="width: 960px;">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title"><i class="icon-briefcase"></i> ข้อมูลการฝากครรภ์</h4>
+                <h4 class="modal-title"><i class="fa fa-briefcase"></i> ข้อมูลการฝากครรภ์</h4>
             </div>
             <div class="modal-body">
             <form class="form-inline  well well-small">
                 <div class="row">
                     <div class="col-lg-2">
                         <label>HN</label>
-                        <input type="text" disabled="disabled" id="txt_anc_info_hn">
+                        <input type="text" disabled="disabled" class="form-control" id="txt_anc_info_hn">
                     </div>
                     <div class="col-lg-3">
                         <label>CID</label>
-                        <input type="text" disabled="disabled" id="txt_anc_info_cid">
+                        <input type="text" disabled="disabled" class="form-control" id="txt_anc_info_cid">
                     </div>
                     <div class="col-lg-3">
                         <label>ชื่อ - สกุล</label>
-                        <input type="text" disabled="disabled" id="txt_anc_info_fullname">
+                        <input type="text" disabled="disabled" class="form-control" id="txt_anc_info_fullname">
                     </div>
                     <div class="col-lg-2">
                         <label>วันเกิด</label>
-                        <input type="text" disabled="disabled" id="txt_anc_info_birthdate">
+                        <input type="text" disabled="disabled" class="form-control" id="txt_anc_info_birthdate">
                     </div>
                     <div class="col-lg-2">
                         <label>อายุ (ปี)</label>
-                        <input type="text" disabled="disabled" id="txt_anc_info_age">
+                        <input type="text" disabled="disabled" class="form-control" id="txt_anc_info_age">
                     </div>
                 </div>
 
@@ -239,8 +241,8 @@
 
             <div class="tabbable">
                 <ul class="nav nav-tabs">
-                    <li class="active"><a href="#tab_anc_info1" data-toggle="tab"><i class="icon-info-sign"></i> ข้อมูลการฝากครรภ์</a></li>
-                    <li><a href="#tab_anc_info2" data-toggle="tab"><i class="icon-refresh"></i> ประวัติการรับบริการ</a></li>
+                    <li class="active"><a href="#tab_anc_info1" data-toggle="tab"><i class="fa fa-briefcase"></i> ข้อมูลการฝากครรภ์</a></li>
+                    <li><a href="#tab_anc_info2" data-toggle="tab"><i class="fa fa-refresh"></i> ประวัติการรับบริการ</a></li>
                 </ul>
 
                 <div class="tab-content">
@@ -249,19 +251,19 @@
                             <div class="row">
                                 <div class="col-lg-2">
                                     <label for="txt_anc_info_gravida">ครรภ์ที่</label>
-                                    <input type="text" id="txt_anc_info_gravida" disabled="disabled">
+                                    <input type="text" class="form-control" id="txt_anc_info_gravida" disabled="disabled">
                                 </div>
                                 <div class="col-lg-2">
                                     <label for="txt_anc_info_lmp">LMP</label>
-                                    <input id="txt_anc_info_lmp" type="text" data-type="date">
+                                    <input id="txt_anc_info_lmp" class="form-control" type="text" data-type="date">
                                 </div>
                                 <div class="col-lg-2">
                                     <label for="txt_anc_info_edc">EDC</label>
-                                    <input id="txt_anc_info_edc" type="text" data-type="date">
+                                    <input id="txt_anc_info_edc" class="form-control" type="text" data-type="date">
                                 </div>
                                 <div class="col-lg-3">
                                     <label for="sl_anc_info_preg_status">สถานะปัจจุบัน</label>
-                                    <select id="sl_anc_info_preg_status">
+                                    <select id="sl_anc_info_preg_status" class="form-control">
                                         <option value="0">ยังไม่คลอด</option>
                                         <option value="1">คลอดแล้ว</option>
                                     </select>
@@ -270,7 +272,7 @@
                             <div class="row">
                                 <div class="col-lg-3">
                                     <label class="control-label" for="sl_anc_info_vdrl">VDRL</label>
-                                    <select id="sl_anc_info_vdrl">
+                                    <select id="sl_anc_info_vdrl" class="form-control">
                                         <option value="1">ปกติ</option>
                                         <option value="2">ผิดปกติ</option>
                                         <option value="3">ไม่ตรวจ</option>
@@ -280,7 +282,7 @@
                                 </div>
                                 <div class="col-lg-3">
                                     <label class="control-label" for="sl_anc_info_hb">HB</label>
-                                    <select id="sl_anc_info_hb" class="input-medium">
+                                    <select id="sl_anc_info_hb" class="form-control">
                                         <option value="1">ปกติ</option>
                                         <option value="2">ผิดปกติ</option>
                                         <option value="3">ไม่ตรวจ</option>
@@ -290,7 +292,7 @@
                                 </div>
                                 <div class="col-lg-3">
                                     <label class="control-label" for="sl_anc_info_hiv">HIV</label>
-                                    <select id="sl_anc_info_hiv">
+                                    <select id="sl_anc_info_hiv" class="form-control">
                                         <option value="1">ปกติ</option>
                                         <option value="2">ผิดปกติ</option>
                                         <option value="3">ไม่ตรวจ</option>
@@ -302,11 +304,11 @@
                             <div class="row">
                                 <div class="col-lg-3">
                                     <label for="txt_anc_info_hct_date">วันที่ตรวจ HCT</label>
-                                    <input class="input-small" id="txt_anc_info_hct_date" type="text" data-type="date">
+                                    <input class="form-control" id="txt_anc_info_hct_date" type="text" data-type="date">
                                 </div>
                                 <div class="col-lg-3">
                                     <label for="sl_anc_info_hct">ผลตรวจ HCT</label>
-                                    <select id="sl_anc_info_hct">
+                                    <select id="sl_anc_info_hct" class="form-control">
                                         <option value="1">ปกติ</option>
                                         <option value="2">ผิดปกติ</option>
                                         <option value="3">ไม่ตรวจ</option>
@@ -316,7 +318,7 @@
                                 </div>
                                 <div class="col-lg-3">
                                     <label class="control-label" for="sl_anc_info_thalassemia">ธาลัสซีเมีย</label>
-                                    <select id="sl_anc_info_thalassemia">
+                                    <select id="sl_anc_info_thalassemia" class="form-control">
                                         <option value="1">ปกติ</option>
                                         <option value="2">ผิดปกติ</option>
                                         <option value="3">ไม่ตรวจ</option>
@@ -326,17 +328,18 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-lg-2">
-                                    <label class="control-label" for="chk_anc_info_do_export">บังคับส่ง</label>
-                                    <input type="checkbox" id="chk_anc_info_do_export">
-                                </div>
-                                <div class="col-lg-2">
+                                <div class="col-sm-3">
                                     <label for="txt_anc_info_export_date">ส่งออกวันที่</label>
-                                    <input id="txt_anc_info_export_date" type="text" data-type="date" rel="tooltip" title="ระบุวันที่เพื่อส่งออก">
+                                    <div class="input-group">
+                                          <span class="input-group-addon">
+                                            <input type="checkbox" id="chk_anc_info_export">
+                                          </span>
+                                        <input type="text" id="txt_anc_info_export_date" class="form-control" data-type="date" rel="tooltip" title="ระบุวันที่เพื่อส่งออก">
+                                    </div>
                                 </div>
                             </div>
-
-                            <a href="#" class="btn btn-success" id="btn_anc_info_save"><i class="icon-save"></i> บันทึกข้อมูล</a>
+                            <br/>
+                            <a href="#" class="btn btn-success" id="btn_anc_info_save"><i class="fa fa-save"></i> บันทึกข้อมูล</a>
                         </form>
                     </div>
 
@@ -364,7 +367,7 @@
             </div>
             </div>
             <div class="modal-footer">
-                <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="icon-off"></i> ปิดหน้าต่าง</a>
+                <a href="#" data-dismiss="modal" class="btn btn-danger"><i class="fa fa-power-off"></i> ปิดหน้าต่าง</a>
             </div>
         </div>
     </div>
@@ -372,7 +375,7 @@
 <!-- /anc info -->
 
 <div class="modal fade" id="mdl_anc">
-    <div class="modal-dialog" style="width: 960px; left: 35%">
+    <div class="modal-dialog" style="width: 960px;">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -387,7 +390,7 @@
 </div>
 
 <div class="modal fade" id="mdl_postnatal">
-    <div class="modal-dialog" style="width: 960px; left: 35%">
+    <div class="modal-dialog" style="width: 960px;">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>

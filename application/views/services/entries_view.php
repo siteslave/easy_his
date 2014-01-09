@@ -29,7 +29,12 @@
             <span class="caret"></span>
         </button>
         <ul class="dropdown-menu">
-            <li class="disabled"><a href="javascript:void(0);" data-name="btn_chronic_fu"><i class="fa fa-tags fa-fw"></i> คัดกรองความเสี่ยง (เบาหวาน, ความดัน)</a></li>
+            <?php if($is_dm) {
+                echo '<li><a href="javascript:void(0);" data-name="btn_chronic_fu"><i class="fa fa-eye-slash"></i> คัดกรองภาวะแทรกซ้อน (ผู้ป่วยเบาหวาน)</a></li>';
+            } else {
+                echo '<li class="disabled"><a href="javascript:void(0);" data-name="btn_chronic_fu2"><i class="fa fa-eye-slash"></i> คัดกรองภาวะแทรกซ้อน (ผู้ป่วยเบาหวาน)</a></li>';
+            }?>
+            <li class="disabled"><a href="javascript:void(0);" data-name="btn_chronic_fu3"><i class="fa fa-tags fa-fw"></i> คัดกรองความเสี่ยง (เบาหวาน, ความดัน)</a></li>
             <li><a href="javascript:void(0);" data-name="btn_depress"><i class="fa fa-leaf fa-fw"></i> คัดกรองโรคซึมเศร้า</a></li>
             <li class="disabled"><a href="javascript:void(0);" data-name="btn_papsemear"><i class="fa fa-fire fa-fw"></i> คัดกรองมะเร็งปากมดลูก</a></li>
         </ul>
@@ -39,7 +44,7 @@
             <span class="caret"></span>
         </button>
         <ul class="dropdown-menu">
-            <li><a href="javascript:void(0);" data-name="btn_chronic_fu"><i class="fa fa-eye-slash"></i> คัดกรองภาวะแทรกซ้อน</a></li>
+            <!-- other menu -->
         </ul>
     </div>
     <div class="btn-group pull-right">
@@ -601,8 +606,8 @@
             </table>
             <div class="btn-group">
                 <button type="button" class="btn btn-success" id="btn_drug_new" rel="tooltip" title="เพิ่มรายการ"><i class="fa fa-plus-circle"></i></button>
-                <button type="button" class="btn btn-default" rel="tooltip" title="กำหนดสูตรยา"><i class="fa fa-th-list"></i></button>
-                <button type="button" class="btn btn-default"rel="tooltip" title="Remed."><i class="fa fa-exchange"></i></button>
+                <button type="button" class="btn btn-default" rel="tooltip" title="กำหนดสูตรยา" disabled><i class="fa fa-th-list"></i></button>
+                <button type="button" class="btn btn-default"rel="tooltip" title="Remed." disabled><i class="fa fa-exchange"></i></button>
             </div>
             <button type="button" class="btn btn-success" rel="tooltip" title="รีเฟรชรายการใหม่" id="btn_drug_refresh"><i class="fa fa-refresh"></i></button>
             <button type="button" class="btn btn-danger" rel="tooltip" title="ลบใบสั่งยา" id="btn_drug_remove_bill"><i class="fa fa-trash-o"></i></button>

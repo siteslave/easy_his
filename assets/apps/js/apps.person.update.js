@@ -153,31 +153,19 @@ head.ready(function(){
                 return err ? cb(err) : cb(null, data);
             });
         },
-        search_drug: function(query, cb){
 
-            var url = 'basic/search_drug',
-                params = {
-                    query: query
-                };
-
-            app.ajax(url, params, function(err, data){
-                return err ? cb(err) : cb(null, data);
-            });
-
-        },
-
-        save_drug_allergy: function(data, cb){
-
-            var url = 'person/save_drug_allergy',
-                params = {
-                    data: data
-                };
-
-            app.ajax(url, params, function(err, data){
-                return err ? cb(err) : cb(null);
-            });
-
-        },
+//        save_drug_allergy: function(data, cb){
+//
+//            var url = 'person/save_drug_allergy',
+//                params = {
+//                    data: data
+//                };
+//
+//            app.ajax(url, params, function(err, data){
+//                return err ? cb(err) : cb(null);
+//            });
+//
+//        },
 
         get_drug_allergy_list: function(hn, cb){
 
@@ -209,18 +197,6 @@ head.ready(function(){
                 params = {
                     drug_id: drug_id,
                     hn: hn
-                };
-
-            app.ajax(url, params, function(err, data){
-                return err ? cb(err) : cb(null, data);
-            });
-        },
-
-        search_icd10: function(query, op, cb){
-            var url = 'basic/search_icd10',
-                params = {
-                    query: query,
-                    op: op
                 };
 
             app.ajax(url, params, function(err, data){
@@ -262,40 +238,40 @@ head.ready(function(){
         }
     };
     //Clear register form
-    person.clear_register_form = function(){
-        $('#txt_cid').val('');
-        $('#txt_first_name').val('');
-        $('#txt_last_name').val('');
-        $('#txt_birth_date').val('');
-        $('#txtFatherCid').val('');
-        $('#txtMotherCid').val('');
-        $('#txtCoupleCid').val('');
-        $('#txtMoveInDate').val('');
-        $('#txtDischargeDate').val('');
-        $('#txt_passport').val('');
-
-        //address
-        $('#txtOutsideHouseId').val('');
-        $('#txtOutsideRoomNumber').val('');
-        $('#txtOutsideCondo').val('');
-        $('#txtOutsideAddressNumber').val('');
-        $('#txtOutsideSoiSub').val('');
-        $('#txtOutsideSoiMain').val('');
-        $('#txtOutsideRoad').val('');
-        $('#txtOutsideVillageName').val('');
-        $('#txtOutsidePostcode').val('');
-        $('#txtOutsideTelephone').val('');
-        $('#txtOutsideMobile').val('');
-
-        //insurance
-        $('#txt_inscl_code').val('');
-        $('#txtInsStartDate').val('');
-        $('#txtInsExpireDate').val('');
-        $('#txt_ins_hospmain_code').val('');
-        $('#txt_ins_hospsub_code').val('');
-        $('#txt_ins_hospmain_name').val('');
-        $('#txt_ins_hospsub_name').val('');
-    };
+//    person.clear_register_form = function(){
+//        $('#txt_cid').val('');
+//        $('#txt_first_name').val('');
+//        $('#txt_last_name').val('');
+//        $('#txt_birth_date').val('');
+//        $('#txtFatherCid').val('');
+//        $('#txtMotherCid').val('');
+//        $('#txtCoupleCid').val('');
+//        $('#txtMoveInDate').val('');
+//        $('#txtDischargeDate').val('');
+//        $('#txt_passport').val('');
+//
+//        //address
+//        $('#txtOutsideHouseId').val('');
+//        $('#txtOutsideRoomNumber').val('');
+//        $('#txtOutsideCondo').val('');
+//        $('#txtOutsideAddressNumber').val('');
+//        $('#txtOutsideSoiSub').val('');
+//        $('#txtOutsideSoiMain').val('');
+//        $('#txtOutsideRoad').val('');
+//        $('#txtOutsideVillageName').val('');
+//        $('#txtOutsidePostcode').val('');
+//        $('#txtOutsideTelephone').val('');
+//        $('#txtOutsideMobile').val('');
+//
+//        //insurance
+//        $('#txt_inscl_code').val('');
+//        $('#txtInsStartDate').val('');
+//        $('#txtInsExpireDate').val('');
+//        $('#txt_ins_hospmain_code').val('');
+//        $('#txt_ins_hospsub_code').val('');
+//        $('#txt_ins_hospmain_name').val('');
+//        $('#txt_ins_hospsub_name').val('');
+//    };
 
     person.update.get_ampur_list = function(chw){
 
@@ -336,9 +312,9 @@ head.ready(function(){
                                 '<td>' +
                                 '<div class="btn-group"> ' +
                                 '<button class="btn btn-default" type="button" data-name="btn_allergy_edit" ' +
-                                'data-id="' + v.drug_id + '" title="แก้ไขรายการ"><i class="icon-edit"></i></button>' +
+                                'data-id="' + v.drug_id + '" title="แก้ไขรายการ"><i class="fa fa-edit"></i></button>' +
                                 '<button class="btn btn-danger" type="button" data-name="btn_allergy_remove" ' +
-                                'data-id="' + v.drug_id + '" title="ลบรายการ"><i class="icon-trash"></i></button>' +
+                                'data-id="' + v.drug_id + '" title="ลบรายการ"><i class="fa fa-trash-o"></i></button>' +
                                 '</div></td>' +
                                 '</tr>'
                         );
@@ -407,247 +383,6 @@ head.ready(function(){
 
     };
 
-    person.update.search_icd10 = function(query, op){
-        var div = $('#div_search_chronic_result');
-        app.show_block(div);
-        person.update.ajax.search_icd10(query, op, function(err, data){
-
-            $('#tbl_search_chronic_result_list > tbody').empty();
-
-            if(err){
-                app.alert(err);
-                app.hide_block(div);
-            }else{
-                if(_.size(data.rows)){
-                    _.each(data.rows, function(v){
-                        var valid = v.valid == 'T' ? '<i class="icon-ok"></i>' :
-                            '<i class="icon-remove"></i>';
-
-                        $('#tbl_search_chronic_result_list > tbody').append(
-                            '<tr>' +
-                                '<td>' + v.code + '</td>' +
-                                '<td>' + v.desc_r + '</td>' +
-                                '<td>' + valid + '</td>' +
-                                '<td><a href="javascript:void(0)" data-code="'+ v.code +'" data-name="btn_select_chronic_diag" data-vname="'+ v.desc_r +'" '+
-                                'data-valid="'+ v.valid +'" data-chronic="' + v.chronic + '" class="btn btn-info">' +
-                                '<i class="icon-share"></i></a></td>' +
-                            '</tr>'
-                        );
-                    });
-                }else{
-                    $('#tbl_search_chronic_result_list > tbody').append(
-                        '<tr>' +
-                            '<td colspan="4">ไม่พบรายการ</td>' +
-                        '</tr>'
-                    );
-                }
-
-                app.hide_block(div);
-            }
-        });
-    }
-    //search dbpop
-    $('#button_do_search_dbpop').click(function(){
-        var query = $('#text_query_search_dbpop').val();
-        if(!query){
-            app.alert('กรุณระบุคำค้นหา เลขบัตรประชาชน หรือ ชื่อ-สกุล');
-        }else{
-            //do search
-            $('#table_search_dbpop_result_list > tbody').empty();
-
-            person.update.ajax.search_dbpop(query, function(err, data){
-                if(err){
-                    $('#table_search_dbpop_result_list > tbody').append(
-                        '<tr>' +
-                            '<td colspan="6">ไม่พบรายการ</td>' +
-                            '</tr>'
-                    );
-                }else{
-                    if( _.size(data.rows) ){
-                        _.each(data.rows, function(v){
-                            $('#table_search_dbpop_result_list > tbody').append(
-                                '<tr>' +
-                                    '<td>' + v.cid + '</td>' +
-                                    '<td>' + v.fname + ' ' + v.lname + '</td>' +
-                                    '<td>' + app.dbpop_to_thai_date(v.birthdate) + '</td>' +
-                                    '<td>' + app.count_age_dbpop(v.birthdate) + '</td>' +
-                                    '<td>[' + v.subinscl + '] ' + v.maininscl_name + '</td>' +
-                                    '<td><a href="#" class="btn btn-default" data-name="button_set_data_from_dbopo" ' +
-                                    'data-cid="' + v.cid + '" data-fname="'+ v.fname +'" data-lname="'+ v.lname+'" ' +
-                                    'data-birth="'+ v.birthdate +'" data-maininscl="'+ v.maininscl +'" ' +
-                                    ' data-inscl="'+ v.subinscl +'" data-sex="'+ v.sex +'" data-cardid="'+ v.cardid +'"' +
-                                    ' data-startdate="'+ v.startdate+'" data-expdate="'+ v.expdate +'"' +
-                                    ' data-hmain_code="'+ v.hmain_code +'" data-hmain_name="'+ v.hmain_name +'" ' +
-                                    ' data-hsub_code="'+ v.hsub_code +'" data-hsub_name="'+ v.hsub_name +'"><i class="icon-share"></i></a></td>' +
-                                    '</tr>'
-                            );
-                        });
-                    }else{
-                        $('#table_search_dbpop_result_list > tbody').append(
-                            '<tr>' +
-                                '<td colspan="6">ไม่พบรายการ</td>' +
-                                '</tr>'
-                        );
-                    }
-                }
-            });
-        }
-    });
-
-    $(document).on('click', 'a[data-name="button_set_data_from_dbopo"]', function(){
-        var cid         = $(this).attr('data-cid'),
-            fname       = $(this).attr('data-fname'),
-            lname       = $(this).attr('data-lname'),
-            birthdate   = app.convertDBPOPDateToEngDate($(this).attr('data-birth')),
-            inscl       = $(this).attr('data-inscl'),
-            maininscl   = $(this).attr('data-maininscl'),
-            cardid      = $(this).attr('data-cardid'),
-            sex         = $(this).attr('data-sex'),
-            hmain_code  = $(this).attr('data-hmain_code'),
-            hmain_name  = $(this).attr('data-hmain_name'),
-            hsub_code   = $(this).attr('data-hsub_code'),
-            hsub_name   = $(this).attr('data-hsub_name'),
-            startdate   = app.convertDBPOPDateToEngDate($(this).attr('data-startdate')),
-            expdate     = app.convertDBPOPDateToEngDate($(this).attr('data-expdate'));
-
-        if(maininscl == 'SSS'){
-            $('#sl_inscl_type').val('S1');
-        }else if(maininscl == "OFC"){
-            $('#sl_inscl_type').val("O1");
-        }else{
-            $('#sl_inscl_type').val(inscl);
-        }
-
-        //set person data
-        $('#txt_cid').val(cid);
-        $('#txt_first_name').val(fname);
-        $('#txt_last_name').val(lname);
-        $('#txt_birth_date').val(birthdate);
-        $('#sl_sex').val(sex);
-        $('#txt_inscl_code').val(cardid);
-        $('#txtInsStartDate').val(startdate);
-        $('#txtInsExpireDate').val(expdate);
-
-        $('#txt_ins_hospmain_code').val(hmain_code);
-        $('#txt_ins_hospmain_name').val(hmain_name);
-
-        $('#txt_ins_hospsub_code').val(hsub_code);
-        $('#txt_ins_hospsub_name').val(hsub_name);
-
-        $('#modal_search_dbpop').modal('hide');
-    });
-    //search hospital
-    $('#btn_do_search_hospital').click(function(){
-        var query = $('#text_query_search_hospital').val();
-        var op = $('#chk_search_by_name').is(":checked") ? 1 : 0;
-
-        if(!query){
-            app.alert('กรุณาระบคำที่ต้องการค้นหา');
-        }else{
-            //do search
-
-            $('#table_search_hospital_result_list > tbody').empty();
-
-            person.update.ajax.search_hospital(query, op, function(err, data){
-                if(err){
-                    $('#table_search_hospital_result_list > tbody').append(
-                        '<tr>' +
-                            '<td colspan="4">' + err + '</td>' +
-                            '</tr>'
-                    );
-                }else{
-                    if( _.size(data.rows) ){
-                        _.each(data.rows, function(v){
-                            $('#table_search_hospital_result_list > tbody').append(
-                                '<tr>' +
-                                    '<td>' + v.code + '</td>' +
-                                    '<td>' + v.name + '</td>' +
-                                    '<td>' + v.province + '</td>' +
-                                    '<td><a href="#" class="btn" data-name="btn_set_hospital" ' +
-                                    'data-code="' + v.code + '" data-vname="'+ v.name +'"><i class="icon-share"></i></a></td>' +
-                                    '</tr>'
-                            );
-                        });
-                    }else{
-                        $('#table_search_hospital_result_list > tbody').append(
-                            '<tr>' +
-                                '<td colspan="4">ไม่พบรายการ</td>' +
-                                '</tr>'
-                        );
-                    }
-                }
-            });
-        }
-    });
-
-    $('#btn_search_hospital_main').click(function(){
-        $('#txt_search_by').val('hmain');
-        person.update.modal.show_search_hospital();
-    });
-    $('#btn_search_hospital_sub').click(function(){
-        $('#txt_search_by').val('hsub');
-        person.update.modal.show_search_hospital();
-    });
-    $('#txt_search_drug_allergy_hosp').click(function(){
-        $('#txt_search_by').val('drug');
-        $('#modal_search_drug_allergy').modal('hide');
-        person.update.modal.show_search_hospital();
-
-    });
-
-    //search hospital dx chronic
-    $('#btn_search_chronic_dx_hosp').click(function(){
-        $('#txt_search_by').val('chronic_dx');
-        $('#modal_search_chronic').modal('hide');
-        person.update.modal.show_search_hospital();
-    });
-
-    $('#btn_search_chronic_rx_hosp').click(function(){
-        $('#txt_search_by').val('chronic_rx');
-        $('#modal_search_chronic').modal('hide');
-        person.update.modal.show_search_hospital();
-    });
-
-    $(document).on('click', 'a[data-name="btn_set_hospital"]', function(){
-        var act = $('#txt_search_by').val(),
-            hospcode = $(this).attr('data-code'),
-            hospname = $(this).attr('data-vname');
-
-        if(act == 'hmain'){
-            $('#txt_ins_hospmain_name').val(hospname);
-            $('#txt_ins_hospmain_code').val(hospcode);
-        }else if(act == 'hsub'){
-            $('#txt_ins_hospsub_name').val(hospname);
-            $('#txt_ins_hospsub_code').val(hospcode);
-        }else if(act == 'drug'){
-            $('#txt_drug_allergy_hosp_code').val(hospcode);
-            $('#txt_drug_allergy_hosp_name').val(hospname);
-            $('#modal_search_drug_allergy').modal('show');
-        }else if(act == 'chronic_dx'){
-            $('#txt_chronic_hosp_dx_code').val(hospcode);
-            $('#txt_chronic_hosp_dx_name').val(hospname);
-            $('#modal_search_chronic').modal('show');
-        }else if(act == 'chronic_rx'){
-            $('#txt_chronic_hosp_rx_code').val(hospcode);
-            $('#txt_chronic_hosp_rx_name').val(hospname);
-            $('#modal_search_chronic').modal('show');
-
-        }else{
-            //
-        }
-        $('#modal_search_hospital').modal('hide');
-    });
-/*
-    $('#modal_search_hospital').on('hidden', function(){
-        var act = $('#txt_search_by').val();
-
-        if(act == 'drug'){
-            $('#modal_search_drug_allergy').modal('show');
-        }else if(act == 'chronic_dx' || act == 'chronic_rx'){
-            $('#modal_search_chronic').modal('show');
-        }
-    });
-    */
     //get ampur list
     $('#slOutsideProvince').change(function(){
         var chw = $(this).val();
@@ -689,36 +424,36 @@ head.ready(function(){
         items.hn                = person.hn;
         items.cid               = $('#txt_cid').val();
         items.old_cid           = $('#txt_old_cid').val();
-        items.title             = $('#slTitle').val();
+        items.title             = $('#slTitle').select2('val');
         items.first_name        = $('#txt_first_name').val();
         items.last_name         = $('#txt_last_name').val();
-        items.sex               = $('#sl_sex').val();
+        items.sex               = $('#sl_sex').select2('val');
         items.birthdate         = $('#txt_birth_date').val();
-        items.mstatus           = $('#slMStatus').val();
-        items.occupation        = $('#slOccupation').val();
-        items.race              = $('#slRace').val();
-        items.nation            = $('#slNation').val();
-        items.religion          = $('#slReligion').val();
-        items.education         = $('#slEducation').val();
-        items.fstatus           = $('#slFstatus').val();
-        items.vstatus           = $('#slVstatus').val();
+        items.mstatus           = $('#slMStatus').select2('val');
+        items.occupation        = $('#slOccupation').select2('val');
+        items.race              = $('#slRace').select2('val');
+        items.nation            = $('#slNation').select2('val');
+        items.religion          = $('#slReligion').select2('val');
+        items.education         = $('#slEducation').select2('val');
+        items.fstatus           = $('#slFstatus').select2('val');
+        items.vstatus           = $('#slVstatus').select2('val');
         items.father_cid        = $('#txtFatherCid').val();
         items.mother_cid        = $('#txtMotherCid').val();
         items.couple_cid        = $('#txtCoupleCid').val();
         items.movein_date       = $('#txtMoveInDate').val();
         items.discharge_date    = $('#txtDischargeDate').val();
-        items.discharge_status  = $('#slDischarge').val();
-        items.abogroup          = $('#slABOGroup').val();
-        items.rhgroup           = $('#slRHGroup').val();
-        items.labor_type        = $('#slLabor').val();
-        items.typearea          = $('#slTypeArea').val();
+        items.discharge_status  = $('#slDischarge').select2('val');
+        items.abogroup          = $('#slABOGroup').select2('val');
+        items.rhgroup           = $('#slRHGroup').select2('val');
+        items.labor_type        = $('#slLabor').select2('val');
+        items.typearea          = $('#slTypeArea').select2('val');
         items.passport          = $('#txt_passport').val();
 
         //address
         items.address = {};
-        items.address.address_type  = $('#slOutsiedAddressType').val();
+        items.address.address_type  = $('#slOutsiedAddressType').select2('val');
         items.address.house_id      = $('#txtOutsideHouseId').val();
-        items.address.house_type    = $('#slOutsiedHouseType').val();
+        items.address.house_type    = $('#slOutsiedHouseType').select2('val');
         items.address.room_no       = $('#txtOutsideRoomNumber').val();
         items.address.condo         = $('#txtOutsideCondo').val();
         items.address.houseno       = $('#txtOutsideAddressNumber').val();
@@ -726,28 +461,31 @@ head.ready(function(){
         items.address.soi_main      = $('#txtOutsideSoiMain').val();
         items.address.road          = $('#txtOutsideRoad').val();
         items.address.village_name  = $('#txtOutsideVillageName').val();
-        items.address.village       = $('#slOutsideVillage').val();
-        items.address.tambon        = $('#slOutsideTambon').val();
-        items.address.ampur         = $('#slOutsideAmpur').val();
-        items.address.changwat      = $('#slOutsideProvince').val();
+        items.address.village       = $('#slOutsideVillage').select2('val');
+        items.address.tambon        = $('#slOutsideTambon').select2('val');
+        items.address.ampur         = $('#slOutsideAmpur').select2('val');
+        items.address.changwat      = $('#slOutsideProvince').select2('val');
         items.address.postcode      = $('#txtOutsidePostcode').val();
         items.address.telephone     = $('#txtOutsideTelephone').val();
         items.address.mobile        = $('#txtOutsideMobile').val();
 
         //insurance
         items.ins = {};
-        items.ins.id            = $('#sl_inscl_type').val();
+        var hospmain            = $('#txt_ins_hospmain_name').select2('data');
+        var hospsub             = $('#txt_ins_hospsub_name').select2('data');
+
+        items.ins.id            = $('#sl_inscl_type').select2('val');
         items.ins.code          = $('#txt_inscl_code').val();
         items.ins.start_date    = $('#txtInsStartDate').val();
         items.ins.expire_date   = $('#txtInsExpireDate').val();
-        items.ins.hmain         = $('#txt_ins_hospmain_code').val();
-        items.ins.hsub          = $('#txt_ins_hospsub_code').val();
+        items.ins.hmain         = hospmain === null ? '' : hospmain.code;
+        items.ins.hsub          = hospsub === null ? '' : hospsub.code;
 
-        if(!items.hn){
+        if(!items.hn) {
             app.alert('ไม่พบลรหัสบุคคลที่ต้องการปรับปรุง [HN]');
-        }else if(!items.cid || items.cid.length != 13){
+        } else if(!items.cid || items.cid.length != 13) {
             app.alert('กรุณาระบุเลขบัตรประชาชน/รูปแบบไม่ถูกต้อง');
-        }else if(!items.title){
+        } else if(!items.title) {
             app.alert('กรุณาเลือกคำนำหน้าชื่อ');
         }else if(!items.first_name){
             app.alert('กรุณาระบุชื่อ');
@@ -780,7 +518,7 @@ head.ready(function(){
         }else if(!items.ins.id){
             app.alert('กรุณาระบุสิทธิการรักษา');
         }else{
-            if(items.typearea == '3' || items.typearea == '4' || items.typearea == '0'){
+            if( _.contains(['3', '4', '0'], items.typearea) ){
                 //check address
                 if(!items.address.changwat){
                     app.alert('กรุณาระบุจังหวัด นอกเขต');
@@ -846,216 +584,135 @@ head.ready(function(){
         person.update.modal.show_allergy(hn);
     });
 
-    //save drug allergy
-    $('#btn_save_drug_allergy').click(function(){
-        var items = {};
-
-        items.isupdate = $('#txt_drug_isupdate').val();
-        items.drug_id = $('#txt_drug_code').val();
-        items.drug_id_old = $('#txt_drug_code_old').val();
-        items.diag_type_id = $('#sl_type_diag').val();
-        items.record_date = $('#txt_date_record').val();
-        items.alevel_id = $('#sl_drug_allergy_alevel').val();
-        items.symptom_id = $('#sl_drug_allergy_symptom').val();
-        items.informant_id = $('#sl_drug_allergy_informant').val();
-        items.hospcode = $('#txt_drug_allergy_hosp_code').val();
-
-        items.hn = person.hn;
-
-        if(!items.hn){
-            app.alert('ไม่พบรหัสบุคคล กรุณาตรวจสอบ');
-        }else if(!items.record_date){
-            app.alert('กรุณาระบุวันที่บันทึก');
-        }else if(!items.diag_type_id){
-            app.alert('กรุณาระบุประเภทการวินิจฉัย')
-        }else if(!items.alevel_id){
-            app.alert('กรุณาระบุระดับความรุนแรง');
-        }else if(!items.drug_id){
-            app.alert('กรุณาเลือกรายการยา ที่ต้องการบันทึก');
-        }else if(!items.hospcode){
-            app.alert('กรุณาระบุหน่วยบริการที่บันทึก');
-        }else{
-            //do save
-            person.update.ajax.save_drug_allergy(items, function(err){
-                if(err){
-                    app.alert(err);
-                }else{
-                    $('#modal_search_drug_allergy').modal('hide');
-                    person.update.clear_drug_allergy_form();
-                    person.update.get_drug_allergy_list(person.hn);
-                }
-            });
-        }
-    });
+//    //save drug allergy
+//    $('#btn_save_drug_allergy').click(function(){
+//        var items = {};
+//
+//        items.isupdate = $('#txt_drug_isupdate').val();
+//        items.drug_id = $('#txt_drug_code').val();
+//        items.drug_id_old = $('#txt_drug_code_old').val();
+//        items.diag_type_id = $('#sl_type_diag').val();
+//        items.record_date = $('#txt_date_record').val();
+//        items.alevel_id = $('#sl_drug_allergy_alevel').val();
+//        items.symptom_id = $('#sl_drug_allergy_symptom').val();
+//        items.informant_id = $('#sl_drug_allergy_informant').val();
+//        items.hospcode = $('#txt_drug_allergy_hosp_code').val();
+//
+//        items.hn = person.hn;
+//
+//        if(!items.hn){
+//            app.alert('ไม่พบรหัสบุคคล กรุณาตรวจสอบ');
+//        }else if(!items.record_date){
+//            app.alert('กรุณาระบุวันที่บันทึก');
+//        }else if(!items.diag_type_id){
+//            app.alert('กรุณาระบุประเภทการวินิจฉัย')
+//        }else if(!items.alevel_id){
+//            app.alert('กรุณาระบุระดับความรุนแรง');
+//        }else if(!items.drug_id){
+//            app.alert('กรุณาเลือกรายการยา ที่ต้องการบันทึก');
+//        }else if(!items.hospcode){
+//            app.alert('กรุณาระบุหน่วยบริการที่บันทึก');
+//        }else{
+//            //do save
+//            person.update.ajax.save_drug_allergy(items, function(err){
+//                if(err){
+//                    app.alert(err);
+//                }else{
+//                    $('#modal_search_drug_allergy').modal('hide');
+//                    person.update.clear_drug_allergy_form();
+//                    person.update.get_drug_allergy_list(person.hn);
+//                }
+//            });
+//        }
+//    });
 
     $('#btn_tab_drug_allergy').click(function(){
         person.update.get_drug_allergy_list(person.hn);
     });
 
-    $('#txt_drug_allergy_hosp_name').typeahead({
+
+    person.update.set_hospital_selected = function() {
+        var
+            hosp_main_name = $('#txt_ins_hospmain_name1').val()
+            , hosp_main_code = $('#txt_ins_hospmain_code1').val()
+            , hosp_sub_name = $('#txt_ins_hospsub_name1').val()
+            , hosp_sub_code = $('#txt_ins_hospsub_code1').val()
+            ;
+
+        $('#txt_ins_hospmain_name').select2('data', { code: hosp_main_code, name: hosp_main_name });
+        $('#txt_ins_hospsub_name').select2('data', { code: hosp_sub_code, name: hosp_sub_name });
+    };
+
+
+    $('#txt_ins_hospmain_name').select2({
+        placeholder: 'ชื่อ หรือ รหัสสถานบริการ',
+        minimumInputLength: 2,
+        allowClear: true,
         ajax: {
-            url: site_url + '/basic/search_hospital_ajax',
-            timeout: 500,
-            displayField: 'fullname',
-            triggerLength: 3,
-            preDispatch: function(query){
+            url: site_url + "/basic/search_hospital_ajax",
+            dataType: 'json',
+            type: 'POST',
+            quietMillis: 100,
+            data: function (term) {
                 return {
-                    query: query,
+                    query: term,
                     csrf_token: csrf_token
-                }
+                };
             },
-
-            preProcess: function(data){
-                if(data.success){
-                    return data.rows;
-                }else{
-                    return false;
-                }
+            results: function (data)
+            {
+                return { results: data.rows, more: (data.rows && data.rows.length == 10 ? true : false) };
             }
+            //dropdownCssClass: "bigdrop"
         },
-        updater: function(data){
-            var d = data.split('#');
-            var name = d[0],
-                code = d[1];
 
-            $('#txt_drug_allergy_hosp_code').val(code);
-            $('#txt_drug_allergy_hosp_name').val(name);
+        id: function(data) { return { id: data.code } },
 
-            return name;
+        formatResult: function(data) {
+            return '[' + data.code + '] ' + data.name;
+        },
+        formatSelection: function(data) {
+            return '[' + data.code + '] ' + data.name;
+        },
+        initSelection: function(el, cb) {
+            //var eltxt = $(el).val();
+            //cb({'term': eltxt });
         }
     });
 
-    //typeahead for drug allergy
-    $('#txt_drug_name').typeahead({
+    $('#txt_ins_hospsub_name').select2({
+        placeholder: 'ชื่อ หรือ รหัสสถานบริการ',
+        minimumInputLength: 2,
+        allowClear: true,
         ajax: {
-            url: site_url + '/basic/search_drug_ajax',
-            timeout: 500,
-            displayField: 'name',
-            triggerLength: 3,
-            preDispatch: function(query){
+            url: site_url + "/basic/search_hospital_ajax",
+            dataType: 'json',
+            type: 'POST',
+            quietMillis: 100,
+            data: function (term) {
                 return {
-                    query: query,
+                    query: term,
                     csrf_token: csrf_token
-                }
+                };
             },
-
-            preProcess: function(data){
-                if(data.success){
-                    return data.rows;
-                }else{
-                    return false;
-                }
+            results: function (data)
+            {
+                return { results: data.rows, more: (data.rows && data.rows.length == 10 ? true : false) };
             }
+            //dropdownCssClass: "bigdrop"
         },
-        updater: function(data){
-            var d = data.split('#');
-            var name = d[0],
-                code = d[1];
 
-            $('#txt_drug_code').val(code);
-            $('#txt_drug_name').val(name);
+        id: function(data) { return { id: data.code } },
 
-            return name;
-        }
-    });
-
-    $('#txt_chronic_hosp_dx_name').typeahead({
-        ajax: {
-            url: site_url + '/basic/search_hospital_ajax',
-            timeout: 500,
-            displayField: 'fullname',
-            triggerLength: 3,
-            preDispatch: function(query){
-                return {
-                    query: query,
-                    csrf_token: csrf_token
-                }
-            },
-
-            preProcess: function(data){
-                if(data.success){
-                    return data.rows;
-                }else{
-                    return false;
-                }
-            }
+        formatResult: function(data) {
+            return '[' + data.code + '] ' + data.name;
         },
-        updater: function(data){
-            var d = data.split('#');
-            var name = d[0],
-                code = d[1];
-
-            $('#txt_chronic_hosp_dx_code').val(code);
-            $('#txt_chronic_hosp_dx_name').val(name);
-
-            return name;
-        }
-    });
-
-    $('#txt_chronic_hosp_rx_name').typeahead({
-        ajax: {
-            url: site_url + '/basic/search_hospital_ajax',
-            timeout: 500,
-            displayField: 'fullname',
-            triggerLength: 3,
-            preDispatch: function(query){
-                return {
-                    query: query,
-                    csrf_token: csrf_token
-                }
-            },
-
-            preProcess: function(data){
-                if(data.success){
-                    return data.rows;
-                }else{
-                    return false;
-                }
-            }
+        formatSelection: function(data) {
+            return '[' + data.code + '] ' + data.name;
         },
-        updater: function(data){
-            var d = data.split('#');
-            var name = d[0],
-                code = d[1];
-
-            $('#txt_chronic_hosp_rx_code').val(code);
-            $('#txt_chronic_hosp_rx_name').val(name);
-
-            return name;
-        }
-    });
-
-
-    $('#txt_chronic_name').typeahead({
-        ajax: {
-            url: site_url + '/basic/search_icd_chronic_ajax',
-            timeout: 500,
-            displayField: 'name',
-            triggerLength: 3,
-            preDispatch: function(query){
-                return {
-                    query: query,
-                    csrf_token: csrf_token
-                }
-            },
-
-            preProcess: function(data){
-                if(data.success){
-                    return data.rows;
-                }else{
-                    return false;
-                }
-            }
-        },
-        updater: function(data){
-            var d = data.split('#');
-            var name = d[1],
-                code = d[0];
-
-            $('#txt_chronic_code').val(code);
-            $('#txt_chronic_name').val(name);
-
-            return name;
+        initSelection: function(el, cb) {
+            //var eltxt = $(el).val();
+            //cb({'term': eltxt });
         }
     });
 
@@ -1066,22 +723,6 @@ head.ready(function(){
         person.update.modal.show_search_chronic();
     });
 
-    //search chronic
-    $('#button_do_search_chronic').click(function(){
-        var query = $('#text_query_search_chronic').val(),
-            op = $('#chk_chronic_search_by_code').is(":checked") ? 1 : 0;
-
-        if(query){
-            if($.trim(query).length > 2){
-                //do search
-                person.update.search_icd10(query, op);
-            }else{
-                app.alert('กรุณาระบุคำค้น มากว่า 2 ตัวอักษรขึ้นไป');
-            }
-        }else{
-            app.alert('กรุณาระบุคำที่ต้องการค้นหา');
-        }
-    });
     /*
      '<td><a href="javascript:void(0)" data-code="'+ v.code +'" data-name="btn_select_chronic_diag" data-vname="'+ v.desc_r +'" '+
      'data-valid="'+ v.valid +'" class="btn btn-info">' +
@@ -1156,9 +797,9 @@ head.ready(function(){
                                 'data-discharge="' + v.discharge_type + '" data-discharge_date="' + v.discharge_date + '" ' +
                                 'data-hosp_dx_code="' + v.hosp_dx_code + '" data-hosp_rx_code="' + v.hosp_rx_code + '" '+
                                 'data-hosp_dx_name="' + v.hosp_dx_name + '" data-hosp_rx_name="' + v.hosp_rx_name + '"> '+
-                                '<i class="icon-edit"></i></a>' +
+                                '<i class="fa fa-edit"></i></a>' +
                                 '<a href="javascript:void(0);" class="btn btn-danger" data-name="btn_chronic_remove" data-id="'+ v.chronic +'">' +
-                                '<i class="icon-trash"></i>' +
+                                '<i class="fa fa-trash-o"></i>' +
                                 '</a>' +
                                 '</div></td>' +
                                 '</tr>'
@@ -1166,7 +807,7 @@ head.ready(function(){
                     });
                 }else{
                     $('#tbl_chronic_list > tbody').append(
-                        '<tr><td colspan="5">ไม่พบรายการ</td></tr>'
+                        '<tr><td colspan="6">ไม่พบรายการ</td></tr>'
                     );
                 }
             }
@@ -1187,7 +828,7 @@ head.ready(function(){
                         app.alert('ลบรายการเสร็จเรียบร้อยแล้ว');
 
                         var hn = $('#hn').val();
-                        person.update.get_chronic_list(hn)
+                        person.update.get_chronic_list(hn);
                     }
                 });
             }
@@ -1195,13 +836,21 @@ head.ready(function(){
     });
 
     $('#btn_save_chronic').click(function(){
-        var items = {};
+        var
+            items = {}
+            , hosp_dx = $('#txt_chronic_hosp_dx_name').select2('data')
+            , hosp_rx = $('#txt_chronic_hosp_rx_name').select2('data')
+            , chronic = $('#txt_chronic_name').select2('data')
+        ;
+
+
         items.hn = person.hn;
         items.isupdate = $('#txt_chronic_isupdate').val();
-        items.hosp_dx = $('#txt_chronic_hosp_dx_code').val();
-        items.hosp_rx = $('#txt_chronic_hosp_rx_code').val();
+        items.hosp_dx = hosp_dx === null ? '' : hosp_dx.code;
+        items.hosp_rx = hosp_rx === null ? '' : hosp_rx.code;
+        items.chronic = chronic === null ? '' : chronic.code;
+
         items.diag_date = $('#txt_chronic_date_diag').val();
-        items.chronic = $('#txt_chronic_code').val();
         items.discharge_date = $('#txt_chronic_date_disch').val();
         items.discharge_type = $('#sl_chronic_dischage_type').val();
 
@@ -1234,30 +883,165 @@ head.ready(function(){
         person.update.get_chronic_list(person.hn);
     });
 
+    $('#btn_refresh_chronic').on('click', function(e) {
+        e.preventDefault();
+
+        person.update.get_chronic_list(person.hn);
+    });
+
     $(document).on('click', 'a[data-name="btn_chronic_edit"]', function(){
-        var chronic = $(this).attr('data-code'),
-            chronic_name = $(this).attr('data-desc_r'),
-            diag_date = $(this).attr('data-diag_date'),
-            discharge = $(this).attr('data-discharge'),
-            discharge_date = $(this).attr('data-discharge_date'),
-            hosp_dx_code = $(this).attr('data-hosp_dx_code'),
-            hosp_rx_code = $(this).attr('data-hosp_rx_code'),
-            hosp_dx_name = $(this).attr('data-hosp_dx_name'),
-            hosp_rx_name = $(this).attr('data-hosp_rx_name');
+        var
+            chronic             = $(this).data('code')
+            , chronic_name      = $(this).data('desc_r')
+            , diag_date         = $(this).data('diag_date')
+            , discharge         = $(this).data('discharge')
+            , discharge_date    = $(this).data('discharge_date')
+            , hosp_dx_code      = $(this).data('hosp_dx_code')
+            , hosp_rx_code      = $(this).data('hosp_rx_code')
+            , hosp_dx_name      = $(this).data('hosp_dx_name')
+            , hosp_rx_name      = $(this).data('hosp_rx_name')
+        ;
 
         $('#txt_chronic_isupdate').val('1');
-        $('#txt_chronic_hosp_dx_code').val(hosp_dx_code);
-        $('#txt_chronic_hosp_rx_code').val(hosp_rx_code);
+        $('#txt_chronic_hosp_dx_name').select2('data', { code: hosp_dx_code, name: hosp_dx_name });
+        $('#txt_chronic_hosp_rx_name').select2('data', { code: hosp_rx_code, name: hosp_rx_name });
         $('#txt_chronic_date_diag').val(diag_date);
-        $('#txt_chronic_code').val(chronic);
-        $('#txt_chronic_date_disch').val(discharge_date);
-        $('#txt_chronic_hosp_rx_name').val(hosp_rx_name);
-        $('#txt_chronic_hosp_dx_name').val(hosp_dx_name);
-        $('#txt_chronic_name').val(chronic_name).attr('disabled', 'disabled').css('background-color', 'white');
+        $('#txt_chronic_name').select2('data', { code: chronic, name: chronic_name });
+        $('#txt_chronic_name').select2('enable', false);
 
-        $('#sl_chronic_dischage_type').val(discharge);
+        $('#txt_chronic_date_disch').val(discharge_date);
+        $('#sl_chronic_dischage_type').select2('val', discharge);
 
         person.update.modal.show_search_chronic();
         $('a[href="#tab_save_chronic"]').tab('show');
     });
+
+    $('#txt_chronic_name').select2({
+        placeholder: 'รหัส หรือ ชื่อการวินิจฉัยโรค',
+        minimumInputLength: 2,
+        allowClear: true,
+        ajax: {
+            url: site_url + "/basic/search_icd_ajax",
+            dataType: 'json',
+            type: 'POST',
+            quietMillis: 100,
+            data: function (term, page) {
+                return {
+                    query: term,
+                    csrf_token: csrf_token,
+                    start: page,
+                    stop: 10
+                };
+            },
+            results: function (data, page)
+            {
+                var more = (page * 10) < data.total; // whether or not there are more results available
+
+                // notice we return the value of more so Select2 knows if more results can be loaded
+                return {results: data.rows, more: more};
+
+                //return { results: data.rows, more: (data.rows && data.rows.length == 10 ? true : false) };
+            }
+            //dropdownCssClass: "bigdrop"
+        },
+
+        id: function(data) { return { id: data.code } },
+
+        formatResult: function(data) {
+            return '[' + data.code + '] ' + data.name;
+        },
+        formatSelection: function(data) {
+            return '[' + data.code + '] ' + data.name;
+        },
+        initSelection: function(el, cb) {
+            //var eltxt = $(el).val();
+            //cb({'term': eltxt });
+        }
+    });
+
+    $('#txt_chronic_hosp_dx_name').select2({
+        placeholder: 'ชื่อ หรือ รหัสสถานบริการ',
+        minimumInputLength: 2,
+        allowClear: true,
+        ajax: {
+            url: site_url + "/basic/search_hospital_ajax",
+            dataType: 'json',
+            type: 'POST',
+            quietMillis: 100,
+            data: function (term, page) {
+                return {
+                    query: term,
+                    csrf_token: csrf_token,
+                    start: page,
+                    stop: 10
+                };
+            },
+            results: function (data, page)
+            {
+                var more = (page * 10) < data.total; // whether or not there are more results available
+
+                // notice we return the value of more so Select2 knows if more results can be loaded
+                return {results: data.rows, more: more};
+
+                //return { results: data.rows, more: (data.rows && data.rows.length == 10 ? true : false) };
+            }
+        },
+
+        id: function(data) { return { id: data.code } },
+
+        formatResult: function(data) {
+            return '[' + data.code + '] ' + data.name;
+        },
+        formatSelection: function(data) {
+            return '[' + data.code + '] ' + data.name;
+        },
+        initSelection: function(el, cb) {
+            //var eltxt = $(el).val();
+            //cb({'term': eltxt });
+        }
+    });
+
+    $('#txt_chronic_hosp_rx_name').select2({
+        placeholder: 'ชื่อ หรือ รหัสสถานบริการ',
+        minimumInputLength: 2,
+        allowClear: true,
+        ajax: {
+            url: site_url + "/basic/search_hospital_ajax",
+            dataType: 'json',
+            type: 'POST',
+            quietMillis: 100,
+            data: function (term, page) {
+                return {
+                    query: term,
+                    csrf_token: csrf_token,
+                    start: page,
+                    stop: 10
+                };
+            },
+            results: function (data, page)
+            {
+                var more = (page * 10) < data.total; // whether or not there are more results available
+
+                // notice we return the value of more so Select2 knows if more results can be loaded
+                return {results: data.rows, more: more};
+
+                //return { results: data.rows, more: (data.rows && data.rows.length == 10 ? true : false) };
+            }
+        },
+
+        id: function(data) { return { id: data.code } },
+
+        formatResult: function(data) {
+            return '[' + data.code + '] ' + data.name;
+        },
+        formatSelection: function(data) {
+            return '[' + data.code + '] ' + data.name;
+        },
+        initSelection: function(el, cb) {
+            //var eltxt = $(el).val();
+            //cb({'term': eltxt });
+        }
+    });
+
+    person.update.set_hospital_selected();
 });

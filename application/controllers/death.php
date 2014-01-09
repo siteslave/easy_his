@@ -56,6 +56,12 @@ class Death extends CI_Controller {
                     //update
                     $rs = $this->death->update($data);
 
+                    //update death status
+                    if($data['dchstatus'] == '1')
+                    {
+                        $this->person->change_discharge_status($data['hn'], '1');
+                    }
+
                     if($rs)
                     {
                         $json = '{"success": true, "msg": "Updated"}';
@@ -77,6 +83,11 @@ class Death extends CI_Controller {
                     {
                         //register
                         $rs = $this->death->save($data);
+                        //update death status
+                        if($data['dchstatus'] == '1')
+                        {
+                            $this->person->change_discharge_status($data['hn'], '1');
+                        }
 
                         if($rs)
                         {
@@ -155,6 +166,32 @@ class Death extends CI_Controller {
 
         render_json($json);
     }
+    //================== Remove death =====================//
+    public function remove()
+    {
+        $hn = $this->input->post('hn');
+        $dchstatus = $this->input->post('dchstatus');
+
+        if(!empty($hn))
+        {
+            $this->death->remove($hn);
+            //change person discharge_status to '9'
+            if(!empty($dchstatus))
+            {
+                $this->person->change_discharge_status($hn, '9');
+            }
+
+            $json = '{"success": true}';
+        }
+        else
+        {
+            $json = '{"success": false, "msg": "ไม่สามารถลบรายการได้"}';
+        }
+
+        render_json($json);
+
+    }
+
     public function search()
     {
         $query = $this->input->post('query');
@@ -215,7 +252,7 @@ class Death extends CI_Controller {
                 $obj->cdeath_d      = $rs['cdeath_d'];
                 $obj->cdeath_d_name = $this->basic->get_diag_name($obj->cdeath_d);
                 $obj->pregdeath     = $rs['pregdeath'];
-                $obj->ddeath        = to_js_date($rs['ddeath']);
+                $obj->ddeath        = from_mongo_to_thai_date($rs['ddeath']);
                 $obj->hospdeath     = $rs['hospdeath'];
                 $obj->hospdeath_name= $this->basic->get_hospital_name($obj->hospdeath);
                 $obj->pdeath        = $rs['pdeath'];

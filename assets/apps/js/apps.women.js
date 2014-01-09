@@ -306,7 +306,7 @@ head.ready(function(){
         }
         else
         {
-            _.each(data.rows, function(v)
+            $(data.rows).each(function(i, v)
             {
                 $('#tbl_list > tbody').append(
                     '<tr>' +
@@ -319,12 +319,13 @@ head.ready(function(){
                         '<td>'+ v.numberson +'</td>' +
                         '<td>'+ v.fptype_name +'</td>' +
                         '<td><div class="btn-group">' +
-                        '<a href="javascript:void(0);" data-name="btn_screen" class="btn btn-success btn-small" data-hn="'+ v.hn +'" ' +
-                        'data-cid="'+ v.cid +'" data-fullname="'+ v.first_name + ' ' + v.last_name +'" ' +
+                        '<a href="javascript:void(0);" data-name="btn_screen" class="btn btn-success btn-small" ' +
+                        'data-hn="'+ v.hn + '" data-cid="'+ v.cid +'" data-fullname="'+ v.first_name + ' ' + v.last_name +'" ' +
                         'data-age="'+ v.age +'" data-birthdate="'+ app.mongo_to_thai_date(v.birthdate) +'" data-year="'+ year +'">' +
-                        '<i class="icon-edit"></i></a>' +
-                        '<a href="javascript:void(0);" data-name="btn_clear" class="btn btn-danger btn-small" data-hn="'+ v.hn +'" data-year="'+ year +'">' +
-                        '<i class="icon-trash"></i></a>' +
+                        '<i class="fa fa-edit"></i></a>' +
+                        '<a href="javascript:void(0);" data-name="btn_clear" class="btn btn-danger btn-small" ' +
+                        'data-hn="'+ v.hn +'" data-year="'+ year +'">' +
+                        '<i class="fa fa-trash-o"></i></a>' +
                         '</div></td>' +
                         '</tr>'
                 );
@@ -390,8 +391,8 @@ head.ready(function(){
 
         items.hn = $('#txt_hn').val();
 //        items.cid = $('#txt_cid').val();
-        items.fptype = $('#sl_fptype').val();
-        items.nofpcause = $('#sl_nofpcause').val();
+        items.fptype = $('#sl_fptype').select2('val');
+        items.nofpcause = $('#sl_nofpcause').select2('val');
         items.totalson = $('#txt_totalson').val();
         items.numberson = $('#txt_numberson').val();
         items.abortion = $('#txt_abortion').val();
@@ -430,9 +431,9 @@ head.ready(function(){
 
     //clear
     $(document).on('click', 'a[data-name="btn_clear"]', function(){
-        var items = {};
-        items.year = $(this).data('year');
-        items.hn = $(this).data('hn');
+        var items   = {};
+        items.year  = $(this).data('year');
+        items.hn    = $(this).data('hn');
 
         app.confirm('คุณต้องการลบรายการสำรวจ ใช่หรือไม่?', function(res){
             if(res)
@@ -468,37 +469,45 @@ head.ready(function(){
 
     });
 
-    //search person
-    $('#txt_query').typeahead({
+    $('#txt_query').select2({
+        placeholder: 'HN, เลขบัตรประชาชน, ชื่อ-สกุล',
+        minimumInputLength: 2,
+        allowClear: true,
         ajax: {
-            url: site_url + 'person/search_person_ajax',
-            timeout: 500,
-            displayField: 'name',
-            triggerLength: 3,
-            preDispatch: function(query){
+            url: site_url + "/person/search_person_all_ajax",
+            dataType: 'json',
+            type: 'POST',
+            quietMillis: 100,
+            data: function (term, page) {
                 return {
-                    query: query,
-                    csrf_token: csrf_token
-                }
+                    query: term,
+                    csrf_token: csrf_token,
+                    start: page,
+                    stop: 10
+                };
             },
+            results: function (data, page)
+            {
+                var more = (page * 10) < data.total; // whether or not there are more results available
 
-            preProcess: function(data){
-                if(data.success){
-                    return data.rows;
-                }else{
-                    return false;
-                }
+                // notice we return the value of more so Select2 knows if more results can be loaded
+                return {results: data.rows, more: more};
+
+                //return { results: data.rows, more: (data.rows && data.rows.length == 10 ? true : false) };
             }
         },
-        updater: function(data){
-            var d = data.split('#');
-            var code = d[0],
-                name = d[1];
 
-            //$('#txt_icdcode').val(code);
-            //$('#txt_icdname').val(name);
+        id: function(data) { return { id: data.hn } },
 
-            return code;
+        formatResult: function(data) {
+            return '[' + data.hn + '] ' + data.fullname;
+        },
+        formatSelection: function(data) {
+            return '[' + data.hn + '] ' + data.fullname;
+        },
+        initSelection: function(el, cb) {
+            //var eltxt = $(el).val();
+            //cb({'term': eltxt });
         }
     });
 
@@ -507,18 +516,20 @@ head.ready(function(){
     });
 
     $('#btn_do_search').on('click', function(){
-        var query = $('#txt_query').val();
+
+        var data = $('#txt_query').select2('data');
+
         var year = $('#sl_year').val();
 
         $('#main_paging').fadeOut('slow');
 
-        if(!query)
+        if(data === null)
         {
             app.alert('กรุณาระบุคำค้นหา');
         }
         else
         {
-            women.ajax.search(query, year, function(err, data){
+            women.ajax.search(data.hn, year, function(err, data){
                 if(err)
                 {
                     app.alert(err);

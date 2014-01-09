@@ -120,10 +120,10 @@ class Settings extends CI_Controller
                 $obj->first_name = $r['first_name'];
                 $obj->last_name = $r['last_name'];
                 $obj->sex = $r['sex'] == '1' ? 'ชาย' : 'หญิง';
-                $obj->birth_date = to_js_date($r['birth_date']);
+                $obj->birth_date = from_mongo_to_thai_date($r['birth_date']);
                 $obj->provider_type = get_provider_type_name($r['provider_type_id']);
-                $obj->start_date = to_js_date($r['start_date']);
-                $obj->out_date = to_js_date($r['out_date']);
+                $obj->start_date = from_mongo_to_thai_date($r['start_date']);
+                $obj->out_date = from_mongo_to_thai_date($r['out_date']);
                 $obj->move_from_hospital_code = $r['move_from_hospital'];
                 $obj->move_from_hospital_name = get_hospital_name($obj->move_from_hospital_code);
                 $obj->move_to_hospital_code = $r['move_to_hospital'];
@@ -158,11 +158,11 @@ class Settings extends CI_Controller
                 $obj->first_name = $r['first_name'];
                 $obj->last_name = $r['last_name'];
                 $obj->sex = $r['sex'];
-                $obj->birth_date = to_js_date($r['birth_date']);
+                $obj->birth_date = from_mongo_to_thai_date($r['birth_date']);
                 $obj->provider_type_id = get_first_object($r['provider_type_id']);
                 //$obj->provider_type = get_provider_type_name($r['provider_type_id']);
-                $obj->start_date = to_js_date($r['start_date']);
-                $obj->out_date = to_js_date($r['out_date']);
+                $obj->start_date = from_mongo_to_thai_date($r['start_date']);
+                $obj->out_date = from_mongo_to_thai_date($r['out_date']);
                 $obj->move_from_hospital_code = $r['move_from_hospital'];
                 $obj->move_from_hospital_name = get_hospital_name($obj->move_from_hospital_code);
                 $obj->move_to_hospital_code = $r['move_to_hospital'];

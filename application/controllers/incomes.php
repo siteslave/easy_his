@@ -78,8 +78,8 @@ class Incomes extends CI_Controller {
                 $obj->name          = isset($r['name']) ? $r['name'] : '-';
 
                 $price_qty          = $this->income->get_price_qty($r['_id']);
-                $obj->price         = isset($price_qty[0]['price']) ? $price_qty[0]['price'] : 0;
-                $obj->qty           = isset($price_qty[0]['qty']) ? $price_qty[0]['qty'] : 0;
+                $obj->price         = isset($price_qty->price) ? $price_qty->price : 0;
+                $obj->qty           = isset($price_qty->qty) ? $price_qty->qty : 0;
 
                 $obj->cost          = isset($r['cost']) ? $r['cost'] : '-';
                 $obj->unit          = isset($r['unit']) ? $r['unit'] : '-';
@@ -125,8 +125,8 @@ class Incomes extends CI_Controller {
                 $obj->name          = isset($r['name']) ? $r['name'] : '-';
 
                 $price_qty          = $this->income->get_price_qty($r['_id']);
-                $obj->price         = isset($price_qty[0]['price']) ? $price_qty[0]['price'] : 0;
-                $obj->qty           = isset($price_qty[0]['qty']) ? $price_qty[0]['qty'] : 0;
+                $obj->price         = isset($price_qty->price) ? $price_qty->price : 0;
+                $obj->qty           = isset($price_qty->qty) ? $price_qty->qty : 0;
 
                 $obj->cost          = isset($r['cost']) ? $r['cost'] : '-';
                 $obj->unit          = isset($r['unit']) ? $r['unit'] : '-';
@@ -172,8 +172,8 @@ class Incomes extends CI_Controller {
                     $obj->name          = isset($r['name']) ? $r['name'] : '-';
 
                     $price_qty          = $this->income->get_price_qty($r['_id']);
-                    $obj->price         = isset($price_qty[0]['price']) ? $price_qty[0]['price'] : 0;
-                    $obj->qty           = isset($price_qty[0]['qty']) ? $price_qty[0]['qty'] : 0;
+                    $obj->price         = isset($price_qty->price) ? $price_qty->price : 0;
+                    $obj->qty           = isset($price_qty->qty) ? $price_qty->qty : 0;
 
                     $obj->cost          = isset($r['cost']) ? $r['cost'] : '-';
                     $obj->unit          = isset($r['unit']) ? $r['unit'] : '-';

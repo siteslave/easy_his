@@ -71,7 +71,7 @@
         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".nav-ext1-collapse">
           <span class="fa fa-bars"></span>
         </button>
-        <a class="navbar-brand" href="#"><span class="fa fa-windows"></span> eHIS</a>
+        <a class="navbar-brand" href="<?=site_url()?>"><span class="fa fa-windows"></span> eHIS</a>
         <div class="collapse navbar-collapse navbar-ex1-collapse">
           <ul class="nav navbar-nav">
             <li><a href="<?=site_url()?>"><span class="fa fa-home"></span> หน้าหลัก</a></li>

@@ -39,6 +39,8 @@ head.ready(function(){
     $('#btn_postnatal_save').click(function(){
         var items = {};
 
+        var hospital = $('#txt_postnatal_hospname').select2('data');
+
         items.hn = $('#txt_postnatal_hn').val();
         items.gravida = $('#sl_postnatal_gravida').val();
         items.vn = $('#txt_postnatal_vn').val();
@@ -51,7 +53,7 @@ head.ready(function(){
         items.tits = $('#sl_postnatal_tits').val();
 
         items.date_serv = $('#txt_postnatal_date').val();
-        items.hospcode = $('#txt_postnatal_hospcode').val();
+        items.hospcode = hospital == null ? '' : hospital.code;
         items.provider_id = $('#sl_postnatal_providers').val();
 
         items.id = $('#txt_postnatal_id').val();
@@ -110,8 +112,8 @@ head.ready(function(){
                             '<td>' + app.clear_null(data.gravida) + '</td>' +
                             '<td>' + app.clear_null(res) + '</td>' +
                             '<td>' + app.clear_null(v.provider_name) + '</td>' +
-                            '<td><a href="#" class="btn btn-danger" data-name="btn_remove_mother_care" title="ลบรายการ" ' +
-                            'data-id="' + v.id + '"><i class="icon-trash"></i></td>' +
+                            '<td><a href="#" class="btn btn-danger" data-name="btn_remove_mother_care1" title="ลบรายการ" ' +
+                            'data-id="' + v.id + '"><i class="fa fa-trash-o"></i></td>' +
                             '</tr>'
                     );
                 });
@@ -136,7 +138,7 @@ head.ready(function(){
     };
 
 
-    $(document).on('click', 'a[data-name="btn_remove_mother_care"]', function(e){
+    $(document).on('click', 'a[data-name="btn_remove_mother_care1"]', function(e){
         var id = $(this).data('id'),
             hn = $('#txt_postnatal_hn').val();
 
@@ -170,41 +172,97 @@ head.ready(function(){
         });
     };
 
-    $('#txt_postnatal_hospname').on('keyup', function(){
-        $('#txt_postnatal_hospcode').val('');
-    });
-
-    $('#txt_postnatal_hospname').typeahead({
+    $('#txt_postnatal_hospname').select2({
+        placeholder: 'ชื่อ หรือ รหัสสถานบริการ',
+        minimumInputLength: 2,
+        allowClear: true,
         ajax: {
-            url: site_url + '/basic/search_hospital_ajax',
-            timeout: 500,
-            displayField: 'fullname',
-            triggerLength: 3,
-            preDispatch: function(query){
+            url: site_url + "/basic/search_hospital_ajax",
+            dataType: 'json',
+            type: 'POST',
+            quietMillis: 100,
+            data: function (term) {
                 return {
-                    query: query,
+                    query: term,
                     csrf_token: csrf_token
-                }
+                };
             },
-
-            preProcess: function(data){
-                if(data.success){
-                    return data.rows;
-                }else{
-                    return false;
-                }
+            results: function (data)
+            {
+                return { results: data.rows, more: (data.rows && data.rows.length == 10 ? true : false) };
             }
+            //dropdownCssClass: "bigdrop"
         },
-        updater: function(data){
-            var d = data.split('#');
-            var name = d[0],
-                code = d[1];
 
-            $('#txt_postnatal_hospcode').val(code);
+        id: function(data) { return { id: data.code } },
 
-            return name;
+        formatResult: function(data) {
+            return '[' + data.code + '] ' + data.name;
+        },
+        formatSelection: function(data) {
+            return '[' + data.code + '] ' + data.name;
+        },
+        initSelection: function(el, cb) {
+            //var eltxt = $(el).val();
+            //cb({'term': eltxt });
         }
     });
+
+//    $('#txt_postnatal_hospname').typeahead({
+//        ajax: {
+//            url: site_url + '/basic/search_hospital_ajax',
+//            timeout: 500,
+//            displayField: 'fullname',
+//            triggerLength: 3,
+//            preDispatch: function(query){
+//                return {
+//                    query: query,
+//                    csrf_token: csrf_token
+//                }
+//            },
+//
+//            preProcess: function(data){
+//                if(data.success){
+//                    return data.rows;
+//                }else{
+//                    return false;
+//                }
+//            }
+//        },
+//        updater: function(data){
+//            var d = data.split('#');
+//            var name = d[0],
+//                code = d[1];
+//
+//            $('#txt_postnatal_hospcode').val(code);
+//
+//            return name;
+//        }
+//    });
+
+    postnatals.set_hospital_selected = function() {
+
+        var vn = $('#txt_postnatal_vn').val();
+        var hospcode = $('#txt_postnatal_hospcode1').val(),
+            hospname = $('#txt_postnatal_hospname1').val();
+
+        if(vn && hospcode) {
+            var hospcode = $('#txt_postnatal_hospcode1').val(),
+                hospname = $('#txt_postnatal_hospname1').val();
+
+            $('#txt_postnatal_hospname').select2('data', {code: hospcode, name: hospname});
+            $('#txt_postnatal_hospname').select2('enable', false);
+        } else if(vn && !hospcode) {
+
+            var code = $('#txt_postnatal_owner_code').val(),
+                name = $('#txt_postnatal_owner_name').val();
+
+            $('#txt_postnatal_hospname').select2('data', {code: code, name: name});
+            $('#txt_postnatal_hospname').select2('enable', false);
+        }
+    };
+
+    postnatals.set_hospital_selected();
 
     app.set_runtime();
 });

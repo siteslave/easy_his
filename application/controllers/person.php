@@ -1150,8 +1150,15 @@ class Person extends CI_Controller
         else
         {
 
-            $rs = $this->person->search_person_all_ajax($query, $start, $limit);
-            $total = $this->person->search_person_all_ajax_total($query);
+            if(is_numeric($query)) {
+                $rs = $this->person->search_person_all_ajax_by_hn_cid($query, $start, $limit);
+                $total = $this->person->search_person_all_ajax_by_hn_cid_total($query);
+            } else {
+                $rs = $this->person->search_person_all_ajax_by_name($query, $start, $limit);
+                $total = $this->person->search_person_all_ajax_by_name_total($query);
+            }
+            //$rs = $this->person->search_person_all_ajax($query, $start, $limit);
+            //$total = $this->person->search_person_all_ajax_total($query);
 
             if($rs)
             {

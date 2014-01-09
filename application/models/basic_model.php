@@ -1034,6 +1034,36 @@ class Basic_model extends CI_Model
         return $result;
     }
 
+    public function search_procedure_extra($query, $start, $limit){
+        $result = $this->mongo_db
+            ->like('th_name', $query)
+            ->limit($limit)
+            ->offset($start)
+            ->get('ref_extra_procedures');
+        return $result;
+    }
+
+    public function get_procedure_extra_list($start, $limit){
+        $result = $this->mongo_db
+            ->limit($limit)
+            ->offset($start)
+            ->get('ref_extra_procedures');
+        return $result;
+    }
+
+    public function get_procedure_extra_total(){
+        $result = $this->mongo_db
+            ->count('ref_extra_procedures');
+        return $result;
+    }
+
+    public function search_procedure_extra_count($query){
+        $result = $this->mongo_db
+            ->like('th_name', $query)
+            ->count('ref_extra_procedures');
+        return $result;
+    }
+
     public function search_procedure_by_code($query, $start, $limit){
         $result = $this->mongo_db
             ->like('code', $query)

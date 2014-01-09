@@ -24,11 +24,12 @@ head.ready(function(){
                 return err ? cb(err) : cb(null, data);
             });
         },
-        remove: function(id, cb){
+        remove: function(hn, dchstatus, cb){
 
             var url = 'death/remove',
                 params = {
-                    id: id
+                    hn: hn,
+                    dchstatus: dchstatus
                 };
 
             app.ajax(url, params, function(err, data){
@@ -107,60 +108,7 @@ head.ready(function(){
                         });
 
                     },
-                    onFormat: function(type){
-                        switch (type) {
-
-                            case 'block':
-
-                                if (!this.active)
-                                    return '<li class="disabled"><a href="">' + this.value + '</a></li>';
-                                else if (this.value != this.page)
-                                    return '<li><a href="#' + this.value + '">' + this.value + '</a></li>';
-                                return '<li class="active"><a href="#">' + this.value + '</a></li>';
-
-                            case 'right':
-                            case 'left':
-
-                                if (!this.active) {
-                                    return "";
-                                }
-                                return '<li><a href="#' + this.value + '">' + this.value + '</a></li>';
-
-                            case 'next':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&raquo;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&raquo;</a></li>';
-
-                            case 'prev':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&laquo;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&laquo;</a></li>';
-
-                            case 'first':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&lt;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&lt;</a></li>';
-
-                            case 'last':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&gt;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&gt;</a></li>';
-
-                            case 'fill':
-                                if (this.active) {
-                                    return '<li class="disabled"><a href="#">...</a></li>';
-                                }
-                        }
-                        return ""; // return nothing for missing branches
-                    }
+                    onFormat: app.paging_format
                 });
             }
         });
@@ -190,304 +138,408 @@ head.ready(function(){
                         '<td>'+ v.ddeath +'</td>' +
                         '<td>'+ v.icd_code +'</td>' +
                         '<td><div class="btn-group">' +
-                        '<a href="javascript:void(0);" data-name="btn_edit" class="btn btn-success btn-small" data-hn="'+ v.hn +'" ' +
+                        '<a href="javascript:void(0);" data-name="btn_edit" class="btn btn-success btn-small" ' +
+                        'data-hn="'+ v.hn +'" ' +
                         'data-cid="'+ v.cid +'" data-fullname="'+ v.first_name + ' ' + v.last_name +'" ' +
-                        'data-age="'+ v.age +'" data-birthdate="'+ app.mongo_to_thai_date(v.birthdate) +'" data-id="'+ v.id +'" title="แก้ไข">' +
-                        '<i class="icon-edit"></i></a>' +
-                        '<a href="javascript:void(0);" data-name="btn_remove" class="btn btn-danger btn-small" data-id="'+ v.id +'" title="ลบรายการ">' +
-                        '<i class="icon-trash"></i></a>' +
+                        'data-age="'+ v.age +'" data-birthdate="'+ app.mongo_to_thai_date(v.birthdate) +'" ' +
+                        'data-id="'+ v.id +'" title="แก้ไข">' +
+                        '<i class="fa fa-edit"></i></a>' +
+                        '<a href="javascript:void(0);" data-name="btn_remove" class="btn btn-danger btn-small" ' +
+                        'data-hn="'+ v.hn +'" title="ลบรายการ">' +
+                        '<i class="fa fa-trash-o"></i></a>' +
                         '</div></td>' +
                         '</tr>'
                 );
             });
         }
     };
-    //search diagnosis
-    $('#txt_reg_cdeath_name').typeahead({
+
+    $('#txt_icd_cdeath').select2({
+        placeholder: 'รหัส หรือ ชื่อการวินิจฉัยโรค',
+        minimumInputLength: 2,
+        allowClear: true,
         ajax: {
-            url: site_url + '/basic/search_icd_ajax',
-            timeout: 500,
-            displayField: 'name',
-            triggerLength: 3,
-            preDispatch: function(query){
+            url: site_url + "/basic/search_icd_ajax",
+            dataType: 'json',
+            type: 'POST',
+            quietMillis: 100,
+            data: function (term, page) {
                 return {
-                    query: query,
-                    csrf_token: csrf_token
-                }
+                    query: term,
+                    csrf_token: csrf_token,
+                    start: page,
+                    stop: 10
+                };
             },
+            results: function (data, page)
+            {
+                var more = (page * 10) < data.total; // whether or not there are more results available
 
-            preProcess: function(data){
-                if(data.success){
-                    return data.rows;
-                }else{
-                    return false;
-                }
+                // notice we return the value of more so Select2 knows if more results can be loaded
+                return {results: data.rows, more: more};
+
+                //return { results: data.rows, more: (data.rows && data.rows.length == 10 ? true : false) };
             }
+            //dropdownCssClass: "bigdrop"
         },
-        updater: function(data){
-            var d = data.split('#');
-            var code = d[0],
-                name = d[1];
 
-            $('#txt_reg_cdeath_code').val(code);
+        id: function(data) { return { id: data.code } },
 
-            return name;
+        formatResult: function(data) {
+            return '[' + data.code + '] ' + data.name;
+        },
+        formatSelection: function(data) {
+            return '[' + data.code + '] ' + data.name;
+        },
+        initSelection: function(el, cb) {
+            //var eltxt = $(el).val();
+            //cb({'term': eltxt });
         }
     });
 
-    $('#txt_reg_cdeath_name').on('keyup', function() {
-        $('#txt_reg_cdeath_code').val('');
-    });
-
-    $('#txt_reg_odisease_name').typeahead({
+    $('#txt_icd_odisease').select2({
+        placeholder: 'รหัส หรือ ชื่อการวินิจฉัยโรค',
+        minimumInputLength: 2,
+        allowClear: true,
         ajax: {
-            url: site_url + '/basic/search_icd_ajax',
-            timeout: 500,
-            displayField: 'name',
-            triggerLength: 3,
-            preDispatch: function(query){
+            url: site_url + "/basic/search_icd_ajax",
+            dataType: 'json',
+            type: 'POST',
+            quietMillis: 100,
+            data: function (term, page) {
                 return {
-                    query: query,
-                    csrf_token: csrf_token
-                }
+                    query: term,
+                    csrf_token: csrf_token,
+                    start: page,
+                    stop: 10
+                };
             },
+            results: function (data, page)
+            {
+                var more = (page * 10) < data.total; // whether or not there are more results available
 
-            preProcess: function(data){
-                if(data.success){
-                    return data.rows;
-                }else{
-                    return false;
-                }
+                // notice we return the value of more so Select2 knows if more results can be loaded
+                return {results: data.rows, more: more};
+
+                //return { results: data.rows, more: (data.rows && data.rows.length == 10 ? true : false) };
             }
+            //dropdownCssClass: "bigdrop"
         },
-        updater: function(data){
-            var d = data.split('#');
-            var code = d[0],
-                name = d[1];
 
-            $('#txt_reg_odisease_code').val(code);
+        id: function(data) { return { id: data.code } },
 
-            return name;
+        formatResult: function(data) {
+            return '[' + data.code + '] ' + data.name;
+        },
+        formatSelection: function(data) {
+            return '[' + data.code + '] ' + data.name;
+        },
+        initSelection: function(el, cb) {
+            //var eltxt = $(el).val();
+            //cb({'term': eltxt });
         }
     });
 
-    $('#txt_reg_odisease_name').on('keyup', function(){
-        $('#txt_reg_odisease_code').val('');
-    });
-
-    $('#txt_hosp_deathA_name').typeahead({
+    $('#txt_icd_deathA').select2({
+        placeholder: 'รหัส หรือ ชื่อการวินิจฉัยโรค',
+        minimumInputLength: 2,
+        allowClear: true,
         ajax: {
-            url: site_url + '/basic/search_icd_ajax',
-            timeout: 500,
-            displayField: 'name',
-            triggerLength: 3,
-            preDispatch: function(query){
+            url: site_url + "/basic/search_icd_ajax",
+            dataType: 'json',
+            type: 'POST',
+            quietMillis: 100,
+            data: function (term, page) {
                 return {
-                    query: query,
-                    csrf_token: csrf_token
-                }
+                    query: term,
+                    csrf_token: csrf_token,
+                    start: page,
+                    stop: 10
+                };
             },
+            results: function (data, page)
+            {
+                var more = (page * 10) < data.total; // whether or not there are more results available
 
-            preProcess: function(data){
-                if(data.success){
-                    return data.rows;
-                }else{
-                    return false;
-                }
+                // notice we return the value of more so Select2 knows if more results can be loaded
+                return {results: data.rows, more: more};
+
+                //return { results: data.rows, more: (data.rows && data.rows.length == 10 ? true : false) };
             }
+            //dropdownCssClass: "bigdrop"
         },
-        updater: function(data){
-            var d = data.split('#');
-            var code = d[0],
-                name = d[1];
 
-            $('#txt_hosp_deathA_code').val(code);
+        id: function(data) { return { id: data.code } },
 
-            return name;
+        formatResult: function(data) {
+            return '[' + data.code + '] ' + data.name;
+        },
+        formatSelection: function(data) {
+            return '[' + data.code + '] ' + data.name;
+        },
+        initSelection: function(el, cb) {
+            //var eltxt = $(el).val();
+            //cb({'term': eltxt });
         }
     });
 
-    $('#txt_hosp_deathA_name').on('keyup', function(){
-        $('#txt_hosp_deathA_code').val('');
-    });
-
-    $('#txt_hosp_deathB_name').typeahead({
+    $('#txt_icd_deathB').select2({
+        placeholder: 'รหัส หรือ ชื่อการวินิจฉัยโรค',
+        minimumInputLength: 2,
+        allowClear: true,
         ajax: {
-            url: site_url + '/basic/search_icd_ajax',
-            timeout: 500,
-            displayField: 'name',
-            triggerLength: 3,
-            preDispatch: function(query){
+            url: site_url + "/basic/search_icd_ajax",
+            dataType: 'json',
+            type: 'POST',
+            quietMillis: 100,
+            data: function (term, page) {
                 return {
-                    query: query,
-                    csrf_token: csrf_token
-                }
+                    query: term,
+                    csrf_token: csrf_token,
+                    start: page,
+                    stop: 10
+                };
             },
+            results: function (data, page)
+            {
+                var more = (page * 10) < data.total; // whether or not there are more results available
 
-            preProcess: function(data){
-                if(data.success){
-                    return data.rows;
-                }else{
-                    return false;
-                }
+                // notice we return the value of more so Select2 knows if more results can be loaded
+                return {results: data.rows, more: more};
+
+                //return { results: data.rows, more: (data.rows && data.rows.length == 10 ? true : false) };
             }
+            //dropdownCssClass: "bigdrop"
         },
-        updater: function(data){
-            var d = data.split('#');
-            var code = d[0],
-                name = d[1];
 
-            $('#txt_hosp_deathB_code').val(code);
+        id: function(data) { return { id: data.code } },
 
-            return name;
+        formatResult: function(data) {
+            return '[' + data.code + '] ' + data.name;
+        },
+        formatSelection: function(data) {
+            return '[' + data.code + '] ' + data.name;
+        },
+        initSelection: function(el, cb) {
+            //var eltxt = $(el).val();
+            //cb({'term': eltxt });
         }
     });
 
-    $('#txt_hosp_deathB_name').on('keyup', function(){
-        $('#txt_hosp_deathB_code').val('');
-    });
-
-    $('#txt_hosp_deathC_name').typeahead({
+    $('#txt_icd_deathC').select2({
+        placeholder: 'รหัส หรือ ชื่อการวินิจฉัยโรค',
+        minimumInputLength: 2,
+        allowClear: true,
         ajax: {
-            url: site_url + '/basic/search_icd_ajax',
-            timeout: 500,
-            displayField: 'name',
-            triggerLength: 3,
-            preDispatch: function(query){
+            url: site_url + "/basic/search_icd_ajax",
+            dataType: 'json',
+            type: 'POST',
+            quietMillis: 100,
+            data: function (term, page) {
                 return {
-                    query: query,
-                    csrf_token: csrf_token
-                }
+                    query: term,
+                    csrf_token: csrf_token,
+                    start: page,
+                    stop: 10
+                };
             },
+            results: function (data, page)
+            {
+                var more = (page * 10) < data.total; // whether or not there are more results available
 
-            preProcess: function(data){
-                if(data.success){
-                    return data.rows;
-                }else{
-                    return false;
-                }
+                // notice we return the value of more so Select2 knows if more results can be loaded
+                return {results: data.rows, more: more};
+
+                //return { results: data.rows, more: (data.rows && data.rows.length == 10 ? true : false) };
             }
+            //dropdownCssClass: "bigdrop"
         },
-        updater: function(data){
-            var d = data.split('#');
-            var code = d[0],
-                name = d[1];
 
-            $('#txt_hosp_deathC_code').val(code);
+        id: function(data) { return { id: data.code } },
 
-            return name;
+        formatResult: function(data) {
+            return '[' + data.code + '] ' + data.name;
+        },
+        formatSelection: function(data) {
+            return '[' + data.code + '] ' + data.name;
+        },
+        initSelection: function(el, cb) {
+            //var eltxt = $(el).val();
+            //cb({'term': eltxt });
         }
     });
 
-    $('#txt_hosp_deathC_name').on('keyup', function(){
-        $('#txt_hosp_deathC_code').val('');
-    });
 
-    $('#txt_hosp_deathD_name').typeahead({
+    $('#txt_icd_deathD').select2({
+        placeholder: 'รหัส หรือ ชื่อการวินิจฉัยโรค',
+        minimumInputLength: 2,
+        allowClear: true,
         ajax: {
-            url: site_url + '/basic/search_icd_ajax',
-            timeout: 500,
-            displayField: 'name',
-            triggerLength: 3,
-            preDispatch: function(query){
+            url: site_url + "/basic/search_icd_ajax",
+            dataType: 'json',
+            type: 'POST',
+            quietMillis: 100,
+            data: function (term, page) {
                 return {
-                    query: query,
-                    csrf_token: csrf_token
-                }
+                    query: term,
+                    csrf_token: csrf_token,
+                    start: page,
+                    stop: 10
+                };
             },
+            results: function (data, page)
+            {
+                var more = (page * 10) < data.total; // whether or not there are more results available
 
-            preProcess: function(data){
-                if(data.success){
-                    return data.rows;
-                }else{
-                    return false;
-                }
+                // notice we return the value of more so Select2 knows if more results can be loaded
+                return {results: data.rows, more: more};
+
+                //return { results: data.rows, more: (data.rows && data.rows.length == 10 ? true : false) };
             }
+            //dropdownCssClass: "bigdrop"
         },
-        updater: function(data){
-            var d = data.split('#');
-            var code = d[0],
-                name = d[1];
 
-            $('#txt_hosp_deathD_code').val(code);
+        id: function(data) { return { id: data.code } },
 
-            return name;
+        formatResult: function(data) {
+            return '[' + data.code + '] ' + data.name;
+        },
+        formatSelection: function(data) {
+            return '[' + data.code + '] ' + data.name;
+        },
+        initSelection: function(el, cb) {
+            //var eltxt = $(el).val();
+            //cb({'term': eltxt });
         }
     });
 
-    $('#txt_hosp_deathD_name').on('keyup', function(){
-        $('#txt_hosp_deathD_code').val('');
-    });
 
-    $('#txt_reg_hn').typeahead({
+    $('#txt_reg_hosp_death').select2({
+        placeholder: 'ชื่อ หรือ รหัสสถานบริการ',
+        minimumInputLength: 2,
+        allowClear: true,
         ajax: {
-            url: site_url + '/person/search_person_ajax',
-            timeout: 500,
-            displayField: 'name',
-            triggerLength: 3,
-            preDispatch: function(query){
+            url: site_url + "/basic/search_hospital_ajax",
+            dataType: 'json',
+            type: 'POST',
+            quietMillis: 100,
+            data: function (term) {
                 return {
-                    query: query,
+                    query: term,
                     csrf_token: csrf_token
-                }
+                };
             },
-
-            preProcess: function(data){
-                if(data.success){
-                    return data.rows;
-                }else{
-                    return false;
-                }
+            results: function (data)
+            {
+                return { results: data.rows, more: (data.rows && data.rows.length == 10 ? true : false) };
             }
+            //dropdownCssClass: "bigdrop"
         },
-        updater: function(data){
-            var d = data.split('#');
-            var code = d[0],
-                name = d[1],
-                birth = d[2];
 
-            $('#txt_reg_fullname').val(name);
-            $('#txt_reg_birthdate').val(app.to_thai_date(birth));
-            $('#txt_reg_age').val(app.count_age(birth));
+        id: function(data) { return { id: data.code } },
 
-            return code;
+        formatResult: function(data) {
+            return '[' + data.code + '] ' + data.name;
+        },
+        formatSelection: function(data) {
+            return '[' + data.code + '] ' + data.name;
+        },
+        initSelection: function(el, cb) {
+            //var eltxt = $(el).val();
+            //cb({'term': eltxt });
         }
     });
 
-    $('#txt_reg_hosp_death_name').on('keyup', function(){
-        $('#txt_reg_hosp_death_code').val('');
-    });
 
-    $('#txt_reg_hosp_death_name').typeahead({
+    $('#txt_query').select2({
+        placeholder: 'HN, เลขบัตรประชาชน, ชื่อ-สกุล',
+        minimumInputLength: 2,
+        allowClear: true,
         ajax: {
-            url: site_url + '/basic/search_hospital_ajax',
-            timeout: 500,
-            displayField: 'fullname',
-            triggerLength: 3,
-            preDispatch: function(query){
+            url: site_url + "/person/search_person_all_ajax",
+            dataType: 'json',
+            type: 'POST',
+            quietMillis: 100,
+            data: function (term, page) {
                 return {
-                    query: query,
-                    csrf_token: csrf_token
-                }
+                    query: term,
+                    csrf_token: csrf_token,
+                    start: page,
+                    stop: 10
+                };
             },
+            results: function (data, page)
+            {
+                var more = (page * 10) < data.total; // whether or not there are more results available
 
-            preProcess: function(data){
-                if(data.success){
-                    return data.rows;
-                }else{
-                    return false;
-                }
+                // notice we return the value of more so Select2 knows if more results can be loaded
+                return {results: data.rows, more: more};
+
+                //return { results: data.rows, more: (data.rows && data.rows.length == 10 ? true : false) };
             }
         },
-        updater: function(data){
-            var d = data.split('#');
-            var name = d[0],
-                code = d[1];
 
-            $('#txt_reg_hosp_death_code').val(code);
-            //$('#txt_reg_service_insc_hosp_main_name').val(name);
+        id: function(data) { return { id: data.hn } },
 
-            return name;
+        formatResult: function(data) {
+            return '[' + data.hn + '] ' + data.fullname;
+        },
+        formatSelection: function(data) {
+            return '[' + data.hn + '] ' + data.fullname;
+        },
+        initSelection: function(el, cb) {
+            //var eltxt = $(el).val();
+            //cb({'term': eltxt });
+        }
+    });
+
+    $('#txt_reg_hn').on('click', function(e) {
+        var data = $(this).select2('data');
+
+        $('#txt_reg_cid').val(data.cid);
+        $('#txt_reg_birthdate').val(data.birthdate);
+        $('#txt_reg_age').val(data.age);
+    });
+
+    $('#txt_reg_hn').select2({
+        placeholder: 'HN, เลขบัตรประชาชน, ชื่อ-สกุล',
+        minimumInputLength: 2,
+        allowClear: true,
+        ajax: {
+            url: site_url + "/person/search_person_all_ajax",
+            dataType: 'json',
+            type: 'POST',
+            quietMillis: 100,
+            data: function (term, page) {
+                return {
+                    query: term,
+                    csrf_token: csrf_token,
+                    start: page,
+                    stop: 10
+                };
+            },
+            results: function (data, page)
+            {
+                var more = (page * 10) < data.total; // whether or not there are more results available
+
+                // notice we return the value of more so Select2 knows if more results can be loaded
+                return {results: data.rows, more: more};
+
+                //return { results: data.rows, more: (data.rows && data.rows.length == 10 ? true : false) };
+            }
+        },
+
+        id: function(data) { return { id: data.hn } },
+
+        formatResult: function(data) {
+            return '[' + data.hn + '] ' + data.fullname;
+        },
+        formatSelection: function(data) {
+            return '[' + data.hn + '] ' + data.fullname;
+        },
+        initSelection: function(el, cb) {
+            //var eltxt = $(el).val();
+            //cb({'term': eltxt });
         }
     });
 
@@ -498,47 +550,59 @@ head.ready(function(){
 
     death.clear_form = function()
     {
-        $('#txt_reg_hn').val('');
-        $('#txt_reg_fullname').val('');
+        $('#txt_reg_hn').select2('val', '');
+        $('#txt_reg_cid').val('');
         $('#txt_reg_birthdate').val('');
         $('#txt_reg_age').val('');
-        $('#txt_reg_hosp_death_code').val('');
-        $('#txt_reg_hosp_death_name').val('');
+        //$('#txt_reg_hosp_death_code').val('');
+        $('#txt_reg_hosp_death').select2('val', '');
         $('#txt_reg_death_date').val('');
-        $('#txt_hosp_deathA_code').val('');
-        $('#txt_hosp_deathA_name').val('');
-        $('#txt_hosp_deathB_code').val('');
-        $('#txt_hosp_deathB_name').val('');
-        $('#txt_hosp_deathC_code').val('');
-        $('#txt_hosp_deathC_name').val('');
-        $('#txt_hosp_deathD_code').val('');
-        $('#txt_hosp_deathD_name').val('');
-        $('#txt_reg_cdeath_code').val('');
-        $('#txt_reg_cdeath_name').val('');
-        app.set_first_selected($('#sl_reg_pregdeath'));
-        app.set_first_selected($('#sl_pdeath'));
-        $('#txt_reg_odisease_code').val('');
-        $('#txt_reg_odisease_name').val('');
+        //$('#txt_hosp_deathA_code').val('');
+        $('#txt_icd_deathA').select2('val', '');
+        //$('#txt_hosp_deathB_code').val('');
+        $('#txt_icd_deathB').select2('val', '');
+        //$('#txt_hosp_deathC_code').val('');
+        $('#txt_icd_deathC').select2('val', '');
+        //$('#txt_hosp_deathD_code').val('');
+        $('#txt_icd_deathD').select2('val', '');
+        //$('#txt_reg_cdeath_code').val('');
+        $('#txt_icd_cdeath').select2('val', '');
+        $('#sl_reg_pregdeath').select2('val', '');
+        $('#sl_pdeath').select2('val', '');
+        $('#txt_icd_odisease').select2('val', '');
         $('#txt_isupdate').val('0');
-        $('#txt_reg_hn').removeAttr('disabled', 'disabled');
+
+        $('#txt_reg_hn').select2('enable', true)
     };
 
     $('#btn_save_death').click(function(){
-        var data = {};
+        var
+            data        = {}
 
-        data.hn = $('#txt_reg_hn').val();
-        data.hospdeath = $('#txt_reg_hosp_death_code').val();
-        data.ddeath = $('#txt_reg_death_date').val();
-        data.cdeath_a = $('#txt_hosp_deathA_code').val();
-        data.cdeath_b = $('#txt_hosp_deathB_code').val();
-        data.cdeath_c = $('#txt_hosp_deathC_code').val();
-        data.cdeath_d = $('#txt_hosp_deathD_code').val();
-        data.cdeath = $('#txt_reg_cdeath_code').val();
-        data.pregdeath = $('#sl_reg_pregdeath').val();
-        data.pdeath = $('#sl_pdeath').val();
-        data.odisease = $('#txt_reg_odisease_code').val();
+            , person      = $('#txt_reg_hn').select2('data')
+            , hospital    = $('#txt_reg_hosp_death').select2('data')
+            , cdeath      = $('#txt_icd_cdeath').select2('data')
+            , death_a     = $('#txt_icd_deathA').select2('data')
+            , death_b     = $('#txt_icd_deathB').select2('data')
+            , death_c     = $('#txt_icd_deathC').select2('data')
+            , death_d     = $('#txt_icd_deathD').select2('data')
+            , odeath      = $('#txt_icd_odisease').select2('data')
+        ;
 
-        data.isupdate = $('#txt_isupdate').val();
+        data.hn         = person === null ? false : person.hn;
+
+        data.hospdeath  = hospital === null ? '' : hospital.code;
+        data.cdeath_a   = death_a === null ? '' : death_a.code;
+        data.cdeath_b   = death_b === null ? '' : death_b.code;
+        data.cdeath_c   = death_c === null ? '' : death_c.code;
+        data.cdeath_d   = death_d === null ? '' : death_d.code;
+        data.cdeath     = cdeath === null ? '' : cdeath.code;
+        data.odisease   = odeath === null ? '' : odeath.code;
+
+        data.ddeath     = $('#txt_reg_death_date').val();
+        data.pregdeath  = $('#sl_reg_pregdeath').select2('val');
+        data.pdeath     = $('#sl_pdeath').select2('val');
+        data.isupdate   = $('#txt_isupdate').val();
 
 
         if(!data.hn)
@@ -563,18 +627,32 @@ head.ready(function(){
         }
         else
         {
-            death.ajax.save(data, function(err){
-                if(err)
-                {
-                    app.alert(err);
-                }
-                else
-                {
-                    app.alert('บันทึกข้อมูลเสร็จเรียบร้อยแล้ว');
-                    death.modal.hide_register();
-                    death.get_list();
-                }
-            });
+
+            if(confirm('คุณต้องการเปลี่ยนสถานะการจำหน่ายเป็น ตาย [1] หรือไม่?'))
+            {
+                data.dchstatus = '1';
+            }
+            else
+            {
+                data.dchstatus = '0';
+            }
+
+            if(confirm('ต้องการบันทึกข้อมูลการตายใช่หรือไม่?'))
+            {
+                death.ajax.save(data, function(err){
+                    if(err)
+                    {
+                        app.alert(err);
+                    }
+                    else
+                    {
+                        app.alert('บันทึกข้อมูลเสร็จเรียบร้อยแล้ว');
+                        death.modal.hide_register();
+                        death.get_list();
+                    }
+                });
+            }
+
         }
     });
 
@@ -596,39 +674,40 @@ head.ready(function(){
 
     death.set_detail = function(data)
     {
-        $('#txt_reg_hosp_death_code').val(data.hospdeath);
-        $('#txt_reg_hosp_death_name').val(data.hospdeath_name);
+        $('#txt_reg_hosp_death').select2('data', { code: data.hospdeath, name: data.hospdeath_name });
         $('#txt_reg_death_date').val(data.ddeath);
-        $('#txt_hosp_deathA_code').val(data.cdeath_a);
-        $('#txt_hosp_deathA_name').val(data.cdeath_a_name);
-        $('#txt_hosp_deathB_code').val(data.cdeath_b);
-        $('#txt_hosp_deathB_name').val(data.cdeath_b_name);
-        $('#txt_hosp_deathC_code').val(data.cdeath_c);
-        $('#txt_hosp_deathC_name').val(data.cdeath_c_name);
-        $('#txt_hosp_deathD_code').val(data.cdeath_d);
-        $('#txt_hosp_deathD_name').val(data.cdeath_d_name);
-        $('#txt_reg_cdeath_code').val(data.cdeath);
-        $('#txt_reg_cdeath_name').val(data.cdeath_name);
-        $('#sl_reg_pregdeath').val(data.pregdeath);
-        $('#sl_pdeath').val(data.pdeath);
-        $('#txt_reg_odisease_code').val(data.odisease);
-        $('#txt_reg_odisease_name').val(data.odisease_name);
+        $('#txt_icd_deathA').select2('data', { code: data.cdeath_a, name: data.cdeath_a_name });
+        $('#txt_icd_deathB').select2('data', { code: data.cdeath_b, name: data.cdeath_b_name });
+        $('#txt_icd_deathC').select2('data', { code: data.cdeath_c, name: data.cdeath_c_name });
+        $('#txt_icd_deathD').select2('data', { code: data.cdeath_d, name: data.cdeath_d_name });
+        $('#txt_icd_cdeath').select2('data', { code: data.cdeath, name: data.cdeath_name });
+        $('#sl_reg_pregdeath').select2('val', data.pregdeath);
+        $('#sl_pdeath').select2('val', data.pdeath);
+        $('#txt_icd_odisease').select2('data', { code: data.odisease, name: data.odisease_name });
 
         $('#txt_isupdate').val('1');
 
     };
 
     $(document).on('click', 'a[data-name="btn_edit"]', function(){
-        var hn = $(this).attr('data-hn'),
-            fullname = $(this).attr('data-fullname'),
-            age = $(this).attr('data-age'),
-            birthdate = $(this).attr('data-birthdate');
+        var
+            hn = $(this).data('hn')
 
-        $('#txt_reg_hn').attr('disabled', 'disabled').css('background-color', 'white');;
-        $('#txt_reg_fullname').val(fullname);
-        $('#txt_reg_hn').val(hn);
+            , fullname = $(this).data('fullname')
+            , cid = $(this).data('cid')
+            , age = $(this).data('age')
+            , birthdate = $(this).data('birthdate')
+        ;
+
+        death.clear_form();
+
+        $('#txt_reg_cid').val(cid);
+        $('#txt_reg_hn').select2('data', { hn: hn, fullname: fullname });
+        $('#txt_reg_hn').select2('enable', false);
+
         $('#txt_reg_age').val(age);
         $('#txt_reg_birthdate').val(birthdate);
+
         //get disability detail
         death.get_detail(hn);
         death.modal.show_register();
@@ -638,24 +717,29 @@ head.ready(function(){
      * Remove
      */
     $(document).on('click', 'a[data-name="btn_remove"]', function(){
-        var id = $(this).attr('data-id');
+        var hn = $(this).data('hn');
+        var dchstatus = null;
 
-        app.confirm('คุณต้องการลบรายการนี้ใช่หรือไม่?', function(res){
-           if(res)
-           {
-               death.ajax.remove(id, function(err){
-                   if(err)
-                   {
-                       app.alert(err);
-                   }
-                   else
-                   {
-                       app.alert('ลบข้อมูลเสร็จเรียบร้อยแล้ว');
-                       death.get_list();
-                   }
-               });
-           }
-        });
+        if(confirm('คุณต้องการเปลี่ยนสถานะการจำหน่ายเป็น ไม่จำหน่าย [9] หรือไม่?'))
+        {
+            dchstatus = '9';
+        }
+        //app.confirm('คุณต้องการลบรายการนี้ใช่หรือไม่?', function(res){
+       if(confirm('คุณต้องการลบรายการนี้ใช่หรือไม่?'))
+       {
+           death.ajax.remove(hn, dchstatus, function(err){
+               if(err)
+               {
+                   app.alert(err);
+               }
+               else
+               {
+                   app.alert('ลบข้อมูลเสร็จเรียบร้อยแล้ว');
+                   death.get_list();
+               }
+           });
+       }
+        //});
 
     });
 
@@ -665,62 +749,46 @@ head.ready(function(){
 
     //search
     $('#btn_search').on('click', function(){
-        var query = $('#txt_query').val();
+        var data = $('#txt_query').select2('data');
 
-        $('#main_paging').fadeOut('slow');
-
-        if(!query)
+        if(data === null)
         {
-            app.alert('กรุณาระบุคำค้นหา โดยระบุชื่อ-สกุล หรือ เลขบัตรประชาชน หรือ HN');
+            app.alert('กรุณาระบุคำค้นหา');
         }
         else
         {
-            $('#tbl_list > tbody').empty();
+            $('#main_paging').fadeOut('slow');
 
-            death.ajax.search(query, function(err, data){
-                if(err)
-                {
-                    app.alert(err);
-                    $('#tbl_list > tbody').append('<tr><td colspan="9">ไม่พบข้อมูล</td></td></tr>');
-                }
-                else
-                {
-                    death.set_list(data);
-                }
-            });
-        }
-
-    });
-
-    //search diagnosis
-    $('#txt_query').typeahead({
-        ajax: {
-            url: site_url + '/person/search_person_ajax',
-            timeout: 500,
-            displayField: 'name',
-            triggerLength: 3,
-            preDispatch: function(query){
-                return {
-                    query: query,
-                    csrf_token: csrf_token
-                }
-            },
-
-            preProcess: function(data){
-                if(data.success){
-                    return data.rows;
-                }else{
-                    return false;
-                }
+            if(!data.hn)
+            {
+                app.alert('กรุณาระบุคำค้นหา โดยระบุชื่อ-สกุล หรือ เลขบัตรประชาชน หรือ HN');
             }
-        },
-        updater: function(data){
-            var d = data.split('#');
-            var code = d[0];
+            else
+            {
+                $('#tbl_list > tbody').empty();
 
-            return code;
+                death.ajax.search(data.hn, function(err, data){
+                    if(err)
+                    {
+                        app.alert(err);
+                        $('#tbl_list > tbody').append('<tr><td colspan="9">ไม่พบข้อมูล</td></td></tr>');
+                    }
+                    else
+                    {
+                        death.set_list(data);
+                    }
+                });
+            }
         }
+
     });
 
+    //refresh list
+    $('#btn_refresh').on('click', function(e) {
+        e.preventDefault();
+        death.get_list();
+    });
+
+    //load list at first time
     death.get_list();
 });

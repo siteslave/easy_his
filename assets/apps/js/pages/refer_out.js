@@ -133,7 +133,7 @@ head.ready(function(){
         items.hn = $('#txt_rfo_hn').val();
         items.refer_date = $('#txt_rfo_date').val();
         items.refer_time = $('#txt_rfo_time').val();
-        items.refer_hospital = hospital.code;
+        items.refer_hospital = hospital === null ? '' : hospital.code;
         items.cause = $('#sl_rfo_cause').val();
         items.reason = $('#sl_rfo_reason').val();
         items.clinic_id = $('#sl_rfo_clinic').val();
@@ -202,7 +202,7 @@ head.ready(function(){
         var items = {
             answer_date: $('#txt_rfo_answer_date').val(),
             answer_detail: $('#txt_rfo_answer_detail').val(),
-            answer_diag: diag.code,
+            answer_diag: diag === null ? '' : diag.code,
             rfo_code: $('#txt_rfo_no').val()
         };
 

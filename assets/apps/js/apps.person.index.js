@@ -241,45 +241,45 @@ head.ready(document).ready(function(){
     person.setSurvey = function(data){
         $('#txt_house_latitude').val(data.latitude);
         $('#txt_house_longitude').val(data.longitude);
-        $('#sl_locatype').val(data.locatype);
+        $('#sl_locatype').select2('val', data.locatype);
         $('#txt_vhvid').val(data.vhvid);
         $('#txt_headid').val(data.headid);
-        $('#sl_toilet').val(data.toilet);
-        $('#sl_water').val(data.water);
-        $('#sl_watertype').val(data.watertype);
-        $('#sl_garbage').val(data.garbage);
-        $('#sl_housing').val(data.housing);
-        $('#sl_durability').val(data.durability);
-        $('#sl_cleanliness').val(data.cleanliness);
-        $('#sl_ventilation').val(data.ventilation);
-        $('#sl_light').val(data.light);
-        $('#sl_watertm').val(data.watertm);
-        $('#sl_mfood').val(data.mfood);
-        $('#sl_bcontrol').val(data.bcontrol);
-        $('#sl_acontrol').val(data.acontrol);
-        $('#sl_chemical').val(data.chemical);
+        $('#sl_toilet').select2('val', data.toilet);
+        $('#sl_water').select2('val', data.water);
+        $('#sl_watertype').select2('val', data.watertype);
+        $('#sl_garbage').select2('val', data.garbage);
+        $('#sl_housing').select2('val', data.housing);
+        $('#sl_durability').select2('val', data.durability);
+        $('#sl_cleanliness').select2('val', data.cleanliness);
+        $('#sl_ventilation').select2('val', data.ventilation);
+        $('#sl_light').select2('val', data.light);
+        $('#sl_watertm').select2('val', data.watertm);
+        $('#sl_mfood').select2('val', data.mfood);
+        $('#sl_bcontrol').select2('val', data.bcontrol);
+        $('#sl_acontrol').select2('val', data.acontrol);
+        $('#sl_chemical').select2('val', data.chemical);
     };
 
     person.clear_servey_form = function(){
         $('#txt_house_latitude').val('');
         $('#txt_house_longitude').val('');
-        $('#sl_locatype').find('option:first').attr('selected','selected');
+        app.set_first_selected($('#sl_locatype'));
         $('#txt_vhvid').val('');
         $('#txt_headid').val('');
-        $('#sl_toilet').find('option:first').attr('selected','selected');
-        $('#sl_water').find('option:first').attr('selected','selected');
-        $('#sl_watertype').find('option:first').attr('selected','selected');
-        $('#sl_garbage').find('option:first').attr('selected','selected');
-        $('#sl_housing').find('option:first').attr('selected','selected');
-        $('#sl_durability').find('option:first').attr('selected','selected');
-        $('#sl_cleanliness').find('option:first').attr('selected','selected');
-        $('#sl_ventilation').find('option:first').attr('selected','selected');
-        $('#sl_light').find('option:first').attr('selected','selected');
-        $('#sl_watertm').find('option:first').attr('selected','selected');
-        $('#sl_mfood').find('option:first').attr('selected','selected');
-        $('#sl_bcontrol').find('option:first').attr('selected','selected');
-        $('#sl_acontrol').find('option:first').attr('selected','selected');
-        $('#sl_chemical').find('option:first').attr('selected','selected');
+        app.set_first_selected($('#sl_toilet'));
+        app.set_first_selected($('#sl_water'));
+        app.set_first_selected($('#sl_watertype'));
+        app.set_first_selected($('#sl_garbage'));
+        app.set_first_selected($('#sl_housing'));
+        app.set_first_selected($('#sl_durability'));
+        app.set_first_selected($('#sl_cleanliness'));
+        app.set_first_selected($('#sl_ventilation'));
+        app.set_first_selected($('#sl_light'));
+        app.set_first_selected($('#sl_watertm'));
+        app.set_first_selected($('#sl_mfood'));
+        app.set_first_selected($('#sl_bcontrol'));
+        app.set_first_selected($('#sl_acontrol'));
+        app.set_first_selected($('#sl_chemical'));
     };
 
 
@@ -297,7 +297,7 @@ head.ready(document).ready(function(){
     });
 
     $('#btn_add_person').on('click', function(){
-        var house_id = $('#sl_houses').val();
+        var house_id = $('#sl_houses').select2('val');
 
         if(!house_id){
             app.alert('กรุณาเลือกหลังคาเรือนที่ต้องการ');
@@ -331,7 +331,7 @@ head.ready(document).ready(function(){
 
         items.house = $('#txtAddress').val();
         items.house_id = $('#txtHouseCode').val();
-        items.house_type = $('#slHouseType').val();
+        items.house_type = $('#slHouseType').select2('val');
         items.room_no = $('#txtRoomNo').val();
         items.soi_sub = $('#txtSoiSub').val();
         items.soi_main = $('#txtSoiMain').val();
@@ -366,8 +366,11 @@ head.ready(document).ready(function(){
 
     //get person list
     $(document).on('click', 'a[data-name="btn_get_person"]', function(){
-        var id = $(this).attr('data-id'),
-            house = $(this).attr('data-house');
+        var
+            id = $(this).data('id')
+            , house = $(this).data('house')
+        ;
+
         $('#txtHouseId').val(id);
         $('#txt_show_house_address').html(house);
 
@@ -376,36 +379,37 @@ head.ready(document).ready(function(){
 
     //save house survey
     $('#btn_save_house_seruvey').click(function(){
-        var items = {};
-        items.latitude = $('#txt_house_latitude').val();
-        items.longitude = $('#txt_house_longitude').val();
-        items.locatype = $('#sl_locatype').val();
-        items.vhvid = $('#txt_vhvid').val();
-        items.headid = $('#txt_headid').val();
-        items.toilet = $('#sl_toilet').val();
-        items.water = $('#sl_water').val();
-        items.watertype = $('#sl_watertype').val();
-        items.garbage = $('#sl_garbage').val();
-        items.housing = $('#sl_housing').val();
-        items.durability = $('#sl_durability').val();
-        items.cleanliness = $('#sl_cleanliness').val();
-        items.ventilation = $('#sl_ventilation').val();
-        items.light = $('#sl_light').val();
-        items.watertm = $('#sl_watertm').val();
-        items.mfood = $('#sl_mfood').val();
-        items.bcontrol = $('#sl_bcontrol').val();
-        items.acontrol = $('#sl_acontrol').val();
-        items.chemical = $('#sl_chemical').val();
+        var items           = {};
 
-        items.house_id = $('#txtHouseId').val();
+        items.latitude      = $('#txt_house_latitude').val();
+        items.longitude     = $('#txt_house_longitude').val();
+        items.locatype      = $('#sl_locatype').select2('val');
+        items.vhvid         = $('#txt_vhvid').val();
+        items.headid        = $('#txt_headid').val();
+        items.toilet        = $('#sl_toilet').select2('val');
+        items.water         = $('#sl_water').select2('val');
+        items.watertype     = $('#sl_watertype').select2('val');
+        items.garbage       = $('#sl_garbage').select2('val');
+        items.housing       = $('#sl_housing').select2('val');
+        items.durability    = $('#sl_durability').select2('val');
+        items.cleanliness   = $('#sl_cleanliness').select2('val');
+        items.ventilation   = $('#sl_ventilation').select2('val');
+        items.light         = $('#sl_light').select2('val');
+        items.watertm       = $('#sl_watertm').select2('val');
+        items.mfood         = $('#sl_mfood').select2('val');
+        items.bcontrol      = $('#sl_bcontrol').select2('val');
+        items.acontrol      = $('#sl_acontrol').select2('val');
+        items.chemical      = $('#sl_chemical').select2('val');
 
-        if(!items.house_id){
+        items.house_id      = $('#txtHouseId').val();
+
+        if(!items.house_id) {
             app.alert('กรุณาเลือกหลังคาเรือนที่ต้องการสำรวจ');
-        }else{
+        } else {
             person.ajax.save_house_survey(items, function(err){
-                if(err){
+                if(err) {
                     app.alert(err);
-                }else{
+                } else {
                     app.alert('Save success');
                     $('#mdlHouseSurvey').modal('hide');
                 }
@@ -461,9 +465,9 @@ head.ready(document).ready(function(){
                         '<td> <div class="btn-group">' +
                         '<a class="btn btn-default btn-small" href="javascript:void(0);" data-name="btn_change_house_person" ' +
                         'data-hn="'+ v.hn +'" title="ย้ายบ้าน">' +
-                        '<i class="icon-share"></i></a>' +
+                        '<i class="fa fa-share-square-o"></i></a>' +
                         '<a class="btn btn-success btn-small" href="'+ site_url + '/person/edit/' + v.hn + '" title="แก้ไข">' +
-                        '<i class="icon-edit"></i></a>' +
+                        '<i class="fa fa-edit"></i></a>' +
                         '</div></td>' +
                         '</tr>'
                 );
@@ -514,14 +518,14 @@ head.ready(document).ready(function(){
             $('#main_paging').fadeIn('slow');
 
             person.ajax.get_list_total(house_code, village_id, function(err, data){
-                if(err){
+                if(err) {
                     app.alert(err);
                     $('#tbl_person > tbody').append(
                         '<tr>' +
                             '<td colspan="11">ไม่พบรายการ</td>' +
                             '</tr>'
                     );
-                }else{
+                } else {
                     $('#main_paging').paging(data.total, {
                         format: " < . (qq -) nnncnnn (- pp) . >",
                         perpage: app.record_per_page,
@@ -544,60 +548,7 @@ head.ready(document).ready(function(){
                             });
 
                         },
-                        onFormat: function(type){
-                            switch (type) {
-
-                                case 'block':
-
-                                    if (!this.active)
-                                        return '<li class="disabled"><a href="">' + this.value + '</a></li>';
-                                    else if (this.value != this.page)
-                                        return '<li><a href="#' + this.value + '">' + this.value + '</a></li>';
-                                    return '<li class="active"><a href="#">' + this.value + '</a></li>';
-
-                                case 'right':
-                                case 'left':
-
-                                    if (!this.active) {
-                                        return "";
-                                    }
-                                    return '<li><a href="#' + this.value + '">' + this.value + '</a></li>';
-
-                                case 'next':
-
-                                    if (this.active) {
-                                        return '<li><a href="#' + this.value + '">&raquo;</a></li>';
-                                    }
-                                    return '<li class="disabled"><a href="">&raquo;</a></li>';
-
-                                case 'prev':
-
-                                    if (this.active) {
-                                        return '<li><a href="#' + this.value + '">&laquo;</a></li>';
-                                    }
-                                    return '<li class="disabled"><a href="">&laquo;</a></li>';
-
-                                case 'first':
-
-                                    if (this.active) {
-                                        return '<li><a href="#' + this.value + '">&lt;</a></li>';
-                                    }
-                                    return '<li class="disabled"><a href="">&lt;</a></li>';
-
-                                case 'last':
-
-                                    if (this.active) {
-                                        return '<li><a href="#' + this.value + '">&gt;</a></li>';
-                                    }
-                                    return '<li class="disabled"><a href="">&gt;</a></li>';
-
-                                case 'fill':
-                                    if (this.active) {
-                                        return '<li class="disabled"><a href="#">...</a></li>';
-                                    }
-                            }
-                            return ""; // return nothing for missing branches
-                        }
+                        onFormat: app.paging_format
                     });
                 }
             });
@@ -609,41 +560,41 @@ head.ready(document).ready(function(){
     $('#btn_save_village_survey').on('click', function(){
         var data = {};
 
-        data.village_id = $('#txt_village_id').val();
+        data.village_id         = $('#txt_village_id').val();
 
-        data.ntraditional = $('#txt_ntraditional').val();
-        data.nmonk = $('#txt_nmonk').val();
-        data.nreligionleader = $('#txt_nreligionleader').val();
-        data.nbroadcast = $('#txt_nbroadcast').val();
-        data.nradio = $('#txt_nradio').val();
-        data.npchc = $('#txt_npchc').val();
-        data.nclinic = $('#txt_nclinic').val();
-        data.ndrugstore = $('#txt_ndrugstore').val();
-        data.nchildcenter = $('#txt_nchildcenter').val();
-        data.npschool = $('#txt_npschool').val();
-        data.nsschool = $('#txt_nsschool').val();
-        data.ntemple = $('#txt_ntemple').val();
-        data.nreligiousplace = $('#txt_nreligiousplace').val();
-        data.nmarket = $('#txt_nmarket').val();
-        data.nshop = $('#txt_nshop').val();
-        data.nfoodshop = $('#txt_nfoodshop').val();
-        data.nstall = $('#txt_nstall').val();
-        data.nraintank = $('#txt_nraintank').val();
-        data.nchickenfarm = $('#txt_nchickenfarm').val();
-        data.npigfarm = $('#txt_npigfarm').val();
-        data.wastewater = $('#sl_wastewater').val();
-        data.garbage = $('#sl_garbage').val();
-        data.nfactory = $('#txt_nfactory').val();
-        data.latitude = $('#txt_latitude').val();
-        data.longitude = $('#txt_longitude').val();
-        data.outdate = $('#txt_outdate').val();
-        data.numactually = $('#txt_numactually').val();
-        data.risktype = $('#txt_risktype').val();
-        data.numstateless = $('#txt_numstateless').val();
-        data.nexerciseclub = $('#txt_nexerciseclub').val();
-        data.nolderlyclub = $('#txt_nolderlyclub').val();
-        data.ndisableclub = $('#txt_ndisableclub').val();
-        data.nnumberoneclub = $('#txt_nnumberoneclub').val();
+        data.ntraditional       = $('#txt_ntraditional').val();
+        data.nmonk              = $('#txt_nmonk').val();
+        data.nreligionleader    = $('#txt_nreligionleader').val();
+        data.nbroadcast         = $('#txt_nbroadcast').val();
+        data.nradio             = $('#txt_nradio').val();
+        data.npchc              = $('#txt_npchc').val();
+        data.nclinic            = $('#txt_nclinic').val();
+        data.ndrugstore         = $('#txt_ndrugstore').val();
+        data.nchildcenter       = $('#txt_nchildcenter').val();
+        data.npschool           = $('#txt_npschool').val();
+        data.nsschool           = $('#txt_nsschool').val();
+        data.ntemple            = $('#txt_ntemple').val();
+        data.nreligiousplace    = $('#txt_nreligiousplace').val();
+        data.nmarket            = $('#txt_nmarket').val();
+        data.nshop              = $('#txt_nshop').val();
+        data.nfoodshop          = $('#txt_nfoodshop').val();
+        data.nstall             = $('#txt_nstall').val();
+        data.nraintank          = $('#txt_nraintank').val();
+        data.nchickenfarm       = $('#txt_nchickenfarm').val();
+        data.npigfarm           = $('#txt_npigfarm').val();
+        data.wastewater         = $('#sl_wastewater').select2('val');
+        data.garbage            = $('#sl_garbage').select2('val');
+        data.nfactory           = $('#txt_nfactory').val();
+        data.latitude           = $('#txt_latitude').val();
+        data.longitude          = $('#txt_longitude').val();
+        data.outdate            = $('#txt_outdate').val();
+        data.numactually        = $('#txt_numactually').val();
+        data.risktype           = $('#txt_risktype').val();
+        data.numstateless       = $('#txt_numstateless').val();
+        data.nexerciseclub      = $('#txt_nexerciseclub').val();
+        data.nolderlyclub       = $('#txt_nolderlyclub').val();
+        data.ndisableclub       = $('#txt_ndisableclub').val();
+        data.nnumberoneclub     = $('#txt_nnumberoneclub').val();
 
         person.ajax.save_village_survey(data, function(err){
             if(err)
@@ -683,7 +634,7 @@ head.ready(document).ready(function(){
     };
 
     $('#btn_village_survey').on('click', function(){
-        var id = $('#sl_villages').val();
+        var id = $('#sl_villages').select2('val');
         if(!id)
         {
             app.alert('กรุณาระบุหมู่บ้านที่ต้องการสำหรวจ');
@@ -698,7 +649,7 @@ head.ready(document).ready(function(){
     });
 
     $('#btn_house_survey').on('click', function(){
-        var house_id = $('#sl_houses').val();
+        var house_id = $('#sl_houses').select2('val');
 
         if(!house_id){
             app.alert('กรุณาเลือกหลังคาเรือนที่ต้องการ');
@@ -755,14 +706,14 @@ head.ready(document).ready(function(){
                     '<td>'+ v.age +'</td>' +
                     '<td>'+ v.sex +'</td>' +
                     '<td><a href="#" class="btn btn-default" data-hn="'+ v.hn + '" data-name="btn_selected_person" data-typearea="'+ v.typearea +'">' +
-                        '<i class="icon-ok"></i></a></td>' +
+                        '<i class="fa fa-check-circle"></i></a></td>' +
                     '</tr>');
             });
         }
     };
 
    $(document).on('click', 'a[data-name="btn_selected_person"]', function(e){
-       if( ! _.indexOf(['1', '3'], $(this).data('typearea')))
+       if(! _.contains(['1', '3'], $(this).data('typearea')))
        {
            app.alert('บุคคลนี้ไม่ใช่บุคคลในเขตรับผิดชอบ');
        }
@@ -881,8 +832,11 @@ head.ready(document).ready(function(){
         }
     });
 
+
     person.get_list();
     var village_id = $('#sl_villages').val();
+
+
     person.get_house_list(village_id);
 
 });

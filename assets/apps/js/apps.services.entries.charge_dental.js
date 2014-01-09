@@ -69,11 +69,11 @@ head.ready(function() {
         items.vn = $('#vn').val();
         items.hn = $('#hn').val();
 
-        items.id = $('#txt_charge_dental_id').val();
-        items.charge_id = $('#sl_charge_dental_items').val();
-        items.teeth = $('#txt_charge_dental_teeth').val();
-        items.price = $('#txt_charge_dental_price').val();
-        items.side = $('#txt_charge_dental_side').val();
+        items.id            = $('#txt_charge_dental_id').val();
+        items.charge_id     = $('#sl_charge_dental_items').val();
+        items.teeth         = $('#txt_charge_dental_teeth').val();
+        items.price         = $('#txt_charge_dental_price').val();
+        items.side          = $('#txt_charge_dental_side').val();
 
         if(!items.vn)
         {
@@ -169,11 +169,11 @@ head.ready(function() {
     };
 
     $(document).on('click', 'a[data-name="btn_charge_dental_edit"]', function() {
-        var id = $(this).data('id'),
-            charge_id = $(this).data('charge_id'),
-            price = $(this).data('price'),
-            teeth = $(this).data('teeth'),
-            side = $(this).data('side');
+        var id          = $(this).data('id'),
+            charge_id   = $(this).data('charge_id'),
+            price       = $(this).data('price'),
+            teeth       = $(this).data('teeth'),
+            side        = $(this).data('side');
 
         $('#txt_charge_dental_id').val(id);
         $('#sl_charge_dental_items').select2('val', charge_id);

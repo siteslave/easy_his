@@ -53,7 +53,7 @@ head.ready(function(){
                                 '<td><div class="btn-group">' +
                                 '<a href="javascript:void(0)" class="btn btn-success btn-small" data-name="btn_edit" ' +
                                 'data-export_code="'+ v.export_code +'" data-vname="'+ v.name +'" data-id="' + v.id + '"> ' +
-                                '<i class="icon-edit"></i></a>' +
+                                '<i class="fa fa-edit"></i></a>' +
                                 /*'<a href="javascript:void(0)" disabled="disabled" class="btn btn-danger" data-name="btn_remove" data-id="' + v.id + '"> ' +
                                 '<i class="icon-trash"></i></a>' +*/
                                 '</div></td> ' +

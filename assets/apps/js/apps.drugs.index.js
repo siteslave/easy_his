@@ -114,60 +114,7 @@ head.ready(function(){
                         });
 
                     },
-                    onFormat: function(type){
-                        switch (type) {
-
-                            case 'block':
-
-                                if (!this.active)
-                                    return '<li class="disabled"><a href="">' + this.value + '</a></li>';
-                                else if (this.value != this.page)
-                                    return '<li><a href="#' + this.value + '">' + this.value + '</a></li>';
-                                return '<li class="active"><a href="#">' + this.value + '</a></li>';
-
-                            case 'right':
-                            case 'left':
-
-                                if (!this.active) {
-                                    return "";
-                                }
-                                return '<li><a href="#' + this.value + '">' + this.value + '</a></li>';
-
-                            case 'next':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&raquo;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&raquo;</a></li>';
-
-                            case 'prev':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&laquo;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&laquo;</a></li>';
-
-                            case 'first':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&lt;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&lt;</a></li>';
-
-                            case 'last':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&gt;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&gt;</a></li>';
-
-                            case 'fill':
-                                if (this.active) {
-                                    return '<li class="disabled"><a href="#">...</a></li>';
-                                }
-                        }
-                        return ""; // return nothing for missing branches
-                    }
+                    onFormat: app.paging_format
                 });
             }
         });
@@ -201,60 +148,7 @@ head.ready(function(){
                         });
 
                     },
-                    onFormat: function(type){
-                        switch (type) {
-
-                            case 'block':
-
-                                if (!this.active)
-                                    return '<li class="disabled"><a href="">' + this.value + '</a></li>';
-                                else if (this.value != this.page)
-                                    return '<li><a href="#' + this.value + '">' + this.value + '</a></li>';
-                                return '<li class="active"><a href="#">' + this.value + '</a></li>';
-
-                            case 'right':
-                            case 'left':
-
-                                if (!this.active) {
-                                    return "";
-                                }
-                                return '<li><a href="#' + this.value + '">' + this.value + '</a></li>';
-
-                            case 'next':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&raquo;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&raquo;</a></li>';
-
-                            case 'prev':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&laquo;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&laquo;</a></li>';
-
-                            case 'first':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&lt;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&lt;</a></li>';
-
-                            case 'last':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&gt;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&gt;</a></li>';
-
-                            case 'fill':
-                                if (this.active) {
-                                    return '<li class="disabled"><a href="#">...</a></li>';
-                                }
-                        }
-                        return ""; // return nothing for missing branches
-                    }
+                    onFormat: app.paging_format
                 });
             }
         });
@@ -286,7 +180,7 @@ head.ready(function(){
                         '<a href="javascript:void(0);" data-name="btn_edit" class="btn btn-success btn-small" data-id="'+ v.id +'" ' +
                         'data-vname="'+ v.name +'" data-did="'+ v.did +'" data-cost="'+ v.cost +'" data-price="'+ v.price +'" ' +
                         'data-qty="'+ v.qty +'" title="แก้ไข">' +
-                        '<i class="icon-edit"></i></a>' +
+                        '<i class="fa fa-edit"></i></a>' +
                         '</td>' +
                         '</tr>'
                 );

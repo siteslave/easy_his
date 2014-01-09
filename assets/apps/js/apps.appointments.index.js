@@ -194,7 +194,7 @@ head.ready(function(){
     {
         var data = {};
         data.date     = $('#txt_date').val();
-        data.clinic   = $('#sl_clinic').val();
+        data.clinic   = $('#sl_clinic').select2('val');
         data.status   = $('#txt_status').val();
 
         if(data.clinic)
@@ -211,7 +211,7 @@ head.ready(function(){
     //------------------------------------------------------------------------------------------------------------------
     //Do filter.
     $('button[data-name="btn_do_filter"]').click(function(){
-        var id = $(this).attr('data-id');
+        var id = $(this).data('id');
         $('#txt_status').val(id);
         appoint.get_list();
     });
@@ -222,7 +222,7 @@ head.ready(function(){
     //------------------------------------------------------------------------------------------------------------------
     //Set search visit filter.
     $('a[data-name="btn_set_search_visit_filter"]').click(function(){
-        var v = $(this).attr('data-value');
+        var v = $(this).data('value');
 
         $('#txt_search_visit_by').val(v);
     });
@@ -260,8 +260,8 @@ head.ready(function(){
     });
 
     $(document).on('click', 'a[data-name="btn_selected_visit"]', function(){
-        var hn = $(this).attr('data-hn'),
-            vn = $(this).attr('data-vn');
+        var hn = $(this).data('hn'),
+            vn = $(this).data('vn');
 
         app.go_to_url('appoints/register/' + vn + '/' + hn);
     });
@@ -271,7 +271,7 @@ head.ready(function(){
      * Remove appointment
      */
     $(document).on('click', 'a[data-name="btn_remove"]', function(){
-        var id = $(this).attr('data-id'),
+        var id = $(this).data('id'),
             obj = $(this).parent().parent().parent();
 
         app.confirm('คุณต้องการลบรายการใช่หรือไม่?', function(res){
@@ -316,60 +316,7 @@ head.ready(function(){
                         });
 
                     },
-                    onFormat: function(type){
-                        switch (type) {
-
-                            case 'block':
-
-                                if (!this.active)
-                                    return '<li class="disabled"><a href="">' + this.value + '</a></li>';
-                                else if (this.value != this.page)
-                                    return '<li><a href="#' + this.value + '">' + this.value + '</a></li>';
-                                return '<li class="active"><a href="#">' + this.value + '</a></li>';
-
-                            case 'right':
-                            case 'left':
-
-                                if (!this.active) {
-                                    return "";
-                                }
-                                return '<li><a href="#' + this.value + '">' + this.value + '</a></li>';
-
-                            case 'next':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&raquo;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&raquo;</a></li>';
-
-                            case 'prev':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&laquo;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&laquo;</a></li>';
-
-                            case 'first':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&lt;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&lt;</a></li>';
-
-                            case 'last':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&gt;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&gt;</a></li>';
-
-                            case 'fill':
-                                if (this.active) {
-                                    return '<li class="disabled"><a href="#">...</a></li>';
-                                }
-                        }
-                        return ""; // return nothing for missing branches
-                    }
+                    onFormat: app.paging_format
                 });
             }
         });
@@ -400,60 +347,7 @@ head.ready(function(){
                         });
 
                     },
-                    onFormat: function(type){
-                        switch (type) {
-
-                            case 'block':
-
-                                if (!this.active)
-                                    return '<li class="disabled"><a href="">' + this.value + '</a></li>';
-                                else if (this.value != this.page)
-                                    return '<li><a href="#' + this.value + '">' + this.value + '</a></li>';
-                                return '<li class="active"><a href="#">' + this.value + '</a></li>';
-
-                            case 'right':
-                            case 'left':
-
-                                if (!this.active) {
-                                    return "";
-                                }
-                                return '<li><a href="#' + this.value + '">' + this.value + '</a></li>';
-
-                            case 'next':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&raquo;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&raquo;</a></li>';
-
-                            case 'prev':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&laquo;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&laquo;</a></li>';
-
-                            case 'first':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&lt;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&lt;</a></li>';
-
-                            case 'last':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&gt;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&gt;</a></li>';
-
-                            case 'fill':
-                                if (this.active) {
-                                    return '<li class="disabled"><a href="#">...</a></li>';
-                                }
-                        }
-                        return ""; // return nothing for missing branches
-                    }
+                    onFormat: app.paging_format
                 });
             }
         });
@@ -464,8 +358,8 @@ head.ready(function(){
     {
         $('#txt_update_date').val(data.rows.date);
         $('#txt_update_time').val(data.rows.time);
-        $('#sl_update_clinic').val(data.rows.clinic);
-        $('#sl_update_aptype').val(data.rows.type);
+        $('#sl_update_clinic').select2('val', data.rows.clinic);
+        $('#sl_update_aptype').select2('val', data.rows.type);
         $('#txt_update_diag_code').val(data.rows.diag);
         $('#txt_update_diag_name').val(data.rows.diag_name);
     };
@@ -474,8 +368,8 @@ head.ready(function(){
     {
         $('#txt_update_date').val('');
         $('#txt_update_time').val('');
-        $('#sl_update_clinic').val('');
-        $('#sl_update_aptype').val('');
+        $('#sl_update_clinic').select2('val', '');
+        $('#sl_update_aptype').select2('val', '');
         $('#txt_update_diag_code').val('');
         $('#txt_update_diag_name').val('');
     };
@@ -493,8 +387,8 @@ head.ready(function(){
         data.id = $('#txt_update_id').val();
         data.date = $('#txt_update_date').val();
         data.time = $('#txt_update_time').val();
-        data.clinic = $('#sl_update_clinic').val();
-        data.type = $('#sl_update_aptype').val();
+        data.clinic = $('#sl_update_clinic').select2('val');
+        data.type = $('#sl_update_aptype').select2('val');
         data.diag = $('#txt_update_diag_code').val();
 
         if(!data.id)
@@ -535,55 +429,22 @@ head.ready(function(){
         }
     });
 
-    //search diag
-//    $('#txt_update_diag_code').typeahead({
-//        ajax: {
-//            url: site_url + 'basic/search_icd_ajax',
-//            timeout: 500,
-//            displayField: 'name',
-//            triggerLength: 3,
-//            preDispatch: function(query){
-//                return {
-//                    query: query,
-//                    csrf_token: csrf_token
-//                }
-//            },
-//
-//            preProcess: function(data){
-//                if(data.success){
-//                    return data.rows;
-//                }else{
-//                    return false;
-//                }
-//            }
-//        },
-//        updater: function(data){
-//            var d = data.split('#');
-//            var code = d[0],
-//                name = d[1];
-//            //alert(code);
-//            $('#txt_update_diag_code').val(code);
-//            $('#txt_update_diag_name').val(name);
-//
-//            return code;
-//        }
-//    });
 
     //set visit
     $(document).on('click', 'a[data-name="btn_set_visit"]', function(){
-        var id = $(this).attr('data-id');
+        var id = $(this).data('id');
         //set detail
 
     });
 
     //show set service
     $(document).on('click', 'a[data-name="btn_set_visit"]', function(){
-        var id = $(this).attr('data-id'),
-            fullname = $(this).attr('data-fullname'),
-            hn = $(this).attr('data-hn'),
-            clinic = $(this).attr('data-clinic'),
-            date_serv = $(this).attr('data-apdate'),
-            status = $(this).attr('data-status');
+        var id          = $(this).data('id'),
+            fullname    = $(this).data('fullname'),
+            hn          = $(this).data('hn'),
+            clinic      = $(this).data('clinic'),
+            date_serv   = $(this).data('apdate'),
+            status      = $(this).data('status');
 
         if(status == '1')
         {
@@ -597,45 +458,11 @@ head.ready(function(){
             $('#txt_serv_appoint_id').val(id);
             $('#txt_serv_hn').val(hn);
             $('#txt_serv_fullname').val(fullname);
-            $('#sl_serv_clinic').val(clinic);
+            $('#sl_serv_clinic').select2('val', clinic);
 
             appoint.modal.show_register_service();
         }
     });
-
-
-//    $('#txt_serv_insc_hosp_main_name').typeahead({
-//        ajax: {
-//            url: site_url + 'basic/search_hospital_ajax',
-//            timeout: 500,
-//            displayField: 'fullname',
-//            triggerLength: 3,
-//            preDispatch: function(query){
-//                return {
-//                    query: query,
-//                    csrf_token: csrf_token
-//                }
-//            },
-//
-//            preProcess: function(data){
-//                if(data.success){
-//                    return data.rows;
-//                }else{
-//                    return false;
-//                }
-//            }
-//        },
-//        updater: function(data){
-//            var d = data.split('#');
-//            var name = d[0],
-//                code = d[1];
-//
-//            $('#txt_serv_insc_hosp_main_code').val(code);
-//            $('#txt_serv_insc_hosp_main_name').val(name);
-//
-//            return name;
-//        }
-//    });
 
     $('#txt_serv_insc_hosp_sub_name').bind('keyup', function(e) {
         //alert(e.keyCode);
@@ -719,13 +546,13 @@ head.ready(function(){
 
         data.date_serv          = $('#txt_serv_date').val();
         data.time_serv          = $('#txt_serv_time').val();
-        data.clinic          = $('#sl_serv_clinic').val();
-        data.doctor_room        = $('#sl_serv_doctor_room').val();
-        data.patient_type             = $('#sl_serv_pttype').val();
-        data.location           = $('#sl_serv_location').val();
-        data.type_in             = $('#sl_serv_typein').val();
-        data.service_place      = $('#sl_serv_service_place').val();
-        data.insc_id               = $('#sl_serv_insc').val();
+        data.clinic             = $('#sl_serv_clinic').select2('val');
+        data.doctor_room        = $('#sl_serv_doctor_room').select2('val');
+        data.patient_type       = $('#sl_serv_pttype').select2('val');
+        data.location           = $('#sl_serv_location').select2('val');
+        data.type_in            = $('#sl_serv_typein').select2('val');
+        data.service_place      = $('#sl_serv_service_place').select2('val');
+        data.insc_id            = $('#sl_serv_insc').select2('avl');
         data.insc_code          = $('#txt_serv_insc_code').val();
         data.insc_start_date    = $('#txt_serv_insc_start_date').val();
         data.insc_expire_date   = $('#txt_serv_insc_expire_date').val();

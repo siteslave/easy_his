@@ -59,21 +59,21 @@ head.ready(function() {
         items.hn = $('#txt_surveil_hn').val();
         items.vn = $('#txt_surveil_vn').val();
 
-        items.syndrome = $('#sl_surveil_syndrome').val();
+        items.syndrome = $('#sl_surveil_syndrome').select2('val');
         items.diagcode = $('#txt_surveil_diag_code').val();
-        items.code506 = $('#sl_surveil_506').val();
+        items.code506 = $('#sl_surveil_506').select2('val');
         items.illdate = $('#txt_surveil_illdate').val();
         items.illhouse = $('#txt_surveil_address').val();
         items.illvillage = $('#txt_surveil_moo').val();
-        items.illtambon = $('#sl_surveil_tambon').val();
-        items.illampur = $('#sl_surveil_ampur').val();
-        items.illchangwat = $('#sl_surveil_province').val();
+        items.illtambon = $('#sl_surveil_tambon').select2('val');
+        items.illampur = $('#sl_surveil_ampur').select2('val');
+        items.illchangwat = $('#sl_surveil_province').select2('val');
         items.latitude = $('#txt_surveil_latitude').val();
         items.longitude = $('#txt_surveil_longitude').val();
-        items.ptstatus = $('#sl_surveil_ptstatus').val();
+        items.ptstatus = $('#sl_surveil_ptstatus').select2('val');
         items.date_death = $('#txt_surveil_date_death').val();
-        items.complication = $('#sl_surveil_complication').val();
-        items.organism = $('#sl_surveil_organism').val();
+        items.complication = $('#sl_surveil_complication').select2('val');
+        items.organism = $('#sl_surveil_organism').select2('val');
 
         items.school_class = $('#txt_surveil_school_class').val();
         items.school_name = $('#txt_surveil_school_name').val();

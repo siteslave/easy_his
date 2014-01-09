@@ -168,18 +168,21 @@ head.ready(function(){
         {
             $('#mdl_register').modal({
                 backdrop: 'static'
-            }).css({
-                    width: 780,
-                    'margin-left': function() {
-                        return -($(this).width() / 2);
-                    }
-                });
+            });
+        },
+        hide_register: function()
+        {
+            $('#mdl_register').modal('hide');
         },
         show_labor: function()
         {
             $('#mdl_labor').modal({
                 backdrop: 'static'
             });
+        },
+        hide_labor: function()
+        {
+            $('#mdl_labor').modal('hide');
         },
         show_ppcare: function(hn, vn)
         {
@@ -217,25 +220,25 @@ head.ready(function(){
                         '<td>' + app.clear_null(mother_hn) +'</td>' +
                         '<td>' + app.clear_null(mother_fullname) +'</td>' +
                         '<td>' +
-                        '<div class="btn-group">' +
+                        '<div class="btn-group dropup">' +
                         '<button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">' +
-                        '<i class="icon-th-list"></i> <span class="caret"></span>' +
+                        '<i class="fa fa-th-list"></i> <span class="caret"></span>' +
                         '</button>' +
-                        '<ul class="dropdown-menu">' +
+                        '<ul class="dropdown-menu pull-right">' +
                         '<li>' +
                         '<a href="javascript:void(0);" data-fullname="'+ v.first_name + ' ' + v.last_name +'" ' +
                         'data-birthdate="'+app.mongo_to_thai_date(v.birthdate)+'" data-age="'+ v.age +'" data-hn="'+ v.hn+'" ' +
                         'data-anc_code="'+ v.anc_code+'" data-name="labor" data-hn="' + v.hn + '" ' +
                         'data-cid="' + v.cid +'" data-gravida="'+ v.gravida +'" data-mother_hn="'+ mother_hn +'" ' +
-                        'title="ข้อมูลการคลอด"><i class="icon-check"></i> ข้อมูลการคลอด</a>' +
+                        'title="ข้อมูลการคลอด"><i class="fa fa-check-circle"></i> ข้อมูลการคลอด</a>' +
                         '</li>' +
                         '<li>' +
                         '<a href="javascript:void(0);" data-hn="'+ v.hn+'" ' +
                         'data-name="ppcare" data-hn="' + v.hn + '" ' +
-                        'title="ข้อมูลหลังคลอด"><i class="icon-time"></i> ดูแลหลังคลอด</a>' +
+                        'title="ข้อมูลหลังคลอด"><i class="fa fa-times-circle"></i> ดูแลหลังคลอด</a>' +
                         '</li>' +'<li>' +
                         '<a href="javascript:void(0);" data-name="btn_babies_nutrition" data-hn="' + v.hn + '" ' +
-                        'title="โภชนาการและพัฒนาการ"><i class="icon-bar-chart"></i> พัฒนาการ</a>' +
+                        'title="โภชนาการและพัฒนาการ"><i class="fa fa-bar-chart-o"></i> พัฒนาการ</a>' +
                         '</li>' +
                         '</ul>' +
                         '</div>' +
@@ -265,7 +268,8 @@ head.ready(function(){
         $('#tbl_list > tbody').empty();
 
         $('#main_paging').fadeOut('slow');
-        var village_id = $('#sl_village').val();
+        var village_id = $('#sl_village').select2('val');
+
         if(!village_id)
         {
             babies.get_list();
@@ -324,60 +328,7 @@ head.ready(function(){
                         });
 
                     },
-                    onFormat: function(type){
-                        switch (type) {
-
-                            case 'block':
-
-                                if (!this.active)
-                                    return '<li class="disabled"><a href="">' + this.value + '</a></li>';
-                                else if (this.value != this.page)
-                                    return '<li><a href="#' + this.value + '">' + this.value + '</a></li>';
-                                return '<li class="active"><a href="#">' + this.value + '</a></li>';
-
-                            case 'right':
-                            case 'left':
-
-                                if (!this.active) {
-                                    return "";
-                                }
-                                return '<li><a href="#' + this.value + '">' + this.value + '</a></li>';
-
-                            case 'next':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&raquo;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&raquo;</a></li>';
-
-                            case 'prev':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&laquo;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&laquo;</a></li>';
-
-                            case 'first':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&lt;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&lt;</a></li>';
-
-                            case 'last':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&gt;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&gt;</a></li>';
-
-                            case 'fill':
-                                if (this.active) {
-                                    return '<li class="disabled"><a href="#">...</a></li>';
-                                }
-                        }
-                        return ""; // return nothing for missing branches
-                    }
+                    onFormat: app.paging_format
                 });
             }
         });
@@ -392,77 +343,13 @@ head.ready(function(){
         babies.get_list();
     });
 
-    babies.set_search_person_result = function(data)
-    {
-        if(!data)
-        {
-            $('#tbl_search_person_result > tbody').append(
-                '<tr><td colspan="7">ไม่พบรายการ</td></tr>');
-        }
-        else
-        {
-            _.each(data.rows, function(v){
-                $('#tbl_search_person_result > tbody').append(
-                    '<tr>' +
-                        '<td>'+ v.hn +'</td>' +
-                        '<td>'+ v.cid +'</td>' +
-                        '<td>'+ v.first_name + ' ' + v.last_name +'</td>' +
-                        '<td>'+ app.mongo_to_thai_date(v.birthdate) +'</td>' +
-                        '<td>'+ v.age +'</td>' +
-                        '<td>'+ v.sex +'</td>' +
-                        '<td><a href="#" class="btn btn-default" data-hn="'+ v.hn + '" data-sex="'+ v.sex +'" ' +
-                        'data-name="btn_selected_person" data-typearea="'+ v.typearea +'">' +
-                        '<i class="icon-ok"></i></a></td>' +
-                        '</tr>');
-            });
-        }
-    };
+    $('#btn_do_register_babies').on('click', function(){
 
-    //search person
-    $('#btn_do_search_person').click(function(){
-        var query = $('#txt_search_query').val(),
-            filter = $('#txt_search_person_filter').val();
+        var person = $('#txt_search_query').select2('data');
 
-        if(!query)
-        {
-            app.alert('กรุณาระบุคำค้นหา โดยระบุชื่อ-สกุล หรือ HN หรือ เลขบัตรประชาชน');
-        }
-        else
-        {
-            //do search
-            $('#tbl_search_person_result > tbody').empty();
+        var hn = person.hn;
 
-            babies.ajax.search_person(query, filter, function(err, data){
-
-                if(err)
-                {
-                    app.alert(err);
-                    $('#tbl_search_person_result > tbody').append(
-                        '<tr><td colspan="7">ไม่พบรายการ</td></tr>');
-                }
-                else
-                {
-                    babies.set_search_person_result(data);
-                }
-            });
-        }
-    });
-    //set filter
-    $('a[data-name="btn_search_person_fillter"]').click(function(){
-        var filter = $(this).attr('data-value');
-
-        $('#txt_search_person_filter').val(filter);
-    });
-
-    $(document).on('click', 'a[data-name="btn_selected_person"]', function(){
-
-        var hn = $(this).data('hn');
-
-        if( ! _.indexOf(['1', '3'], $(this).data('typearea')) || !$(this).data('typearea'))
-        {
-            app.alert('บุคคลนี้ไม่ใช่บุคคลในเขตรับผิดชอบ');
-        }
-        else
+        if(_.contains(['1', '3'], person.typearea))
         {
             if(confirm('คุณต้องการลงทะเบียนข้อมูลนี้ใช่หรือไม่?'))
             {
@@ -480,6 +367,10 @@ head.ready(function(){
                     }
                 });
             }
+        }
+        else
+        {
+            app.alert('บุคคลนี้ไม่ใช่บุคคลในเขตรับผิดชอบ [T=' + person.typearea + ']');
         }
     });
 
@@ -503,51 +394,47 @@ head.ready(function(){
             $('#txt_labor_bdate').val(data.rows.bdate);
             $('#txt_labor_bresult_icdcode').val(data.rows.bresult_code);
             $('#txt_labor_bresult_icdname').val(data.rows.bresult_name);
-            $('#sl_labor_bplace').val(data.rows.bplace);
+            $('#sl_labor_bplace').select2('val', data.rows.bplace);
             $('#txt_labor_hospcode').val(data.rows.bhosp);
             $('#txt_labor_hospname').val(data.rows.bhosp_name);
-            $('#sl_labor_btype').val(data.rows.btype);
-            $('#sl_labor_bdoctor').val(data.rows.bdoctor);
+            $('#sl_labor_btype').select2('val', data.rows.btype);
+            $('#sl_labor_bdoctor').select2('val', data.rows.bdoctor);
             $('#txt_labor_gravida').val(data.rows.gravida);
-            $('#sl_labor_gravida').val(data.rows.gravida);
+            $('#sl_labor_gravida').select2('val', data.rows.gravida);
             $('#txt_labor_btime').val(data.rows.btime);
         },
-        set_mother_detail: function(data)
-        {
-            $('#txt_labor_mother_hn').val(data.hn);
-            $('#txt_labor_mother_hn').val(data.first_name + ' ' + data.last_name);
-        },
+
         clear_form: function()
         {
             $('#txt_labor_bdate').val('');
             $('#txt_labor_bresult_icdcode').val('');
             $('#txt_labor_bresult_icdname').val('');
-            app.set_first_selected($('#sl_labor_bplace'));
+            $('#sl_labor_bplace').select2('val', '');
             $('#txt_labor_hospcode').val('');
             $('#txt_labor_hospname').val('');
-            app.set_first_selected($('#sl_labor_btype'));
-            app.set_first_selected($('#sl_labor_bdoctor'));
+            $('#sl_labor_btype').select2('val', '');
+            $('#sl_labor_bdoctor').select2('val', '');
             $('#txt_labor_gravida').val('');
             $('#txt_labor_btime').val('');
             $('#txt_labor_mother_hn').val('');
             $('#txt_labor_mother_name').val('');
-            app.set_first_selected($('#sl_labor_birthno'));
+            $('#sl_labor_birthno').select2('val', '');
             $('#txt_labor_bweight').val('');
-            app.set_first_selected($('#sl_labor_asphyxia'));
-            app.set_first_selected($('#sl_labor_vitk'));
-            app.set_first_selected($('#sl_labor_tsh'));
+            $('#sl_labor_asphyxia').select2('val', '');
+            $('#sl_labor_vitk').select2('val', '');
+            $('#sl_labor_tsh').select2('val', '');
             $('#txt_labor_tshresult').val('');
         }
     };
     //labor detail
     $(document).on('click', 'a[data-name="labor"]', function(e){
-        var hn = $(this).data('hn'),
-            fullname = $(this).data('fullname'),
-            birthdate = $(this).data('birthdate'),
-            age = $(this).data('age'),
-            cid = $(this).data('cid'),
-            gravida = $(this).data('gravida'),
-            mother_hn = $(this).data('mother_hn');
+        var hn          = $(this).data('hn'),
+            fullname    = $(this).data('fullname'),
+            birthdate   = $(this).data('birthdate'),
+            age         = $(this).data('age'),
+            cid         = $(this).data('cid'),
+            gravida     = $(this).data('gravida'),
+            mother_hn   = $(this).data('mother_hn');
 
         $('#txt_labor_hn').val(hn);
         $('#txt_labor_cid').val(cid);
@@ -574,8 +461,8 @@ head.ready(function(){
         babies.ajax.get_mother_detail(hn, function(err, data){
             if(!err)
             {
-                $('#txt_labor_mother_hn').val(data.rows.hn);
-                $('#txt_labor_mother_name').val(data.rows.first_name + ' ' + data.rows.last_name);
+                var fullname = data.rows.first_name + ' ' + data.rows.last_name;
+                $('#txt_labor_mother_name').select2('data', { hn: data.rows.hn, fullname: fullname });
             }
         });
     };
@@ -613,53 +500,110 @@ head.ready(function(){
 
     babies.set_babies_detail = function(data)
     {
-        $('#sl_labor_birthno').val(data.rows.birthno);
+        $('#sl_labor_birthno').select2('val', data.rows.birthno);
         $('#txt_labor_bweight').val(data.rows.bweight);
-        $('#sl_labor_asphyxia').val(data.rows.asphyxia);
-        $('#sl_labor_vitk').val(data.rows.vitk);
-        $('#sl_labor_tsh').val(data.rows.tsh);
+        $('#sl_labor_asphyxia').select2('val', data.rows.asphyxia);
+        $('#sl_labor_vitk').select2('val', data.rows.vitk);
+        $('#sl_labor_tsh').select2('val', data.rows.tsh);
         $('#txt_labor_tshresult').val(data.rows.tshresult);
     };
 
-    $('#txt_labor_mother_name').typeahead({
+    $('#txt_labor_mother_name').select2({
+        placeholder: 'HN, เลขบัตรประชาชน, ชื่อ-สกุล',
+        minimumInputLength: 2,
+        allowClear: true,
         ajax: {
-            url: site_url + 'person/search_person_ajax',
-            timeout: 500,
-            displayField: 'name',
-            triggerLength: 3,
-            preDispatch: function(query){
+            url: site_url + "/person/search_person_all_ajax",
+            dataType: 'json',
+            type: 'POST',
+            quietMillis: 100,
+            data: function (term, page) {
                 return {
-                    query: query,
-                    csrf_token: csrf_token
-                }
+                    query: term,
+                    csrf_token: csrf_token,
+                    start: page,
+                    stop: 10
+                };
             },
+            results: function (data, page)
+            {
+                var more = (page * 10) < data.total; // whether or not there are more results available
 
-            preProcess: function(data){
-                if(data.success){
-                    return data.rows;
-                }else{
-                    return false;
-                }
+                // notice we return the value of more so Select2 knows if more results can be loaded
+                return {results: data.rows, more: more};
+
+                //return { results: data.rows, more: (data.rows && data.rows.length == 10 ? true : false) };
             }
         },
-        updater: function(data){
-            var d = data.split('#');
-            var hn = d[0],
-                name = d[1];
 
-            $('#txt_labor_mother_hn').val(hn);
-            $('#txt_labor_mother_name').val(name);
+        id: function(data) { return { id: data.hn } },
 
-            babies.get_gravida(hn);
-
-            return name;
+        formatResult: function(data) {
+            return '[' + data.hn + '] ' + data.fullname;
+        },
+        formatSelection: function(data) {
+            return '[' + data.hn + '] ' + data.fullname;
+        },
+        initSelection: function(el, cb) {
+            //var eltxt = $(el).val();
+            //cb({'term': eltxt });
         }
     });
 
+    $('#txt_query_babies').select2({
+        placeholder: 'HN, เลขบัตรประชาชน, ชื่อ-สกุล',
+        minimumInputLength: 2,
+        allowClear: true,
+        ajax: {
+            url: site_url + "/person/search_person_all_ajax",
+            dataType: 'json',
+            type: 'POST',
+            quietMillis: 100,
+            data: function (term, page) {
+                return {
+                    query: term,
+                    csrf_token: csrf_token,
+                    start: page,
+                    stop: 10
+                };
+            },
+            results: function (data, page)
+            {
+                var more = (page * 10) < data.total; // whether or not there are more results available
+
+                // notice we return the value of more so Select2 knows if more results can be loaded
+                return {results: data.rows, more: more};
+
+                //return { results: data.rows, more: (data.rows && data.rows.length == 10 ? true : false) };
+            }
+        },
+
+        id: function(data) { return { id: data.hn } },
+
+        formatResult: function(data) {
+            return '[' + data.hn + '] ' + data.fullname;
+        },
+        formatSelection: function(data) {
+            return '[' + data.hn + '] ' + data.fullname;
+        },
+        initSelection: function(el, cb) {
+            //var eltxt = $(el).val();
+            //cb({'term': eltxt });
+        }
+    });
+
+    $('#txt_labor_mother_name').on('click', function() {
+        var person = $(this).select2('data');
+        babies.get_gravida(person.hn);
+    });
+
+
     $('#sl_labor_gravida').on('change', function(){
         var data = {};
+        var mother = $('#txt_labor_mother_name').select2('data');
+
         data.hn_baby = $('#txt_labor_hn').val();
-        data.hn_mother = $('#txt_labor_mother_hn').val();
+        data.hn_mother = mother.hn;
         data.gravida = $(this).val();
 
         babies.labor.get_detail(data.hn_mother, data.gravida);
@@ -669,9 +613,10 @@ head.ready(function(){
     //save mother data
     $('#btn_labor_do_mother_save').click(function(){
         var data = {};
+        var mother = $('#txt_labor_mother_name').select2('data');
 
         data.baby_hn = $('#txt_labor_hn').val();
-        data.mother_hn = $('#txt_labor_mother_hn').val();
+        data.mother_hn = mother === null ? '' : mother.hn;
         data.gravida = $('#sl_labor_gravida').val();
 
         if(!data.baby_hn)
@@ -707,13 +652,15 @@ head.ready(function(){
      */
     $('#btn_labor_save_babies').click(function(){
         var data = {};
+        var mother = $('#txt_labor_mother_name').select2('data');
+
         data.birthno = $('#sl_labor_birthno').val();
         data.bweight = $('#txt_labor_bweight').val();
         data.asphyxia = $('#sl_labor_asphyxia').val();
         data.vitk = $('#sl_labor_vitk').val();
         data.tsh = $('#sl_labor_tsh').val();
         data.tshresult = $('#txt_labor_tshresult').val();
-        data.mother_hn = $('#txt_labor_mother_hn').val();
+        data.mother_hn = mother === null ? '' : mother.hn;
         data.gravida = $('#sl_labor_gravida').val();
 
         data.hn = $('#txt_labor_hn').val();
@@ -721,7 +668,8 @@ head.ready(function(){
         if(!data.hn)
         {
             app.alert('กรุณาระบุ HN ของเด็ก');
-        }else if(!data.mother_hn)
+        }
+        else if(!data.mother_hn)
         {
             app.alert('กรุณาระบุข้อมูลมารดา');
         }
@@ -763,6 +711,7 @@ head.ready(function(){
                else
                {
                    app.alert('การบันทึกข้อมูลเสร็จเรียบร้อยแล้ว');
+                   //babies.modal.hide_labor();
                }
             });
         }
@@ -790,8 +739,8 @@ head.ready(function(){
      * Search babies
      */
     $('#btn_do_search_babies').on('click', function(e){
-        var hn = $('#txt_query_babies').val();
-        if(!hn)
+        var query = $('#txt_query_babies').select2('data');
+        if(!query.hn)
         {
             app.alert('กรุณาระบุ HN เพื่อค้นหา');
         }
@@ -799,7 +748,7 @@ head.ready(function(){
         {
             $('#main_paging').fadeOut('slow');
             $('#tbl_list > tbody').empty();
-            babies.ajax.search(hn, function(err, data){
+            babies.ajax.search(query.hn, function(err, data){
                 if(err)
                 {
                     app.alert(err);
@@ -815,6 +764,48 @@ head.ready(function(){
         }
 
         e.preventDefault();
+    });
+
+    $('#txt_search_query').select2({
+        placeholder: 'HN, เลขบัตรประชาชน, ชื่อ-สกุล',
+        minimumInputLength: 2,
+        allowClear: true,
+        ajax: {
+            url: site_url + "/person/search_person_all_ajax",
+            dataType: 'json',
+            type: 'POST',
+            quietMillis: 100,
+            data: function (term, page) {
+                return {
+                    query: term,
+                    csrf_token: csrf_token,
+                    start: page,
+                    stop: 10
+                };
+            },
+            results: function (data, page)
+            {
+                var more = (page * 10) < data.total; // whether or not there are more results available
+
+                // notice we return the value of more so Select2 knows if more results can be loaded
+                return {results: data.rows, more: more};
+
+                //return { results: data.rows, more: (data.rows && data.rows.length == 10 ? true : false) };
+            }
+        },
+
+        id: function(data) { return { id: data.hn } },
+
+        formatResult: function(data) {
+            return '[' + data.hn + '] ' + data.fullname;
+        },
+        formatSelection: function(data) {
+            return '[' + data.hn + '] ' + data.fullname;
+        },
+        initSelection: function(el, cb) {
+            //var eltxt = $(el).val();
+            //cb({'term': eltxt });
+        }
     });
 
     //Load list on page loaded.

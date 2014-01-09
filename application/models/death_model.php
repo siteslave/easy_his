@@ -107,4 +107,12 @@ class Death_model extends CI_Model
         return count($rs) > 0 ? $rs[0] : NULL;
     }
 
+    public function remove($hn)
+    {
+        $this->mongo_db->where(array('hn' => (string) $hn))
+            ->delete('death');
+
+        return true;
+    }
+
 }

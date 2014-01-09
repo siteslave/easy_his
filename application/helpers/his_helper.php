@@ -29,7 +29,7 @@ if( ! function_exists('render_json')){
 
 if(!function_exists('to_string_date')){
     function to_string_date($date){
-        if(empty($date)){
+        if(empty($date) || strlen($date) < 8){
             return null;
         }else{
             $d = explode('/', $date);

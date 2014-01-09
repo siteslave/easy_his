@@ -65,6 +65,12 @@ class Services extends CI_Controller
     }
     public function entries($vn = '')
     {
+
+        $this->load->model('Diabetes_model', 'dm');
+
+        $this->dm->clinic_code = '01';
+        $this->dm->owner_id = $this->owner_id;
+
         if(empty($vn) || !isset($vn))
         {
             show_error('No vn found.', 404);
@@ -94,6 +100,8 @@ class Services extends CI_Controller
 
             $lab_groups                 = $this->basic->get_lab_groups_list();
 
+            $data['is_dm']              = $this->dm->is_registered($hn);
+
             $data['drinkings']  = $drinkings;
             $data['smokings']   = $smokings;
             $data['diag_types'] = $diag_types;
@@ -106,6 +114,7 @@ class Services extends CI_Controller
             $data['vn']         = $vn;
             $data['sex']        = $sex;
             $data['lab_groups'] = $lab_groups;
+
 
             $data['disabilities_types'] = $this->basic->get_disabilities_list();
             $data['icf_qualifiers']     = $this->basic->get_icf_qualifiers();

@@ -2,10 +2,10 @@
     <li><a href="<?php echo site_url(); ?>">หน้าหลัก</a></li>
     <li class="active">ทะเบียนผู้ป่วยเบาหวาน (DM)</li>
 </ul>
-<div class="navbar">
+<div class="navbar navbar-default">
     <form action="#" class="navbar-form">
         <label for="sl_village">หมู่บ้าน</label>
-        <select id="sl_village" style="width: 255px;">
+        <select id="sl_village" style="width: 255px;" class="form-control">
             <option value="">-- เลือกหมู่บ้าน (ทั้งหมด) --</option>
             <?php
             foreach ($villages as $r){
@@ -13,14 +13,27 @@
             }
             ?>
         </select>
-        <button type="button" class="btn btn-primary" id="btn_filter_by_village"><i class="icon-search"></i></button> |
-        <input type="text" style="width: 250px;" id="txt_query" placeholder="พิมพ์ HN หรือ เลขบัตรประชาชน"
-               title="พิมพ์ HN หรือ เลขบัตรประชาชน" rel="tooltip" autocomplete="off" />
-        <button type="button" id="btn_search" class="btn btn-primary"><i class="icon-search"></i></button>
+        <button type="button" class="btn btn-primary" id="btn_filter_by_village">
+            <i class="fa fa-search"></i>
+        </button> |
+        <input type="hidden" style="width: 250px;" id="txt_query" />
+
+        <button type="button" id="btn_search" class="btn btn-primary">
+            <i class="fa fa-search"></i>
+        </button>
         <div class="btn-group pull-right">
-            <button type="button" id="btn_refresh" class="btn btn-default" title="แสดงข้อมูลทั้งหมด (Refresh)" rel="tooltip"><i class="icon-refresh"></i></button>
-            <button type="button" id="btn_register" class="btn btn-success" title="ลงทะเบียนผู้ป่วยรายใหม่ (Register)" rel="tooltip"><i class="icon-plus-sign"></i></button>
-            <button type="button" id="btn_print" class="btn btn-default" title="พิมพ์รายชื่อผู้ป่วยทั้งหมด (Print)" rel="tooltip"><i class="icon-print"></i></button>
+            <button type="button" id="btn_refresh" class="btn btn-default"
+                    title="แสดงข้อมูลทั้งหมด (Refresh)" rel="tooltip">
+                <i class="fa fa-refresh"></i>
+            </button>
+            <button type="button" id="btn_register" class="btn btn-success"
+                    title="ลงทะเบียนผู้ป่วยรายใหม่ (Register)" rel="tooltip">
+                <i class="fa fa-plus-circle"></i>
+            </button>
+            <button type="button" id="btn_print" class="btn btn-default"
+                    title="พิมพ์รายชื่อผู้ป่วยทั้งหมด (Print)" rel="tooltip">
+                <i class="fa fa-print"></i>
+            </button>
         </div>
     </form>
 
@@ -52,74 +65,74 @@
 
 <!-- Module Register Form -->
 <div class="modal fade" id="mdlNewRegister">
-    <div class="modal-dialog" style="width: 960px; left: 35%;">
+    <div class="modal-dialog" style="width: 960px;">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h4 class="modal-title">ลงทะเบียนผู้ป่วยเบาหวาน (DM)</h4>
+                <h4 class="modal-title"><i class="fa fa-plus-circle"></i> ลงทะเบียนผู้ป่วยเบาหวาน (DM)</h4>
             </div>
             <div class="modal-body">
                 <form class="form-inline well well-small">
                     <label for="txt_search_person">HN</label>
-                    <input type="text" id="txt_search_person" style="width: 250px;" placeholder="เลขบัตรประชาชน หรือ HN"
-                           rel="tooltip" title="เลขบัตรประชาชน หรือ HN " data-placement="right">
-                    <button type="button" class="btn btn-primary" id="btn_search_person"><i class="icon-search icon-white"></i></button>
-                    <input type="hidden" id="txt_isupdate" value="0" />
+                    <input type="hidden" id="txt_search_person" style="width: 250px;">
+                    <input type="hidden" id="txt_isupdate" value="" />
+                    <button type="button" class="btn btn-primary" id="btn_search_person">
+                        <i class="fa fa-search"></i></button>
                 </form>
                 <form action="#" class="form-inline">
                     <div class="row">
                         <div class="col-lg-2">
                             <label class="control-label" for="tboHN">HN</label>
-                            <input type="text" id="tboHN" placeholder="HN" disabled />
+                            <input type="text" id="tboHN" class="form-control" placeholder="HN" disabled />
                         </div>
                         <div class="col-lg-3">
                             <label class="control-label" for="tboCid">เลขบัตรประชาชน</label>
-                            <input type="text" id="tboCid" placeholder="เลขบัตรประชาชน" disabled />
+                            <input type="text" id="tboCid" class="form-control" placeholder="เลขบัตรประชาชน" disabled />
                         </div>
                         <div class="col-lg-3">
                             <label class="control-label" for="tboFname">ชื่อ</label>
-                            <input type="text" id="tboFname" placeholder="ชื่อผู้ป่วย" disabled />
+                            <input type="text" id="tboFname" class="form-control" placeholder="ชื่อผู้ป่วย" disabled />
                         </div>
                         <div class="col-lg-3">
                             <label class="control-label" for="tboLname">นามสกุล</label>
-                            <input type="text" id="tboLname" placeholder="นามสกุล" disabled />
+                            <input type="text" id="tboLname" class="form-control" placeholder="นามสกุล" disabled />
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-lg-2">
                             <label class="control-label" for="tboAge">อายุ</label>
-                            <input type="text" id="tboAge" placeholder="อายุ" disabled />
+                            <input type="text" id="tboAge" class="form-control" placeholder="อายุ" disabled />
                         </div>
                         <div class="col-lg-2">
                             <label class="control-label" for="slSex">เพศ</label>
-                            <select id="slSex" disabled style="background-color: white">
+                            <select id="slSex" disabled style="background-color: white" class="form-control">
                                 <option value="1">ชาย</option>
                                 <option value="2">หญิง</option>
                             </select>
                         </div>
                         <div class="col-lg-3">
                             <label class="control-label" for="tboRegCenterNumber">เลขทะเบียนกลาง</label>
-                            <input type="text" id="tboRegCenterNumber" placeholder="เลขทะเบียนกลาง" disabled />
+                            <input type="text" class="form-control" id="tboRegCenterNumber" placeholder="เลขทะเบียนกลาง" disabled />
                         </div>
                         <div class="col-lg-3">
                             <label class="control-label" for="tboRegHosNumber">เลขทะเบียน รพ.</label>
-                            <input type="text" id="tboRegHosNumber" placeholder="เลขทะเบียน รพ." />
+                            <input type="text" class="form-control" id="tboRegHosNumber" placeholder="เลขทะเบียน รพ." />
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-lg-2">
                             <label class="control-label" for="tboYear">ปีที่เริ่มเป็น</label>
-                            <input type="text" id="tboYear" placeholder="พ.ศ. เช่น 2556" data-type="year" />
+                            <input type="text" id="tboYear" class="form-control" placeholder="พ.ศ. เช่น 2556" data-type="year" />
                         </div>
                         <div class="col-lg-3">
                             <label class="control-label" for="dtpRegisDate">วันที่ขึ้นทะเบียน</label>
-                            <input value="" type="text" id="dtpRegisDate" data-type="date" />
+                            <input value="" type="text" class="form-control" id="dtpRegisDate" data-type="date" />
                         </div>
                         <div class="col-lg-3">
                             <div class="control-group">
                                 <label class="control-label" for="cboDiseaseType">ประเภทโรค</label>
                                 <div class="controls">
-                                    <select id="cboDiseaseType">
+                                    <select id="cboDiseaseType" class="form-control">
                                         <option value="">----------</option>
                                         <?php
                                         foreach($diabetes_types as $dt)
@@ -131,7 +144,7 @@
                         </div>
                         <div class="col-lg-4">
                             <label class="control-label" for="cboDoctor">แพทย์ผู้ดูแล</label>
-                            <select id="cboDoctor">
+                            <select id="cboDoctor" class="form-control">
                                 <option value="">----------------</option>
                                 <?php
                                 foreach($providers as $prov) {
@@ -144,7 +157,7 @@
                     <div class="row">
                         <div class="col-lg-3">
                             <label for="sl_member_status">สถานะปัจจุบัน</label>
-                            <select id="sl_member_status">
+                            <select id="sl_member_status" class="form-control">
                                 <option value="1">ติดตามการรักษา</option>
                                 <option value="1">ส่งต่อรับการรักษาที่อื่น</option>
                                 <option value="1">เสียชีวิต</option>
@@ -152,7 +165,8 @@
                         </div>
                         <div class="col-lg-2">
                             <label for="txt_discharge_date">วันจำหน่าย</label>
-                            <input type="text" id="txt_discharge_date" data-type="date" placeholder="dd/mm/yyyy"/>
+                            <input type="text" id="txt_discharge_date" class="form-control"
+                                   data-type="date" placeholder="dd/mm/yyyy"/>
                         </div>
                     </div>
                     <br>
@@ -186,8 +200,12 @@
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-success" id="btn_dm_do_register"><i class="icon-save"></i><span id="lblRegis" title="add"> บันทึกข้อมูล</span></button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="icon-off"></i> ปิดหน้าต่าง</button>
+                <button type="button" class="btn btn-success" id="btn_dm_do_register">
+                    <i class="fa fa-save"></i><span id="lblRegis" title="add"> บันทึกข้อมูล</span>
+                </button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">
+                    <i class="fa fa-save"></i> ปิดหน้าต่าง
+                </button>
             </div>
         </div>
     </div>

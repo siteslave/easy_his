@@ -328,8 +328,8 @@ class Pages extends CI_Controller {
             $data['vn'] = $vn;
             $visit = $this->service->get_visit_info($vn);
             $data['date_serv'] = from_mongo_to_thai_date($visit['date_serv']);
-            $data['hospname'] = get_owner_name(get_first_object($visit['owner_id']));
-            $data['hospcode'] = get_owner_pcucode(get_first_object($visit['owner_id']));
+            $data['owner_name'] = get_owner_name(get_first_object($visit['owner_id']));
+            $data['owner_code'] = get_owner_pcucode(get_first_object($visit['owner_id']));
             //get nutrition detail
             $items = $this->nutri->get_visit_detail($data['vn']);
 
@@ -341,6 +341,8 @@ class Pages extends CI_Controller {
             $data['childdevelop'] = $items['childdevelop'];
             $data['bottle'] = $items['bottle'];
             $data['food'] = $items['food'];
+            $data['hospcode'] = $items['hospcode'];
+            $data['hospname'] = get_hospital_name($items['hospcode']);
 
         }
 
@@ -387,10 +389,12 @@ class Pages extends CI_Controller {
         {
             $sv = $this->service->get_visit_info($vn);
             $data['date_serv'] = from_mongo_to_thai_date($sv['date_serv']);
-            $data['hospname'] = get_owner_name(get_first_object($sv['owner_id']));
-            $data['hospcode'] = get_owner_pcucode(get_first_object($sv['owner_id']));
+            $data['owner_name'] = get_owner_name(get_first_object($sv['owner_id']));
+            $data['owner_code'] = get_owner_pcucode(get_first_object($sv['owner_id']));
 
             $detail = $this->preg->postnatal_get_detail($hn, $vn);
+            $data['hospcode'] = isset($detail['postnatal'][0]['hospcode']) ? $detail['postnatal'][0]['hospcode'] : '';
+            $data['hospname'] = isset($detail['postnatal'][0]['hospcode']) ? get_hospital_name($detail['postnatal'][0]['hospcode']) : '';
             $data['gravida'] = isset($detail['gravida']) ? $detail['gravida'] : '';
             $data['ppresult'] = isset($detail['postnatal'][0]['ppresult']) ? $detail['postnatal'][0]['ppresult'] : '';
             $data['sugar'] = isset($detail['postnatal'][0]['sugar']) ? $detail['postnatal'][0]['sugar'] : '';
@@ -422,14 +426,16 @@ class Pages extends CI_Controller {
             $sv = $this->service->get_visit_info($vn);
 
             $data['date_serv'] = from_mongo_to_thai_date($sv['date_serv']);
-            $data['hospname'] = get_owner_name(get_first_object($sv['owner_id']));
-            $data['hospcode'] = get_owner_pcucode(get_first_object($sv['owner_id']));
+            $data['owner_name'] = get_owner_name(get_first_object($sv['owner_id']));
+            $data['owner_code'] = get_owner_pcucode(get_first_object($sv['owner_id']));
 
             $detail = $this->babies->get_service_detail($hn, $vn);
             $data['result'] = $detail['result'];
             $data['id'] = get_first_object($detail['_id']);
             $data['food'] = $detail['food'];
             $data['provider_id'] = get_first_object($detail['provider_id']);
+            $data['hospcode'] = $detail['hospcode'];
+            $data['hospname'] = get_hospital_name($detail['hospcode']);
         }
 
         $this->load->view('pages/babies_care_view', $data);

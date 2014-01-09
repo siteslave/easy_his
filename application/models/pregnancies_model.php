@@ -421,7 +421,17 @@ class Pregnancies_model extends CI_Model
 
         $rs = $this->mongo_db
             ->select(array('gravida', 'postnatal'))
-            ->where(array('hn' => (string) $hn, 'postnatal.vn' => (string) $vn))
+            //->where(array('hn' => (string) $hn, 'postnatal.vn' => (string) $vn))
+            ->where(array(
+                'hn' => (string) $hn,
+                'postnatal' =>
+                    array(
+                        '$elemMatch' =>
+                            array(
+                                'vn' => (string) $vn
+                            )
+                    )
+            ))
             ->limit(1)
             ->get('pregnancies');
 

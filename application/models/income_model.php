@@ -136,8 +136,8 @@ class Income_model extends CI_Model
             $obj->id = get_first_object($r['_id']);
             $obj->name = $r['name'];
             $price_qty          = $this->get_price_qty($r['_id']);
-            $obj->price         = isset($price_qty[0]['price']) ? $price_qty[0]['price'] : 0;
-            $obj->qty           = isset($price_qty[0]['qty']) ? $price_qty[0]['qty'] : 0;
+            $obj->price         = isset($price_qty->price) ? $price_qty->price : 0;
+            $obj->qty           = isset($price_qty->qty) ? $price_qty->qty : 0;
 
             $arr_result[] = $obj;
         }
@@ -161,7 +161,34 @@ class Income_model extends CI_Model
             ->limit(1)
             ->get('ref_charge_items');
 
-        return count($rs) > 0 ? $rs[0]['owners'] : NULL;
+      $obj = new stdClass();
+
+      if( count( $rs) > 0 ) {
+        if( isset($rs[0]['owners']) ) {
+          foreach( $rs[0]['owners'] as $r ) {
+
+            if( isset($r['owner_id']) ) {
+
+              $obj_owner_id = get_first_object( $r['owner_id'] );
+
+              if( $obj_owner_id == $this->owner_id ) {
+                $obj->price = isset($r['price']) ? $r['price'] : 0;
+                $obj->qty = isset($r['qty']) ? $r['qty'] : 0;
+
+                return $obj;
+                break;
+              }
+            } else {
+              return $obj;
+              break;
+            }
+          }
+        } else {
+          return $obj;
+        }
+      } else {
+        return $obj;
+      }
     }
 
 

@@ -1,8 +1,10 @@
+//
 head.ready(function() {
 
     var chronicfu = {};
 
     chronicfu.ajax = {
+
         save: function(items, cb){
             var url = 'chronicfu/save',
                 params = {
@@ -13,6 +15,7 @@ head.ready(function() {
                 err ? cb(err) : cb(null, data);
             });
         },
+
         detail: function(hn, vn, cb){
             var url = 'chronicfu/detail',
                 params = {
@@ -24,6 +27,7 @@ head.ready(function() {
                 err ? cb(err) : cb(null, data);
             });
         },
+
         remove: function(hn, vn, cb){
             var url = 'chronicfu/remove',
                 params = {
@@ -35,6 +39,7 @@ head.ready(function() {
                 err ? cb(err) : cb(null, data);
             });
         }
+
     };
 
     chronicfu.get_detail = function(hn, vn) {
@@ -51,41 +56,42 @@ head.ready(function() {
     };
 
     chronicfu.set_detail = function(v) {
-        $('#sl_cfu_eye_result_left').val(v.eye_result_left);
-        $('#sl_cfu_eye_result_right').val(v.eye_result_right);
+        $('#sl_cfu_eye_result_left').select2('val', v.eye_result_left);
+        $('#sl_cfu_eye_result_right').select2('val', v.eye_result_right);
         $('#txt_cfu_eye_va_left').val(v.eye_va_left);
         $('#txt_cfu_eye_va_right').val(v.eye_va_right);
         $('#txt_cfu_eye_iop_left').val(v.eye_iop_left);
         $('#txt_cfu_eye_iop_right').val(v.eye_iop_right);
         $('#txt_cfu_eye_oth_dz_left').val(v.eye_oth_dz_left);
         $('#txt_cfu_eye_oth_dz_right').val(v.eye_oth_dz_right);
-        $('#sl_cfu_eye_macular').val(v.eye_macular);
-        $('#sl_cfu_eye_laser').val(v.eye_laser);
-        $('#sl_cfu_eye_cataract').val(v.eye_cataract);
-        $('#sl_cfu_eye_surgery').val(v.eye_surgery);
-        $('#sl_cfu_eye_blindness').val(v.eye_blindness);
+        $('#sl_cfu_eye_macular').select2('val', v.eye_macular);
+        $('#sl_cfu_eye_laser').select2('val', v.eye_laser);
+        $('#sl_cfu_eye_cataract').select2('val', v.eye_cataract);
+        $('#sl_cfu_eye_surgery').select2('val', v.eye_surgery);
+        $('#sl_cfu_eye_blindness').select2('val', v.eye_blindness);
         $('#txt_cfu_eye_treatment').val(v.eye_treatment);
         $('#txt_cfu_eye_remark').val(v.eye_remark);
+
         // Foot
-        $('#sl_cfu_foot_result_left').val(v.foot_result_left);
-        $('#sl_cfu_foot_result_right').val(v.foot_result_right);
-        $('#sl_cfu_foot_ulcer').val(v.foot_ulcer);
-        $('#sl_cfu_foot_his_ulcer').val(v.foot_his_ulcer);
-        $('#sl_cfu_foot_his_amp').val(v.foot_his_amp);
-        $('#sl_cfu_foot_his_sens').val(v.foot_his_sens);
-        $('#sl_cfu_foot_nail').val(v.foot_nail);
-        $('#sl_cfu_foot_wart').val(v.foot_wart);
-        $('#sl_cfu_foot_footshape').val(v.foot_footshape);
-        $('#sl_cfu_foot_hair').val(v.foot_hair);
-        $('#sl_cfu_foot_temp').val(v.foot_temp);
-        $('#sl_cfu_foot_tenia').val(v.foot_tenia);
-        $('#sl_cfu_foot_sensory').val(v.foot_sensory);
-        $('#sl_cfu_foot_dieskin').val(v.foot_dieskin);
-        $('#sl_cfu_foot_skincolor').val(v.foot_skincolor);
-        $('#sl_cfu_foot_posttib_left').val(v.foot_posttib_left);
-        $('#sl_cfu_foot_posttib_right').val(v.foot_posttib_right);
-        $('#sl_cfu_foot_dorsped_left').val(v.foot_dorsped_left);
-        $('#sl_cfu_foot_dorsped_right').val(v.foot_dorsped_right);
+        $('#sl_cfu_foot_result_left').select2('val', v.foot_result_left);
+        $('#sl_cfu_foot_result_right').select2('val', v.foot_result_right);
+        $('#sl_cfu_foot_ulcer').select2('val', v.foot_ulcer);
+        $('#sl_cfu_foot_his_ulcer').select2('val', v.foot_his_ulcer);
+        $('#sl_cfu_foot_his_amp').select2('val', v.foot_his_amp);
+        $('#sl_cfu_foot_his_sens').select2('val', v.foot_his_sens);
+        $('#sl_cfu_foot_nail').select2('val', v.foot_nail);
+        $('#sl_cfu_foot_wart').select2('val', v.foot_wart);
+        $('#sl_cfu_foot_footshape').select2('val', v.foot_footshape);
+        $('#sl_cfu_foot_hair').select2('val', v.foot_hair);
+        $('#sl_cfu_foot_temp').select2('val', v.foot_temp);
+        $('#sl_cfu_foot_tenia').select2('val', v.foot_tenia);
+        $('#sl_cfu_foot_sensory').select2('val', v.foot_sensory);
+        $('#sl_cfu_foot_dieskin').select2('val', v.foot_dieskin);
+        $('#sl_cfu_foot_skincolor').select2('val', v.foot_skincolor);
+        $('#sl_cfu_foot_posttib_left').select2('val', v.foot_posttib_left);
+        $('#sl_cfu_foot_posttib_right').select2('val', v.foot_posttib_right);
+        $('#sl_cfu_foot_dorsped_left').select2('val', v.foot_dorsped_left);
+        $('#sl_cfu_foot_dorsped_right').select2('val', v.foot_dorsped_right);
         $('#txt_cfu_foot_shoe').val(v.foot_shoe);
         $('#txt_cfu_foot_remark').val(v.foot_remark);
     };
@@ -159,43 +165,43 @@ head.ready(function() {
         items.vn = $('#vn').val();
         items.hn = $('#hn').val();
 
-        items.eye_result_left = $('#sl_cfu_eye_result_left').val();
-        items.eye_result_right = $('#sl_cfu_eye_result_right').val();
-        items.eye_va_left = $('#txt_cfu_eye_va_left').val();
-        items.eye_va_right = $('#txt_cfu_eye_va_right').val();
-        items.eye_iop_left = $('#txt_cfu_eye_iop_left').val();
-        items.eye_iop_right = $('#txt_cfu_eye_iop_right').val();
-        items.eye_oth_dz_left = $('#txt_cfu_eye_oth_dz_left').val();
-        items.eye_oth_dz_right = $('#txt_cfu_eye_oth_dz_right').val();
-        items.eye_macular = $('#sl_cfu_eye_macular').val();
-        items.eye_laser = $('#sl_cfu_eye_laser').val();
-        items.eye_cataract = $('#sl_cfu_eye_cataract').val();
-        items.eye_surgery = $('#sl_cfu_eye_surgery').val();
-        items.eye_blindness = $('#sl_cfu_eye_blindness').val();
-        items.eye_treatment = $('#txt_cfu_eye_treatment').val();
-        items.eye_remark = $('#txt_cfu_eye_remark').val();
+        items.eye_result_left       = $('#sl_cfu_eye_result_left').select2('val');
+        items.eye_result_right      = $('#sl_cfu_eye_result_right').select2('val');
+        items.eye_va_left           = $('#txt_cfu_eye_va_left').val();
+        items.eye_va_right          = $('#txt_cfu_eye_va_right').val();
+        items.eye_iop_left          = $('#txt_cfu_eye_iop_left').val();
+        items.eye_iop_right         = $('#txt_cfu_eye_iop_right').val();
+        items.eye_oth_dz_left       = $('#txt_cfu_eye_oth_dz_left').val();
+        items.eye_oth_dz_right      = $('#txt_cfu_eye_oth_dz_right').val();
+        items.eye_macular           = $('#sl_cfu_eye_macular').select2('val');
+        items.eye_laser             = $('#sl_cfu_eye_laser').select2('val');
+        items.eye_cataract          = $('#sl_cfu_eye_cataract').select2('val');
+        items.eye_surgery           = $('#sl_cfu_eye_surgery').select2('val');
+        items.eye_blindness         = $('#sl_cfu_eye_blindness').select2('val');
+        items.eye_treatment         = $('#txt_cfu_eye_treatment').val();
+        items.eye_remark            = $('#txt_cfu_eye_remark').val();
         // Foot
-        items.foot_result_left = $('#sl_cfu_foot_result_left').val();
-        items.foot_result_right = $('#sl_cfu_foot_result_right').val();
-        items.foot_ulcer = $('#sl_cfu_foot_ulcer').val();
-        items.foot_his_ulcer = $('#sl_cfu_foot_his_ulcer').val();
-        items.foot_his_amp = $('#sl_cfu_foot_his_amp').val();
-        items.foot_his_sens = $('#sl_cfu_foot_his_sens').val();
-        items.foot_nail = $('#sl_cfu_foot_nail').val();
-        items.foot_wart = $('#sl_cfu_foot_wart').val();
-        items.foot_footshape = $('#sl_cfu_foot_footshape').val();
-        items.foot_hair = $('#sl_cfu_foot_hair').val();
-        items.foot_temp = $('#sl_cfu_foot_temp').val();
-        items.foot_tenia = $('#sl_cfu_foot_tenia').val();
-        items.foot_sensory = $('#sl_cfu_foot_sensory').val();
-        items.foot_dieskin = $('#sl_cfu_foot_dieskin').val();
-        items.foot_skincolor = $('#sl_cfu_foot_skincolor').val();
-        items.foot_posttib_left = $('#sl_cfu_foot_posttib_left').val();
-        items.foot_posttib_right = $('#sl_cfu_foot_posttib_right').val();
-        items.foot_dorsped_left = $('#sl_cfu_foot_dorsped_left').val();
-        items.foot_dorsped_right = $('#sl_cfu_foot_dorsped_right').val();
-        items.foot_shoe = $('#txt_cfu_foot_shoe').val();
-        items.foot_remark = $('#txt_cfu_foot_remark').val();
+        items.foot_result_left      = $('#sl_cfu_foot_result_left').select2('val');
+        items.foot_result_right     = $('#sl_cfu_foot_result_right').select2('val');
+        items.foot_ulcer            = $('#sl_cfu_foot_ulcer').select2('val');
+        items.foot_his_ulcer        = $('#sl_cfu_foot_his_ulcer').select2('val');
+        items.foot_his_amp          = $('#sl_cfu_foot_his_amp').select2('val');
+        items.foot_his_sens         = $('#sl_cfu_foot_his_sens').select2('val');
+        items.foot_nail             = $('#sl_cfu_foot_nail').select2('val');
+        items.foot_wart             = $('#sl_cfu_foot_wart').select2('val');
+        items.foot_footshape        = $('#sl_cfu_foot_footshape').select2('val');
+        items.foot_hair             = $('#sl_cfu_foot_hair').select2('val');
+        items.foot_temp             = $('#sl_cfu_foot_temp').select2('val');
+        items.foot_tenia            = $('#sl_cfu_foot_tenia').select2('val');
+        items.foot_sensory          = $('#sl_cfu_foot_sensory').select2('val');
+        items.foot_dieskin          = $('#sl_cfu_foot_dieskin').select2('val');
+        items.foot_skincolor        = $('#sl_cfu_foot_skincolor').select2('val');
+        items.foot_posttib_left     = $('#sl_cfu_foot_posttib_left').select2('val');
+        items.foot_posttib_right    = $('#sl_cfu_foot_posttib_right').select2('val');
+        items.foot_dorsped_left     = $('#sl_cfu_foot_dorsped_left').select2('val');
+        items.foot_dorsped_right    = $('#sl_cfu_foot_dorsped_right').select2('val');
+        items.foot_shoe             = $('#txt_cfu_foot_shoe').val();
+        items.foot_remark           = $('#txt_cfu_foot_remark').val();
 
         app.confirm('คุณต้องการบันทึกข้อมูลใช่หรือไม่?', function(res) {
             if(res)

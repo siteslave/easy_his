@@ -183,8 +183,8 @@ class Disabilities extends CI_Controller
             $obj->dcause = $rs['dcause'];
             $obj->diag_code = $rs['diag_code'];
             $obj->diag_name = get_diag_name($rs['diag_code']);
-            $obj->detect_date = to_js_date($rs['detect_date']);
-            $obj->disb_date = to_js_date($rs['disb_date']);
+            $obj->detect_date = from_mongo_to_thai_date($rs['detect_date']);
+            $obj->disb_date = from_mongo_to_thai_date($rs['disb_date']);
 
             $rows = json_encode($obj);
 

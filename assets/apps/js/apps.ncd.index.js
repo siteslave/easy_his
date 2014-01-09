@@ -148,7 +148,7 @@ head.ready(function(){
                         '<td>' + v.screen + '</td>' +
                         '<td>' +
                         '<div class="btn-group">' +
-                        '<a href="javascript:void(0);" class="btn" data-name="btnFilter" data-id="' + v.id + '"><i class="icon-filter"></i></a>' +
+                        '<a href="javascript:void(0);" class="btn" data-name="btnFilter" data-id="' + v.id + '"><i class="fa fa-filter"></i></a>' +
                         '</div>' +
                         '</td>' +
                         '</tr>'

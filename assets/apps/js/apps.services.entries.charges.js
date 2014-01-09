@@ -103,7 +103,7 @@ head.ready(function(){
     });
 
     $(document).on('click', 'a[data-name="btn_charge_edit"]', function(){
-        var id = $(this).attr('data-id');
+        var id = $(this).data('id');
         charge.modal.show_update(id);
     });
 
@@ -114,7 +114,7 @@ head.ready(function(){
     //remove charge
     $(document).on('click', 'a[data-name="btn_charge_remove"]', function(){
 
-        var id = $(this).attr('data-id');
+        var id = $(this).data('id');
        // alert(id);
 
         app.confirm('คุณต้องการลบรายการใช่หรือไม่?', function(res){

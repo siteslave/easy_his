@@ -144,23 +144,27 @@ head.ready(function(){
                         '<td>' + app.mongo_to_thai_date(v.reg_date) + '</td>' +
                         '<td>' + v.diag_type + '</td>' +
                         '<td>' +
-                        '<div class="btn-group">' +
+                        '<div class="btn-group dropup">' +
                         '<button type="button" class="btn btn-success dropdown-toggle btn-small" data-toggle="dropdown">' +
-                        '<i class="icon-th-list"></i> <span class="caret"></span>' +
+                        '<i class="fa fa-th-list"></i> <span class="caret"></span>' +
                         '</button>' +
-                        '<ul class="dropdown-menu">' +
+                        '<ul class="dropdown-menu pull-right">' +
                         '<li>' +
-                        '<a href="javascript:void(0);" data-name="edit" title="แก้ไข" data-hn="' + v.hn + '"><i class="icon-edit"></i> แก้ไขข้อมูล</a>' +
+                        '<a href="javascript:void(0);" data-name="edit" title="แก้ไข" data-hn="' + v.hn + '">' +
+                        '<i class="fa fa-edit"></i> แก้ไขข้อมูล</a>' +
                         '</li>' +
                         '<li>' +
-                        '<a href="javascript:void(0);" data-name="remove" title="ลบรายการ" data-hn="' + v.hn + '"><i class="icon-trash"></i> ลบรายการ</a>' +
+                        '<a href="javascript:void(0);" data-name="remove" title="ลบรายการ" data-hn="' + v.hn + '">' +
+                        '<i class="fa fa-trash-o"></i> ลบรายการ</a>' +
                         '</li>' +
                         '<li>' +
-                        '<a href="javascript:void(0);" data-name="visit_ncdscreen_history" title="ประวัติคัดกรอง" data-hn="' + v.hn + '"><i class="icon-th-list"></i> ประวัติการคัดกรองความเสี่ยง</a>' +
+                        '<a href="javascript:void(0);" data-name="visit_ncdscreen_history" title="ประวัติคัดกรอง" ' +
+                        'data-hn="' + v.hn + '"><i class="fa fa-th-list"></i> ประวัติการคัดกรองความเสี่ยง</a>' +
                         '</li>' +
                         '<li>' +
-                        '<a href="javascript:void(0);" data-name="visit_ncdscreen_history" title="ประวัติคัดกรองภาวะแทรกซ้อน" ' +
-                        'data-hn="' + v.hn + '"><i class="icon-indent-right"></i> ประวัติการคัดกรองภาวะแทรกซ้อน</a>' +
+                        '<a href="javascript:void(0);" data-name="visit_ncdscreen_history" ' +
+                        'title="ประวัติคัดกรองภาวะแทรกซ้อน" ' +
+                        'data-hn="' + v.hn + '"><i class="fa fa-eye-slash"></i> ประวัติการคัดกรองภาวะแทรกซ้อน</a>' +
                         '</li>' +
                         '</ul></div>' +
                         '</td>' +
@@ -173,6 +177,7 @@ head.ready(function(){
             );
         }
     };
+
     dm.get_list = function(){
         $('#main_paging').fadeIn('slow');
         dm.ajax.get_list_total(function(err, data){
@@ -201,60 +206,7 @@ head.ready(function(){
                         });
 
                     },
-                    onFormat: function(type){
-                        switch (type) {
-
-                            case 'block':
-
-                                if (!this.active)
-                                    return '<li class="disabled"><a href="">' + this.value + '</a></li>';
-                                else if (this.value != this.page)
-                                    return '<li><a href="#' + this.value + '">' + this.value + '</a></li>';
-                                return '<li class="active"><a href="#">' + this.value + '</a></li>';
-
-                            case 'right':
-                            case 'left':
-
-                                if (!this.active) {
-                                    return "";
-                                }
-                                return '<li><a href="#' + this.value + '">' + this.value + '</a></li>';
-
-                            case 'next':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&raquo;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&raquo;</a></li>';
-
-                            case 'prev':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&laquo;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&laquo;</a></li>';
-
-                            case 'first':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&lt;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&lt;</a></li>';
-
-                            case 'last':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&gt;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&gt;</a></li>';
-
-                            case 'fill':
-                                if (this.active) {
-                                    return '<li class="disabled"><a href="#">...</a></li>';
-                                }
-                        }
-                        return ""; // return nothing for missing branches
-                    }
+                    onFormat: app.paging_format
                 });
             }
         });
@@ -276,21 +228,25 @@ head.ready(function(){
         $('#tboFname').val(v.first_name);
         $('#tboLname').val(v.last_name);
         $('#tboAge').val(v.age);
-        $('#slSex').val(v.sex);
+        $('#slSex').select2('val', v.sex);
         $('#tboRegCenterNumber').val(v.reg_serial);
         $('#tboRegHosNumber').val(v.hosp_serial);
         $('#tboYear').val(v.year);
         $('#dtpRegisDate').val(v.reg_date);
-        $('#cboDiseaseType').val(v.diag_type);
-        $('#cboDoctor').val(v.doctor);
+        $('#cboDiseaseType').select2('val', v.diag_type);
+        $('#cboDoctor').select2('val', v.doctor);
         $('#ch_pre_register').prop('checked', true);
        //v.pre_register == "Y" ? $('#ch_pre_register').attr('checked', true) : $('#ch_pre_register').attr('checked', false);
         v.pregnancy == "1" ? $('#ch_pregnancy').prop('checked', true) : $('#ch_pregnancy').removeProp('checked');
         v.hypertension == "1" ? $('#ch_hypertension').prop('checked', true) : $('#ch_hypertension').removeProp('checked');
         v.insulin == "1" ? $('#ch_insulin').prop('checked', true) : $('#ch_insulin').removeProp('checked');
         v.newcase == "1" ? $('#ch_newcase').prop('checked', true) : $('#ch_newcase').removeProp('checked');
-        $('#sl_member_status').val(v.member_status);
+        $('#sl_member_status').select2('val', v.member_status);
         $('#txt_discharge_date').val(v.discharge_date);
+
+        var fullname = v.first_name + ' '  + v.last_name;
+        $('#txt_search_person').select2('data', {hn: v.hn, fullname: fullname});
+        $('#txt_search_person').select2('enable', false);
 
         $('#tboRegHosNumber').focus();
 
@@ -307,7 +263,9 @@ head.ready(function(){
     };
     //search person
     $('#btn_search_person').click(function(){
-        var query = $('#txt_search_person').val();
+        var data = $('#txt_search_person').select2('data');
+
+        var query = data.hn;
 
         if(!query)
         {
@@ -316,7 +274,7 @@ head.ready(function(){
         else
         {
             //do search
-            dm.clear_register_form();
+            //dm.clear_register_form();
 
             dm.ajax.search_person(query, function(err, data){
 
@@ -331,13 +289,7 @@ head.ready(function(){
             });
         }
     });
-    
-    //set filter
-    $('a[data-name="btn_set_search_person_filter"]').click(function(){
-        var filter = $(this).attr('data-value');
 
-        $('input[data-name="txt_search_person_filter"]').val(filter);
-    });
 
     $('#btn_filter_by_village').click(function(){
         var village_id = $('#sl_village').val();
@@ -381,60 +333,7 @@ head.ready(function(){
                         });
 
                     },
-                    onFormat: function(type){
-                        switch (type) {
-
-                            case 'block':
-
-                                if (!this.active)
-                                    return '<li class="disabled"><a href="">' + this.value + '</a></li>';
-                                else if (this.value != this.page)
-                                    return '<li><a href="#' + this.value + '">' + this.value + '</a></li>';
-                                return '<li class="active"><a href="#">' + this.value + '</a></li>';
-
-                            case 'right':
-                            case 'left':
-
-                                if (!this.active) {
-                                    return "";
-                                }
-                                return '<li><a href="#' + this.value + '">' + this.value + '</a></li>';
-
-                            case 'next':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&raquo;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&raquo;</a></li>';
-
-                            case 'prev':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&laquo;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&laquo;</a></li>';
-
-                            case 'first':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&lt;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&lt;</a></li>';
-
-                            case 'last':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&gt;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&gt;</a></li>';
-
-                            case 'fill':
-                                if (this.active) {
-                                    return '<li class="disabled"><a href="#">...</a></li>';
-                                }
-                        }
-                        return ""; // return nothing for missing branches
-                    }
+                    onFormat: app.paging_format
                 });
             }
         });
@@ -460,8 +359,8 @@ head.ready(function(){
         $('#ch_hypertension').removeProp('checked');
         $('#ch_insulin').removeProp('checked');
         $('#ch_newcase').removeProp('checked');
-        $('#txt_search_person').val('');
-        $('#txt_search_person').removeProp('disabled');
+        $('#txt_search_person').select2('val', '');
+        $('#txt_search_person').select2('enable', true);
         $('#btn_search_person').removeProp('disabled');
         $('#txt_discharge_date').val('');
         app.set_first_selected($('#sl_member_status'));
@@ -488,7 +387,9 @@ head.ready(function(){
 
     $('#btn_dm_do_register').click(function() {
         var items = {};
-        items.hn            = $('#tboHN').val();
+        var babies = $('#txt_search_person').select2('data');
+
+        items.hn            = babies.hn;
         items.hid_regis     = $('#tboRegHosNumber').val();
         items.year_regis    = $('#tboYear').val();
         items.reg_date      = $('#dtpRegisDate').val();
@@ -585,68 +486,95 @@ head.ready(function(){
         dm.get_list();
     });
 
-    $('#txt_search_person').typeahead({
+    $('#txt_query').select2({
+        placeholder: 'HN, เลขบัตรประชาชน, ชื่อ-สกุล',
+        minimumInputLength: 2,
+        allowClear: true,
         ajax: {
-            url: site_url + '/person/search_person_ajax',
-            timeout: 500,
-            displayField: 'name',
-            triggerLength: 3,
-            preDispatch: function(query){
+            url: site_url + "/person/search_person_all_ajax",
+            dataType: 'json',
+            type: 'POST',
+            quietMillis: 100,
+            data: function (term, page) {
                 return {
-                    query: query,
-                    csrf_token: csrf_token
-                }
+                    query: term,
+                    csrf_token: csrf_token,
+                    start: page,
+                    stop: 10
+                };
             },
+            results: function (data, page)
+            {
+                var more = (page * 10) < data.total; // whether or not there are more results available
 
-            preProcess: function(data){
-                if(data.success){
-                    return data.rows;
-                }else{
-                    return false;
-                }
+                // notice we return the value of more so Select2 knows if more results can be loaded
+                return {results: data.rows, more: more};
+
+                //return { results: data.rows, more: (data.rows && data.rows.length == 10 ? true : false) };
             }
         },
-        updater: function(data){
-            var d = data.split('#');
-            var code = d[0],
-                name = d[1];
 
-            return code;
+        id: function(data) { return { id: data.hn } },
+
+        formatResult: function(data) {
+            return '[' + data.hn + '] ' + data.fullname;
+        },
+        formatSelection: function(data) {
+            return '[' + data.hn + '] ' + data.fullname;
+        },
+        initSelection: function(el, cb) {
+            //var eltxt = $(el).val();
+            //cb({'term': eltxt });
         }
     });
 
-    $('#txt_query').typeahead({
+    $('#txt_search_person').select2({
+        placeholder: 'HN, เลขบัตรประชาชน, ชื่อ-สกุล',
+        minimumInputLength: 2,
+        allowClear: true,
         ajax: {
-            url: site_url + '/person/search_person_ajax',
-            timeout: 500,
-            displayField: 'name',
-            triggerLength: 3,
-            preDispatch: function(query){
+            url: site_url + "/person/search_person_all_ajax",
+            dataType: 'json',
+            type: 'POST',
+            quietMillis: 100,
+            data: function (term, page) {
                 return {
-                    query: query,
-                    csrf_token: csrf_token
-                }
+                    query: term,
+                    csrf_token: csrf_token,
+                    start: page,
+                    stop: 10
+                };
             },
+            results: function (data, page)
+            {
+                var more = (page * 10) < data.total; // whether or not there are more results available
 
-            preProcess: function(data){
-                if(data.success){
-                    return data.rows;
-                }else{
-                    return false;
-                }
+                // notice we return the value of more so Select2 knows if more results can be loaded
+                return {results: data.rows, more: more};
+
+                //return { results: data.rows, more: (data.rows && data.rows.length == 10 ? true : false) };
             }
         },
-        updater: function(data){
-            var d = data.split('#');
-            var code = d[0],
-                name = d[1];
 
-            return code;
+        id: function(data) { return { id: data.hn } },
+
+        formatResult: function(data) {
+            return '[' + data.hn + '] ' + data.fullname;
+        },
+        formatSelection: function(data) {
+            return '[' + data.hn + '] ' + data.fullname;
+        },
+        initSelection: function(el, cb) {
+            //var eltxt = $(el).val();
+            //cb({'term': eltxt });
         }
     });
 
     $('#btn_search').on('click', function(){
-        var hn = $('#txt_query').val();
+        var data = $('#txt_query').select2('data');
+
+        hn = data.hn;
+
         if(!hn)
         {
             app.alert('กรุณาระบุ HN เพื่อค้นหา');

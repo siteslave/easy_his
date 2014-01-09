@@ -225,10 +225,10 @@ head.ready(function(){
                         'data-cid="' + v.cid +'"><i class="fa fa-th-list"></i> ข้อมูลการฝากครรภ์</a>' +
                         '</li>' +
                         '<li>' +
-                        '<a href="javascript:void(0);" data-name="btn_service_anc" data-hn="'+ v.hn +'"><i class="fa fa-calendar"></i> ฝากครรภ์ (จากที่อื่น)</a>' +
+                        '<a href="javascript:void(0);" data-name="btn_service_anc" data-hn="'+ v.hn +'"><i class="fa fa-calendar"></i> ฝากครรภ์ (ความครอบคลุม)</a>' +
                         '</li>' +
                         '<li>' +
-                        '<a href="javascript:void(0);" data-name="btn_mother_care" data-hn="'+ v.hn +'"><i class="fa fa-user-md"></i> เยี่ยมหลังคลอด</a>' +
+                        '<a href="javascript:void(0);" data-name="btn_mother_care" data-hn="'+ v.hn +'"><i class="fa fa-user-md"></i> เยี่ยมหลังคลอด (ความครอบคลุม)</a>' +
                         '</li>' +
                         '</ul>' +
                         '</div>' +
@@ -291,60 +291,7 @@ head.ready(function(){
                         });
 
                     },
-                    onFormat: function(type){
-                        switch (type) {
-
-                            case 'block':
-
-                                if (!this.active)
-                                    return '<li class="disabled"><a href="">' + this.value + '</a></li>';
-                                else if (this.value != this.page)
-                                    return '<li><a href="#' + this.value + '">' + this.value + '</a></li>';
-                                return '<li class="active"><a href="#">' + this.value + '</a></li>';
-
-                            case 'right':
-                            case 'left':
-
-                                if (!this.active) {
-                                    return "";
-                                }
-                                return '<li><a href="#' + this.value + '">' + this.value + '</a></li>';
-
-                            case 'next':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&raquo;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&raquo;</a></li>';
-
-                            case 'prev':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&laquo;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&laquo;</a></li>';
-
-                            case 'first':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&lt;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&lt;</a></li>';
-
-                            case 'last':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&gt;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&gt;</a></li>';
-
-                            case 'fill':
-                                if (this.active) {
-                                    return '<li class="disabled"><a href="#">...</a></li>';
-                                }
-                        }
-                        return ""; // return nothing for missing branches
-                    }
+                    onFormat: app.paging_format
                 });
             }
         });
@@ -380,62 +327,62 @@ head.ready(function(){
             preg.get_list_by_village(village_id);
         }
     });
-
-    preg.set_search_person_result = function(data)
-    {
-        if(!data)
-        {
-            $('#tbl_search_person_result > tbody').append(
-                '<tr><td colspan="7">ไม่พบรายการ</td></tr>');
-        }
-        else
-        {
-            _.each(data.rows, function(v){
-                $('#tbl_search_person_result > tbody').append(
-                    '<tr>' +
-                        '<td>'+ v.hn +'</td>' +
-                        '<td>'+ v.cid +'</td>' +
-                        '<td>'+ v.first_name + ' ' + v.last_name +'</td>' +
-                        '<td>'+ app.mongo_to_thai_date(v.birthdate) +'</td>' +
-                        '<td>'+ v.age +'</td>' +
-                        '<td>'+ v.sex +'</td>' +
-                        '<td><a href="#" class="btn btn-success" data-hn="'+ v.hn + '" data-sex="'+ v.sex +'" ' +
-                        'data-name="btn_selected_person" data-typearea="'+ v.typearea +'">' +
-                        '<i class="fa fa-comments-o"></i></a></td>' +
-                        '</tr>');
-            });
-        }
-    };
+//
+//    preg.set_search_person_result = function(data)
+//    {
+//        if(!data)
+//        {
+//            $('#tbl_search_person_result > tbody').append(
+//                '<tr><td colspan="7">ไม่พบรายการ</td></tr>');
+//        }
+//        else
+//        {
+//            _.each(data.rows, function(v){
+//                $('#tbl_search_person_result > tbody').append(
+//                    '<tr>' +
+//                        '<td>'+ v.hn +'</td>' +
+//                        '<td>'+ v.cid +'</td>' +
+//                        '<td>'+ v.first_name + ' ' + v.last_name +'</td>' +
+//                        '<td>'+ app.mongo_to_thai_date(v.birthdate) +'</td>' +
+//                        '<td>'+ v.age +'</td>' +
+//                        '<td>'+ v.sex +'</td>' +
+//                        '<td><a href="#" class="btn btn-success" data-hn="'+ v.hn + '" data-sex="'+ v.sex +'" ' +
+//                        'data-name="btn_selected_person" data-typearea="'+ v.typearea +'">' +
+//                        '<i class="fa fa-comments-o"></i></a></td>' +
+//                        '</tr>');
+//            });
+//        }
+//    };
 
     //search person
-    $('#btn_do_search_person').click(function(){
-        var query = $('#txt_search_query').val(),
-            filter = $('#txt_search_person_filter').val();
-
-        if(!query)
-        {
-            app.alert('กรุณาระบุคำค้นหา โดยระบุชื่อ-สกุล หรือ HN หรือ เลขบัตรประชาชน');
-        }
-        else
-        {
-            //do search
-            $('#tbl_search_person_result > tbody').empty();
-
-            preg.ajax.search_person(query, filter, function(err, data){
-
-                if(err)
-                {
-                    app.alert(err);
-                    $('#tbl_search_person_result > tbody').append(
-                        '<tr><td colspan="7">ไม่พบรายการ</td></tr>');
-                }
-                else
-                {
-                    preg.set_search_person_result(data);
-                }
-            });
-        }
-    });
+//    $('#btn_do_search_person').click(function(){
+//        var query = $('#txt_search_query').val(),
+//            filter = $('#txt_search_person_filter').val();
+//
+//        if(!query)
+//        {
+//            app.alert('กรุณาระบุคำค้นหา โดยระบุชื่อ-สกุล หรือ HN หรือ เลขบัตรประชาชน');
+//        }
+//        else
+//        {
+//            //do search
+//            $('#tbl_search_person_result > tbody').empty();
+//
+//            preg.ajax.search_person(query, filter, function(err, data){
+//
+//                if(err)
+//                {
+//                    app.alert(err);
+//                    $('#tbl_search_person_result > tbody').append(
+//                        '<tr><td colspan="7">ไม่พบรายการ</td></tr>');
+//                }
+//                else
+//                {
+//                    preg.set_search_person_result(data);
+//                }
+//            });
+//        }
+//    });
 
 
     $('#btn_do_register').on('click', function(){
@@ -722,15 +669,15 @@ head.ready(function(){
         {
             $('#txt_anc_info_lmp').val(data.rows.lmp);
             $('#txt_anc_info_edc').val(data.rows.edc);
-            $('#sl_anc_info_preg_status').val(data.rows.preg_status);
-            $('#sl_anc_info_vdrl').val(data.rows.vdrl);
-            $('#sl_anc_info_hb').val(data.rows.hb);
-            $('#sl_anc_info_hiv').val(data.rows.hiv);
+            $('#sl_anc_info_preg_status').select2('val', data.rows.preg_status);
+            $('#sl_anc_info_vdrl').select2('val', data.rows.vdrl);
+            $('#sl_anc_info_hb').select2('val', data.rows.hb);
+            $('#sl_anc_info_hiv').select2('val', data.rows.hiv);
             $('#txt_anc_info_hct_date').val(data.rows.hct_date);
-            $('#sl_anc_info_hct').val(data.rows.hct);
-            $('#sl_anc_info_thalassemia').val(data.rows.thalassemia);
+            $('#sl_anc_info_hct').select2('val', data.rows.hct);
+            $('#sl_anc_info_thalassemia').select2('val', data.rows.thalassemia);
             //$('#chk_anc_info_do_export').attr('checked') ? '1' : '0';
-            data.rows.do_export == '1' ? $('#chk_anc_info_do_export').attr('checked', 'checked') : $('#chk_anc_info_do_export').removeAttr('checked');
+            data.rows.do_export == '1' ? $('#chk_anc_info_export').prop('checked', true) : $('#chk_anc_info_export').removeProp('checked');
             $('#txt_anc_info_export_date').val(data.rows.do_export_date);
         },
 
@@ -759,7 +706,8 @@ head.ready(function(){
                     $('#tbl_anc_history > tbody').append(
                         '<tr>' +
                             '<td>' + app.clear_null(v.date_serv) + '</td>' +
-                            '<td>' + app.clear_null(v.owner_name) + '</td>' +
+                            //'<td>' + app.clear_null(v.owner_name) + '</td>' +
+                            '<td>' + app.clear_null(v.hospname) + '</td>' +
                             //'<td>' + app.clear_null(data.gravida) + '</td>' +
                             '<td>' + app.clear_null(v.anc_no) + '</td>' +
                             '<td>' + app.clear_null(v.ga) + '</td>' +
@@ -808,14 +756,14 @@ head.ready(function(){
         data.gravida = $('#txt_anc_info_gravida').val();
         data.lmp = $('#txt_anc_info_lmp').val();
         data.edc = $('#txt_anc_info_edc').val();
-        data.preg_status = $('#sl_anc_info_preg_status').val();
-        data.vdrl = $('#sl_anc_info_vdrl').val();
-        data.hb = $('#sl_anc_info_hb').val();
-        data.hiv = $('#sl_anc_info_hiv').val();
+        data.preg_status = $('#sl_anc_info_preg_status').select2('val');
+        data.vdrl = $('#sl_anc_info_vdrl').select2('val');
+        data.hb = $('#sl_anc_info_hb').select2('val');
+        data.hiv = $('#sl_anc_info_hiv').select2('val');
         data.hct_date = $('#txt_anc_info_hct_date').val();
-        data.hct = $('#sl_anc_info_hct').val();
-        data.thalassemia = $('#sl_anc_info_thalassemia').val();
-        data.do_export = $('#chk_anc_info_do_export').attr('checked') ? '1' : '0';
+        data.hct = $('#sl_anc_info_hct').select2('val');
+        data.thalassemia = $('#sl_anc_info_thalassemia').select2('val');
+        data.do_export = $('#chk_anc_info_export').prop('checked') ? '1' : '0';
         data.do_export_date = $('#txt_anc_info_export_date').val();
 
         if(!data.hn)
@@ -859,12 +807,58 @@ head.ready(function(){
         preg.get_list();
     })
 
+    $('#txt_query_preg').select2({
+        placeholder: 'HN, เลขบัตรประชาชน, ชื่อ-สกุล',
+        minimumInputLength: 2,
+        allowClear: true,
+        ajax: {
+            url: site_url + "/person/search_person_all_ajax",
+            dataType: 'json',
+            type: 'POST',
+            quietMillis: 100,
+            data: function (term, page) {
+                return {
+                    query: term,
+                    csrf_token: csrf_token,
+                    start: page,
+                    stop: 10
+                };
+            },
+            results: function (data, page)
+            {
+                var more = (page * 10) < data.total; // whether or not there are more results available
+
+                // notice we return the value of more so Select2 knows if more results can be loaded
+                return {results: data.rows, more: more};
+
+                //return { results: data.rows, more: (data.rows && data.rows.length == 10 ? true : false) };
+            }
+        },
+
+        id: function(data) { return { id: data.hn } },
+
+        formatResult: function(data) {
+            return '[' + data.hn + '] ' + data.fullname;
+        },
+        formatSelection: function(data) {
+            return '[' + data.hn + '] ' + data.fullname;
+        },
+        initSelection: function(el, cb) {
+            //var eltxt = $(el).val();
+            //cb({'term': eltxt });
+        }
+    });
+
+
     /**
      * Do search pregnancies
      */
 
     $('#btn_do_search_preg').on('click', function(e){
-        var hn = $('#txt_query_preg').val();
+        var person = $('#txt_query_preg').select2('data');
+
+        var hn = person.hn;
+
         if(!hn)
         {
             app.alert('กรุณาระบุ HN');

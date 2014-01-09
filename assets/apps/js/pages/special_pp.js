@@ -167,11 +167,11 @@ head.ready(function(){
         var items = {};
         items.vn = $('#txt_ssp_vn').val();
         items.hn = $('#txt_ssp_hn').val();
-        items.servplace = $('#sl_spp_servplace').val();
-        items.ppspecial = $('#sl_spp_ppspecial').val();
+        items.servplace = $('#sl_spp_servplace').select2('val');
+        items.ppspecial = $('#sl_spp_ppspecial').select2('val');
         items.hospcode = $('#txt_spp_hospcode').val();
         items.date_serv = $('#txt_spp_date').val();
-        items.provider_id = $('#sl_spp_providers').val();
+        items.provider_id = $('#sl_spp_providers').select2('val');
         items.id = $('#txt_ssp_id').val();
 
         if(!items.servplace)
@@ -216,37 +216,6 @@ head.ready(function(){
         app.set_first_selected($('#sl_spp_providers'));
     };
 
-//    $('#txt_spp_hospname').typeahead({
-//        ajax: {
-//            url: site_url + '/basic/search_hospital_ajax',
-//            timeout: 500,
-//            displayField: 'fullname',
-//            triggerLength: 3,
-//            preDispatch: function(query){
-//                return {
-//                    query: query,
-//                    csrf_token: csrf_token
-//                }
-//            },
-//
-//            preProcess: function(data){
-//                if(data.success){
-//                    return data.rows;
-//                }else{
-//                    return false;
-//                }
-//            }
-//        },
-//        updater: function(data){
-//            var d = data.split('#');
-//            var name = d[0],
-//                code = d[1];
-//
-//            $('#txt_spp_hospcode').val(code);
-//
-//            return name;
-//        }
-//    });
 
     spps.get_visit_history();
 

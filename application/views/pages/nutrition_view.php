@@ -10,20 +10,20 @@
                 <input type="hidden" id="txt_nutri_id" value="<?=isset($id) ? $id : ''?>"/>
                 <input type="hidden" id="txt_nutri_hn" value="<?=isset($hn) ? $hn : ''?>"/>
                 <input type="hidden" id="txt_nutri_vn" value="<?=isset($vn) ? $vn : ''?>"/>
+                <input type="hidden" id="txt_nutri_hospname1" value="<?=isset($hospname) ? $hospname : ''?>" />
+                <input type="hidden" id="txt_nutri_hospcode1" value="<?=isset($hospcode) ? $hospcode : ''?>" />
+                <input type="hidden" id="txt_nutri_owner_code" value="<?=isset($owner_code) ? $owner_code : ''?>" />
+                <input type="hidden" id="txt_nutri_owner_name" value="<?=isset($owner_name) ? $owner_name : ''?>" />
+
                 <div class="row">
                     <div class="col-lg-2">
                         <label for="txt_fp_date">วันที่รับบริการ</label>
                         <input type="text" class="form-control" id="txt_fp_date" placeholder="dd/mm/yyyy" title="ระบุวันที่รับบริการวัคซีน" rel="tooltip" data-type="date"
                                value="<?=isset($date_serv) ? $date_serv : ''?>" <?=isset($date_serv) ? 'disabled="disabled"' : ''?> />
                     </div>
-                    <div class="col-lg-2">
-                        <label for="txt_nutri_hospcode">รหัส</label>
-                        <input type="text" class="form-control" id="txt_nutri_hospcode" value="<?=isset($hospcode) ? $hospcode : ''?>" disabled="disabled" placeholder="-*-" />
-                    </div>
                     <div class="col-lg-8">
                         <label for="txt_nutri_hospname">สถานพยาบาล</label>
-                        <input type="text" class="form-control" id="txt_nutri_hospname" value="<?=isset($hospname) ? $hospname : ''?>" <?=isset($hospname) ? 'disabled="disabled"' : ''?>
-                               placeholder="พิมพ์ชื่อหรือรหัสสถาพยาบาล..." title="พิมพ์ชื่อหรือรหัสสถานพยาบาลเพื่อค้นหา" rel="tooltip"/>
+                        <input type="hidden" class="form-control" id="txt_nutri_hospname" style="width: 550px;"/>
                     </div>
                 </div>
                 <div class="row">

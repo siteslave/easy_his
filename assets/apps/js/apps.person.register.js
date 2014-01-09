@@ -125,210 +125,11 @@ head.ready(function(){
             });
         }
     };
-    //Clear register form
-    person.clear_register_form = function(){
-        $('#txt_cid').val('');
-        $('#txt_first_name').val('');
-        $('#txt_last_name').val('');
-        $('#txt_birth_date').val('');
-        $('#txtFatherCid').val('');
-        $('#txtMotherCid').val('');
-        $('#txtCoupleCid').val('');
-        $('#txtMoveInDate').val('');
-        $('#txtDischargeDate').val('');
-        $('#txt_passport').val('');
 
-        //address
-        $('#txtOutsideHouseId').val('');
-        $('#txtOutsideRoomNumber').val('');
-        $('#txtOutsideCondo').val('');
-        $('#txtOutsideAddressNumber').val('');
-        $('#txtOutsideSoiSub').val('');
-        $('#txtOutsideSoiMain').val('');
-        $('#txtOutsideRoad').val('');
-        $('#txtOutsideVillageName').val('');
-        $('#txtOutsidePostcode').val('');
-        $('#txtOutsideTelephone').val('');
-        $('#txtOutsideMobile').val('');
-
-        //insurance
-        $('#txt_inscl_code').val('');
-        $('#txtInsStartDate').val('');
-        $('#txtInsExpireDate').val('');
-        $('#txt_ins_hospmain_code').val('');
-        $('#txt_ins_hospsub_code').val('');
-        $('#txt_ins_hospmain_name').val('');
-        $('#txt_ins_hospsub_name').val('');
-    };
-
-    //search dbpop
-    $('#button_do_search_dbpop').click(function(){
-        var query = $('#text_query_search_dbpop').val(),
-            by = $('#txt_dbpop_search_by').val();
-
-        if(!query){
-            app.alert('กรุณาระบุเลขบัตรประชาชน');
-        }else{
-            //do search
-            $('#table_search_dbpop_result_list tbody').empty();
-
-            person.register.ajax.search_dbpop(query, by, function(err, data){
-                if(err){
-                    app.alert(err);
-
-                    $('#table_search_dbpop_result_list tbody').append(
-                        '<tr>' +
-                            '<td colspan="6">ไม่พบรายการ</td>' +
-                            '</tr>'
-                    );
-                }else{
-                    if( _.size(data) ){
-                        _.each(data.rows, function(v){
-                            $('#table_search_dbpop_result_list tbody').append(
-                                '<tr>' +
-                                    '<td>' + v.cid + '</td>' +
-                                    '<td>' + v.fname + ' ' + v.lname + '</td>' +
-                                    '<td>' + app.dbpop_to_thai_date(v.birthdate) + '</td>' +
-                                    '<td>' + app.count_age_dbpop(v.birthdate) + '</td>' +
-                                    '<td>[' + v.subinscl + '] ' + v.maininscl_name + '</td>' +
-                                    '<td><a href="#" class="btn" data-name="button_set_data_from_dbopo" ' +
-                                    ' data-cid="' + v.cid + '" data-fname="'+ v.fname +'" data-lname="'+ v.lname+'" ' +
-                                    ' data-birth="'+ v.birthdate +'" data-maininscl="'+ v.maininscl +'" ' +
-                                    ' data-inscl="'+ v.subinscl +'" data-sex="'+ v.sex +'" data-cardid="'+ v.cardid +'"' +
-                                    ' data-startdate="'+ v.startdate+'" data-expdate="'+ v.expdate +'"' +
-                                    ' data-hmain_code="'+ v.hmain_code +'" data-hmain_name="'+ v.hmain_name +'" ' +
-                                    ' data-hsub_code="'+ v.hsub_code +'" data-hsub_name="'+ v.hsub_name +'"><i class="icon-share"></i></a></td>' +
-                                    '</tr>'
-                            );
-                        });
-                    }else{
-                        $('#table_search_dbpop_result_list tbody').append(
-                            '<tr>' +
-                                '<td colspan="6">ไม่พบรายการ</td>' +
-                            '</tr>'
-                        );
-                    }
-                }
-            });
-        }
-    });
-
-    $(document).on('click', 'a[data-name="button_set_data_from_dbopo"]', function(){
-        var cid         = $(this).attr('data-cid'),
-            fname       = $(this).attr('data-fname'),
-            lname       = $(this).attr('data-lname'),
-            birthdate   = app.convertDBPOPDateToEngDate($(this).attr('data-birth')),
-            inscl       = $(this).attr('data-inscl'),
-            maininscl   = $(this).attr('data-maininscl'),
-            cardid      = $(this).attr('data-cardid'),
-            sex         = $(this).attr('data-sex'),
-            hmain_code  = $(this).attr('data-hmain_code'),
-            hmain_name  = $(this).attr('data-hmain_name'),
-            hsub_code   = $(this).attr('data-hsub_code'),
-            hsub_name   = $(this).attr('data-hsub_name'),
-            startdate   = app.convertDBPOPDateToEngDate($(this).attr('data-startdate')),
-            expdate     = app.convertDBPOPDateToEngDate($(this).attr('data-expdate'));
-
-        if(maininscl == 'SSS'){
-            $('#sl_inscl_type').val('S1');
-        }else if(maininscl == "OFC"){
-            $('#sl_inscl_type').val("O1");
-        }else{
-            $('#sl_inscl_type').val(inscl);
-        }
-
-        //set person data
-        $('#txt_cid').val(cid);
-        $('#txt_first_name').val(fname);
-        $('#txt_last_name').val(lname);
-        $('#txt_birth_date').val(birthdate);
-        $('#sl_sex').val(sex);
-        $('#txt_inscl_code').val(cardid);
-        $('#txtInsStartDate').val(startdate);
-        $('#txtInsExpireDate').val(expdate);
-
-        $('#txt_ins_hospmain_code').val(hmain_code);
-        $('#txt_ins_hospmain_name').val(hmain_name);
-
-        $('#txt_ins_hospsub_code').val(hsub_code);
-        $('#txt_ins_hospsub_name').val(hsub_name);
-
-        $('#modal_search_dbpop').modal('hide');
-    });
-    //search hospital
-    $('#btn_do_search_hospital').click(function(){
-        var query = $('#text_query_search_hospital').val();
-        var op = $('#chk_search_by_name').is(":checked") ? 1 : 0;
-
-        if(!query){
-            app.alert('กรุณาระบคำที่ต้องการค้นหา');
-        }else{
-            //do search
-
-            $('#table_search_hospital_result_list tbody').empty();
-
-            person.register.ajax.search_hospital(query, op, function(err, data){
-                if(err){
-                    $('#table_search_hospital_result_list tbody').append(
-                        '<tr>' +
-                            '<td colspan="4">' + err + '</td>' +
-                            '</tr>'
-                    );
-                }else{
-                    if( _.size(data) ){
-                        _.each(data.rows, function(v){
-                            $('#table_search_hospital_result_list tbody').append(
-                                '<tr>' +
-                                    '<td>' + app.clear_null(v.code) + '</td>' +
-                                    '<td>' + app.clear_null(v.name) + '</td>' +
-                                    '<td>' + app.clear_null(v.province) + '</td>' +
-                                    '<td><a href="#" class="btn" data-name="btn_set_hospital" ' +
-                                    'data-code="' + v.code + '" data-vname="'+ v.name +'"><i class="icon-share"></i></a></td>' +
-                                    '</tr>'
-                            );
-                        });
-                    }else{
-                        $('#table_search_hospital_result_list tbody').append(
-                            '<tr>' +
-                                '<td colspan="4">ไม่พบรายการ</td>' +
-                                '</tr>'
-                        );
-                    }
-                }
-            });
-        }
-    });
-
-    $('#btn_search_hospital_main').click(function(){
-        $('#txt_search_by').val('hmain');
-        person.register.modal.show_search_hospital();
-    });
-    $('#btn_search_hospital_sub').click(function(){
-        $('#txt_search_by').val('hsub');
-        person.register.modal.show_search_hospital();
-    });
-
-    $(document).on('click', 'a[data-name="btn_set_hospital"]', function(){
-        var act = $('#txt_search_by').val(),
-            hospcode = $(this).attr('data-code'),
-            hospname = $(this).attr('data-vname');
-
-        if(act == 'hmain'){
-            $('#txt_ins_hospmain_name').val(hospname);
-            $('#txt_ins_hospmain_code').val(hospcode);
-        }else{
-            $('#txt_ins_hospsub_name').val(hospname);
-            $('#txt_ins_hospsub_code').val(hospcode);
-        }
-
-        $('#modal_search_hospital').modal('hide');
-
-    });
     //get ampur list
     $('#slOutsideProvince').change(function(){
         var chw = $(this).val();
 
-        app.showImageLoading();
         //load ampur list
         person.register.ajax.get_ampur(chw, function(err, data){
             $('#slOutsideAmpur').empty();
@@ -339,8 +140,6 @@ head.ready(function(){
                 if(!v.name.match(/\*/))
                     $('#slOutsideAmpur').append('<option value="'+ v.code +'">'+ v.name +'</option>');
             });
-
-            app.hideImageLoading();
         });
     });
 
@@ -348,7 +147,6 @@ head.ready(function(){
         var chw = $('#slOutsideProvince').val(),
             amp = $(this).val();
 
-        app.showImageLoading();
         //load ampur list
         person.register.ajax.get_tambon(chw, amp, function(err, data){
             $('#slOutsideTambon').empty();
@@ -358,7 +156,6 @@ head.ready(function(){
                     $('#slOutsideTambon').append('<option value="'+ v.code +'">'+ v.name +'</option>');
             });
 
-            app.hideImageLoading();
         });
     });
 
@@ -369,36 +166,36 @@ head.ready(function(){
         items.cid               = $('#txt_cid').val();
         //index key
         items.house_code        = $('#house_code').val();
-        items.title             = $('#slTitle').val();
+        items.title             = $('#slTitle').select2('val');
         items.first_name        = $('#txt_first_name').val();
         items.last_name         = $('#txt_last_name').val();
-        items.sex               = $('#sl_sex').val();
+        items.sex               = $('#sl_sex').select2('val');
         items.birthdate         = $('#txt_birth_date').val();
-        items.mstatus           = $('#slMStatus').val();
+        items.mstatus           = $('#slMStatus').select2('val');
         items.occupation        = $('#slOccupation').val();
-        items.race              = $('#slRace').val();
-        items.nation            = $('#slNation').val();
-        items.religion          = $('#slReligion').val();
-        items.education         = $('#slEducation').val();
-        items.fstatus           = $('#slFstatus').val();
-        items.vstatus           = $('#slVstatus').val();
+        items.race              = $('#slRace').select2('val');
+        items.nation            = $('#slNation').select2('val');
+        items.religion          = $('#slReligion').select2('val');
+        items.education         = $('#slEducation').select2('val');
+        items.fstatus           = $('#slFstatus').select2('val');
+        items.vstatus           = $('#slVstatus').select2('val');
         items.father_cid        = $('#txtFatherCid').val();
         items.mother_cid        = $('#txtMotherCid').val();
         items.couple_cid        = $('#txtCoupleCid').val();
         items.movein_date       = $('#txtMoveInDate').val();
         items.discharge_date    = $('#txtDischargeDate').val();
-        items.discharge_status  = $('#slDischarge').val();
-        items.abogroup          = $('#slABOGroup').val();
-        items.rhgroup           = $('#slRHGroup').val();
-        items.labor_type        = $('#slLabor').val();
-        items.typearea          = $('#slTypeArea').val();
+        items.discharge_status  = $('#slDischarge').select2('val');
+        items.abogroup          = $('#slABOGroup').select2('val');
+        items.rhgroup           = $('#slRHGroup').select2('val');
+        items.labor_type        = $('#slLabor').select2('val');
+        items.typearea          = $('#slTypeArea').select2('val');
         items.passport          = $('#txt_passport').val();
 
         //address
         items.address = {};
-        items.address.address_type  = $('#slOutsiedAddressType').val();
+        items.address.address_type  = $('#slOutsiedAddressType').select2('val');
         items.address.house_id      = $('#txtOutsideHouseId').val();
-        items.address.house_type    = $('#slOutsiedHouseType').val();
+        items.address.house_type    = $('#slOutsiedHouseType').select2('val');
         items.address.room_no       = $('#txtOutsideRoomNumber').val();
         items.address.condo         = $('#txtOutsideCondo').val();
         items.address.houseno       = $('#txtOutsideAddressNumber').val();
@@ -406,22 +203,26 @@ head.ready(function(){
         items.address.soi_main      = $('#txtOutsideSoiMain').val();
         items.address.road          = $('#txtOutsideRoad').val();
         items.address.village_name  = $('#txtOutsideVillageName').val();
-        items.address.village       = $('#slOutsideVillage').val();
-        items.address.tambon        = $('#slOutsideTambon').val();
-        items.address.ampur         = $('#slOutsideAmpur').val();
-        items.address.changwat      = $('#slOutsideProvince').val();
+        items.address.village       = $('#slOutsideVillage').select2('val');
+        items.address.tambon        = $('#slOutsideTambon').select2('val');
+        items.address.ampur         = $('#slOutsideAmpur').select2('val');
+        items.address.changwat      = $('#slOutsideProvince').select2('val');
         items.address.postcode      = $('#txtOutsidePostcode').val();
         items.address.telephone     = $('#txtOutsideTelephone').val();
         items.address.mobile        = $('#txtOutsideMobile').val();
 
         //insurance
         items.ins = {};
-        items.ins.id            = $('#sl_inscl_type').val();
+        var hospmain            = $('#txt_ins_hospmain_name').select2('data');
+        var hospsub             = $('#txt_ins_hospsub_name').select2('data');
+
+        items.ins.id            = $('#sl_inscl_type').select2('val');
         items.ins.code          = $('#txt_inscl_code').val();
         items.ins.start_date    = $('#txtInsStartDate').val();
         items.ins.expire_date   = $('#txtInsExpireDate').val();
-        items.ins.hmain         = $('#txt_ins_hospmain_code').val();
-        items.ins.hsub          = $('#txt_ins_hospsub_code').val();
+
+        items.ins.hmain         = hospmain === null ? '' : hospmain.code;
+        items.ins.hsub          = hospsub === null ? '' : hospsub.code;
 
         if(!items.cid || items.cid.length != 13){
             app.alert('กรุณาระบุเลขบัตรประชาชน/รูปแบบไม่ถูกต้อง');
@@ -458,7 +259,7 @@ head.ready(function(){
         }else if(!items.ins.id){
             app.alert('กรุณาระบุสิทธิการรักษา');
         }else{
-            if(items.typearea == '3' || items.typearea == '4' || items.typearea == '0'){
+            if(_.contains(['3', '4', '0'], items.typearea)){
                 //check address
                 if(!items.address.changwat){
                     app.alert('กรุณาระบุจังหวัด นอกเขต');
@@ -472,11 +273,7 @@ head.ready(function(){
                         if(err){
                             app.alert(err);
                         }else{
-                            if(confirm('บันทึกข้อมูลเสร็จเรียบร้อยแล้วคุณต้องการเพิ่มรายการอีกหรือไม่?')){
-                                person.clear_register_form();
-                            }else{
-                                app.go_to_url('person');
-                            }
+                            app.go_to_url('person');
                         }
                     });
                 }
@@ -486,27 +283,88 @@ head.ready(function(){
                     if(err){
                         app.alert(err);
                     }else{
-                        if(confirm('บันทึกข้อมูลเสร็จเรียบร้อยแล้วคุณต้องการเพิ่มรายการอีกหรือไม่?')){
-                            person.clear_register_form();
-                        }else{
-                            app.go_to_url('person');
-                        }
+                        app.go_to_url('person');
                     }
                 });
             }
         }
     });
 
-    //clear register form
-    $("#btn_clear_person").click(function(){
-        person.clear_register_form();
+//    //clear register form
+//    $("#btn_clear_person").click(function(){
+//        person.clear_register_form();
+//    });
+
+    $('#txt_ins_hospmain_name').select2({
+        placeholder: 'ชื่อ หรือ รหัสสถานบริการ',
+        minimumInputLength: 2,
+        allowClear: true,
+        ajax: {
+            url: site_url + "/basic/search_hospital_ajax",
+            dataType: 'json',
+            type: 'POST',
+            quietMillis: 100,
+            data: function (term) {
+                return {
+                    query: term,
+                    csrf_token: csrf_token
+                };
+            },
+            results: function (data)
+            {
+                return { results: data.rows, more: (data.rows && data.rows.length == 10 ? true : false) };
+            }
+            //dropdownCssClass: "bigdrop"
+        },
+
+        id: function(data) { return { id: data.code } },
+
+        formatResult: function(data) {
+            return '[' + data.code + '] ' + data.name;
+        },
+        formatSelection: function(data) {
+            return '[' + data.code + '] ' + data.name;
+        },
+        initSelection: function(el, cb) {
+            //var eltxt = $(el).val();
+            //cb({'term': eltxt });
+        }
     });
 
-    $('#btn_dbpop_search_by_cid').click(function(){
-        $('#txt_dbpop_search_by').val('cid');
+    $('#txt_ins_hospsub_name').select2({
+        placeholder: 'ชื่อ หรือ รหัสสถานบริการ',
+        minimumInputLength: 2,
+        allowClear: true,
+        ajax: {
+            url: site_url + "/basic/search_hospital_ajax",
+            dataType: 'json',
+            type: 'POST',
+            quietMillis: 100,
+            data: function (term) {
+                return {
+                    query: term,
+                    csrf_token: csrf_token
+                };
+            },
+            results: function (data)
+            {
+                return { results: data.rows, more: (data.rows && data.rows.length == 10 ? true : false) };
+            }
+            //dropdownCssClass: "bigdrop"
+        },
+
+        id: function(data) { return { id: data.code } },
+
+        formatResult: function(data) {
+            return '[' + data.code + '] ' + data.name;
+        },
+        formatSelection: function(data) {
+            return '[' + data.code + '] ' + data.name;
+        },
+        initSelection: function(el, cb) {
+            //var eltxt = $(el).val();
+            //cb({'term': eltxt });
+        }
     });
 
-    $('#btn_dbpop_search_by_name').click(function(){
-        $('#txt_dbpop_search_by').val('name');
-    });
 });

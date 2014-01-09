@@ -164,60 +164,7 @@ head.ready(function(){
                         });
 
                     },
-                    onFormat: function(type){
-                        switch (type) {
-
-                            case 'block':
-
-                                if (!this.active)
-                                    return '<li class="disabled"><a href="">' + this.value + '</a></li>';
-                                else if (this.value != this.page)
-                                    return '<li><a href="#' + this.value + '">' + this.value + '</a></li>';
-                                return '<li class="active"><a href="#">' + this.value + '</a></li>';
-
-                            case 'right':
-                            case 'left':
-
-                                if (!this.active) {
-                                    return "";
-                                }
-                                return '<li><a href="#' + this.value + '">' + this.value + '</a></li>';
-
-                            case 'next':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&raquo;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&raquo;</a></li>';
-
-                            case 'prev':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&laquo;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&laquo;</a></li>';
-
-                            case 'first':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&lt;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&lt;</a></li>';
-
-                            case 'last':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&gt;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&gt;</a></li>';
-
-                            case 'fill':
-                                if (this.active) {
-                                    return '<li class="disabled"><a href="#">...</a></li>';
-                                }
-                        }
-                        return ""; // return nothing for missing branches
-                    }
+                    onFormat: app.paging_format
                 });
             }
         });
@@ -249,60 +196,7 @@ head.ready(function(){
                         });
 
                     },
-                    onFormat: function(type){
-                        switch (type) {
-
-                            case 'block':
-
-                                if (!this.active)
-                                    return '<li class="disabled"><a href="">' + this.value + '</a></li>';
-                                else if (this.value != this.page)
-                                    return '<li><a href="#' + this.value + '">' + this.value + '</a></li>';
-                                return '<li class="active"><a href="#">' + this.value + '</a></li>';
-
-                            case 'right':
-                            case 'left':
-
-                                if (!this.active) {
-                                    return "";
-                                }
-                                return '<li><a href="#' + this.value + '">' + this.value + '</a></li>';
-
-                            case 'next':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&raquo;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&raquo;</a></li>';
-
-                            case 'prev':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&laquo;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&laquo;</a></li>';
-
-                            case 'first':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&lt;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&lt;</a></li>';
-
-                            case 'last':
-
-                                if (this.active) {
-                                    return '<li><a href="#' + this.value + '">&gt;</a></li>';
-                                }
-                                return '<li class="disabled"><a href="">&gt;</a></li>';
-
-                            case 'fill':
-                                if (this.active) {
-                                    return '<li class="disabled"><a href="#">...</a></li>';
-                                }
-                        }
-                        return ""; // return nothing for missing branches
-                    }
+                    onFormat: app.paging_format
                 });
             }
         });
@@ -625,26 +519,26 @@ head.ready(function(){
     $('#btn_save').on('click', function(){
         var items = {};
 
-        items.dm_history = $('#sl_dm_history').val();
-        items.ht_history = $('#sl_ht_history').val();
-        items.ds_history = $('#sl_ds_history').val();
-        items.hb_history = $('#sl_hb_history').val();
-        items.lb_history = $('#sl_lb_history').val();
-        items.lg_history = $('#sl_lg_history').val();
-        items.lv_history = $('#sl_lv_history').val();
-        items.bb_history = $('#sl_bb_history').val();
-        items.wt_history = $('#sl_wt_history').val();
-        items.ur_history = $('#sl_ur_history').val();
-        items.et_history = $('#sl_et_history').val();
-        items.we_history = $('#sl_we_history').val();
-        items.mo_history = $('#sl_mo_history').val();
-        items.sk_history = $('#sl_sk_history').val();
-        items.ey_history = $('#sl_ey_history').val();
-        items.fg_history = $('#sl_fg_history').val();
-        items.status_history = $('#sl_status_history').val();
+        items.dm_history = $('#sl_dm_history').select2('val');
+        items.ht_history = $('#sl_ht_history').select2('val');
+        items.ds_history = $('#sl_ds_history').select2('val');
+        items.hb_history = $('#sl_hb_history').select2('val');
+        items.lb_history = $('#sl_lb_history').select2('val');
+        items.lg_history = $('#sl_lg_history').select2('val');
+        items.lv_history = $('#sl_lv_history').select2('val');
+        items.bb_history = $('#sl_bb_history').select2('val');
+        items.wt_history = $('#sl_wt_history').select2('val');
+        items.ur_history = $('#sl_ur_history').select2('val');
+        items.et_history = $('#sl_et_history').select2('val');
+        items.we_history = $('#sl_we_history').select2('val');
+        items.mo_history = $('#sl_mo_history').select2('val');
+        items.sk_history = $('#sl_sk_history').select2('val');
+        items.ey_history = $('#sl_ey_history').select2('val');
+        items.fg_history = $('#sl_fg_history').select2('val');
+        items.status_history = $('#sl_status_history').select2('val');
 
 
-        items.screen_place = $('#sl_place').val();
+        items.screen_place = $('#sl_place').select2('val');;
         items.hn = $('#txt_hn').val();
         items.screen_date = $('#txt_screen_date').val();
         items.screen_time = $('#txt_screen_time').val();
