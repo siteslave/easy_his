@@ -111,11 +111,11 @@
                                                 <input type="password" id="txt_password" class="form-control" placeholder="********">
                                             </div>
                                             <div class="col-lg-2">
-                                                <label for="txt_password">รหัสผ่าน (ยืนยัน)</label>
+                                                <label for="txt_password2">รหัสผ่าน (ยืนยัน)</label>
                                                 <input type="password" id="txt_password2" class="form-control" placeholder="********">
                                             </div>
                                             <div class="col-lg-4">
-                                                <label for="txt_password">สิทธิการใช้งาน</label>
+                                                <label for="">สิทธิการใช้งาน</label>
 
                                                 <div class="btn-group" data-toggle="buttons">
                                                     <label class="btn btn-success" id="lbl_active">

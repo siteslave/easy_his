@@ -328,6 +328,12 @@ app.set_runtime = function()
 {
     $('input[data-type="time"]').mask("99:99");
     $('input[data-type="date"]').mask("99/99/9999");
+//    $('input[data-type="date"]').datepicker({
+//        language: 'th',
+//        todayBtn: true,
+//        todayHighlight: true,
+//        format: 'dd/mm/yyyy'
+//    });
     $('input[data-type="year"]').mask("9999");
     $('input[data-type="number"]').numeric();
     $('select[disabled]').css('background-color', 'white');
@@ -340,6 +346,18 @@ app.set_runtime = function()
 head.ready(function(){
 
     app.set_runtime();
+
+    //show loading
+    app.set_show_loading = function($this) {
+        var l = Ladda.create($this);
+        l.start();
+    };
+
+    //hide loading
+    app.set_hide_loading = function($this) {
+        var l = Ladda.create($this);
+        l.stop();
+    };
 
     app.get_providers = function(cb){
         var url = 'basic/get_providers',

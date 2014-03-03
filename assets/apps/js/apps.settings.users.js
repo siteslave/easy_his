@@ -181,7 +181,7 @@ head.ready(function(){
         {
             app.alert('กรุณาระบุสกุล');
         }
-        else if(!items.id || (items.password != items.password2))
+        else if(!items.id && (items.password != items.password2))
         {
             app.alert('รหัสผ่านทั้ง 2 ช่องไม่ตรงกัน');
         }

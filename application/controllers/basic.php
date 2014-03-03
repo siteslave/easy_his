@@ -41,7 +41,7 @@ class Basic extends CI_Controller
     }
 
     public function search_hospital_ajax(){
-        $query = $this->input->post('query');
+        $query  = $this->input->post('query');
 
         $start  = $this->input->post('start');
         $stop   = $this->input->post('stop');
@@ -49,7 +49,7 @@ class Basic extends CI_Controller
         $start  = empty($start) ? 1 : $start;
         $stop   = empty($stop) ? 10 : $stop;
 
-        $start = ($start - 1) * $stop;
+        $start  = ($start - 1) * $stop;
 
         $limit  = $stop;
 
@@ -96,22 +96,22 @@ class Basic extends CI_Controller
 
     public function get_ampur(){
 
-        $chw = $this->input->post('chw');
+        $chw    = $this->input->post('chw');
         $result = $this->basic->get_ampur($chw);
-        $rows = json_encode($result);
+        $rows   = json_encode($result);
 
-        $json = '{"success": true, "rows": '.$rows.'}';
+        $json   = '{"success": true, "rows": '.$rows.'}';
 
         render_json($json);
     }
     public function get_tambon(){
 
-        $chw = $this->input->post('chw');
-        $amp = $this->input->post('amp');
+        $chw    = $this->input->post('chw');
+        $amp    = $this->input->post('amp');
         $result = $this->basic->get_tambon($chw, $amp);
-        $rows = json_encode($result);
+        $rows   = json_encode($result);
 
-        $json = '{"success": true, "rows": '.$rows.'}';
+        $json   = '{"success": true, "rows": '.$rows.'}';
 
         render_json($json);
     }
@@ -219,9 +219,9 @@ class Basic extends CI_Controller
 
     public function search_drug_usage(){
         $query = $this->input->post('query');
-        if(empty($query)){
+        if(empty($query)) {
             $json = '{"success": false, "msg": "No query found."}';
-        }else{
+        } else {
 
             $op = has_number($query);
 
@@ -490,38 +490,6 @@ class Basic extends CI_Controller
 
         render_json($json);
     }
-
-//    public function search_provider_ajax(){
-//        $query = $this->input->post('query');
-//        if(empty($query)){
-//            $json = '{"success": false, "msg": "No query found."}';
-//        }else{
-//
-//            $op = has_number($query);
-//
-//            if($op){
-//                $result = $this->basic->search_provider_by_code($query);
-//            }else{
-//                $result = $this->basic->search_provider_by_name($query);
-//            }
-//
-//            if($result){
-//                $arr_result = array();
-//                foreach ($result as $r) {
-//                    $obj            = new stdClass();
-//                    $obj->name      = $r['provider'] . '#' . $r['first_name'] . ' ' . $r['last_name'];
-//
-//                    $arr_result[]   = $obj;
-//                }
-//                $rows = json_encode($arr_result);
-//                $json = '{"success": true, "rows": '.$rows.'}';
-//            }else{
-//                $json = '{"success": false, "msg": "No data."}';
-//            }
-//        }
-//
-//        render_json($json);
-//    }
 
     public function search_drug_ajax(){
 

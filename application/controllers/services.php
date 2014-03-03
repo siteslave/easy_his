@@ -37,17 +37,17 @@ class Services extends CI_Controller
 
         $this->load->helper('person');
 
-        $this->accident->user_id = $this->user_id;
-        $this->accident->provider_id = $this->provider_id;
-        $this->accident->owner_id = $this->owner_id;
+        $this->accident->user_id    = $this->user_id;
+        $this->accident->provider_id= $this->provider_id;
+        $this->accident->owner_id   = $this->owner_id;
 
-        $this->income->owner_id = $this->owner_id;
+        $this->income->owner_id     = $this->owner_id;
 
-        $this->service->owner_id = $this->owner_id;
-        $this->service->user_id = $this->user_id;
+        $this->service->owner_id    = $this->owner_id;
+        $this->service->user_id     = $this->user_id;
         $this->service->provider_id = $this->provider_id;
-        $this->basic->owner_id  = $this->owner_id;
-        $this->drug->owner_id  = $this->owner_id;
+        $this->basic->owner_id      = $this->owner_id;
+        $this->drug->owner_id       = $this->owner_id;
 
     }
 
@@ -68,8 +68,8 @@ class Services extends CI_Controller
 
         $this->load->model('Diabetes_model', 'dm');
 
-        $this->dm->clinic_code = '01';
-        $this->dm->owner_id = $this->owner_id;
+        $this->dm->clinic_code  = '01';
+        $this->dm->owner_id     = $this->owner_id;
 
         if(empty($vn) || !isset($vn))
         {
@@ -119,13 +119,13 @@ class Services extends CI_Controller
             $data['disabilities_types'] = $this->basic->get_disabilities_list();
             $data['icf_qualifiers']     = $this->basic->get_icf_qualifiers();
             $data['patient_name']       = $patient_name;
-            $data['providers']  = $this->basic->get_providers();
+            $data['providers']          = $this->basic->get_providers();
 
             //accident
 
-            $data['aetypes'] 	= $this->basic->get_aetype();
-            $data['aeplaces'] 	= $this->basic->get_aeplace();
-            $data['aetypeins'] 	= $this->basic->get_aetypein();
+            $data['aetypes']    = $this->basic->get_aetype();
+            $data['aeplaces']   = $this->basic->get_aeplace();
+            $data['aetypeins']  = $this->basic->get_aetypein();
             $data['aetraffics'] = $this->basic->get_aetraffic();
             $data['aevehicles'] = $this->basic->get_aevehicle();
 
@@ -136,8 +136,8 @@ class Services extends CI_Controller
 
     public function search_person()
     {
-        $query = $this->input->post('query');
-        $op = $this->input->post('op');
+        $query  = $this->input->post('query');
+        $op     = $this->input->post('op');
 
         if(empty($query))
         {
@@ -163,16 +163,16 @@ class Services extends CI_Controller
                 $arr_result = array();
                 foreach($rs as $r)
                 {
-                    $obj = new stdClass();
-                    $obj->id = get_first_object($r['_id']);
-                    $obj->fullname = $r['first_name'] . ' ' . $r['last_name'];
-                    $obj->cid = $r['cid'];
-                    $obj->hn = $r['hn'];
+                    $obj            = new stdClass();
+                    $obj->id        = get_first_object($r['_id']);
+                    $obj->fullname  = $r['first_name'] . ' ' . $r['last_name'];
+                    $obj->cid       = $r['cid'];
+                    $obj->hn        = $r['hn'];
                     $obj->birthdate = to_js_date($r['birthdate']);
-                    $obj->sex = $r['sex'];
-                    $obj->address = get_address($obj->hn);
-
-                    array_push($arr_result, $obj);
+                    $obj->sex       = $r['sex'];
+                    $obj->address   = get_address($obj->hn);
+                    
+                    $arr_result[]   = $obj;
                 }
 
                 $rows = json_encode($arr_result);
@@ -195,14 +195,15 @@ class Services extends CI_Controller
         }else{
             $rs = $this->service->get_person_detail($hn);
             if($rs){
-                $obj = new stdClass();
-                $obj->fullname = $rs['first_name'] . ' ' . $rs['last_name'];
+                $obj            = new stdClass();
+                $obj->fullname  = $rs['first_name'] . ' ' . $rs['last_name'];
                 $obj->birthdate = to_js_date($rs['birthdate']);
-                $obj->sex = $rs['sex'];
-                $obj->cid = $rs['cid'];
-                $obj->hn = $rs['hn'];
-                $obj->address = get_address($rs['house_code']);
-                $rows = json_encode($obj);
+                $obj->sex       = $rs['sex'];
+                $obj->cid       = $rs['cid'];
+                $obj->hn        = $rs['hn'];
+                $obj->address   = get_address($rs['house_code']);
+                
+                $rows           = json_encode($obj);
 
                 $json = '{"success": true, "rows": '.$rows.'}';
             }else{
@@ -223,10 +224,10 @@ class Services extends CI_Controller
             if(empty($data['vn'])){
                 //insert
                 $data['vn'] = generate_serial('VN');
-                $rs = $this->service->do_register($data);
+                $rs         = $this->service->do_register($data);
             }else{
                 //update
-                $rs = $this->service->do_update($data);
+                $rs         = $this->service->do_update($data);
             }
 
             if(!empty($data['appoint_id']))
@@ -245,20 +246,18 @@ class Services extends CI_Controller
     }
 
     public function get_list(){
-        $start = $this->input->post('start');
-        $stop = $this->input->post('stop');
-        $date = $this->input->post('date');
-        $doctor_room = $this->input->post('doctor_room');
+        $start          = $this->input->post('start');
+        $stop           = $this->input->post('stop');
+        $date           = $this->input->post('date');
+        $doctor_room    = $this->input->post('doctor_room');
 
-        $date = empty($date) ? date('Ymd') : to_string_date($date);
+        $date           = empty($date) ? date('Ymd') : to_string_date($date);
 
-        $start = empty($start) ? 0 : $start;
-        $stop = empty($stop) ? 25 : $stop;
-
-        $limit = (int) $stop - (int) $start;
-
-        $this->service->owner_id = $this->owner_id;
-        $rs = $this->service->get_list($date, $doctor_room, $start, $limit);
+        $start          = empty($start) ? 0 : $start;
+        $stop           = empty($stop) ? 25 : $stop;
+        $limit          = (int) $stop - (int) $start;
+        
+        $rs             = $this->service->get_list($date, $doctor_room, $start, $limit);
 
         if($rs){
             $arr_result = array();
@@ -267,36 +266,36 @@ class Services extends CI_Controller
 
                 $obj = new stdClass();
 
-                $obj->vn = isset($r['vn']) ? $r['vn'] : '-';
+                $obj->vn        = isset($r['vn']) ? $r['vn'] : '-';
                 $obj->person_id = isset($r['person_id']) ? get_first_object($r['person_id']) : null;
 
-                $person_detail = get_person_detail_with_hn($r['hn']);
+                $person_detail  = get_person_detail_with_hn($r['hn']);
 
-                $obj->diag = $this->service->get_visit_pdx($obj->vn);
-                $obj->diag_name = get_diag_name($obj->diag);
+                $obj->diag          = $this->service->get_visit_pdx($obj->vn);
+                $obj->diag_name     = get_diag_name($obj->diag);
                 $obj->provider_name = get_provider_name_by_id(get_first_object($r['provider_id']));
 
                 if($person_detail){
-                    $obj->hn = $person_detail['hn'];
-                    $obj->cid = $person_detail['cid'];
-                    $obj->fullname = $person_detail['first_name'] . ' ' . $person_detail['last_name'];
+                    $obj->hn        = $person_detail['hn'];
+                    $obj->cid       = $person_detail['cid'];
+                    $obj->fullname  = $person_detail['first_name'] . ' ' . $person_detail['last_name'];
                     $obj->birthdate = to_js_date($person_detail['birthdate']);
                 }else{
-                    $obj->cid = '-';
-                    $obj->fullname = '-';
+                    $obj->cid       = '-';
+                    $obj->fullname  = '-';
                     $obj->birthdate = '-';
                 }
 
                 $obj->clinic_name = get_clinic_name(get_first_object($r['clinic']));
 
                 if(isset($r['insurances'])){
-                    $obj->insurance_name = get_insurance_name($r['insurances']['id']);
-                    $obj->insurance_id = $r['insurances']['id'];
-                    $obj->insurance_code = $r['insurances']['code'];
+                    $obj->insurance_name    = get_insurance_name($r['insurances']['id']);
+                    $obj->insurance_id      = $r['insurances']['id'];
+                    $obj->insurance_code    = $r['insurances']['code'];
                 }else{
-                    $obj->insurance_name = '-';
-                    $obj->insurance_id = '-';
-                    $obj->insurance_code = '-';
+                    $obj->insurance_name    = '-';
+                    $obj->insurance_id      = '-';
+                    $obj->insurance_code    = '-';
                 }
 
                 $screenings = $this->service->get_service_screening($r['vn']);
@@ -319,16 +318,14 @@ class Services extends CI_Controller
     }
 
     public function get_list_search(){
-        $start = $this->input->post('start');
-        $stop = $this->input->post('stop');
-        $hn = $this->input->post('hn');
+        $start  = $this->input->post('start');
+        $stop   = $this->input->post('stop');
+        $hn     = $this->input->post('hn');
 
-        $start = empty($start) ? 0 : $start;
-        $stop = empty($stop) ? 25 : $stop;
+        $start  = empty($start) ? 0 : $start;
+        $stop   = empty($stop) ? 25 : $stop;
+        $limit  = (int) $stop - (int) $start;
 
-        $limit = (int) $stop - (int) $start;
-
-        $this->service->owner_id = $this->owner_id;
         $rs = $this->service->get_list_search($hn, $start, $limit);
 
         if($rs){
@@ -338,23 +335,23 @@ class Services extends CI_Controller
 
                 $obj = new stdClass();
 
-                $obj->vn = isset($r['vn']) ? $r['vn'] : '-';
+                $obj->vn        = isset($r['vn']) ? $r['vn'] : '-';
                 $obj->person_id = isset($r['person_id']) ? get_first_object($r['person_id']) : null;
 
-                $person_detail = get_person_detail_with_hn($r['hn']);
+                $person_detail  = get_person_detail_with_hn($r['hn']);
 
-                $obj->diag = $this->service->get_visit_pdx($obj->vn);
+                $obj->diag      = $this->service->get_visit_pdx($obj->vn);
                 $obj->diag_name = get_diag_name($obj->diag);
                 $obj->provider_name = get_provider_name_by_id(get_first_object($r['provider_id']));
 
                 if($person_detail){
-                    $obj->hn = $person_detail['hn'];
-                    $obj->cid = $person_detail['cid'];
-                    $obj->fullname = $person_detail['first_name'] . ' ' . $person_detail['last_name'];
+                    $obj->hn        = $person_detail['hn'];
+                    $obj->cid       = $person_detail['cid'];
+                    $obj->fullname  = $person_detail['first_name'] . ' ' . $person_detail['last_name'];
                     $obj->birthdate = to_js_date($person_detail['birthdate']);
                 }else{
-                    $obj->cid = '-';
-                    $obj->fullname = '-';
+                    $obj->cid       = '-';
+                    $obj->fullname  = '-';
                     $obj->birthdate = '-';
                 }
 
@@ -362,12 +359,12 @@ class Services extends CI_Controller
 
                 if(isset($r['insurances'])){
                     $obj->insurance_name = get_insurance_name($r['insurances']['id']);
-                    $obj->insurance_id = $r['insurances']['id'];
-                    $obj->insurance_code = $r['insurances']['code'];
+                    $obj->insurance_id      = $r['insurances']['id'];
+                    $obj->insurance_code    = $r['insurances']['code'];
                 }else{
-                    $obj->insurance_name = '-';
-                    $obj->insurance_id = '-';
-                    $obj->insurance_code = '-';
+                    $obj->insurance_name    = '-';
+                    $obj->insurance_id      = '-';
+                    $obj->insurance_code    = '-';
                 }
 
                 $screenings = $this->service->get_service_screening($r['vn']);
@@ -391,25 +388,22 @@ class Services extends CI_Controller
 
     public function get_list_total()
     {
-        $date = $this->input->post('date');
-        $doctor_room = $this->input->post('doctor_room');
+        $date           = $this->input->post('date');
+        $doctor_room    = $this->input->post('doctor_room');
 
         $date = empty($date) ? date('Ymd') : to_string_date($date);
 
-        $this->service->owner_id = $this->owner_id;
-        $total = $this->service->get_list_total($date, $doctor_room);
-        $json = '{"success": true, "total": '.$total.'}';
+        $total  = $this->service->get_list_total($date, $doctor_room);
+        $json   = '{"success": true, "total": '.$total.'}';
 
         render_json($json);
     }
 
     public function get_list_search_total()
     {
-        $hn = $this->input->post('hn');
-
-        $this->service->owner_id = $this->owner_id;
-        $total = $this->service->get_list_search_total($hn);
-        $json = '{"success": true, "total": '.$total.'}';
+        $hn     = $this->input->post('hn');
+        $total  = $this->service->get_list_search_total($hn);
+        $json   = '{"success": true, "total": '.$total.'}';
 
         render_json($json);
     }
@@ -439,11 +433,11 @@ class Services extends CI_Controller
         if(empty($vn)){
             $json = '{"success": false, "msg": "ไม่พบรหัส VN"}';
         }else{
-            $rs = $this->service->get_screening($vn);
+            $rs     = $this->service->get_screening($vn);
 
-            $rows = json_encode($rs);
+            $rows   = json_encode($rs);
 
-            $json = '{"success": true, "rows": '.$rows.'}';
+            $json   = '{"success": true, "rows": '.$rows.'}';
         }
 
         render_json($json);
@@ -770,7 +764,6 @@ class Services extends CI_Controller
     public function save_drug_opd()
     {
         $data = $this->input->post('data');
-        $this->service->owner_id = $this->owner_id;
 
         if(empty($data))
         {
@@ -801,6 +794,7 @@ class Services extends CI_Controller
             //{
                 //do update
                 $rs = $this->service->update_drug_opd($data);
+
                 if($rs)
                 {
                     $json = '{"success": true}';
@@ -821,6 +815,7 @@ class Services extends CI_Controller
             {
                 //check qty
                 $qty_overload = $this->drug->check_order_qty($data['drug_id'], $data['qty']);
+
                 if(!$qty_overload)
                 {
                     $json = '{"success": false, "msg": "จำนวนยาในสต๊อกไม่พอจ่าย กรุณาตรวจสอบ"}';
@@ -887,8 +882,9 @@ class Services extends CI_Controller
                     $obj->price = isset($r['price']) ? $r['price'] : 0;
                     $obj->qty = isset($r['qty']) ? $r['qty'] : 0;
 
-                    array_push($arr_result, $obj);
-
+                    //array_push($arr_result, $obj);
+                    $arr_result[] = $obj;
+                    
                     $rows = json_encode($arr_result);
                     $json = '{"success": true, "rows": '.$rows.'}';
                 }
@@ -1165,9 +1161,7 @@ class Services extends CI_Controller
 
     }
 
-    /*******************************************************************************************************************
-     * Dental module
-     *******************************************************************************************************************/
+    /******************************************************************************** Dental module *******************************************************************************/
     public function dental_save()
     {
         $is_ajax = $this->input->is_ajax_request();

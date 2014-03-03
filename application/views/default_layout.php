@@ -14,7 +14,8 @@
     <link href="<?php echo base_url(); ?>assets/css/freeow/freeow.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/css/select2.css" rel="stylesheet">
     <link href="<?php echo base_url(); ?>assets/css/select2-bootstrap.css" rel="stylesheet">
-
+    <link href="<?php echo base_url(); ?>assets/css/datepicker3.css" rel="stylesheet">
+    <link href="<?php echo base_url(); ?>assets/css/ladda.min.css" rel="stylesheet">
     <script src="<?php echo base_url(); ?>assets/js/jquery.js"></script>
     <script src="<?php echo base_url(); ?>assets/js/head.load.min.js"></script>
     <script type="text/javascript">
@@ -36,9 +37,16 @@
     <!--[if lt IE 9]>
     <script src="/assets/js/html5shiv.js"></script>
     <script src="/assets/js/respond/respond.min.js"></script>
-    <![endif]-->
-    <script src="<?php echo base_url(); ?>assets/js/jquery.js"></script>
-    <script src="<?php echo base_url(); ?>assets/js/head.load.min.js"></script>
+    <!--[endif]-->
+
+<!--    <script src="--><?php //echo base_url(); ?><!--assets/js/jquery.js"></script>-->
+<!--    <script src="--><?php //echo base_url(); ?><!--assets/js/head.load.min.js"></script>-->
+<!--    <script src="--><?php //echo base_url(); ?><!--assets/js/angular/angular.js"></script>-->
+<!--    <script src="--><?php //echo base_url(); ?><!--assets/js/angular/angular-animate.js"></script>-->
+<!--    <script src="--><?php //echo base_url(); ?><!--assets/js/angular/angular-resource.js"></script>-->
+<!--    <script src="--><?php //echo base_url(); ?><!--assets/js/angular/angular-route.js"></script>-->
+<!--    <script src="--><?php //echo base_url(); ?><!--assets/js/angular/angular-sanitize.js"></script>-->
+
     <script>
         head.js(
             '<?php echo base_url(); ?>assets/js/bootstrap.min.js',
@@ -56,6 +64,10 @@
             '<?php echo base_url(); ?>assets/js/holder.js',
             '<?php echo base_url(); ?>assets/js/select2.min.js',
             '<?php echo base_url(); ?>assets/js/select2_locale_th.js',
+            '<?php echo base_url(); ?>assets/js/bootstrap-datepicker.js',
+            '<?php echo base_url(); ?>assets/js/bootstrap-datepicker.th.js',
+            '<?php echo base_url(); ?>assets/js/spin.min.js',
+            '<?php echo base_url(); ?>assets/js/ladda.min.js',
             '<?php echo base_url(); ?>assets/apps/js/apps.js'
         );
 

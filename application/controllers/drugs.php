@@ -43,33 +43,31 @@ class Drugs extends CI_Controller
 
     public function index()
     {
-        $data['strengths'] = $this->basic->get_strength_list($this->owner_id);
-        $data['units'] = $this->basic->get_units_list($this->owner_id);
+        $data['strengths']  = $this->basic->get_strength_list($this->owner_id);
+        $data['units']      = $this->basic->get_units_list($this->owner_id);
+
         $this->layout->view('drugs/index_view', $data);
     }
 
     public function get_list_total()
     {
-        $this->drug->owner_id = $this->owner_id;
-
-        $total = $this->drug->get_list_total();
-
-        $json = '{"success": true, "total": '.$total.'}';
+        $total  = $this->drug->get_list_total();
+        $json   = '{"success": true, "total": '.$total.'}';
 
         render_json($json);
     }
 
     public function get_list()
     {
-        $start = $this->input->post('start');
-        $stop = $this->input->post('stop');
+        $start  = $this->input->post('start');
+        $stop   = $this->input->post('stop');
 
-        $start = empty($start) ? 0 : $start;
-        $stop = empty($stop) ? 25 : $stop;
+        $start  = empty($start) ? 0 : $start;
+        $stop   = empty($stop) ? 25 : $stop;
 
-        $limit = (int) $stop - (int) $start;
+        $limit  = (int) $stop - (int) $start;
 
-        $rs = $this->drug->get_list($start, $limit);
+        $rs     = $this->drug->get_list($start, $limit);
 
         if($rs)
         {
@@ -105,25 +103,24 @@ class Drugs extends CI_Controller
 
     public function search_total()
     {
-        $query = $this->input->post('query');
+        $query  = $this->input->post('query');
 
-        $this->drug->owner_id = $this->owner_id;
-        $total = $this->drug->search_total($query);
+        $total  = $this->drug->search_total($query);
+        $json   = '{"success": true, "total": '.$total.'}';
 
-        $json = '{"success": true, "total": '.$total.'}';
         render_json($json);
     }
 
     public function search()
     {
-        $query = $this->input->post('query');
-        $start = $this->input->post('start');
-        $stop = $this->input->post('stop');
+        $query  = $this->input->post('query');
+        $start  = $this->input->post('start');
+        $stop   = $this->input->post('stop');
 
-        $start = empty($start) ? 0 : $start;
-        $stop = empty($stop) ? 25 : $stop;
+        $start  = empty($start) ? 0 : $start;
+        $stop   = empty($stop) ? 25 : $stop;
 
-        $limit = (int) $stop - (int) $start;
+        $limit  = (int) $stop - (int) $start;
 
         $rs = $this->drug->search($query, $start, $limit);
 
@@ -134,6 +131,7 @@ class Drugs extends CI_Controller
             {
 
                 $price_qty = $this->drug->get_price_qty($r['_id']);
+
                 $obj                = new stdClass();
                 $obj->id            = get_first_object($r['_id']);
                 $obj->name          = $r['name'];
@@ -199,7 +197,7 @@ class Drugs extends CI_Controller
 
             $obj = new stdClass();
             $obj->price = $rs['price'];
-            $obj->qty = $rs['qty'];
+            $obj->qty   = $rs['qty'];
 
             $rows = json_encode($obj);
             $json = '{"success": true, "rows": '.$rows.'}';
@@ -211,6 +209,7 @@ class Drugs extends CI_Controller
     public function remove()
     {
         $id = $this->input->post('id');
+
         if(empty($id))
         {
             $json = '{"success": false, "msg": "ไม่พบรายการที่ต้องการลบ [ID not found]"}';

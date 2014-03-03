@@ -213,13 +213,8 @@ head.ready(function() {
         },
         formatSelection: function(data) {
             return '[' + data.code + '] ' + data.name;
-        },
-        initSelection: function(el, cb) {
-            //var eltxt = $(el).val();
-            //cb({'term': eltxt });
         }
     });
-
 
     $('#txt_service_profile_hn').on('click', function() {
         var data = $(this).select2('data');
@@ -272,10 +267,6 @@ head.ready(function() {
         },
         formatSelection: function(data) {
             return '[' + data.hn + '] ' + data.fullname;
-        },
-        initSelection: function(el, cb) {
-            //var eltxt = $(el).val();
-            //cb({'term': eltxt });
         }
     });
 

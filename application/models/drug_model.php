@@ -172,6 +172,7 @@ class Drug_model extends CI_Model
 
         return count($rs) > 0 ? $rs : NULL;
     }
+
     public function search_total($query)
     {
         $rs = $this->mongo_db
@@ -184,7 +185,7 @@ class Drug_model extends CI_Model
     public function check_order_qty($id, $qty)
     {
         $pqty = $this->get_price_qty($id);
-        $stock_qty = isset($pqty[0]['qty']) ? $pqty[0]['qty'] : 0;
+        $stock_qty = isset($pqty->qty) ? $pqty->qty : 0;
 
         return $qty > $stock_qty ? FALSE : TRUE;
     }
